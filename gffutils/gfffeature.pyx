@@ -154,7 +154,7 @@ cdef class Attributes:
         gtf_attrs = Attributes('gene_id "FBgn000001";')
     """
     cdef dict _attr_dict
-    cdef str _attr_str, sep, field_sep, trailing_sep
+    cdef str _attr_str, sep, field_sep, trailing_sep, filetype
 
     def __init__(self, attr_str="", filetype="gff"):
         self._attr_str = attr_str.strip()
@@ -164,8 +164,10 @@ cdef class Attributes:
             return
 
         if filetype == 'gff':
+            self.filetype = 'gff'
             self.sep, self.field_sep = (';', '=')
         if filetype == 'gtf':
+            self.filetype = 'gtf'
             self.sep, self.field_sep = (';', ' ')
 
         if attr_str[-1] == self.sep:
@@ -195,9 +197,13 @@ cdef class Attributes:
     def __str__(self):
         # stringify all items first
         items = []
+        if self.filetype == 'gtf':
+            quotes = '"'
+        else:
+            quotes = ""
         for i, j in self._attr_dict.items():
             if isinstance(j, basestring):
-                items.append((i, j))
+                items.append((i, quotes + j + quotes))
         return self.sep.join([self.field_sep.join(kvs) \
                 for kvs in items]) + self.trailing_sep
 
