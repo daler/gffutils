@@ -1116,7 +1116,7 @@ class FeatureDB:
     def promoter(self, id, dist=1000, truncate_at_next_feature=None,
             direction='upstream'):
         """
-        Returns a new GFFFeature of featuretype "promoter", with the definition
+        Returns a new Feature of featuretype "promoter", with the definition
         of the promoter guided by the kwargs described below.
 
         *dist* (default 1000) is the distance in bp from TSS that you want to

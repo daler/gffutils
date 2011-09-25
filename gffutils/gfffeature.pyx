@@ -110,6 +110,10 @@ cdef class Feature:
                 self.frame, str(self.attributes)]
         return '\t'.join(fields)
 
+    def __repr__(self):
+        return '<Feature: %s, %s:%s-%s (%s)>' % (
+                self.featuretype, self.chrom, self.start, self.stop, self.strand)
+
     property id:
         def __get__(self):
             if self._id:
