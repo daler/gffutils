@@ -979,7 +979,7 @@ class FeatureDB:
             grandchildren = exons + cdss + utrs
 
             for feature in grandchildren:
-                yield GTFFeature(chrom=feature.chrom,
+                yield Feature(chrom=feature.chrom,
                                  start=feature.start,
                                  stop=feature.stop,
                                  featuretype=feature.featuretype,
@@ -994,42 +994,46 @@ class FeatureDB:
             # GTF 2.2 spec
             if transcript.strand == '+':
                 # start codon
-                yield GTFFeature(chrom=transcript.chrom,
+                yield Feature(chrom=transcript.chrom,
                                  start=cdss[0].start,
                                  stop=cdss[0].start + 2,
                                  strand=transcript.strand,
                                  featuretype='start_codon',
                                  source=transcript.source,
-                                 frame=0,
+                                 score='.',
+                                 frame='0',
                                  attributes=attributes)
 
                 # stop codon
-                yield GTFFeature(chrom=transcript.chrom,
+                yield Feature(chrom=transcript.chrom,
                                  start=cdss[-1].stop + 1,
                                  stop=cdss[-1].stop + 3,
                                  strand=transcript.strand,
                                  featuretype='stop_codon',
                                  source=transcript.source,
-                                 frame=0,
+                                 score='.',
+                                 frame='0',
                                  attributes=attributes)
 
             # Or, if we're on the other strand,
             if transcript.strand == '-':
-                yield GTFFeature(chrom=transcript.chrom,
+                yield Feature(chrom=transcript.chrom,
                                  start=cdss[-1].stop,
                                  stop=cdss[-1].stop - 2,
                                  strand=transcript.strand,
                                  featuretype='start_codon',
                                  source=transcript.source,
-                                 frame=0,
+                                 score='.',
+                                 frame='0',
                                  attributes=attributes)
-                yield GTFFeature(chrom=transcript.chrom,
+                yield Feature(chrom=transcript.chrom,
                                  start=cdss[0].start - 1,
                                  stop=cdss[0].start - 3,
                                  strand=transcript.strand,
                                  featuretype='stop_codon',
                                  source=transcript.source,
-                                 frame=0,
+                                 score='.',
+                                 frame='0',
                                  attributes=attributes)
 
     def refFlat(self, gene):
