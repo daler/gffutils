@@ -858,7 +858,7 @@ class FeatureDB:
         if level > 2:
             raise NotImplementedError('Levels > 2 not supported yet.')
 
-        if isinstance(id, self.__class__.featureclass):
+        if isinstance(id, Feature):
             id = id.id
 
         cursor = self.conn.cursor()
@@ -893,7 +893,7 @@ class FeatureDB:
         if level > 2:
             raise NotImplementedError('Levels > 2 not supported yet.')
 
-        if isinstance(id, self.__class__.featureclass):
+        if isinstance(id, Feature):
             id = id.id
 
         cursor = self.conn.cursor()
