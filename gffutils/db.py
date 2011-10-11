@@ -341,10 +341,6 @@ class GTFDBCreator(DBCreator):
                 featuretype = 'gene'
                 attributes = 'gene_id "%s"; ' % parent
 
-            if level is None:
-                print 'WARNING: got back nothing good from db for %s' % parent
-                featuretype = 'None'
-
             fout.write('%s\t%s\t%s\t%s\t%s\t%s\t%s\n' % (
                 parent, chrom, start, end, strand, featuretype, attributes))
         fout.close()
