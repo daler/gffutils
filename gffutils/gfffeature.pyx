@@ -15,7 +15,10 @@ cdef class GFFFile:
             self.fn = gzip.open(filename)
         else:
             self.fn = open(filename)
-        first_feature = self.__next__()
+        try:
+            first_feature = self.__next__()
+        except StopIteration:
+            raise ValueError('No features found in file "%s"' % filename)
         self.filetype = first_feature.filetype
         self.fn.seek(0)
 
