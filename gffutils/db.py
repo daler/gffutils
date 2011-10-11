@@ -353,10 +353,14 @@ class GTFDBCreator(DBCreator):
         # parents, slurp in the file and insert everything into the db.
         fin = open(fout.name)
         for line in fin:
+            score = '.'
+            source = 'derived'
+            frame = '.'
             c.execute("""
                       INSERT OR IGNORE INTO features (id, chrom, start, stop,
-                      strand, featuretype, attributes) VALUES (?,?,?,?,?,?,?)
-                      """, line.strip().split('\t'))
+                      strand, featuretype, attributes, score, source, frame)
+                      VALUES (?,?,?,?,?,?,?,?,?,?)
+                      """, line.strip().split('\t') + [score, source, frame])
 
         self.conn.commit()
         os.remove(tmp)
@@ -379,17 +383,33 @@ class FeatureDB:
         self.db_fn = db_fn
         self.conn = sqlite3.connect(db_fn)
         self.conn.text_factory = str
+        c = self.conn.cursor()
+        c.execute('''
+        SELECT filetype FROM meta
+        ''')
+        self.filetype = c.fetchone()[0]
+
+        self.SELECT = """
+        SELECT id, chrom, source, featuretype, start, stop, score, strand,
+        frame, attributes
+        """
+
+    def _newfeature(self, *args):
+        feature = Feature(*args[1:])
+        feature.dbid = args[0]
+        return feature
 
     def __getitem__(self, id):
         c = self.conn.cursor()
+        if isinstance(id, Feature):
+            id = id.id
         c.execute('''
-                  SELECT chrom, source, featuretype, start, stop, score,
-                  strand, frame, attributes from features where id = ?
-                  ''', (id,))
+                  %s from features where id = ?
+                  ''' % self.SELECT, (id,))
         results = c.fetchall()
         if not len(results) == 1:
             raise FeatureNotFoundError(id)
-        return Feature(*results[0])
+        return self._newfeature(*results[0])
 
     def attribute_search(self, text, featuretype='gene'):
         """
@@ -403,13 +423,12 @@ class FeatureDB:
         text = '%' + text + '%'
         c = self.conn.cursor()
         c.execute('''
-                  SELECT chrom, source, featuretype, start, stop, score,
-                  strand, frame, attributes from features where attributes
+                  %s from features where attributes
                   like "%s" and featuretype = ?
-                  ''' % (text,), (featuretype,))
+                  ''' % (self.SELECT, text,), (featuretype,))
         results = []
         for result in c.fetchall():
-            results.append(Feature(*result))
+            results.append(self._newfeature(*result))
         return results
 
     def features_of_type(self, featuretype, chrom=None, start=None, stop=None,
@@ -449,15 +468,13 @@ class FeatureDB:
 
         c = self.conn.cursor()
         c.execute('''
-                  SELECT
-                  id,chrom, source, featuretype, start, stop, score, strand,
-                  frame, attributes
+                  %s
                   FROM
                   features
                   WHERE featuretype = ?
                   %s
                   ORDER BY start
-                  ''' % filter_clause, (featuretype, ))
+                  ''' % (self.SELECT, filter_clause), (featuretype, ))
         for i in c:
             yield self[i[0]]
 
@@ -479,14 +496,12 @@ class FeatureDB:
         """
         c = self.conn.cursor()
         c.execute('''
-                  SELECT
-                  chrom, source, featuretype, start, stop, score, strand,
-                  frame, attributes
+                  %s
                   FROM
                   features
-                  ''')
+                  ''' % self.SELECT)
         for i in c:
-            yield Feature(*i)
+            yield self._newfeature(*i)
 
     def exonic_bp(self, id, ignore_strand=False):
         """
@@ -494,7 +509,7 @@ class FeatureDB:
         *ignore_strand* is passed to merge_features(). Useful for calculating
         RPKM for full gene models.
         """
-        if isinstance(id, self.__class__.featureclass):
+        if isinstance(id, Feature):
             id = id.id
         exons = self.children(id, featuretype='exon', level=2)
         exons = list(exons)
@@ -659,17 +674,16 @@ class FeatureDB:
                                      ) ''' % locals()
         c = self.conn.cursor()
         c.execute('''
-        SELECT
-        chrom,source,featuretype,start,stop, score,strand,frame,attributes
+        %s
         FROM features WHERE
         chrom = ?
         %s
         %s
         %s
-        ''' % (strand_clause, featuretype_clause, within_clause),
+        ''' % (self.SELECT, strand_clause, featuretype_clause, within_clause),
         (chrom,))
         for i in c:
-            yield Feature(*i)
+            yield self._newfeature(*i)
 
     def merge_features(self, features, ignore_strand=False):
         """
@@ -756,14 +770,14 @@ class FeatureDB:
                 # done with the current merged feature.  Prepare for output...
                 Feature = feature.__class__
                 merged_feature = Feature(chrom=feature.chrom,
-                                         source=None,
+                                         source='.',
                                          featuretype=featuretype,
                                          start=current_merged_start,
                                          stop=current_merged_stop,
-                                         score=None,
+                                         score='.',
                                          strand=strand,
-                                         frame=None,
-                                         attributes=None)
+                                         frame='.',
+                                         attributes='')
                 yield merged_feature
 
                 # and we start a new one, initializing with this feature's
@@ -774,14 +788,14 @@ class FeatureDB:
         # need to yield the last one.
         Feature = feature.__class__
         merged_feature = Feature(chrom=feature.chrom,
-                                 source=None,
+                                 source='.',
                                  featuretype=featuretype,
                                  start=current_merged_start,
                                  stop=current_merged_stop,
-                                 score=None,
+                                 score='.',
                                  strand=strand,
-                                 frame=None,
-                                 attributes=None)
+                                 frame='.',
+                                 attributes='')
         yield merged_feature
 
     def interfeatures(self, features):
@@ -833,15 +847,15 @@ class FeatureDB:
             interfeature_start += 1
             interfeature_stop -= 1
 
-            yield self.featureclass(chrom=chrom,
-                                    source=None,
-                                    featuretype=featuretype,
-                                    start=interfeature_start,
-                                    stop=interfeature_stop,
-                                    score=None,
-                                    strand=strand,
-                                    frame=None,
-                                    attributes=None)
+            yield Feature(chrom=chrom,
+                          source='.',
+                          featuretype=featuretype,
+                          start=interfeature_start,
+                          stop=interfeature_stop,
+                          score='.',
+                          strand=strand,
+                          frame='.',
+                          attributes='')
             interfeature_start = feature.stop
 
     def chromosomes(self):
@@ -888,7 +902,7 @@ class FeatureDB:
 
         cursor.execute('''
         SELECT DISTINCT
-        chrom, source, featuretype, start, stop, score, strand, frame,
+        id, chrom, source, featuretype, start, stop, score, strand, frame,
         attributes
         FROM features JOIN relations
         ON relations.child = features.id
@@ -898,7 +912,7 @@ class FeatureDB:
         ORDER BY start''' % (
             featuretype_clause), (id, level))
         for i in cursor:
-            yield Feature(*i)
+            yield self._newfeature(*i)
 
     def parents(self, id, level=1, featuretype=None):
         """
@@ -921,8 +935,7 @@ class FeatureDB:
             AND features.featuretype = "%s"''' % featuretype
         cursor.execute('''
             SELECT DISTINCT
-            %s
-            chrom, source, featuretype, start, stop, score, strand, frame,
+            id, chrom, source, featuretype, start, stop, score, strand, frame,
             attributes
             FROM features JOIN relations
             ON relations.parent = features.id
@@ -931,7 +944,7 @@ class FeatureDB:
             %s
             ORDER BY start''' % (featuretype_clause), (id, level))
         for i in cursor:
-            yield Feature(*i)
+            yield self._newfeature(*i)
 
     def execute(self, query):
         """
@@ -1165,7 +1178,7 @@ class FeatureDB:
         checking the upper boundary is the responsibility of the calling
         function.
         """
-        if not isinstance(id, self.__class__.featureclass):
+        if not isinstance(id, Feature):
             feature = self[id]
         else:
             feature = id
@@ -1245,30 +1258,16 @@ class FeatureDB:
         coords.sort()
         start, stop = coords
 
-        # Create a new GFFFeature object (or GTFFeature) to return
-        if self.__class__.featureclass == GTFFeature:
-            promoter = self.__class__.featureclass(id='promoter:' + id,
-                                          chrom=feature.chrom,
-                                          source='imputed',
-                                          featuretype='promoter',
-                                          start=start,
-                                          stop=stop,
-                                          strand=feature.strand,
-                                          score=None,
-                                          frame=None,
-                                          attributes=None)
-
-        else:
-            promoter = self.__class__.featureclass(chrom=feature.chrom,
-                                              source='imputed',
-                                              featuretype='promoter',
-                                              start=start,
-                                              stop=stop,
-                                              strand=feature.strand,
-                                              score=None,
-                                              frame=None,
-                                              attributes=None)
-            promoter.add_attribute('ID', 'promoter:' + feature.id)
+        promoter = Feature(
+                chrom=feature.chrom,
+                source='imputed',
+                featuretype='promoter',
+                start=start,
+                stop=stop,
+                strand=feature.strand,
+                score='.',
+                frame='.',
+                attributes='')
         return promoter
 
     def random_feature(self, featuretype=None):
@@ -1290,16 +1289,14 @@ class FeatureDB:
             featuretype_subclause = 'WHERE featuretype = "%s"' % featuretype
             featuretype_subclause = ''
         c.execute('''
-        SELECT
-        chrom, source, featuretype, start, stop, score, strand, frame,
-        attributes
+        %s
         FROM features
         WHERE
         %s
         rowid >= abs(random()) %% (SELECT count() FROM features %s) LIMIT 1
-        ''' % (featuretype_clause, featuretype_subclause))
+        ''' % (self.SELECT, featuretype_clause, featuretype_subclause))
         results = c.fetchone()
-        return Feature(*results)
+        return self._newfeature(*results)
 
     def coding_genes(self):
         """
