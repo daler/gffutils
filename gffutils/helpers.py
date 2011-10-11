@@ -1,3 +1,15 @@
+def asinterval(feature):
+    """
+    Convert a gffutils.Feature object to a pybedtools.Interval, enabling full
+    use of pybedtools functionality.  Requires pybedtools.
+    """
+    try:
+        import pybedtools
+    except ImportError:
+        raise ImportError('Please install pybedtools to convert to '
+                          'pybedtools.Interval objects')
+    return pybedtools.create_interval_from_list(
+            str(feature).split('\t'))
 
 class FeatureNotFoundError(Exception):
     """

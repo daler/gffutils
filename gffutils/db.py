@@ -4,7 +4,7 @@ import os
 import time
 import sys
 from gfffeature import GFFFile, Feature
-from helpers import FeatureNotFoundError
+from helpers import FeatureNotFoundError, asinterval
 
 
 class DBCreator(object):
