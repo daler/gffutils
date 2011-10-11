@@ -105,8 +105,8 @@ class GFFDBCreator(DBCreator):
                 last_perc = perc
 
             if not feature.id:
-                new_id = '%s:%s:%s-%s' % (feature.featuretype,
-                        feature.chrom, feature.start, feature.stop)
+                new_id = '%s:%s:%s-%s:%s' % (feature.featuretype,
+                        feature.chrom, feature.start, feature.stop, feature.strand)
                 feature.id = new_id
             c.execute('''
                       INSERT OR IGNORE INTO features VALUES
