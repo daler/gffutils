@@ -226,21 +226,22 @@ class GFFDBCreator(DBCreator):
 
 
 class GTFDBCreator(DBCreator):
-    def __init__(self, dbfn):
-        DBCreator.__init__(self, dbfn)
+    def __init__(self, fn, dbfn, *args, **kwargs):
+        DBCreator.__init__(self, fn, dbfn, *args, **kwargs)
+        self.filetype = 'gtf'
 
     def populate_from_features(self, features):
         t0 = time.time()
         self.drop_indexes()
         c = self.conn.cursor()
         for feature in features:
-            parent = feature.attributes['transcript_id'][0]
-            grandparent = feature.attributes['gene_id'][0]
+            parent = feature.attributes['transcript_id']
+            grandparent = feature.attributes['gene_id']
 
             # A database-specific ID to use
-            ID = '%s:%s:%s-%s' % (
+            ID = '%s:%s:%s-%s:%s' % (
                     feature.featuretype, feature.chrom, feature.start,
-                    feature.stop)
+                    feature.stop, feature.strand)
 
             # If it's an exon, its attributes include its parent transcript
             # and its 'grandparent' gene.  So we can insert these
