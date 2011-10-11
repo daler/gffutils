@@ -181,34 +181,50 @@ cdef class Attributes:
     """
     cdef dict _attr_dict
     cdef str _attr_str, sep, field_sep, trailing_sep, filetype
-
+    cdef list _field_order
     def __init__(self, attr_str="", filetype="gff"):
         self._attr_str = attr_str.strip()
         self._attr_dict = {}
+        self._field_order = []
         # quick exit
         if attr_str == "":
             return
 
+        self.sep = ';'
+
         if filetype == 'gff':
             self.filetype = 'gff'
-            self.sep, self.field_sep = (';', '=')
+            self.field_sep = '='
+
         if filetype == 'gtf':
             self.filetype = 'gtf'
-            self.sep, self.field_sep = (';', ' ')
+            self.field_sep = ' '
 
-        if attr_str[-1] == self.sep:
+        # If input had a separator on the end, so should output
+        if self._attr_str[-1] == self.sep:
             self.trailing_sep = self.sep
         else:
             self.trailing_sep = ""
 
-        kvs = map(str.strip, attr_str.strip().split(self.sep))
-        for kv in kvs:
-            if kv:
-                field, value = kv.split(self.field_sep)
+        for attribute in attr_str.strip().split(self.sep):
+            if attribute.startswith(' '):
+                prefix_space = ' '
+            else:
+                prefix_space = ''
+            attribute = attribute.strip()
+            if attribute:
+                field, value = attribute.split(self.field_sep)
+
+                # comma-separated lists turn into lists; otherwise string
                 value = value.replace('"', '').split(',')
                 if len(value) == 1:
                     value = value[0]
+
                 self._attr_dict[field] = value
+
+                # Keep track of order, and whether or not the attribute has
+                # a preceding space, so that the output is identical
+                self._field_order.append((field, prefix_space))
 
     def __setitem__(self, key, value):
         """
@@ -216,22 +232,33 @@ cdef class Attributes:
         attrs field if it's a GFF Interval
         """
         self._attr_dict[key] = value
+        if key not in self._field_order:
+            # default to no space for GFF, but with space for GTF
+            if self.filetype == 'gff':
+                self._field_order.append((key, ""))
+            if self.filetype == 'gtf':
+                self._field_order.append((key, " "))
 
     def __getitem__(self, key):
         return self._attr_dict[key]
 
     def __str__(self):
         # stringify all items first
-        items = []
+        if len(self._field_order) == 0:
+            return ""
+        attributes = []
         if self.filetype == 'gtf':
             quotes = '"'
         else:
             quotes = ""
-        for i, j in self._attr_dict.items():
-            if isinstance(j, basestring):
-                items.append((i, quotes + j + quotes))
+        for field, space in self._field_order:
+            value = self._attr_dict[field]
+            if isinstance(value, basestring):
+                attributes.append((space + field, quotes + value + quotes))
+            else:
+                attributes.append((space + field, quotes + ','.join(value) + quotes))
         return self.sep.join([self.field_sep.join(kvs) \
-                for kvs in items]) + self.trailing_sep
+                for kvs in attributes]) + self.trailing_sep
 
     def __repr__(self):
         return repr(self._attr_dict)
