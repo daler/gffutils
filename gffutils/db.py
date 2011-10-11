@@ -177,6 +177,9 @@ class GFFDBCreator(DBCreator):
             c2.execute('''
             SELECT child FROM relations
             WHERE parent = ? AND level=1''', (parent,))
+
+            # For each of those children, we get *their* children -- so the
+            # 'grandchildren' of the original parent.
             for child in c2:
                 child = child[0]
                 c3.execute('''
@@ -187,7 +190,7 @@ class GFFDBCreator(DBCreator):
                     fout.write('%s\t%s\n' % (parent, grandchild))
         fout.close()
 
-        # Imoprt the "grandchild" file into the relations table
+        # Import the "grandchild" file into the relations table
         for line in open(tmp):
             parent, child = line.strip().split('\t')
             c.execute('''
