@@ -432,6 +432,15 @@ class GenericDBClass(object):
         print result
         assert result == (None,None)
 
+        # should work the same with a string rather than list
+        result = self.G.closest_feature(chrom='chr2L',
+                                        pos=1,
+                                        featuretype='gene',
+                                        strand='+',
+                                        ignore='FBgn0031208')
+        print result
+        assert result == (None,None)
+
         # closest mRNA to beginning, on - strand.
         observed_dist, observed_feature = self.G.closest_feature(chrom='chr2L',
                                                                  pos=1,
@@ -443,7 +452,6 @@ class GenericDBClass(object):
 
         # TODO: the GFF/GTF files probably need some more genes added to be
         # able to test the "upstream" # and "downstream" functionality.
-
 
     def feature_not_found_test(self):
         # Correct exception thrown upon asking for nonexistent feature?
@@ -809,10 +817,28 @@ FBtr0300690	FBgn0031208	chr2L	+	7529	9484	7680	9276	3	7529,8193,8668,	8116,8589,
         print expected
         assert observed == expected
 
+    def test_n_isoforms(self):
+        assert self.G.n_gene_isoforms('FBgn0031208') == self.G.n_gene_isoforms(self.G['FBgn0031208']) == 2
+
     def promoter_test(self):
         # test defaults of bidirectional=True and dist=1000
         print 'original:', self.G['FBgn0031208']
         observed = self.G.promoter(id='FBgn0031208', direction='both')
+        expected = self.Feature(chrom='chr2L', source='imputed', start=6529,stop=8529,strand='+')
+        expected.featuretype = 'promoter'
+        print 'observed:'
+        print observed
+        print 'len(observed):',len(observed)
+        print 'expected:'
+        print expected
+
+        # 1000 upstream and the TSS itself.
+        assert len(observed) == 2001
+        assert observed == expected
+
+
+        # same if Feature rather than string is provided
+        observed = self.G.promoter(id=self.G['FBgn0031208'], direction='both')
         expected = self.Feature(chrom='chr2L', source='imputed', start=6529,stop=8529,strand='+')
         expected.featuretype = 'promoter'
         print 'observed:'
@@ -881,11 +907,13 @@ FBtr0300690	FBgn0031208	chr2L	+	7529	9484	7680	9276	3	7529,8193,8668,	8116,8589,
             assert str(observed[0]) == str(expected)
 
     def exonic_bp_test(self):
-        observed = self.G.exonic_bp('FBgn0031208')
         expected = 1880
-        print 'observed:',observed
-        print 'expected:',expected
-        assert observed == expected
+        observed1 = self.G.exonic_bp('FBgn0031208')
+
+        # should work the same if you provide a Feature
+        observed2 = self.G.exonic_bp(self.G['FBgn0031208'])
+        assert observed1 == observed2 == expected
+
 
         # If no exons, then exonic length is zero
         observed = self.G.exonic_bp('transcript_Fk_gene_1')
@@ -931,6 +959,15 @@ FBtr0300690	FBgn0031208	chr2L	+	7529	9484	7680	9276	3	7529,8193,8668,	8116,8589,
     def teardown(self):
         pass
         #os.unlink(testdbfn)
+
+    def test_too_deep(self):
+        def f():
+            list(self.G.children('FBgn0031208', level=3))
+        nt.assert_raises(NotImplementedError, f)
+
+        def f():
+            list(self.G.parents('FBgn0031208', level=3))
+        nt.assert_raises(NotImplementedError, f)
 
 
 class TestGFFDBClass(GenericDBClass):
