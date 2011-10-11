@@ -159,6 +159,11 @@ cdef class Feature:
         def __set__(self, value):
             self._id = value
 
+    def tostring(self):
+        """
+        Backwards compatibility function -- simply returns str(self).
+        """
+        return str(self)
 
 cdef class Attributes:
     """
