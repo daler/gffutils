@@ -111,6 +111,23 @@ cdef class Feature:
                 self.frame, str(self.attributes)]
         return '\t'.join(fields)
 
+    def __richcmp__(Feature self, Feature other, int cmp):
+        """
+        <    0
+        ==   2
+        >    4
+        <=   1
+        !=   3
+        >=   5
+        """
+        if cmp == 2:
+            return str(self) == str(other)
+        if cmp == 3:
+            return str(self) != str(other)
+        else:
+            raise ValueError('Comparisons other than "==" and "!=" are not '
+                             'supported for Feature objects')
+
     def __repr__(self):
         return '<Feature: %s, %s:%s-%s (%s)>' % (
                 self.featuretype, self.chrom, self.start, self.stop, self.strand)
