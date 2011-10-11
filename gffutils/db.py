@@ -61,17 +61,30 @@ class DBCreator(object):
             child text,
             level int,
             primary key(parent,child,level) );
+
+        CREATE TABLE meta (
+            filetype text
+            );
         ''')
+        self.conn.commit()
+
+
+    def set_filetype(self):
+        c = self.conn.cursor()
+        c.execute('''
+        INSERT INTO meta VALUES (?)''', (self.filetype,))
         self.conn.commit()
 
     def create(self):
         self.init_tables()
         self.populate_from_features(self.features)
         self.update_relations()
+        self.set_filetype()
 
 
 class GFFDBCreator(DBCreator):
     def __init__(self, *args, **kwargs):
+        self.filetype = 'gff'
         DBCreator.__init__(self, *args, **kwargs)
 
     def populate_from_features(self, features):
