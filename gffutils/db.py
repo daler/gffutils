@@ -3,7 +3,8 @@ import tempfile
 import os
 import time
 import sys
-from gffutils import GFFFile, Feature
+from gfffeature import GFFFile, Feature
+from helpers import FeatureNotFoundError
 
 
 class DBCreator(object):
