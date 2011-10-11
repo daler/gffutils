@@ -1,0 +1,17 @@
+chr2L	FlyBase	gene	7529	9484	.	+	.	ID=FBgn0031208;Name=CG11023;Ontology_term=SO:0000010,SO:0000087,GO:0008234,GO:0006508;Dbxref=FlyBase:FBan0011023,FlyBase_Annotation_IDs:CG11023,GB:AE003590,GB_protein:AAO41164,GB:AI944728,GB:AJ564667,GB_protein:CAD92822,GB:BF495604,UniProt/TrEMBL:Q6KEV3,UniProt/TrEMBL:Q86BM6,INTERPRO:IPR003653,BIOGRID:59420,dedb:5870,GenomeRNAi_gene:33155,ihop:59383;derived_computed_cyto=21A5-21A5;gbunit=AE014134
+chr2L	FlyBase	mRNA	7529	9484	.	+	.	ID=FBtr0300689;Name=CG11023-RB;Parent=FBgn0031208;Dbxref=FlyBase_Annotation_IDs:CG11023-RB;score_text=Strongly Supported;score=11
+chr2L	FlyBase	mRNA	7529	9484	.	+	.	ID=FBtr0300690;Name=CG11023-RC;Parent=FBgn0031208;Dbxref=FlyBase_Annotation_IDs:CG11023-RC;score_text=Moderately Supported;score=7
+chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690
+chr2L	FlyBase	five_prime_UTR	7529	7679	.	+	.	ID=five_prime_UTR_FBgn0031208:1_737;Name=CG11023-u5;Parent=FBtr0300689,FBtr0300690
+chr2L	FlyBase	CDS	7680	8116	.	+	0	ID=CDS_FBgn0031208:1_737;Name=CG11023-cds;Parent=FBtr0300689,FBtr0300690
+chr2L	FlyBase	intron	8117	8192	.	+	.	ID=intron_FBgn0031208:1_FBgn0031208:2;Name=CG11023-in;Parent=FBtr0300690
+chr2L	FlyBase	intron	8117	8192	.	+	.	ID=intron_FBgn0031208:1_FBgn0031208:3;Name=CG11023-in;Parent=FBtr0300689
+chr2L	FlyBase	exon	8193	9484	.	+	.	ID=FBgn0031208:3;Name=CG11023:3;Parent=FBtr0300689
+chr2L	FlyBase	CDS	8193	8610	.	+	2	ID=CDS_FBgn0031208:3_737;Name=CG11023-cds;Parent=FBtr0300689
+chr2L	FlyBase	CDS	8193	8589	.	+	2	ID=CDS_FBgn0031208:2_737;Name=CG11023-cds;Parent=FBtr0300690
+chr2L	FlyBase	exon	8193	8589	.	+	.	ID=FBgn0031208:2;Name=CG11023:2;Parent=FBtr0300690
+chr2L	FlyBase	intron	8590	8667	.	+	.	ID=intron_FBgn0031208:2_FBgn0031208:4;Name=CG11023-in;Parent=FBtr0300690
+chr2L	FlyBase	three_prime_UTR	8611	9484	.	+	.	ID=three_prime_UTR_FBgn0031208:3_737;Name=CG11023-u3;Parent=FBtr0300689
+chr2L	FlyBase	exon	8668	9484	.	+	.	ID=FBgn0031208:4;Name=CG11023:4;Parent=FBtr0300690
+chr2L	FlyBase	CDS	8668	9276	.	+	0	ID=CDS_FBgn0031208:4_737;Name=CG11023-cds;Parent=FBtr0300690
+chr2L	FlyBase	three_prime_UTR	9277	9484	.	+	.	ID=three_prime_UTR_FBgn0031208:4_737;Name=CG11023-u3;Parent=FBtr0300690
