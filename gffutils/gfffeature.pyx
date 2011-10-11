@@ -65,9 +65,9 @@ cdef class Feature:
     cdef public str _str_attributes, filetype
     cdef object _attributes
 
-    def __init__(self, str chrom, str source, str featuretype,
-                 int start, int stop, str score, str strand,
-                 str frame, str attributes):
+    def __init__(self, str chrom=".", str source=".", str featuretype=".",
+                 int start=1, int stop=1, str score=".", str strand=".",
+                 str frame=".", str attributes=""):
         self.chrom = chrom
         self.source = source
         self.featuretype = featuretype
