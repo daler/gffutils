@@ -61,7 +61,7 @@ cdef class GFFFile:
 cdef class Feature:
     cdef public int start, stop
     cdef public str chrom, featuretype, source, score, strand, frame
-    cdef public str _id
+    cdef public str _id, dbid
     cdef public str _str_attributes, filetype
     cdef object _attributes
 
@@ -79,6 +79,7 @@ cdef class Feature:
         self._str_attributes = attributes.strip()
         self._attributes = None
         self.filetype = ""
+        self.dbid = ""
 
         if '=' in attributes:
             self.filetype = 'gff'
@@ -125,15 +126,18 @@ cdef class Feature:
                         return self._id
                     except KeyError:
                         pass
+                return self.dbid
+
             if self.filetype == 'gtf':
                 if self.featuretype not in ('gene', 'mRNA'):
-                    self._id = '%s:%s:%s:%s:%s' % (
+                    self._id = '%s:%s:%s-%s:%s' % (
                             self.featuretype,
                             self.chrom,
                             self.start,
                             self.stop,
                             self.strand)
                     return self._id
+                return self.dbid
 
         def __set__(self, value):
             self._id = value
