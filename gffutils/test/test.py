@@ -1,4 +1,5 @@
 import gffutils
+import sys
 import os
 import sqlite3
 import nose.tools as nt
@@ -16,8 +17,8 @@ if os.path.exists(testdbfn_gff):
     os.unlink(testdbfn_gff)
 
 def setup():
-    gffutils.GFFDBCreator('FBgn0031208.gff', testdbfn_gff, verbose=False).create()
-    gffutils.GTFDBCreator('FBgn0031208.gtf', testdbfn_gtf, verbose=False).create()
+    gffutils.GFFDBCreator('FBgn0031208.gff', testdbfn_gff, verbose=False, force=True).create()
+    gffutils.GTFDBCreator('FBgn0031208.gtf', testdbfn_gtf, verbose=False, force=True).create()
 
 
 
@@ -956,3 +957,29 @@ class TestGTFDBClass(GenericDBClass):
         print 'observed:',observed
         print 'expected:',expected
         assert observed == expected
+
+
+def test_empty_superclass_methods():
+    dbcreator = gffutils.db.DBCreator('FBgn0031208.gff', 'empty.db', verbose=False)
+    dbcreator.populate_from_features([])
+    dbcreator.update_relations()
+    assert os.path.exists('empty.db')
+    assert os.stat('empty.db').st_size == 0
+    os.unlink('empty.db')
+
+def test_force_removes_file():
+    os.system('echo "something" > empty.db')
+    dbcreator = gffutils.db.DBCreator('FBgn0031208.gff', 'empty.db', verbose=False, force=True)
+    assert os.path.exists('empty.db')
+    assert os.stat('empty.db').st_size == 0
+    os.unlink('empty.db')
+
+def test_verbose():
+    # just a smoke test to make sure it runs
+    actual_stderr = sys.stderr
+    import StringIO
+    sys.stderr = StringIO.StringIO()
+    gffdb = gffutils.db.GFFDBCreator('FBgn0031208.gff', 'deleteme.db', verbose=True, force=True).create()
+    sys.stderr = actual_stderr
+    os.unlink('deleteme.db')
+
