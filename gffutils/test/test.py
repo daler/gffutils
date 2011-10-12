@@ -387,7 +387,7 @@ class GenericDBClass(object):
     def features_test(self):
         # All featuretypes present and accounted for?
         expected = expected_features[self.featureclass]
-        results = list(self.G.features())
+        results = list(self.G.featuretypes())
         assert set(results) == set(expected)
 
     def strand_test(self):

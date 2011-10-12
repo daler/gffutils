@@ -484,7 +484,7 @@ class FeatureDB:
         for i in c:
             yield self[i[0]]
 
-    def features(self):
+    def featuretypes(self):
         """
         Returns an iterator of the different feature types found in the
         database.
