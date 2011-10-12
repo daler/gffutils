@@ -68,7 +68,6 @@ class DBCreator(object):
         ''')
         self.conn.commit()
 
-
     def set_filetype(self):
         c = self.conn.cursor()
         c.execute('''
@@ -106,7 +105,8 @@ class GFFDBCreator(DBCreator):
 
             if not feature.id:
                 new_id = '%s:%s:%s-%s:%s' % (feature.featuretype,
-                        feature.chrom, feature.start, feature.stop, feature.strand)
+                        feature.chrom, feature.start, feature.stop,
+                        feature.strand)
                 feature.id = new_id
             c.execute('''
                       INSERT OR IGNORE INTO features VALUES
