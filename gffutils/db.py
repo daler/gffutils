@@ -967,20 +967,36 @@ class FeatureDB:
     def to_GTF(self, gene, include_utrs=True):
         """
         Converts the gene into a series of GTF features that can be output to a
-        file (with feature.tostring()).
+        file.
 
-        Optionally include UTRs in the output with *include_UTRs=True*
+        Uses the GTF2.2 spec from http://mblab.wustl.edu/GTF22.html
+
+        * Featuretypes CDS, start_codon, stop_codon are required.
+        * start codon included in first CDS
+        * stop codon not included in last CDS; the last CDS must shrink by 3bp
+        * non-contiguous start/stop codons indicated by nonzero frame field; if
+          nonzero then there must be multiple features for the same codon
+        * frame:
+            * 0 = starts with whole codon at 5'-most base
+            * 1 = one extra base (the last of a codon) before the first whole codon
+            * 2 = two extra bases
+
         """
+        # how we're sorting exons...
         def by_start(x):
             return x.start
 
-        for transcript in self.children(gene, level=1, featuretype='mRNA'):
-
+        # first, get all the transcripts.
+        for transcript in self.children(gene, level=1):
             gene_id = gene.id
             transcript_id = transcript.id
+
+            # all exons of this transcript will have the same gene/transcript
+            # parents, so just create the attributes once
             attributes = 'gene_id "%s"; transcript_id "%s";' % (
                     gene_id, transcript_id)
 
+            # Sort exons separately from CDSs.
             exons = sorted(
                     self.children(
                         transcript, level=1, featuretype='exon'), key=by_start)
@@ -988,9 +1004,10 @@ class FeatureDB:
                     self.children(
                         transcript, level=1, featuretype='CDS'), key=by_start)
 
+            # needs more testing before implementation
             utrs = []
+            """
             if include_utrs:
-
                 five_prime_utrs = sorted(
                         self.children(
                                       transcript,
@@ -1012,10 +1029,9 @@ class FeatureDB:
                     if three_prime_utr.strand == '+':
                         three_prime_utr.start += 3
                     utrs.append(three_prime_utr)
-
-            grandchildren = exons + cdss + utrs
-
-            for feature in grandchildren:
+            """
+            # First the exons, which are easy:
+            for feature in exons:
                 yield Feature(chrom=feature.chrom,
                                  start=feature.start,
                                  stop=feature.stop,
@@ -1028,50 +1044,136 @@ class FeatureDB:
 
             # Construct new features for start_codon and stop_codon.
             # Contiguous start and stop codons always have frame=0, says the
-            # GTF 2.2 spec
-            if transcript.strand == '+':
-                # start codon
-                yield Feature(chrom=transcript.chrom,
-                                 start=cdss[0].start,
-                                 stop=cdss[0].start + 2,
-                                 strand=transcript.strand,
-                                 featuretype='start_codon',
-                                 source=transcript.source,
-                                 score='.',
-                                 frame='0',
-                                 attributes=attributes)
+            # GTF 2.2 spec.  TODO: how to identify from GFF when a codon is
+            # split?
 
-                # stop codon
-                yield Feature(chrom=transcript.chrom,
-                                 start=cdss[-1].stop + 1,
-                                 stop=cdss[-1].stop + 3,
-                                 strand=transcript.strand,
-                                 featuretype='stop_codon',
-                                 source=transcript.source,
-                                 score='.',
-                                 frame='0',
-                                 attributes=attributes)
+            # Only consider CDSs and start/stop if this is a coding gene.
+            # Rather than rely on featuretype=='mRNA", here we look for the
+            # presence of CDSs.
+            if len(cdss) > 0:
+                if transcript.strand == '+':
+                    # start codon
+                    yield Feature(chrom=transcript.chrom,
+                                     start=cdss[0].start,
+                                     stop=cdss[0].start + 2,
+                                     strand=transcript.strand,
+                                     featuretype='start_codon',
+                                     source=transcript.source,
+                                     score='.',
+                                     frame='0',
+                                     attributes=attributes)
 
-            # Or, if we're on the other strand,
-            if transcript.strand == '-':
-                yield Feature(chrom=transcript.chrom,
-                                 start=cdss[-1].stop,
-                                 stop=cdss[-1].stop - 2,
-                                 strand=transcript.strand,
-                                 featuretype='start_codon',
-                                 source=transcript.source,
-                                 score='.',
-                                 frame='0',
-                                 attributes=attributes)
-                yield Feature(chrom=transcript.chrom,
-                                 start=cdss[0].start - 1,
-                                 stop=cdss[0].start - 3,
-                                 strand=transcript.strand,
-                                 featuretype='stop_codon',
-                                 source=transcript.source,
-                                 score='.',
-                                 frame='0',
-                                 attributes=attributes)
+                    # stop codon
+                    yield Feature(chrom=transcript.chrom,
+                                     start=cdss[-1].stop - 2,
+                                     stop=cdss[-1].stop,
+                                     strand=transcript.strand,
+                                     featuretype='stop_codon',
+                                     source=transcript.source,
+                                     score='.',
+                                     frame='0',
+                                     attributes=attributes)
+
+                    # write out the first CDS, but only if a multi-CDS gene -- since
+                    # single-CDS genes need to have stop_codon coords trimmed
+                    nextframe = 0
+                    if len(cdss) > 1:
+                        yield Feature(chrom=transcript.chrom,
+                                      source=transcript.source,
+                                      featuretype='CDS',
+                                      strand=transcript.strand,
+                                      start=cdss[0].start,
+                                      stop=cdss[0].stop,
+                                      score='.',
+                                      frame=str(nextframe),
+                                      attributes=attributes)
+                        nextframe = (3 - ((len(cdss[0]) - nextframe) % 3)) % 3
+
+                    for cds in cdss[1:-1]:
+                        yield Feature(chrom=transcript.chrom,
+                                      source=transcript.source,
+                                      strand=transcript.strand,
+                                      featuretype='CDS',
+                                      start=cds.start,
+                                      stop=cds.stop,
+                                      score='.',
+                                      frame=str(nextframe),
+                                      attributes=attributes)
+                        nextframe = (3 - ((len(cds) - nextframe) % 3)) % 3
+
+                    # last CDS has stop_codon's coords removed
+                    yield Feature(chrom=transcript.chrom,
+                                  source=transcript.source,
+                                  strand=transcript.strand,
+                                  featuretype='CDS',
+                                  start=cdss[-1].start,
+                                  stop=cdss[-1].stop - 3,
+                                  score='.',
+                                  frame=str(nextframe),
+                                  attributes=attributes)
+
+                # Or, if we're on the other strand,
+                if transcript.strand == '-':
+
+                    # minus-strand has start codon included in CDS coords
+                    yield Feature(chrom=transcript.chrom,
+                                     start=cdss[-1].stop - 2,
+                                     stop=cdss[-1].stop,
+                                     strand=transcript.strand,
+                                     featuretype='start_codon',
+                                     source=transcript.source,
+                                     score='.',
+                                     frame='0',
+                                     attributes=attributes)
+
+                    # minus-strand stop codon needs to be removed from cdss[0]
+                    yield Feature(chrom=transcript.chrom,
+                                     start=cdss[0].start,
+                                     stop=cdss[0].start + 2,
+                                     strand=transcript.strand,
+                                     featuretype='stop_codon',
+                                     source=transcript.source,
+                                     score='.',
+                                     frame='0',
+                                     attributes=attributes)
+
+                    # first CDS is last sorted; only deal with it here a multi-CDS gene
+                    nextframe = 0
+                    if len(cdss) > 1:
+                        yield Feature(chrom=transcript.chrom,
+                                      source=transcript.source,
+                                      featuretype='CDS',
+                                      strand=transcript.strand,
+                                      start=cdss[-1].start,
+                                      stop=cdss[-1].stop,
+                                      score='.',
+                                      frame=str(nextframe),
+                                      attributes=attributes)
+                        nextframe = (3 - ((len(cdss[-1]) - nextframe) % 3)) % 3
+
+                    for cds in cdss[1:-1][::-1]:
+                        yield Feature(chrom=transcript.chrom,
+                                      source=transcript.source,
+                                      strand=transcript.strand,
+                                      featuretype='CDS',
+                                      start=cds.start,
+                                      stop=cds.stop,
+                                      score='.',
+                                      frame=str(nextframe),
+                                      attributes=attributes)
+                        nextframe = (3 - ((len(cds) - nextframe) % 3)) % 3
+
+                    # last CDS in gene (first in sorted list) has stop_codon's
+                    # coords removed
+                    yield Feature(chrom=transcript.chrom,
+                                  source=transcript.source,
+                                  strand=transcript.strand,
+                                  featuretype=cdss[0].featuretype,
+                                  start=cdss[0].start + 3,
+                                  stop=cdss[0].stop,
+                                  score='.',
+                                  frame=str(nextframe),
+                                  attributes=attributes)
 
     def refFlat(self, gene):
         """Writes the gene out as a RefFlat format:
