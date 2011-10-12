@@ -379,16 +379,26 @@ class FeatureDB:
         self.db_fn = db_fn
         self.conn = sqlite3.connect(db_fn)
         self.conn.text_factory = str
-        c = self.conn.cursor()
-        c.execute('''
-        SELECT filetype FROM meta
-        ''')
-        self.filetype = c.fetchone()[0]
 
+        # SELECT statement to use when you want all the fields of a feature,
+        # plus the db ID.  Results from this are usually sent right to
+        # self._newfeature()
         self.SELECT = """
         SELECT id, chrom, source, featuretype, start, stop, score, strand,
         frame, attributes
         """
+
+        c = self.conn.cursor()
+        try:
+            c.execute('''
+            SELECT filetype FROM meta
+            ''')
+            self.filetype = c.fetchone()[0]
+        except sqlite3.OperationalError:
+            c.execute(self.SELECT + ' FROM features LIMIT 1')
+            results = c.fetchone()[0]
+            feature = self._newfeature(results)
+            self.filetype = feature.filetype
 
     def _newfeature(self, *args):
         feature = Feature(*args[1:])
