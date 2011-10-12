@@ -70,7 +70,7 @@ cdef class Feature:
 
     def __init__(self, str chrom=".", str source=".", str featuretype=".",
                  int start=1, int stop=1, str score=".", str strand=".",
-                 str frame=".", str attributes=""):
+                 str frame=".", str attributes="", str filetype=""):
         self.chrom = chrom
         self.source = source
         self.featuretype = featuretype
@@ -81,13 +81,18 @@ cdef class Feature:
         self.frame = frame
         self._str_attributes = attributes.strip()
         self._attributes = None
-        self.filetype = ""
+        self.filetype = filetype
         self.dbid = ""
 
-        if '=' in attributes:
-            self.filetype = 'gff'
-        else:
-            self.filetype = 'gtf'
+        # filetype wasn't provided, so we have to guess...guess it's a GFF
+        # if there are as many "=" as ";",possibly missing a ";" at the
+        # end of the attributes string.
+        if self.filetype == "":
+            semicolons = attributes.count(';')
+            if attributes.count('=') > semicolons - 1:
+                self.filetype = 'gff'
+            else:
+                self.filetype = 'gtf'
 
     property attributes:
         def __get__(self):
