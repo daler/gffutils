@@ -774,7 +774,6 @@ class FeatureDB:
             else:
                 # The start position is outside the merged feature, so we're
                 # done with the current merged feature.  Prepare for output...
-                Feature = feature.__class__
                 merged_feature = Feature(chrom=feature.chrom,
                                          source='.',
                                          featuretype=featuretype,
@@ -792,7 +791,8 @@ class FeatureDB:
                 current_merged_stop = feature.stop
 
         # need to yield the last one.
-        Feature = feature.__class__
+        if len(features) == 1:
+            feature = features[0]
         merged_feature = Feature(chrom=feature.chrom,
                                  source='.',
                                  featuretype=featuretype,
