@@ -509,15 +509,15 @@ class FeatureDB:
         for i in c:
             yield self._newfeature(*i)
 
-    def exonic_bp(self, id, ignore_strand=False):
+    def exonic_bp(self, feature, ignore_strand=False):
         """
         Merges all exons of the gene *id* and sums the total bp.
         *ignore_strand* is passed to merge_features(). Useful for calculating
         RPKM for full gene models.
         """
-        if isinstance(id, Feature):
-            id = id.id
-        exons = self.children(id, featuretype='exon', level=2)
+        if isinstance(feature, Feature):
+            feature = feature.id
+        exons = self.children(feature, featuretype='exon', level=2)
         exons = list(exons)
         if len(exons) == 0:
             return 0
