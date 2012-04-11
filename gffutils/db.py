@@ -7,6 +7,7 @@ from gfffeature import GFFFile, Feature
 from helpers import FeatureNotFoundError, asinterval
 
 
+
 class DBCreator(object):
     def __init__(self, fn, dbfn, force=False, verbose=True, **kwargs):
         """
@@ -26,6 +27,11 @@ class DBCreator(object):
         self.nfeatures = len(gfffile)
         self.features = gfffile
         self.verbose = verbose
+
+    def msg(self, s):
+        if self.verbose:
+            sys.stderr.write(s)
+            sys.stderr.flush()
 
     def populate_from_features(self, features):
         pass
@@ -93,15 +99,12 @@ class GFFDBCreator(DBCreator):
         nfeatures = float(self.nfeatures)
         last_perc = 0
         for i, feature in enumerate(features):
-            if self.verbose:
-                perc = int(i / nfeatures * 100)
-                if perc != last_perc:
-                    msg = 'Populating features table and first-order '
-                    msg += 'relations: %d (%d%%)' % (i, perc)
-
-                    sys.stderr.write('\r' + msg)
-                    sys.stderr.flush()
-                last_perc = perc
+            perc = int(i / nfeatures * 100)
+            if perc != last_perc:
+                msg = 'Populating features table and first-order '
+                msg += 'relations: %d (%d%%)' % (i, perc)
+                self.msg('\r' + msg)
+            last_perc = perc
 
             if not feature.id:
                 new_id = '%s:%s:%s-%s:%s' % (feature.featuretype,
@@ -139,14 +142,11 @@ class GFFDBCreator(DBCreator):
         self.conn.commit()
 
         t1 = time.time()
-        if self.verbose:
-            sys.stderr.write('...done in %.1fs\n' % (t1 - t0))
-            sys.stderr.flush()
+        self.msg('...done in %.1fs\n' % (t1 - t0))
 
     def update_relations(self):
         t0 = time.time()
-        if self.verbose:
-            sys.stderr.write('Updating 2nd-order relations...')
+        self.msg('Updating 2nd-order relations...')
         c = self.conn.cursor()
 
         # create 2 more cursors so we can iterate over one while querying on
@@ -187,15 +187,11 @@ class GFFDBCreator(DBCreator):
             VALUES (?,?,?)''', (parent, child, 2))
 
         t1 = time.time()
-        if self.verbose:
-            sys.stderr.write('done in %.1fs\n' % (t1 - t0))
-            sys.stderr.flush()
+        self.msg('done in %.1fs\n' % (t1 - t0))
 
         # Re-create indexes.
         # TODO: performance testing to see how much of a difference these make
-        if self.verbose:
-            sys.stderr.write('Creating indexes...')
-            sys.stderr.flush()
+        self.msg('Creating indexes...')
         c.execute('drop index childindex')
         c.execute('drop index parentindex')
         c.execute('create index parentindex on relations (parent)')
@@ -209,9 +205,7 @@ class GFFDBCreator(DBCreator):
         self.conn.commit()
         os.unlink(tmp)
         t2 = time.time()
-        if self.verbose:
-            sys.stderr.write('done in %.1fs\n' % (t2 - t1))
-            sys.stderr.flush()
+        self.msg('done in %.1fs\n' % (t2 - t1))
 
 
 class GTFDBCreator(DBCreator):
@@ -221,9 +215,20 @@ class GTFDBCreator(DBCreator):
 
     def populate_from_features(self, features):
         t0 = time.time()
+        self.msg("Populating features and relations tables...")
         self.drop_indexes()
+        nfeatures = float(self.nfeatures)
+        last_perc = 0
         c = self.conn.cursor()
-        for feature in features:
+        for i, feature in enumerate(features):
+
+            perc = int(i / nfeatures * 100)
+            if perc != last_perc:
+                msg = 'Populating features and relations '
+                msg += 'table: %d (%d%%) ' % (i, perc)
+                self.msg('\r' + msg)
+            last_perc = perc
+
             parent = feature.attributes['transcript_id']
             grandparent = feature.attributes['gene_id']
 
@@ -270,19 +275,38 @@ class GTFDBCreator(DBCreator):
                        feature.frame,
                        feature._str_attributes))
         self.conn.commit()
+        t1 = time.time()
+        self.msg('done in %.1fs\n' % (t1 - t0))
 
     def update_relations(self):
         self.drop_indexes()
         c = self.conn.cursor()
         c2 = self.conn.cursor()
+        t0 = time.time()
+        self.msg("Creating temporary indexes...")
         c.execute('CREATE INDEX ids ON features (id)')
         c.execute('CREATE INDEX parentindex ON relations (parent)')
         c.execute('CREATE INDEX childindex ON relations (child)')
+        t1 = time.time()
+        self.msg('done in %.1fs\n' % (t1 - t0))
 
+        t0 = time.time()
+        self.msg("Inferring gene and transcript extents; saving unique to tempfile... ")
         tmp = tempfile.mktemp()
         fout = open(tmp, 'w')
         c.execute("SELECT DISTINCT parent FROM relations")
-        for parent in c:
+        parents = list(c)
+        nparents = float(len(parents))
+        last_perc = 0
+        for i, parent in enumerate(parents):
+
+            perc = int(i / nparents * 100)
+            if perc != last_perc:
+                msg = 'Inferring gene and transcript extents: '
+                msg += '%d (%d%%)...' % (i, perc)
+                self.msg('\r' + msg)
+            last_perc = perc
+
             parent = parent[0]
             c2.execute("""
                        SELECT min(start), max(stop), level, strand, chrom
@@ -318,7 +342,7 @@ class GTFDBCreator(DBCreator):
             # parents at level 1 are mRNAs.
             #
             # WARNING: this does NOT account for non-coding RNAs -- they will
-            # still be called "mRNA"
+            # still be called "mRNA".
 
             if level == 1:
                 featuretype = 'mRNA'
@@ -336,6 +360,12 @@ class GTFDBCreator(DBCreator):
 
         # Now that the file has been created and we're done querying for the
         # parents, slurp in the file and insert everything into the db.
+
+        t1 = time.time()
+        self.msg('done in %.1fs\n' % (t1- t0))
+
+        t0 = time.time()
+        self.msg('Importing inferred features...')
         fin = open(fout.name)
         for line in fin:
             score = '.'
@@ -348,11 +378,17 @@ class GTFDBCreator(DBCreator):
                       """, line.strip().split('\t') + [score, source, frame])
 
         self.conn.commit()
+        t1 = time.time()
+        self.msg('done in %.1fs\n' % (t1- t0))
         os.remove(tmp)
 
+        t0 = time.time()
+        self.msg('Creating index...')
         c.execute('DROP INDEX ids')
         c.execute('CREATE INDEX ids ON features (id)')
         self.conn.commit()
+        t1 = time.time()
+        self.msg('done in %.1fs\n' % (t1 - t0))
 
 
 class FeatureDB:
