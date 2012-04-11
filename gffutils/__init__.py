@@ -40,3 +40,24 @@ def create_db(fn, dbfn, verbose=True, force=False):
     else:
         creator = GTFDBCreator(fn, dbfn, verbose=verbose)
     creator.create()
+
+
+def data_dir():
+    """
+    Returns the data directory that contains example files for tests and
+    documentation.
+    """
+    return os.path.join(os.path.dirname(__file__), 'test', 'data')
+
+
+def example_filename(fn):
+    """
+    Return a bed file from the pybedtools examples directory.  Use
+    func:`list_example_files` to see a list of files that are included.
+    """
+    fn = os.path.join(data_dir(), fn)
+    if not os.path.exists(fn):
+        raise ValueError("%s does not exist" % fn)
+    return fn
+
+
