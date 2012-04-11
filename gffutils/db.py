@@ -170,24 +170,13 @@ class GFFDBCreator(DBCreator):
         fout = open(tmp, 'w')
         for parent in c:
             parent = parent[0]
-
-            # Here we get the first-level child from the initial import.   This
-            # data was contained in the "Parent=" attribute of each GFF
-            # feature.
-            c2.execute('''
-            SELECT child FROM relations
-            WHERE parent = ? AND level=1''', (parent,))
-
-            # For each of those children, we get *their* children -- so the
-            # 'grandchildren' of the original parent.
-            for child in c2:
-                child = child[0]
-                c3.execute('''
-                SELECT child FROM relations
-                WHERE parent = ? AND level=1''', (child,))
-                for grandchild in c3:
-                    grandchild = grandchild[0]
-                    fout.write('%s\t%s\n' % (parent, grandchild))
+            c2.execute("""
+            SELECT child FROM relations WHERE parent IN
+                (SELECT child FROM relations WHERE parent=?)
+            """, (parent,))
+            for grandchild in c2:
+                grandchild = grandchild[0]
+                fout.write('%s\t%s\n' % (parent, grandchild))
         fout.close()
 
         # Import the "grandchild" file into the relations table
