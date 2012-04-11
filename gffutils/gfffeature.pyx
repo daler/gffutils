@@ -6,6 +6,13 @@ cdef class GFFFile:
     cdef object ignore, only
 
     def __init__(self, str filename, ignore=None, only=None):
+        """
+        Parses a GFF or GTF file, `filename` and yields Feature objects.
+
+        `ignore` can be a list of feature types to ignore.
+
+        `only` can be a list of the only feature types to keep.
+        """
         self.filename = filename
         self.ignore = ignore
         self.only = only
@@ -51,7 +58,7 @@ cdef class GFFFile:
                 break
         fields[3] = int(fields[3])
         fields[4] = int(fields[4])
-        return Feature(*fields)
+        return Feature(*fields, filetype=self.filetype)
 
     def __len__(self):
         n = sum(1 for _ in self)
