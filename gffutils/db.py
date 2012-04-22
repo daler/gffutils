@@ -7,7 +7,6 @@ from gfffeature import GFFFile, Feature
 from helpers import FeatureNotFoundError, asinterval
 
 
-
 class DBCreator(object):
     def __init__(self, fn, dbfn, force=False, verbose=True, **kwargs):
         """
@@ -291,7 +290,9 @@ class GTFDBCreator(DBCreator):
         self.msg('done in %.1fs\n' % (t1 - t0))
 
         t0 = time.time()
-        self.msg("Inferring gene and transcript extents; saving unique to tempfile... ")
+        self.msg(
+                "Inferring gene and transcript extents; saving unique "
+                "to tempfile... ")
         tmp = tempfile.mktemp()
         fout = open(tmp, 'w')
         c.execute("SELECT DISTINCT parent FROM relations")
@@ -362,7 +363,7 @@ class GTFDBCreator(DBCreator):
         # parents, slurp in the file and insert everything into the db.
 
         t1 = time.time()
-        self.msg('done in %.1fs\n' % (t1- t0))
+        self.msg('done in %.1fs\n' % (t1 - t0))
 
         t0 = time.time()
         self.msg('Importing inferred features...')
@@ -379,7 +380,7 @@ class GTFDBCreator(DBCreator):
 
         self.conn.commit()
         t1 = time.time()
-        self.msg('done in %.1fs\n' % (t1- t0))
+        self.msg('done in %.1fs\n' % (t1 - t0))
         os.remove(tmp)
 
         t0 = time.time()
@@ -447,7 +448,8 @@ class FeatureDB:
         Search for a string in features' attributes.
 
         :param text: String to search for, case-insensitive.
-        :param featuretype: Restrict search to a particular featuretype; default is `"gene"`
+        :param featuretype: Restrict search to a particular featuretype;
+                            default is `"gene"`
 
         :rtype: Iterator of :class:`gffutils.Feature` objects
 
@@ -495,9 +497,9 @@ class FeatureDB:
             # genes on + strand of chrX
             self.features_of_type('gene',chrom='chrX', strand='+')
 
-        For more complicated operations, (e.g., filtering by multiple chromosomes)
-        you'll probably want to use self.execute() directly and write your own
-        SQL queries . . . or just call this method iteratively.
+        For more complicated operations, (e.g., filtering by multiple
+        chromosomes) you'll probably want to use self.execute() directly and
+        write your own SQL queries . . . or just call this method iteratively.
         """
         filter_clause = ''
         if chrom is not None:
@@ -1020,7 +1022,8 @@ class FeatureDB:
           nonzero then there must be multiple features for the same codon
         * frame:
             * 0 = starts with whole codon at 5'-most base
-            * 1 = one extra base (the last of a codon) before the first whole codon
+            * 1 = one extra base (the last of a codon) before
+                  the first whole codon
             * 2 = two extra bases
 
         """
@@ -1116,8 +1119,9 @@ class FeatureDB:
                                      frame='0',
                                      attributes=attributes)
 
-                    # write out the first CDS, but only if a multi-CDS gene -- since
-                    # single-CDS genes need to have stop_codon coords trimmed
+                    # write out the first CDS, but only if a multi-CDS gene --
+                    # since single-CDS genes need to have stop_codon coords
+                    # trimmed
                     nextframe = 0
                     if len(cdss) > 1:
                         yield Feature(chrom=transcript.chrom,
@@ -1179,7 +1183,8 @@ class FeatureDB:
                                      frame='0',
                                      attributes=attributes)
 
-                    # first CDS is last sorted; only deal with it here a multi-CDS gene
+                    # first CDS is last sorted; only deal with it here a
+                    # multi-CDS gene
                     nextframe = 0
                     if len(cdss) > 1:
                         yield Feature(chrom=transcript.chrom,
