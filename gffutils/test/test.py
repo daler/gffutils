@@ -17,8 +17,8 @@ if os.path.exists(testdbfn_gff):
     os.unlink(testdbfn_gff)
 
 def setup():
-    gffutils.GFFDBCreator('FBgn0031208.gff', testdbfn_gff, verbose=False, force=True).create()
-    gffutils.GTFDBCreator('FBgn0031208.gtf', testdbfn_gtf, verbose=False, force=True).create()
+    gffutils.create_db('FBgn0031208.gff', testdbfn_gff, verbose=False, force=True)
+    gffutils.create_db('FBgn0031208.gtf', testdbfn_gtf, verbose=False, force=True)
 
 
 
