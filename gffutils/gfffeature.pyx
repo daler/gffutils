@@ -136,6 +136,7 @@ cdef class Feature:
         def __set__(self, value):
             self._filetype = value
 
+
     property attributes:
         def __get__(self):
             # Lazy evaluation
@@ -182,27 +183,35 @@ cdef class Feature:
         return '<Feature: %s, %s:%s-%s (%s)>' % (
                 self.featuretype, self.chrom, self.start, self.stop, self.strand)
 
+    cdef _autoid(self):
+        """
+        Creates an automatically-generated ID based on self's attributes
+        """
+        return "%s:%s:%s-%s:%s" % (
+                self.featuretype,
+                self.chrom,
+                self.start,
+                self.stop,
+                self.strand)
+
     property id:
         def __get__(self):
             if self._id:
                 return self._id
+            # See if this feature already has a usable ID field (GFF only)
             if self.filetype == 'gff':
                 for key in ("ID", "Name", "gene_name"):
                     try:
                         self._id = self.attributes[key]
                         return self._id
                     except KeyError:
-                        pass
+                        self.id = self._autoid()
                 return self.dbid
 
+            # GTF features do not have unique identifiers;
             if self.filetype == 'gtf':
                 if self.featuretype not in ('gene', 'mRNA'):
-                    self._id = '%s:%s:%s-%s:%s' % (
-                            self.featuretype,
-                            self.chrom,
-                            self.start,
-                            self.stop,
-                            self.strand)
+                    self._id = self._autoid()
                     return self._id
                 return self.dbid
 
