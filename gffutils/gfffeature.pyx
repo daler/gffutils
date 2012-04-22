@@ -78,9 +78,28 @@ cdef class Feature:
     def __init__(self, str chrom=".", str source=".", str featuretype=".",
                  int start=1, int stop=1, str score=".", str strand=".",
                  str frame=".", str attributes="", str filetype=""):
-        self.chrom = chrom
-        self.source = source
-        self.featuretype = featuretype
+        """
+        Class to represent a GTF/GFF feature.
+
+        Signature:
+
+            Feature(chrom=".", source=".", featuretype=".", start=1, stop=1,
+            score=".", strand=".", frame=".", attributes="", filetype="")
+
+        :param chrom: chromosome
+        :param source: source
+        :param featuretype: featuretype
+        :param start: Integer start position, 1-based
+        :param stop: Integer stop position, 1-based inclusive
+        :param score: String score, default is "."
+        :param strand: Strand, default is "."
+        :param frame: Coding frame, default is "."
+        :param attributes: Attributes for the feature, specific to the format
+        :param filetype: File type this feature should be considered (GFF, GTF)
+        """
+        self.chrom = chrom #: chromosome
+        self.source = source #: source
+        self.featuretype = featuretype #: featuretype
         self.start = start
         self.stop = stop
         self.score = score
