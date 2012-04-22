@@ -444,8 +444,15 @@ class FeatureDB:
 
     def attribute_search(self, text, featuretype='gene'):
         """
-        Looks for *text* within the "attributes" field of features of
-        *featuretype* ('gene' by default).  Useful for looking up genes based
+        Search for a string in features' attributes.
+
+        :param text: String to search for, case-insensitive.
+        :param featuretype: Restrict search to a particular featuretype; default is `"gene"`
+
+        :rtype: Iterator of :class:`gffutils.Feature` objects
+
+        Looks for `text` within the attributes field of features of
+        `featuretype` ('"gene"' by default).  Useful for looking up genes based
         on symbol or name rather than accession number.  Returns a list of
         matching Features.
 
@@ -465,9 +472,17 @@ class FeatureDB:
     def features_of_type(self, featuretype, chrom=None, start=None, stop=None,
             strand=None):
         """
-        Returns an iterator of GFFFeature objects that have the feature type
-        *featuretype*.  You can optionally specify chrom, strand, start, and
-        stop filters.
+        Retrieve feature of a specific feature type (gene, exon, etc.)
+
+        :param featuretype: feature type to return
+        :param chrom: Optional chromsome to restrict results
+        :param start: Optional start position to restrict results
+        :param stop: Optional stop position to restric results
+        :rtype: Iterator of :class:`gffdb.Feature` objects
+
+        Returns an iterator of :class:`gffutils.Feature` objects that have the
+        feature type `featuretype`.  You can optionally specify chrom, strand,
+        start, and stop filters.
 
         For example, to get all exons within a range::
 
@@ -482,7 +497,7 @@ class FeatureDB:
             # genes on + strand of chrX
             self.features_of_type('gene',chrom='chrX', strand='+')
 
-        For more complicated stuff, (e.g., filtering by multiple chromosomes)
+        For more complicated operations, (e.g., filtering by multiple chromosomes)
         you'll probably want to use self.execute() directly and write your own
         SQL queries . . . or just call this method iteratively.
         """
@@ -511,8 +526,9 @@ class FeatureDB:
 
     def featuretypes(self):
         """
-        Returns an iterator of the different feature types found in the
-        database.
+        Iterator of featuretypes found in the database.
+
+        :rtype: Iterator of :class:`Feature` objects
         """
         c = self.conn.cursor()
         c.execute('''
@@ -536,8 +552,11 @@ class FeatureDB:
 
     def exonic_bp(self, feature, ignore_strand=False):
         """
-        Merges all exons of the gene *id* and sums the total bp.
-        *ignore_strand* is passed to merge_features(). Useful for calculating
+        Convenience function for calculating unique exonic bp for a gene across
+        all isoforms.
+
+        Merges all exons of the gene `id` and sums the total bp.
+        `ignore_strand` is passed to merge_features(). Useful for calculating
         RPKM for full gene models.
         """
         if isinstance(feature, Feature):
