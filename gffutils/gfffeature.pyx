@@ -69,17 +69,27 @@ cdef class GFFFile:
         self.fn.seek(0)
 
 cdef class Feature:
+    cdef str _filetype
     cdef public int start, stop
     cdef public str chrom, featuretype, source, score, strand, frame
     cdef public str _id, dbid
-    cdef public str _str_attributes, filetype
+    cdef public str _str_attributes
     cdef object _attributes
 
     def __init__(self, str chrom=".", str source=".", str featuretype=".",
                  int start=1, int stop=1, str score=".", str strand=".",
                  str frame=".", str attributes="", str filetype=""):
         """
-        Class to represent a GTF/GFF feature.
+        Class to represent a GTF/GFF feature (implemented in Cython).
+
+        Typical usage is to create a new Feature object straight from a GFF or
+        GTF line, e.g.::
+
+            >>> f = Feature(*(line.split('\\t')))
+
+        Note that the __init__ method removes newlines from the attributes
+        field, so it's OK if a newline is in the last field in the example
+        above.
 
         Signature:
 
@@ -96,10 +106,13 @@ cdef class Feature:
         :param frame: Coding frame, default is "."
         :param attributes: Attributes for the feature, specific to the format
         :param filetype: File type this feature should be considered (GFF, GTF)
+
+        The `feature` attribute, if not provided, is automatically detected and
+        is either `'gtf'` or '`gff'`.
         """
-        self.chrom = chrom #: chromosome
-        self.source = source #: source
-        self.featuretype = featuretype #: featuretype
+        self.chrom = chrom
+        self.source = source
+        self.featuretype = featuretype
         self.start = start
         self.stop = stop
         self.score = score
@@ -107,18 +120,21 @@ cdef class Feature:
         self.frame = frame
         self._str_attributes = attributes.strip()
         self._attributes = None
-        self.filetype = filetype
+        self._filetype = filetype
         self.dbid = ""
 
-        # filetype wasn't provided, so we have to guess...guess it's a GFF
-        # if there are as many "=" as ";",possibly missing a ";" at the
-        # end of the attributes string.
-        if self.filetype == "":
-            semicolons = attributes.count(';')
-            if attributes.count('=') > semicolons - 1:
-                self.filetype = 'gff'
-            else:
-                self.filetype = 'gtf'
+    property filetype:
+        def __get__(self):
+            if self.filetype == "":
+                semicolons = self._str_attributes.count(';')
+                if self._str_attributes.count('=') > semicolons - 1:
+                    self._filetype = 'gff'
+                else:
+                    self._filetype = 'gtf'
+            return self._filetype
+
+        def __set__(self, value):
+            self._filetype = value
 
     property attributes:
         def __get__(self):
