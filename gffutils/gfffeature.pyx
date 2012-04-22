@@ -50,7 +50,7 @@ cdef class GFFFile:
             line = self.fn.next()
 
             # special case for flybase files
-            if line.startswith('>', '##FASTA'):
+            if line.startswith(('>', '##FASTA')):
                 raise StopIteration
 
             fields = line.split('\t')
