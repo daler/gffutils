@@ -464,10 +464,8 @@ class FeatureDB:
                   %s from features where attributes
                   like "%s" and featuretype = ?
                   ''' % (self.SELECT, text,), (featuretype,))
-        results = []
         for result in c.fetchall():
-            results.append(self._newfeature(*result))
-        return results
+            yield self._newfeature(*result)
 
     def features_of_type(self, featuretype, chrom=None, start=None, stop=None,
             strand=None):
