@@ -1,4 +1,11 @@
 import gzip
+import os
+
+
+def example_filename(fn):
+    here = os.path.dirname(__file)
+    return os.path.join(here, 'test', 'data', fn)
+
 
 def asinterval(feature):
     """
@@ -12,6 +19,7 @@ def asinterval(feature):
                           'pybedtools.Interval objects')
     return pybedtools.create_interval_from_list(
             str(feature).split('\t'))
+
 
 class FeatureNotFoundError(Exception):
     """

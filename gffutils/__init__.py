@@ -1,7 +1,8 @@
 import os
 from gfffeature import Feature, GFFFile
 from db import GFFDBCreator, GTFDBCreator, FeatureDB
-from helpers import FeatureNotFoundError, clean_gff, inspect_featuretypes
+from helpers import FeatureNotFoundError, clean_gff,\
+        inspect_featuretypes, example_filename
 import copy_reg
 
 
@@ -59,5 +60,3 @@ def example_filename(fn):
     if not os.path.exists(fn):
         raise ValueError("%s does not exist" % fn)
     return fn
-
-
