@@ -14,6 +14,7 @@ cdef class GFFFile:
         `only` can be a list of the only feature types to keep.
         """
         self.filename = filename
+        self.filetype = ""
         self.ignore = ignore
         self.only = only
         if only and ignore:
@@ -125,12 +126,14 @@ cdef class Feature:
 
     property filetype:
         def __get__(self):
-            if self.filetype == "":
+            if self._filetype == "":
                 semicolons = self._str_attributes.count(';')
                 if self._str_attributes.count('=') > semicolons - 1:
                     self._filetype = 'gff'
                 else:
                     self._filetype = 'gtf'
+            else:
+                assert self._filetype in ('gtf', 'gff')
             return self._filetype
 
         def __set__(self, value):
