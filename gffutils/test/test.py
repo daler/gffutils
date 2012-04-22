@@ -17,8 +17,8 @@ if os.path.exists(testdbfn_gff):
     os.unlink(testdbfn_gff)
 
 def setup():
-    gffutils.create_db('FBgn0031208.gff', testdbfn_gff, verbose=False, force=True)
-    gffutils.create_db('FBgn0031208.gtf', testdbfn_gtf, verbose=False, force=True)
+    gffutils.create_db(gffutils.example_filename('FBgn0031208.gff'), testdbfn_gff, verbose=False, force=True)
+    gffutils.create_db(gffutils.example_filename('FBgn0031208.gtf'), testdbfn_gtf, verbose=False, force=True)
 
 
 
@@ -170,7 +170,7 @@ def test_clean_gff():
 
 
 def test_inspect_featuretypes():
-    observed = gffutils.inspect_featuretypes('FBgn0031208.gff')
+    observed = gffutils.inspect_featuretypes(gffutils.example_filename('FBgn0031208.gff'))
     observed.sort()
     expected = ['CDS', 'exon', 'five_prime_UTR', 'gene', 'intron', 'mRNA', 'pcr_product', 'protein', 'three_prime_UTR']
     print observed
@@ -187,11 +187,11 @@ class GenericDBClass(object):
         self.Feature = gffutils.Feature
         if self.featureclass == 'GFF':
             extension = '.gff'
-            self.fn = 'FBgn0031208.gff'
+            self.fn = gffutils.example_filename('FBgn0031208.gff')
             self.dbfn = testdbfn_gff
         if self.featureclass == 'GTF':
             extension = '.gtf'
-            self.fn = 'FBgn0031208.gtf'
+            self.fn = gffutils.example_filename('FBgn0031208.gtf')
             self.dbfn = testdbfn_gtf
 
         self.G = gffutils.FeatureDB(self.dbfn)
@@ -895,13 +895,13 @@ FBtr0300690	FBgn0031208	chr2L	+	7529	9484	7680	9276	3	7529,8193,8668,	8116,8589,
 
     def attribute_search_test(self):
         if self.featureclass == 'GFF':
-            observed = self.G.attribute_search('FBan0011023')
+            observed = list(self.G.attribute_search('FBan0011023'))
             expected = self.G['FBgn0031208']
             assert len(observed)==1
             assert str(observed[0]) == str(expected)
 
         if self.featureclass == 'GTF':
-            observed = self.G.attribute_search('Fk_gene_1')
+            observed = list(self.G.attribute_search('Fk_gene_1'))
             expected = self.G['Fk_gene_1']
             assert len(observed)==1
             assert str(observed[0]) == str(expected)
@@ -997,7 +997,7 @@ class TestGTFDBClass(GenericDBClass):
 
 
 def test_empty_superclass_methods():
-    dbcreator = gffutils.db.DBCreator('FBgn0031208.gff', 'empty.db', verbose=False)
+    dbcreator = gffutils.db.DBCreator(gffutils.example_filename('FBgn0031208.gff'), 'empty.db', verbose=False)
     dbcreator.populate_from_features([])
     dbcreator.update_relations()
     assert os.path.exists('empty.db')
@@ -1006,7 +1006,7 @@ def test_empty_superclass_methods():
 
 def test_force_removes_file():
     os.system('echo "something" > empty.db')
-    dbcreator = gffutils.db.DBCreator('FBgn0031208.gff', 'empty.db', verbose=False, force=True)
+    dbcreator = gffutils.db.DBCreator(gffutils.example_filename('FBgn0031208.gff'), 'empty.db', verbose=False, force=True)
     assert os.path.exists('empty.db')
     assert os.stat('empty.db').st_size == 0
     os.unlink('empty.db')
@@ -1016,7 +1016,8 @@ def test_verbose():
     actual_stderr = sys.stderr
     import StringIO
     sys.stderr = StringIO.StringIO()
-    gffdb = gffutils.db.GFFDBCreator('FBgn0031208.gff', 'deleteme.db', verbose=True, force=True).create()
+    gffdb = gffutils.db.GFFDBCreator(gffutils.example_filename('FBgn0031208.gff'),
+            'deleteme.db', verbose=True, force=True).create()
     sys.stderr = actual_stderr
     os.unlink('deleteme.db')
 
