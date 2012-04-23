@@ -11,7 +11,7 @@ setup(
         name='gffutils',
         cmdclass={'build_ext': build_ext},
         install_requires=['cython'],
-        ext_modules=[Extension('gfffeature', sources=['gffutils/gfffeature.pyx'])],
+        ext_modules=[Extension('gffutils.gfffeature', sources=['gffutils/gfffeature.pyx'])],
         packages=['gffutils'],
         author='Ryan Dale',
         package_dir={'gffutils': 'gffutils'},
