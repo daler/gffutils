@@ -157,16 +157,17 @@ expected_features,
 def test_clean_gff():
     # test the "full" cleaning -- remove some featuretypes, do sanity-checking,
     # add chr
-    gffutils.clean_gff('dirty.gff',newfn='cleaned.tmp',featuretypes_to_remove=['pcr_product','protein'],addchr=True)
+    fn = gffutils.example_filename('dirty.gff')
+    gffutils.clean_gff(fn, newfn='cleaned.tmp',featuretypes_to_remove=['pcr_product','protein'],addchr=True)
     observed = open('cleaned.tmp').readlines()
-    expected = open('fully-cleaned.gff').readlines()
+    expected = open(gffutils.example_filename('fully-cleaned.gff')).readlines()
     assert observed==expected
     os.unlink('cleaned.tmp')
-    gffutils.clean_gff('dirty.gff',featuretypes_to_remove=None, sanity_check=False)
-    observed = open('dirty.gff.cleaned').read()
-    expected = open('basic-cleaned.gff').read()
+    gffutils.clean_gff(fn, featuretypes_to_remove=None, sanity_check=False)
+    observed = open(gffutils.example_filename('dirty.gff.cleaned')).read()
+    expected = open(gffutils.example_filename('basic-cleaned.gff')).read()
     assert observed == expected
-    os.unlink('dirty.gff.cleaned')
+    os.unlink(gffutils.example_filename('dirty.gff.cleaned'))
 
 
 def test_inspect_featuretypes():
