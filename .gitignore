@@ -1,6 +1,5 @@
 *.swo
 *gfffeature.so
-*gfffeature.c
 *.swp
 *.pyc
 gffutils.egg-info/

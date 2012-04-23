@@ -1,11 +1,40 @@
+import sys
 from setuptools import setup
 from distutils.extension import Extension
+
+# optional cython
 try:
-    from Cython.Distutils import build_ext
+  from Cython.Distutils import build_ext
 except ImportError:
-    print "-------------------------------------------------"
-    print "Please install Cython: (try 'pip install cython')"
-    print "-------------------------------------------------"
+  from distutils.command import build_ext as _build_ext
+  class build_ext(_build_ext.build_ext):
+
+      description = "change pyx files to corresponding .c/.cpp (fallback when cython is not installed)"
+
+      def build_extensions(self):
+          # First, sanity-check the 'extensions' list
+          self.check_extensions_list(self.extensions)
+
+          for extension in self.extensions:
+              iscpp = extension.language and extension.language.lower() == 'c++'
+              target_ext = '.cpp' if iscpp else '.c'
+
+              patchedsrc = []
+              for source in extension.sources:
+                (root, ext) = os.path.splitext(source)
+                if ext == '.pyx':
+                  patchedsrc.append(root + target_ext)
+                else:
+                  patchedsrc.append(source)
+
+              extension.sources = patchedsrc
+              self.build_extension(extension)
+
+
+if 'setuptools.extension' in sys.modules:
+    m = sys.modules['setuptools.extension']
+    m.Extension.__dict__ = m._Extension.__dict__
+
 
 setup(
         name='gffutils',
