@@ -1,4 +1,5 @@
 import os
+from version import __version__
 from gfffeature import Feature, GFFFile
 from db import GFFDBCreator, GTFDBCreator, FeatureDB
 from helpers import FeatureNotFoundError, clean_gff,\

@@ -1,3 +1,4 @@
+import os
 import sys
 from setuptools import setup
 from distutils.extension import Extension
@@ -36,8 +37,12 @@ if 'setuptools.extension' in sys.modules:
     m.Extension.__dict__ = m._Extension.__dict__
 
 
+version_py = os.path.join(os.path.dirname(__file__), 'gffutils', 'version.py')
+version = open(version_py).read().strip().split('=')[-1].replace('"', '')
+
 setup(
         name='gffutils',
+        version=version,
         cmdclass={'build_ext': build_ext},
         install_requires=['cython'],
         ext_modules=[Extension('gffutils.gfffeature', sources=['gffutils/gfffeature.pyx'])],
