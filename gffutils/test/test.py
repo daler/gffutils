@@ -1022,3 +1022,28 @@ def test_verbose():
     sys.stderr = actual_stderr
     os.unlink('deleteme.db')
 
+def test_attributes_modify():
+    """
+    Test that attributes can be modified in a GFF record.
+    """
+    # Test that attributes can be modified
+    gffutils.create_db(gffutils.example_filename('FBgn0031208.gff'), testdbfn_gff,
+                       verbose=False,
+                       force=True)
+    db = gffutils.FeatureDB(testdbfn_gff)
+    gene_id = "FBgn0031208"
+    gene_childs = list(db.children(gene_id))
+    print "old attributes: "
+    print gene_childs[0].attributes["ID"]
+    gene_childs[0].attributes["ID"] = "Modified"
+    print "new attributes: "
+    print gene_childs[0].attributes
+    ###
+    ### NOTE: Would be ideal if database checked that this
+    ### change leaves "dangling" children; i.e. children
+    ### GFF nodes that point to Parent that does not exist.
+    ###
+    
+
+if __name__ == "__main__":
+    test_attributes_modify()

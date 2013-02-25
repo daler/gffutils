@@ -294,11 +294,13 @@ cdef class Attributes:
         attrs field if it's a GFF Interval
         """
         self._attr_dict[key] = value
-        if key not in self._field_order:
+        # Corrected key check to allow overwriting of attributes
+        # in a record
+        if (key, "") not in self._field_order:
             # default to no space for GFF, but with space for GTF
             if self.filetype == 'gff':
                 self._field_order.append((key, ""))
-            if self.filetype == 'gtf':
+            elif self.filetype == 'gtf':
                 self._field_order.append((key, " "))
 
     def __getitem__(self, key):
