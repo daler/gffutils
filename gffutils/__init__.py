@@ -38,9 +38,9 @@ def create_db(fn, dbfn, verbose=True, force=False):
     first_feature = GFFFile(fn).next()
     fmt = first_feature.filetype
     if fmt == 'gff':
-        creator = GFFDBCreator(fn, dbfn, verbose=verbose)
+        creator = GFFDBCreator(fn, dbfn, verbose=verbose, force=force)
     else:
-        creator = GTFDBCreator(fn, dbfn, verbose=verbose)
+        creator = GTFDBCreator(fn, dbfn, verbose=verbose, force=force)
     creator.create()
 
 
