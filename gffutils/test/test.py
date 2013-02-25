@@ -1035,9 +1035,12 @@ def test_attributes_modify():
     gene_childs = list(db.children(gene_id))
     print "old attributes: "
     print gene_childs[0].attributes
+    assert str(gene_childs[0].attributes) == 'ID=FBtr0300689;Name=CG11023-RB;Parent=FBgn0031208;Dbxref=FlyBase_Annotation_IDs:CG11023-RB;score_text=Strongly Supported;score=11'
+
     gene_childs[0].attributes["ID"] = "Modified"
     print "new attributes: "
     print gene_childs[0].attributes
+    assert str(gene_childs[0].attributes) == 'ID=Modified;Name=CG11023-RB;Parent=FBgn0031208;Dbxref=FlyBase_Annotation_IDs:CG11023-RB;score_text=Strongly Supported;score=11;ID=Modified'
     ###
     ### NOTE: Would be ideal if database checked that this
     ### change leaves "dangling" children; i.e. children
