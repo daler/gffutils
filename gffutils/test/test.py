@@ -1034,7 +1034,7 @@ def test_attributes_modify():
     gene_id = "FBgn0031208"
     gene_childs = list(db.children(gene_id))
     print "old attributes: "
-    print gene_childs[0].attributes["ID"]
+    print gene_childs[0].attributes
     gene_childs[0].attributes["ID"] = "Modified"
     print "new attributes: "
     print gene_childs[0].attributes
