@@ -38,13 +38,14 @@ setup(
     name='gffutils',
     version=version,
     cmdclass={'build_ext': build_ext},
-    install_requires=['cython'],
+    install_requires=['cython', 'argh', 'argcomplete'],
     ext_modules=[
         Extension(
             'gffutils.gfffeature',
             sources=['gffutils/gfffeature.pyx'])
     ],
-    packages=['gffutils'],
+    packages=['gffutils', 'gffutils.scripts'],
+    scripts=['gffutils/scripts/gffutils-cli'],
     author='Ryan Dale',
     package_dir={'gffutils': 'gffutils'},
     description="Work with GFF and GTF files in a flexible "
