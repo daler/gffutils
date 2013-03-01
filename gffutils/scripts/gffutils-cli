@@ -145,7 +145,7 @@ def common(db):
 @arg('--force', help='''Overwrite an existing database''')
 @arg('--verbose', help='''Report timing information when creating the
      database''')
-def create(filename, output=None, force=True, verbose=True):
+def create(filename, output=None, force=False, verbose=True):
     """
     Create a database.
     """
