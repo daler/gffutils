@@ -461,11 +461,16 @@ class FeatureDB:
         Uses SQL's LIKE operator, which is case-insensitive.
         """
         text = '%' + text + '%'
+        if featuretype:
+            featuretype_clause = 'and featuretype = "%s"' % featuretype
+        else:
+            featuretype_clause = ""
+
         c = self.conn.cursor()
         c.execute('''
                   %s from features where attributes
-                  like "%s" and featuretype = ?
-                  ''' % (self.SELECT, text,), (featuretype,))
+                  like "%s" %s
+                  ''' % (self.SELECT, text, featuretype_clause))
         for result in c.fetchall():
             yield self._newfeature(*result)
 
