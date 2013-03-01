@@ -326,3 +326,12 @@ cdef class Attributes:
 
     def __repr__(self):
         return repr(self._attr_dict)
+
+    def keys(self):
+        return self._attr_dict.keys()
+
+    def items(self):
+        return self._attr_dict.items()
+
+    def values(self):
+        return self._attr_dict.values()
