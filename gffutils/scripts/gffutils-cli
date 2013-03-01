@@ -143,12 +143,13 @@ def common(db):
 @arg('--output', help='''Database to create.  Default is to append ".db" to the
      end of the input filename''')
 @arg('--force', help='''Overwrite an existing database''')
-@arg('--verbose', help='''Report timing information when creating the
-     database''')
-def create(filename, output=None, force=False, verbose=True):
+@arg('--quiet', help='''Suppress the reporting of timing information when
+     creating the database''')
+def create(filename, output=None, force=False, quiet=False):
     """
     Create a database.
     """
+    verbose = not quiet
     if output is None:
         output = filename + '.db'
     gffutils.create_db(filename, output, force=force, verbose=verbose)
