@@ -4,3 +4,8 @@
 *.pyc
 gffutils.egg-info/
 .coverage
+doc/build/*
+build/*
+doc/source/autodocs/*
+gffutils/test/data/*.db
+gffutils/test/data/*.gz
