@@ -1013,6 +1013,70 @@ class FeatureDB:
         for i in cursor:
             yield i
 
+
+    def UTRs_from_GTF(self, transcript):
+        """
+        Some GTFs do not include 5'UTR and 3'UTR annotations.  So get them
+        here....
+        """
+        # assume "exon" and "CDS" are existing featuretypes.
+
+        exon_iter = self.children(transcript, level=1, featuretype='exon')
+        try:
+            first_exon = exon_iter.next()
+        except StopIteration:
+            raise ValueError('no exons')
+        last_exon = None
+        for last_exon in exon_iter:
+            pass
+
+        CDS_iter = self.children(transcript, level=1, featuretype='CDS')
+        try:
+            first_cds = CDS_iter.next()
+        except StopIteration:
+            raise ValueError('no CDSs')
+        last_cds = None
+        for last_cds in CDS_iter:
+            pass
+
+        if last_exon is None:
+            raise ValueError('no exons')
+        if last_cds is None:
+            raise ValueError('no CDSs')
+        right_UTR = Feature(
+                chrom=transcript.chrom,
+                start=last_cds.stop,
+                stop=last_exon.start,
+                featuretype='',
+                score=transcript.score,
+                frame=transcript.frame,
+                strand=transcript.strand,
+                source=transcript.source,
+                attributes=str(transcript.attributes))
+
+        left_UTR = Feature(
+                chrom=transcript.chrom,
+                start=first_exon.start,
+                stop=first_cds.start,
+                featuretype='',
+                score=transcript.score,
+                frame=transcript.frame,
+                strand=transcript.strand,
+                source=transcript.source,
+                attributes=str(transcript.attributes))
+
+        if transcript.strand == '-':
+            five_prime_utr, three_prime_utr = right_UTR, left_UTR
+        else:
+            five_prime_utr, three_prime_utr = left_UTR, right_UTR
+
+        five_prime_utr.featuretype = 'five_prime_utr'
+        three_prime_utr.featuretype = 'three_prime_utr'
+
+        return five_prime_utr, three_prime_utr
+
+
+
     def to_GTF(self, gene, include_utrs=True):
         """
         Converts the gene into a series of GTF features that can be output to a
