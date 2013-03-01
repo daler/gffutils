@@ -941,13 +941,13 @@ class FeatureDB:
         ''')
         return [i[0] for i in c.fetchall()]
 
-    def children(self, id, level=1, featuretype=None):
+    def children(self, id, level=None, featuretype=None):
         """
-        Returns an iterator of the children *level* levels away.  Immediate
-        children are level=1; "grandchildren" are level=2.  The child
-        transcripts of a gene will be at level=1; the child exons of the same
-        gene are at level=2.  Returns an error if there are not enough levels
-        of children for the level specified.
+        Returns an iterator of the children *level* levels away.  Default is to
+        use all levels. Immediate children are level=1; "grandchildren" are
+        level=2.  The child transcripts of a gene will be at level=1; the child
+        exons of the same gene are at level=2.  Returns an error if there are
+        not enough levels of children for the level specified.
         """
 
         if level > 2:
@@ -963,21 +963,27 @@ class FeatureDB:
             featuretype_clause = '''
             AND features.featuretype = "%s"''' % featuretype
 
-        cursor.execute('''
-        SELECT DISTINCT
-        id, chrom, source, featuretype, start, stop, score, strand, frame,
-        attributes
-        FROM features JOIN relations
-        ON relations.child = features.id
-        WHERE relations.parent = ?
-        AND relations.level = ?
-        %s
-        ORDER BY start''' % (
-            featuretype_clause), (id, level))
+        level_clause = ''
+        if level is not None:
+            level_clause = 'AND relations.level = "%s"' % level
+
+        cursor.execute(
+            '''
+            SELECT DISTINCT
+            id, chrom, source, featuretype, start, stop, score, strand, frame,
+            attributes
+            FROM features JOIN relations
+            ON relations.child = features.id
+            WHERE relations.parent = ?
+            {level_clause}
+            {featuretype_clause}
+            ORDER BY start'''.format(**locals()),
+            (id,)
+        )
         for i in cursor:
             yield self._newfeature(*i)
 
-    def parents(self, id, level=1, featuretype=None):
+    def parents(self, id, level=None, featuretype=None):
         """
         Returns an iterator of the parents *level* levels away.  Immediate
         children are level=1; "grandchildren" are level=2.  The child
@@ -996,16 +1002,25 @@ class FeatureDB:
         if featuretype is not None:
             featuretype_clause = '''
             AND features.featuretype = "%s"''' % featuretype
-        cursor.execute('''
+
+
+        level_clause = ''
+        if level is not None:
+            level_clause = 'AND relations.level = "%s"' % level
+
+        cursor.execute(
+            '''
             SELECT DISTINCT
             id, chrom, source, featuretype, start, stop, score, strand, frame,
             attributes
             FROM features JOIN relations
             ON relations.parent = features.id
             WHERE relations.child = ?
-            AND relations.level = ?
-            %s
-            ORDER BY start''' % (featuretype_clause), (id, level))
+            {level_clause}
+            {featuretype_clause}
+            ORDER BY start'''.format(**locals()),
+            (id,)
+        )
         for i in cursor:
             yield self._newfeature(*i)
 
