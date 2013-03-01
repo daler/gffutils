@@ -63,7 +63,7 @@ filename named after it but in the current working directory: In practice you
 would provide your own GFF or GTF file.
 
 
-    # example filenames
+    >>> # example filenames
     >>> import os
     >>> import gffutils
     >>> gff_fn = gffutils.example_filename('dm3-5-genes.gff3')
