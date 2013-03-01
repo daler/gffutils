@@ -48,24 +48,20 @@ can take several minutes to create (depending on your input file) but it's
 a one-time procedure.
 
 
-.. .. doctest::
-    :hide:
-::
 
-    >>> import os
-    >>> import gffutils
-    >>> gff_fn = gffutils.example_filename('dm3-5-genes.gff3')
-    >>> db_fn = os.path.basename(gff_fn) + '.db'
-    >>> if os.path.exists(db_fn):
-    ...    os.unlink(db_fn)
+..    >>> 
+..    >>> import os
+..    >>> import gffutils
+..    >>> gff_fn = gffutils.example_filename('dm3-5-genes.gff3')
+..    >>> db_fn = os.path.basename(gff_fn) + '.db'
+..    >>> if os.path.exists(db_fn):
+..    ...    os.unlink(db_fn)
 
 
 Here we get an example file that ships with `gffutils`, and create a database
 filename named after it but in the current working directory: In practice you
 would provide your own GFF or GTF file.
 
-.. .. doctest::
-::
 
     # example filenames
     >>> import os
@@ -74,9 +70,6 @@ would provide your own GFF or GTF file.
     >>> db_fn = os.path.basename(gff_fn) + '.db'
 
 Then, create the database:
-
-.. .. doctest::
-::
 
     >>> import gffutils
     >>> gffutils.create_db(gff_fn, db_fn)
@@ -97,7 +90,6 @@ Using the database interactively
 To connect to the database, simply create a `FeatureDB` class by passing the
 database filename:
 
-.. doctest::
 
     >>> import gffutils
     >>> db_fn = 'dm3-5-genes.gff3.db'
@@ -105,7 +97,6 @@ database filename:
 
 For reference, the schema is:
 
-.. doctest::
 
     >>> db.print_schema()
     CREATE TABLE features (
@@ -134,7 +125,6 @@ For reference, the schema is:
 Note that most `FeatureDB` methods return iterators for performance.  Show the
 featuretypes that were in the GFF file:
 
-.. doctest::
 
     >>> # Which kinds of featuretypes are in the database?
     >>> print list(db.featuretypes())
@@ -143,7 +133,6 @@ featuretypes that were in the GFF file:
 
 Return an iterator of all the features of one type:
 
-.. doctest::
 
     >>> genes = db.features_of_type('gene')
     >>> gene = genes.next()
@@ -152,7 +141,6 @@ Return an iterator of all the features of one type:
 
 `Feature` objects have attributes like:
 
-.. doctest::
 
     >>> gene.chrom
     '2L'
@@ -171,7 +159,6 @@ Return an iterator of all the features of one type:
 
 `Feature.attributes` is a dictionary-like object:
 
-.. doctest::
 
     >>> gene.attributes.keys()
     ['Ontology_term', 'gbunit', 'derived_computed_cyto', 'Alias', 'Dbxref', 'ID', 'Name']
@@ -183,7 +170,6 @@ Return an iterator of all the features of one type:
 The primary key in the database for a feature is the ``ID`` field.  So you can
 access features by their ID directly if you know it:
 
-.. doctest::
 
     >>> ID = gene.attributes['ID']
 
@@ -194,16 +180,13 @@ access features by their ID directly if you know it:
 
 Instead of a string ID, you can also use the `Feature` object itself:
 
-.. doctest::
 
     >>> assert db[gene] == gene
 
 Printing a `Feature` prints the full GFF line:
 
-.. doctest::
-    :options: -ELLIPSIS, +NORMALIZE_WHITESPACE
 
-    >>> print gene
+    >>> print gene  #doctest: +NORMALIZE_WHITESPACE
     2L	FlyBase	gene	114726	156030	.	+	.	ID=FBgn0031228;Name=CG11455;Alias=NADH ubiquinone oxidoreductase 15 kDa,NADH:ubiquinone oxidoreductase 15 kDa subunit;Ontology_term=SO:0000010,SO:0000087,GO:0006120,GO:0003954,GO:0005747;Dbxref=FlyBase:FBan0011455,FlyBase_Annotation_IDs:CG11455,GB_protein:AAF51538,GB_protein:ACZ94135,GB_protein:ACZ94134,GB_protein:AAN10510,GB_protein:ACZ94133,GB:AI404167,GB:AY069186,GB_protein:AAL39331,GB:CZ476154,MITODROME:MTDROME11455,UniProt/TrEMBL:Q7K1C0,INTERPRO:IPR019342,OrthoDB5_Drosophila:EOG5GHZJ8,OrthoDB5_Diptera:EOG5BRW72,OrthoDB5_Insecta:EOG5WPZSP,OrthoDB5_Arthropoda:EOG5N5TDD,OrthoDB5_Metazoa:EOG5PCDK4,EntrezGene:33179,InterologFinder:33179,BIOGRID:59439,FlyAtlas:CG11455-RA,GenomeRNAi:33179;gbunit=AE014134;derived_computed_cyto=21B3-21B3
 
 The major advantage of `gffutils` is the ability to navigate the hierarchy of
@@ -213,14 +196,12 @@ are the workhorses for this.
 By default, all child (and grandchild, etc) features will be returned using the
 `FeatureDB.children()` method.
 
-.. doctest::
 
     >>> len(list(db.children(gene)))
     73
 
 Looks like a pretty complex gene:
 
-.. doctest::
 
     >>> from collections import Counter
     >>> Counter(i.featuretype for i in db.children(gene))
@@ -228,7 +209,6 @@ Looks like a pretty complex gene:
 
 We can restrict the children to only a selected featuretype:
 
-.. doctest::
 
     >>> len(list(db.children(gene, featuretype='mRNA')))
     11
@@ -236,7 +216,6 @@ We can restrict the children to only a selected featuretype:
 
 Are any of these exons constitutive (present in all isoforms)?
 
-.. doctest::
 
     >>> # All isoforms for this gene
     >>> isoforms = set(i.id for i in db.children(gene, featuretype='mRNA'))
@@ -256,11 +235,8 @@ Are any of these exons constitutive (present in all isoforms)?
 
 Inspect that exon:
 
-.. doctest::
-    :options: -ELLIPSIS, +NORMALIZE_WHITESPACE
-
     >>> exon = db['FBgn0031228:13']
-    >>> print exon
+    >>> print exon  #doctest: +NORMALIZE_WHITESPACE
     2L	FlyBase	exon	155858	156030	.	+	.	ID=FBgn0031228:13;Name=CG11455:13;Parent=FBtr0078117,FBtr0078118,FBtr0301886,FBtr0301887,FBtr0301888,FBtr0306542,FBtr0330638,FBtr0330639,FBtr0330640,FBtr0330641,FBtr0330642;parent_type=mRNA
 
     >>> len(exon.attributes['Parent'])
@@ -268,8 +244,6 @@ Inspect that exon:
 
 Exonic bp of the gene:
 
-.. doctest::
-    :options: -ELLIPSIS, +NORMALIZE_WHITESPACE
 
     >>> # These exons overlap quite a bit; summing the length of all exons
     >>> # wouldn't make sense if we wanted to calculate RPKM or something
@@ -292,7 +266,7 @@ Exonic bp of the gene:
 
     >>> # So we can merge them to get the total exonic bp for this gene:
     >>> merged_exons = list(db.merge_features(db.children(gene, featuretype='exon')))
-    >>> for i in merged_exons:
+    >>> for i in merged_exons:  #doctest: +NORMALIZE_WHITESPACE
     ...     print i
     2L	.	merged_exon	114726	114991	.	+	.	
     2L	.	merged_exon	155089	155784	.	+	.	
@@ -303,7 +277,6 @@ Exonic bp of the gene:
 
 Longest protein for this gene:
 
-.. doctest::
 
     >>> lengths = {}
     >>> for isoform in db.children(gene, featuretype='mRNA'):
@@ -314,7 +287,6 @@ Longest protein for this gene:
 
 Longest transcript for this gene:
 
-.. doctest::
 
     >>> lengths = {}
     >>> for isoform in db.children(gene, featuretype='mRNA'):
@@ -325,7 +297,6 @@ Longest transcript for this gene:
 
 Gene in the database with the most exons:
 
-.. doctest::
 
     >>> gene_with_most, exon_count = None, 0
     >>> for g in db.features_of_type('gene'):
