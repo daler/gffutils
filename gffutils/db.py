@@ -426,6 +426,14 @@ class FeatureDB:
             feature = self._newfeature(results)
             self.filetype = feature.filetype
 
+
+    def print_schema(self):
+        for i, in self.execute(
+            'SELECT sql FROM sqlite_master WHERE type="table"'
+        ):
+            print i
+
+
     def _newfeature(self, *args):
         feature = Feature(*args[1:])
         feature.dbid = args[0]
