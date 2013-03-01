@@ -149,6 +149,8 @@ def create(filename, output=None, force=True, verbose=True):
     """
     Create a database.
     """
+    if output is None:
+        output = filename + '.db'
     gffutils.create_db(filename, output, force=force, verbose=verbose)
 
 
