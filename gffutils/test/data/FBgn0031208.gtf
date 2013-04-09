@@ -1,0 +1,111 @@
+# GTF entries for FBgn0031208, for testing.  Specifically written to have the
+# same isoform model as the same gene in the test GFF file.
+#
+#
+# Simplified model (-- is UTR; == is CDS; .. is intron)
+#
+# -------===============...................=============---------- FBtr0300689
+# -------===============...................========........===---- FBtr0300690
+#
+#
+# ^^^^^^^^^^^^^^^^^^^^exon                 ^^^^^^^^^^^^^^^^^^^^^^^ exon  <-|
+#        =============CDS                  =============CDS                | 
+#        * start codon                                  * stop codon
+#
+# ^^^^^^^^^^^^^^^^^^^^exon                 ^^^^^^^^exon    ^^^^^^^exon   <-|            
+#                                          ========CDS     ===CDS          | FBtr0300690
+#
+#
+# ======||||||||||||||----||||||||||||-----||||||||||||||========== FBtr0300690
+# ======||||||||||||||----||||||||||||||=========================== FBtr0300689
+#
+#
+# start_codons not listed in GFF
+# ======||||||||||||||----||||||||||||-----||||||||||||||========== FBtr0300690
+# ======||||||||||||||----||||||||||||||=========================== FBtr0300689
+#       ^ start codon shared
+chr2L	protein_coding	start_codon	7680	7682	.	+	0	gene_id "FBgn0031208"; transcript_id "FBtr0300689";
+chr2L	protein_coding	start_codon	7680	7682	.	+	0	gene_id "FBgn0031208"; transcript_id "FBtr0300690";
+#
+# same as unnamed_exon:1 in GFF,but in GTF format, constitutive exons are listed once for each isoform.
+# ======||||||||||||||----||||||||||||-----||||||||||||||========== FBtr0300690
+# ======||||||||||||||----||||||||||||||=========================== FBtr0300689
+# ^------------------^
+#    shared exon between isoforms
+chr2L	protein_coding	exon	7529	8116	.	+	.	gene_id "FBgn0031208"; transcript_id "FBtr0300689";
+chr2L	protein_coding	exon	7529	8116	.	+	.	gene_id "FBgn0031208"; transcript_id "FBtr0300690";
+#
+# same as CDS_FBgn0031208:1_737 in GFF
+#
+# ======||||||||||||||----||||||||||||-----||||||||||||||========== FBtr0300690
+# ======||||||||||||||----||||||||||||||=========================== FBtr0300689
+#       ^------------^
+#       shared CDS between isoforms
+chr2L	protein_coding	CDS	7680	8116	.	+	0	gene_id "FBgn0031208"; transcript_id "FBtr0300689";
+chr2L	protein_coding	CDS	7680	8116	.	+	0	gene_id "FBgn0031208"; transcript_id "FBtr0300690";
+#
+#
+# exon FBgn0031208:3 in GFF -- these two exons imply different-length introns
+# ======||||||||||||||----||||||||||||-----||||||||||||||========== FBtr0300690
+# ======||||||||||||||----||||||||||||||=========================== FBtr0300689
+#                         ^---------------------------------------^
+#                         second of only 2 exons for FBtr*89
+chr2L	protein_coding	exon	8193	9484	.	+	.	gene_id "FBgn0031208"; transcript_id "FBtr0300689";
+#
+# CDS_FBgn0031208:3_737 in GFF
+# ======||||||||||||||----||||||||||||-----||||||||||||||========== FBtr0300690
+# ======||||||||||||||----||||||||||||||=========================== FBtr0300689
+#                         ^------------^
+#                         larger CDS, for 89
+chr2L	protein_coding	CDS	8193	8610	.	+	2	gene_id "FBgn0031208"; transcript_id "FBtr0300689";
+#
+# CDS_FBgn0031208:2_737 in GFF
+# ======||||||||||||||----||||||||||||-----||||||||||||||========== FBtr0300690
+# ======||||||||||||||----||||||||||||||=========================== FBtr0300689
+#                         ^----------^
+#                         smaller CDS, for 90
+chr2L	protein_coding	CDS	8193	8589	.	+	2	gene_id "FBgn0031208"; transcript_id "FBtr0300690";
+#
+# ======||||||||||||||----||||||||||||-----||||||||||||||========== FBtr0300690
+# ======||||||||||||||----||||||||||||||=========================== FBtr0300689
+#                         ^----------^
+#                         smaller exon, for 90
+chr2L	protein_coding	exon	8193	8589	.	+	2	gene_id "FBgn0031208"; transcript_id "FBtr0300690";
+#
+#
+#
+# ======||||||||||||||----||||||||||||-----||||||||||||||========== FBtr0300690
+# ======||||||||||||||----||||||||||||||=========================== FBtr0300689
+#                                          ^----------------------^  
+#                                          3rd of 3 exons for FBtr*90
+chr2L	protein_coding	exon	8668	9484	.	+	.	gene_id "FBgn0031208"; transcript_id "FBtr0300690";
+#
+#
+#
+# CDS_FBgn0031208:4_737 in GFF
+# ======||||||||||||||----||||||||||||-----||||||||||||||========== FBtr0300690
+# ======||||||||||||||----||||||||||||||=========================== FBtr0300689
+#                                          ^------------^
+#                                          3rd of 3 CDSs in 90
+chr2L	protein_coding	CDS	8668	9276	.	+	2	gene_id "FBgn0031208"; transcript_id "FBtr0300690";
+#
+# ======||||||||||||||----||||||||||||-----||||||||||||||========== FBtr0300690
+# ======||||||||||||||----||||||||||||||=========================== FBtr0300689
+#                                       ^
+#                                       stop codon for 89
+chr2L	protein_coding	stop_codon	8611	8613	.	+	0	gene_id "FBgn0031208"; transcript_id "FBtr0300689";
+#
+# ======||||||||||||||----||||||||||||-----||||||||||||||========== FBtr0300690
+# ======||||||||||||||----||||||||||||||=========================== FBtr0300689
+#                                                        ^
+#                                                        stop codon for 90
+chr2L	protein_coding	stop_codon	9277	9279	.	+	0	gene_id "FBgn0031208"; transcript_id "FBtr0300690";
+#
+# fake gene 1
+chr2L	FAKE	CDS	10000	11000	.	-	.	gene_id "Fk_gene_1"; transcript_id "transcript_Fk_gene_1";
+chr2L	FAKE	exon	10000	11000	.	-	.	gene_id "Fk_gene_1"; transcript_id "transcript_Fk_gene_1";
+chr2L	FAKE	start_codon	10000	11002	.	-	.	gene_id "Fk_gene_1"; transcript_id "transcript_Fk_gene_1";
+chr2L	FAKE	stop_codon	11001	11003	.	-	.	gene_id "Fk_gene_1"; transcript_id "transcript_Fk_gene_1";
+#
+# fake gene 2, which is non-coding -- say, a snoRNA
+chr2L	FAKE	exon	11500	12500	.	-	.	gene_id "Fk_gene_2"; transcript_id "transcript_Fk_gene_2";
