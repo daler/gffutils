@@ -73,3 +73,18 @@ class Feature(object):
     def stop(self, value):
         self.end = value
 
+
+def feature_from_line(line):
+    """
+    Given a line from a GFF file, return a Feature object
+    """
+    fields = line.rstrip('\n\r').split(None, 8)
+    attrs, dialect = parser._split_keyvals(fields[8])
+    fields[3] = int(fields[3])
+    fields[4] = int(fields[4])
+    _bin = bins.bins(int(fields[3]), int(fields[4]), one=True)
+    _id = None
+    items = [_id] + fields[:8] + [attrs] + [fields[9:]]
+
+    print items
+    return Feature(items, dialect=dialect)
