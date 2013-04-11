@@ -107,10 +107,10 @@ def test_checklines_limit():
 
 def test_valid_line_count():
     p = parser.Parser(example_filename('ncbi_gff3.txt'))
-    assert p._valid_line_count() == 17, p._valid_line_count()
+    assert p._valid_line_count() == 17
 
     p = parser.Parser(example_filename('hybrid1.gff3'))
     assert p._valid_line_count() == 6
 
     p = parser.Parser(example_filename('FBgn0031208.gff'))
-    assert p._valid_line_count() == 28
+    assert p._valid_line_count() == 27
