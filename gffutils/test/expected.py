@@ -99,9 +99,9 @@ expected_feature_counts = {
             'gtf':{
                 #'gene':3,
                 #   'mRNA':4,
-                   'CDS':5,
-                   'exon':6,
-                   'start_codon':2,
+                   'CDS':6,
+                   'exon':7,
+                   'start_codon':3,
                    'stop_codon':3}
             }
 

@@ -114,7 +114,7 @@ class FeatureDB(object):
         c.execute(
             '''
             SELECT count() FROM features
-            WHERE feature = ?
+            WHERE featuretype = ?
             ''', (featuretype,))
         results = c.fetchone()
         if results is not None:

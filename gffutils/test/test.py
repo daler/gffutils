@@ -1,5 +1,6 @@
 import expected
-from .. import db
+from .. import create
+from .. import interface
 from .. import parser
 from ..__init__ import example_filename
 import sys
@@ -15,8 +16,8 @@ testdbfn_gtf = ':memory:'
 testdbfn_gff = ':memory:'
 
 def setup():
-    db.create_db(example_filename('FBgn0031208.gff'), testdbfn_gff, verbose=False, force=True)
-    db.create_db(example_filename('FBgn0031208.gtf'), testdbfn_gtf, verbose=False, force=True)
+    create.create_db(example_filename('FBgn0031208.gff'), testdbfn_gff, verbose=False, force=True)
+    create.create_db(example_filename('FBgn0031208.gtf'), testdbfn_gtf, verbose=False, force=True)
 
 
 class BaseDB(object):
@@ -25,7 +26,7 @@ class BaseDB(object):
     """
     orig_fn = None
     def setup(self):
-        self.db = db.create_db(self.orig_fn, ':memory:', verbose=False)
+        self.db = create.create_db(self.orig_fn, ':memory:', verbose=False)
         self.c = self.db.conn.cursor()
         self.dialect = self.db.dialect
 
@@ -33,14 +34,14 @@ class BaseDB(object):
         """
         Do the right tables exist?
         """
-        expected_tables = ['features', 'relations', 'meta', 'directives']
+        expected_tables = ['features', 'relations', 'meta', 'directives', 'autoincrements']
         self.c.execute('select name from sqlite_master where type="table"')
         observed_tables = [i[0] for i in self.c.execute('select name from sqlite_master where type="table"')]
-        assert set(expected_tables) == set(observed_tables)
+        assert set(expected_tables) == set(observed_tables), observed_tables
 
     def _count1(self,featuretype):
         """Count using SQL"""
-        self.c.execute('select count() from features where feature = ?',(featuretype,))
+        self.c.execute('select count() from features where featuretype = ?',(featuretype,))
         results = self.c.fetchone()[0]
         print 'count1("%s") says: %s' % (featuretype,results)
         return results
@@ -82,13 +83,10 @@ class BaseDB(object):
         expected_feature_counts = expected.expected_feature_counts[self.dialect['fmt']]
         for featuretype, expected_count in expected_feature_counts.items():
             rawsql_cnt = self._count1(featuretype)
+            fileparsed_cnt = self._count2(featuretype)
             count_feature_of_type_cnt = self._count3(featuretype)
             iterator_cnt = self._count4(featuretype)
-
-            # count2 is not an appropriate test for GTF files, since "gene" is
-            # not explicitly listed -- only implied by the boundaries of CDSs:
-            #
-            fileparsed_cnt = self._count2(featuretype)
+            print "expected count:", expected_count
             assert rawsql_cnt == count_feature_of_type_cnt == iterator_cnt == fileparsed_cnt == expected_count
 
 
