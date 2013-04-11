@@ -5,6 +5,8 @@ import urllib
 import copy
 import constants
 from helpers import DefaultOrderedDict, example_filename
+import helpers
+import bins
 
 import logging
 
@@ -24,7 +26,7 @@ def _reconstruct(keyvals, dialect):
     Reconstructs the original attributes string according to the dialect.
     """
     if not dialect or not keyvals:
-        return ""
+        raise helpers.AttributeStringError
     parts = []
 
     # May need to split multiple values into multiple key/val pairs
@@ -107,6 +109,8 @@ def _split_keyvals(keyval_str, dialect=None):
             if len(parts) > 1:
                 dialect['field separator'] = sep
                 break
+    else:
+        parts = keyval_str.split(dialect['field separator'])
 
     # Is it GFF3?  They have key-vals separated by "="
     if gff3_kw_pat.match(parts[0]):
@@ -156,7 +160,7 @@ def _split_keyvals(keyval_str, dialect=None):
             # quals[key].extend([v for v in val.split(',') if v])
             vals = val.split(',')
             if (len(vals) > 1) and dialect['repeated keys']:
-                raise ValueError(
+                raise helpers.AttributeStringError(
                     "Internally inconsistent attributes formatting: "
                     "some have repeated keys, some do not.")
             quals[key].extend(vals)
@@ -199,7 +203,8 @@ class Parser(object):
 
     _keys = constants._gffkeys_extra
 
-    def __init__(self, filename, checklines=10, transform=None, from_string=False):
+    def __init__(self, filename, checklines=10, transform=None,
+                 from_string=False):
         """
         Parse a GFF or GTF file, yielding dictionaries of each line.
 
@@ -237,8 +242,8 @@ class Parser(object):
         Examples
         --------
 
-        >>> filename = gffutils.example_filename('F3-unique-3.v2.gff')
-        >>> p = gffutils.Parser(filename)
+        >>> filename = example_filename('F3-unique-3.v2.gff')
+        >>> p = Parser(filename)
         >>> linedict = iter(p).next()
 
         Fields are accessed by their key, and values are always strings:
@@ -275,6 +280,8 @@ class Parser(object):
         self.warnings = []
         self.checklines = checklines
         self.transform = transform
+        self.current_line = None
+        self.current_line_number = None
 
     def _iter_data(self):
         """

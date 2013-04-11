@@ -1,4 +1,8 @@
+import tempfile
+from nose.tools import assert_raises
 from .. import parser
+from .. import constants
+from .. import helpers
 from ..__init__ import example_filename
 import attr_test_cases
 
@@ -56,3 +60,57 @@ def parser_smoke_test():
         p = parser.Parser(filename)
         for i in p:
             continue
+
+def test_empty_recontruct():
+    """
+    reconstructing attributes with incomplete information returns empty string
+    """
+    assert_raises(helpers.AttributeStringError, parser._reconstruct, None, constants.dialect)
+    assert_raises(helpers.AttributeStringError, parser._reconstruct, dict(ID='asdf'), None)
+    assert_raises(helpers.AttributeStringError, parser._reconstruct, None, None)
+
+def test_empty_split_keyvals():
+    assert parser._split_keyvals(keyval_str=None) == helpers.DefaultOrderedDict(list)
+
+def test_repeated_keys_conflict():
+    """
+    if dialect says repeated keys, but len(vals) > 1, then the keys are not
+    actually repeated....
+    """
+    dialect = constants.dialect.copy()
+    dialect['repeated keys'] = True
+    assert_raises(helpers.AttributeStringError, parser._split_keyvals, "Parent=1,2,3", dialect)
+
+def test_parser_from_string():
+    """
+    make sure from string and from file return identical results
+    """
+    line = "chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690"
+    tmp = tempfile.NamedTemporaryFile()
+    tmp.write(line)
+    tmp.seek(0)
+
+    p1 = parser.Parser(
+        "chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690",
+        from_string=True)
+    p2 = parser.Parser(tmp.name)
+    lines = zip(p1, p2)
+    assert len(lines) == 1
+    assert p1.current_line_number == p2.current_line_number == 0
+    assert lines[0][0] == lines[0][1]
+
+
+def test_checklines_limit():
+    fn = example_filename('ensembl_gtf.txt')
+    p = parser.Parser(fn, checklines=1)
+    p._sniff()
+
+def test_valid_line_count():
+    p = parser.Parser(example_filename('ncbi_gff3.txt'))
+    assert p._valid_line_count() == 17, p._valid_line_count()
+
+    p = parser.Parser(example_filename('hybrid1.gff3'))
+    assert p._valid_line_count() == 6
+
+    p = parser.Parser(example_filename('FBgn0031208.gff'))
+    assert p._valid_line_count() == 28
