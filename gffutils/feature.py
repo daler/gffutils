@@ -1,6 +1,8 @@
 import helpers
 import constants
 import parser
+import bins
+
 
 class Feature(object):
     def __init__(self, fields, dialect=None):
@@ -27,7 +29,8 @@ class Feature(object):
         self.dialect = dialect or constants.dialect
         for k, v in zip(constants._keys, fields):
             if k in ('attributes', 'extra'):
-                v = helpers._unjsonify(v)
+                if isinstance(v, basestring):
+                    v = helpers._unjsonify(v)
             setattr(self, k, v)
 
     def __repr__(self):
