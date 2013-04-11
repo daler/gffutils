@@ -56,3 +56,20 @@ class Feature(object):
 
     def __eq__(self, other):
         return str(self) == str(other)
+
+    @property
+    def chrom(self):
+        return self.seqid
+
+    @chrom.setter
+    def chrom(self, value):
+        self.seqid = value
+
+    @property
+    def stop(self):
+        return self.end
+
+    @stop.setter
+    def stop(self, value):
+        self.end = value
+
