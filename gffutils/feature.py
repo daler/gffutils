@@ -11,8 +11,6 @@ class Feature(object):
         as possible using `dialect`.
 
         Parameters
-        ----------
-
         `fields` : list
 
             List of fields from the database.  See :attr:`constants._keys` for

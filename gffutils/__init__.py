@@ -1,4 +1,5 @@
-from db import create_db, FeatureDB
+from create import create_db
+from interface import FeatureDB
 from feature import Feature
 from helpers import example_filename, FeatureNotFoundError, DuplicateIDError
 from parser import Parser
