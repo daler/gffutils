@@ -15,12 +15,9 @@ def _bin_from_dict(d):
     """
     Given a dictionary yielded by the parser, return the genomic "UCSC" bin
     """
-    try:
-        start = int(d['start'])
-        end = int(d['end'])
-        return bins.bins(start, end, one=True)
-    except ValueError:
-        return None
+    start = int(d['start'])
+    end = int(d['end'])
+    return bins.bins(start, end, one=True)
 
 
 class FeatureNotFoundError(Exception):

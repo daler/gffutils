@@ -53,4 +53,6 @@ def test_hash():
 def test_repr():
     line = "chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690	some	more	stuff"
     f = feature.feature_from_line(line)
-    assert repr(f) == "<Feature exon (chr2L:7529-8116[+] at %s" % (id(f))
+    print repr(f)
+    print hex(id(f))
+    assert repr(f) == ("<Feature exon (chr2L:7529-8116[+]) at %s>" % hex(id(f)))
