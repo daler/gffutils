@@ -39,6 +39,10 @@ class DuplicateIDError(Exception):
     pass
 
 
+class AttributeStringError(Exception):
+    pass
+
+
 def _jsonify(x):
     """Use most compact form of JSON"""
     return simplejson.dumps(x, separators=(',', ':'))
@@ -62,6 +66,14 @@ def _dict_to_fields(d, jsonify=True):
         else:
             x.append(v)
     return tuple(x)
+
+
+def asinterval(feature):
+    """
+    Converts a gffutils.Feature to a pybedtools.Interval
+    """
+    import pybedtools
+    return pybedtools.create_interval_from_list(str(feature).split('\t'))
 
 
 class DefaultOrderedDict(OrderedDict):
@@ -121,7 +133,6 @@ class DefaultListOrderedDict(DefaultOrderedDict):
     def __init__(self, *a, **kw):
         super(DefaultListOrderedDict, self).__init__(list, *a, **kw)
         self.default_factory = list
-
 
 
 if __name__ == "__main__":
