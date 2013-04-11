@@ -16,9 +16,18 @@ def test_aliases():
     assert f.chrom == 'chr2L' == f.seqid
     assert f.end == 8116 == f.stop
 
+    f.chrom = 'fake'
+    f.stop = 1
+    assert f.chrom == 'fake' == f.seqid
+    assert f.stop == 1 == f.end
+
 
 def test_string_representation():
     line = "chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690"
+    f = feature.feature_from_line(line)
+    assert line == str(f)
+
+    line = "chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690	some	more	stuff"
     f = feature.feature_from_line(line)
     assert line == str(f)
 

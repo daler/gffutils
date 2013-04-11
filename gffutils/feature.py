@@ -50,8 +50,9 @@ class Feature(object):
         # final line includes reconstructed as well as any previously-added
         # "extra" fields
         items.append(reconstructed_attributes)
+        print self.extra
         if self.extra:
-            items.append('\t'.join(extra))
+            items.append('\t'.join(self.extra))
         return '\t'.join(map(str, items))
 
     def __hash__(self):
@@ -81,7 +82,7 @@ def feature_from_line(line):
     """
     Given a line from a GFF file, return a Feature object
     """
-    fields = line.rstrip('\n\r').split(None, 8)
+    fields = line.rstrip('\n\r').split(None, 9)
     attrs, dialect = parser._split_keyvals(fields[8])
     fields[3] = int(fields[3])
     fields[4] = int(fields[4])
