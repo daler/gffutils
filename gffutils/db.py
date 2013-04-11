@@ -8,6 +8,7 @@ import version
 import parser
 import bins
 import helpers
+import feature
 
 import logging
 
@@ -441,7 +442,6 @@ class _GTFDBCreator(_DBCreator):
             # Insert the feature itself...
             c.execute(constants._INSERT, helpers._dict_to_fields(d))
 
-
             # TODO: This assumes an on-spec GTF file...may need a config dict
             # (or dialect?) to modify.
 
@@ -631,7 +631,7 @@ class FeatureDB(object):
         results = c.fetchall()
         if len(results) != 1:
             raise helpers.FeatureNotFoundError(key)
-        return Feature(*results, dialect=self.dialect)
+        return feature.Feature(*results, dialect=self.dialect)
 
     def count_features_of_type(self, featuretype):
         """
@@ -718,7 +718,7 @@ class FeatureDB(object):
             tuple(args)
         )
         for i in c:
-            yield Feature(i, dialect=self.dialect)
+            yield feature.Feature(i, dialect=self.dialect)
 
     def all_features(self, seqid=None, start=None, end=None, strand=None):
         """
@@ -776,7 +776,7 @@ class FeatureDB(object):
             tuple(args)
         )
         for i in c:
-            yield Feature(i, dialect=self.dialect)
+            yield feature.Feature(i, dialect=self.dialect)
 
     def featuretypes(self):
         """
@@ -809,7 +809,7 @@ class FeatureDB(object):
             featuretype.
         """
 
-        if isinstance(id, Feature):
+        if isinstance(id, feature.Feature):
             id = id.id
 
         c = self.conn.cursor()
@@ -839,7 +839,7 @@ class FeatureDB(object):
             ORDER BY start'''.format(**locals()),
             tuple(args))
         for i in c:
-            yield Feature(i, dialect=self.dialect)
+            yield feature.Feature(i, dialect=self.dialect)
 
     def children(self, id, level=None, featuretype=None):
         """
@@ -906,7 +906,7 @@ class FeatureDB(object):
             seqid, coords = region.split(':')
             start, end = coords.split('-')
 
-        elif isinstance(region, Feature):
+        elif isinstance(region, feature.Feature):
             seqid = region.seqid
             start = region.start
             end = region.end
@@ -937,14 +937,15 @@ class FeatureDB(object):
         if featuretype is not None:
             if isinstance(featuretype, basestring):
                 featuretype = [featuretype]
-            feature_clause = ' or '.join(['featuretype = ?' for _ in featuretype])
+            feature_clause = ' or '.join(
+                ['featuretype = ?' for _ in featuretype])
             query += ' AND (%s) ' % feature_clause
             args.extend(featuretype)
 
         c = self.conn.cursor()
         c.execute(query, tuple(args))
         for i in c:
-            yield Feature(i, dialect=self.dialect)
+            yield feature.Feature(i, dialect=self.dialect)
 
     # Recycle the docs for _relation so they stay consistent between parents()
     # and children()
@@ -952,64 +953,6 @@ class FeatureDB(object):
         _relation_docstring=_relation.__doc__)
     parents.__doc__ = parents.__doc__.format(
         _relation_docstring=_relation.__doc__)
-
-
-class Feature(object):
-    def __init__(self, fields, dialect=None):
-        """
-        Represents a feature from the database.
-
-        When printed, reproduces the original line from the file as faithfully
-        as possible using `dialect`.
-
-        Parameters
-        ----------
-
-        `fields` : list
-
-            List of fields from the database.  See :attr:`constants._keys` for
-            the order.
-
-        `dialect` : dict or None
-
-            The dialect to use when reconstructing attribute strings; defaults
-            to the GFF3 spec.  :class:`FeatureDB` objects will automatically
-            attach the dialect from the original file.
-
-        """
-        self._fields = fields
-        self.dialect = dialect or constants.dialect
-        for k, v in zip(constants._keys, fields):
-            if k in ('attributes', 'extra'):
-                v = helpers._unjsonify(v)
-            setattr(self, k, v)
-
-    def __repr__(self):
-        memory_loc = hex(id(self))
-        return (
-            "<Feature {x.featuretype} ({x.seqid}:{x.start}-{x.end}[{x.strand}])"
-            " at {loc}>".format(x=self, loc=memory_loc))
-
-    def __str__(self):
-        # all but attributes
-        items = [getattr(self, k) for k in constants._gffkeys[:-1]]
-
-        # reconstruct from dict and dialect
-        reconstructed_attributes = parser._reconstruct(
-            self.attributes, self.dialect)
-
-        # final line includes reconstructed as well as any previously-added
-        # "extra" fields
-        items.append(reconstructed_attributes)
-        if self.extra:
-            items.append('\t'.join(extra))
-        return '\t'.join(map(str, items))
-
-    def __hash__(self):
-        return hash(str(self))
-
-    def __eq__(self, other):
-        return str(self) == str(other)
 
 
 def create_db(fn, dbfn, id_spec=None, force=False, verbose=True, checklines=10,
