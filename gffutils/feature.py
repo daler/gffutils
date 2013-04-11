@@ -89,5 +89,4 @@ def feature_from_line(line):
     _id = None
     items = [_id] + fields[:8] + [attrs] + [fields[9:]]
 
-    print items
     return Feature(items, dialect=dialect)
