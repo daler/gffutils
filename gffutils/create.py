@@ -769,7 +769,7 @@ def create_db(fn, dbfn, id_spec=None, force=False, verbose=True, checklines=10,
         kwargs = {}
     elif dialect['fmt'] == 'gtf':
         cls = _GTFDBCreator
-        id_spec = id_spec or {'gene': 'gene_id'}
+        id_spec = id_spec or {'gene': 'gene_id', 'transcript': 'transcript_id'}
         kwargs = dict(
             transcript_key=gtf_transcript_key,
             gene_key=gtf_gene_key,
