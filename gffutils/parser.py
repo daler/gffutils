@@ -241,7 +241,8 @@ class Parser(object):
 
         Examples
         --------
-
+        >>> from gffutils.helpers import example_filename
+        >>> from gffutils.parser import Parser
         >>> filename = example_filename('F3-unique-3.v2.gff')
         >>> p = Parser(filename)
         >>> linedict = iter(p).next()

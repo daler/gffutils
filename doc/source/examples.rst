@@ -272,7 +272,7 @@ end because of that transform function:
 <Feature transcript (I:12759579-12764949[-]) at 0x...>
 
 >>> print t  #doctest:+NORMALIZE_WHITESPACE
-I	gffutils_derived	transcript	12759579	12764949	.	-	.	transcript_id "B0019.1_transcript";
+I	gffutils_derived	transcript	12759579	12764949	.	-	.	transcript_id "B0019.1_transcript"; gene_id "B0019.1";
 
 How many annotated transcripts are there for this gene?
 
@@ -534,9 +534,10 @@ Example line:
 
 This file has no gene_id or transcript_id fields; it appears to use "CDS" as
 a gene-level kind of object.  So we can use a transform function to add
-a "gene_id" field to all non-CDS features.  Furthermore, by default
-:mod:`gffutils` uses `'exon'` as the default feature type to merge into genes.
-Here, we need to specify `'coding_exon'`.
+"gene_id" and "transcript_id" fields to all non-CDS features so that the file
+conforms to a GTF standard and gene extents can be inferred.  Furthermore, by
+default :mod:`gffutils` uses `'exon'` as the default feature type to merge into
+genes.  Here, we need to specify `gtf_subfeature='coding_exon'`.
 
 .. rst-class:: html-toggle
 
@@ -549,12 +550,14 @@ Import
 ``````
 
 >>> def transform(f):
-...     if f['featuretype'] != 'CDS': 
-...         f['attributes']['gene_id'] = f['attributes']['CDS']
+...     if f['featuretype'] in ['coding_exon', 'intron']:
+...         _id = f['attributes']['CDS'][0]
+...         f['attributes']['gene_id'] = [_id]
+...         f['attributes']['transcript_id'] = [_id + '_transcript']
 ...     return f
 
 >>> fn = gffutils.example_filename('wormbase_gff2_alt.txt')
->>> db = gffutils.create_db(fn, ":memory:", id_spec={'gene': 'gene_id'}, transform=transform, gtf_subfeature='coding_exon')
+>>> db = gffutils.create_db(fn, ":memory:", id_spec={'gene': 'gene_id', 'transcript': 'transcript_id'}, transform=transform, gtf_subfeature='coding_exon')
 
 Access
 ``````
@@ -565,6 +568,7 @@ Contig102	gffutils_derived	gene	1629	3377	.	-	.	gene_id "cr01.sctg102.wum.2.1";
 >>> for f in db.children("cr01.sctg102.wum.2.1"):
 ...     print '{0.featuretype:>12}: {0.id}'.format(f)
  coding_exon: coding_exon_4
+  transcript: cr01.sctg102.wum.2.1_transcript
       intron: intron_3
  coding_exon: coding_exon_3
       intron: intron_2
