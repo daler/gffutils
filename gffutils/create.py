@@ -460,11 +460,9 @@ class _GTFDBCreator(_DBCreator):
                     c.execute(constants._INSERT,
                               helpers._dict_to_fields(fixed))
 
-
-
-            # TODO: This assumes an on-spec GTF file...may need a config dict
-            # (or dialect?) to modify.
-
+            # For an on-spec GTF file,
+            # self.transcript_key = "transcript_id"
+            # self.gene_key = "gene_id"
             relations = []
             parent = None
             grandparent = None
@@ -507,9 +505,9 @@ class _GTFDBCreator(_DBCreator):
         # This takes some explanation...
         #
         # First, the nested subquery gets the level-1 parents of
-        # self.subfeature featuretypes.  For a canonical GTF, this translates
-        # to getting the distinct level-1 parents of exons . . . which are
-        # transcripts.
+        # self.subfeature featuretypes.  For an on-spec GTF file,
+        # self.subfeature = "exon", so this translates to getting the distinct
+        # level-1 parents of exons . . . which are transcripts.
         #
         # OK, so this subquery is now a list of transcripts; call it
         # "firstlevel".
@@ -540,11 +538,13 @@ class _GTFDBCreator(_DBCreator):
                 AND relations.level = 1
             )
             AS firstlevel
-            JOIN relations ON firstlevel.parent = child 
+            JOIN relations ON firstlevel.parent = child
             WHERE relations.level = 1
             ORDER BY relations.parent
             ''', (self.subfeature,))
 
+        # Now we iterate through those results (using a new cursor) to infer
+        # the extent of transcripts and genes.
 
         last_gene_id = None
         for transcript_id, gene_id in c:
@@ -557,13 +557,13 @@ class _GTFDBCreator(_DBCreator):
                 features.id = relations.child
                 WHERE parent = ? AND featuretype == ?
                 ''', (transcript_id, self.subfeature))
-
             transcript_start, transcript_end, strand, seqid = c2.fetchone()
             transcript_attributes = {
                 self.transcript_key: [transcript_id],
                 self.gene_key: [gene_id]
             }
-            transcript_bin = bins.bins(transcript_start, transcript_end, one=True)
+            transcript_bin = bins.bins(
+                transcript_start, transcript_end, one=True)
 
             # Write out to file; we'll be reading it back in shortly.  Omit
             # score, frame, source, and extra since they will always have the
@@ -581,8 +581,7 @@ class _GTFDBCreator(_DBCreator):
                 helpers._jsonify(transcript_attributes)
             ])) + '\n')
 
-            # Same as above but for gene (only if we haven't added this gene
-            # yet).
+            # Infer gene extent, but only if we haven't done so already.
             if gene_id != last_gene_id:
                 c2.execute(
                     '''
@@ -595,7 +594,6 @@ class _GTFDBCreator(_DBCreator):
                 gene_start, gene_end, strand, seqid = c2.fetchone()
                 gene_attributes = {self.gene_key: [gene_id]}
                 gene_bin = bins.bins(gene_start, gene_end, one=True)
-
 
                 fout.write('\t'.join(map(str, [
                     gene_id,
@@ -628,10 +626,9 @@ class _GTFDBCreator(_DBCreator):
                 d['id'] = self._id_handler(d)
                 yield d
 
-        # Batch-insert the derived features
-
+        # Insert the just-inferred transcripts and genes according to the
+        # specified merge strategy
         for d in derived_feature_generator():
-            # Insert the feature itself...
             try:
                 c.execute(constants._INSERT, helpers._dict_to_fields(d))
             except sqlite3.IntegrityError:

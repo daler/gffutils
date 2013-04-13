@@ -50,7 +50,6 @@ class Feature(object):
         # final line includes reconstructed as well as any previously-added
         # "extra" fields
         items.append(reconstructed_attributes)
-        print self.extra
         if self.extra:
             items.append('\t'.join(self.extra))
         return '\t'.join(map(str, items))
