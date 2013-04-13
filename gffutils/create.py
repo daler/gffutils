@@ -755,6 +755,18 @@ def create_db(fn, dbfn, id_spec=None, force=False, verbose=True, checklines=10,
 
         Function (or other callable object) that accepts a dictionary and
         returns a dictionary.
+
+    `gtf_transcript_key`, `gtf_gene_key` : string
+
+        Which attribute to use as the transcript ID and gene ID respectively
+        for GTF files.  Default is `transcript_id` and `gene_id` according to
+        the GTF spec.
+
+    `gtf_subfeature` : string
+
+        Feature type to use as a "gene component" when inferring gene and
+        transcript extents for GTF files.  Default is `exon` according to the
+        GTF spec.
     """
 
     # Auto-detect format
