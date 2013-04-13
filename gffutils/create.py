@@ -68,6 +68,9 @@ class _DBCreator(object):
         if isinstance(self.id_spec, basestring):
             id_key = [self.id_spec]
 
+        elif hasattr(self.id_spec, '__call__'):
+            id_key = [self.id_spec]
+
         # If dict, then assume it's a feature -> attribute mapping, e.g.,
         # {'gene': 'gene_id'} for GTF
         elif isinstance(self.id_spec, dict):
@@ -88,7 +91,7 @@ class _DBCreator(object):
         for k in id_key:
 
             if hasattr(k, '__call__'):
-                _id = self.id_spec(d)
+                _id = k(d)
                 if _id:
                     if _id.startswith('autoincrement:'):
                         return self._increment_featuretype_autoid(_id[14:])
@@ -317,7 +320,7 @@ class _GFFDBCreator(_DBCreator):
                             ''', (helpers._jsonify(fixed['attributes']),
                                   fixed['id']))
 
-                    if self.merge_strategy == 'create_unique':
+                    elif self.merge_strategy == 'create_unique':
                         c.execute(constants._INSERT,
                                   helpers._dict_to_fields(fixed))
 
@@ -441,7 +444,23 @@ class _GTFDBCreator(_DBCreator):
             d['bin'] = helpers._bin_from_dict(d)
 
             # Insert the feature itself...
-            c.execute(constants._INSERT, helpers._dict_to_fields(d))
+            try:
+                c.execute(constants._INSERT, helpers._dict_to_fields(d))
+            except sqlite3.IntegrityError:
+                fixed = self._do_merge(d)
+                if self.merge_strategy == 'merge':
+                    c.execute(
+                        '''
+                        UPDATE features SET attributes = ?
+                        WHERE id = ?
+                        ''', (helpers._jsonify(fixed['attributes']),
+                              fixed['id']))
+
+                elif self.merge_strategy == 'create_unique':
+                    c.execute(constants._INSERT,
+                              helpers._dict_to_fields(fixed))
+
+
 
             # TODO: This assumes an on-spec GTF file...may need a config dict
             # (or dialect?) to modify.
@@ -480,39 +499,117 @@ class _GTFDBCreator(_DBCreator):
         c2 = self.conn.cursor()
 
         tmp = tempfile.NamedTemporaryFile(delete=False).name
+        tmp = '/tmp/gffutils'
         fout = open(tmp, 'w')
-        c.execute('''SELECT DISTINCT parent FROM relations''')
-        for parent, in c:
+
+        self._tmpfile = tmp
+
+        # This takes some explanation...
+        #
+        # First, the nested subquery gets the level-1 parents of
+        # self.subfeature featuretypes.  For a canonical GTF, this translates
+        # to getting the distinct level-1 parents of exons . . . which are
+        # transcripts.
+        #
+        # OK, so this subquery is now a list of transcripts; call it
+        # "firstlevel".
+        #
+        # Then join firstlevel on relations, but the trick is to now consider
+        # each transcript a *child* -- so that relations.parent (on the first
+        # line of the query) will be the first-level parent of the transcript
+        # (the gene).
+        #
+        #
+        # The result is something like:
+        #
+        #   transcript1     gene1
+        #   transcript2     gene1
+        #   transcript3     gene2
+        #
+        # Note that genes are repeated; below we need to ensure that only one
+        # is added.  To ensure this, the results are ordered by the gene ID.
+
+        c.execute(
+            '''
+            SELECT DISTINCT firstlevel.parent, relations.parent
+            FROM (
+                SELECT DISTINCT relations.parent
+                FROM relations
+                JOIN features ON features.id = relations.child
+                WHERE features.featuretype = ?
+                AND relations.level = 1
+            )
+            AS firstlevel
+            JOIN relations ON firstlevel.parent = child 
+            WHERE relations.level = 1
+            ORDER BY relations.parent
+            ''', (self.subfeature,))
+
+
+        last_gene_id = None
+        for transcript_id, gene_id in c:
+            # transcript extent
             c2.execute(
                 '''
-                SELECT MIN(start), MAX(end), level, strand, seqid
+                SELECT MIN(start), MAX(end), strand, seqid
                 FROM features
                 JOIN relations ON
                 features.id = relations.child
                 WHERE parent = ? AND featuretype == ?
-                ''', (parent, self.subfeature))
-            start, end, level, strand, seqid = c2.fetchone()
+                ''', (transcript_id, self.subfeature))
 
-            # if level == 2, then it's a gene
-            # if level == 1, then it's a transcript
-
-            if level == 1:
-                attributes = {self.transcript_key: [parent]}
-                feature = 'transcript'
-
-            if level == 2:
-                attributes = {self.gene_key: [parent]}
-                feature = 'gene'
-
-            # We need to recalculate a bin for entire parent feature
-            _bin = bins.bins(start, end, one=True)
+            transcript_start, transcript_end, strand, seqid = c2.fetchone()
+            transcript_attributes = {
+                self.transcript_key: [transcript_id],
+                self.gene_key: [gene_id]
+            }
+            transcript_bin = bins.bins(transcript_start, transcript_end, one=True)
 
             # Write out to file; we'll be reading it back in shortly.  Omit
-            # score, frame, source, and extra since they will have the same
-            # default values for all all genes.
+            # score, frame, source, and extra since they will always have the
+            # same default values (".", ".", "gffutils_derived", and []
+            # respectively)
+
             fout.write('\t'.join(map(str, [
-                parent, seqid, start, end, strand, feature, _bin,
-                helpers._jsonify(attributes)])) + '\n')
+                transcript_id,
+                seqid,
+                transcript_start,
+                transcript_end,
+                strand,
+                'transcript',
+                transcript_bin,
+                helpers._jsonify(transcript_attributes)
+            ])) + '\n')
+
+            # Same as above but for gene (only if we haven't added this gene
+            # yet).
+            if gene_id != last_gene_id:
+                c2.execute(
+                    '''
+                    SELECT MIN(start), MAX(end), strand, seqid
+                    FROM features
+                    JOIN relations ON
+                    features.id = relations.child
+                    WHERE parent = ? AND featuretype == ?
+                    ''', (gene_id, self.subfeature))
+                gene_start, gene_end, strand, seqid = c2.fetchone()
+                gene_attributes = {self.gene_key: [gene_id]}
+                gene_bin = bins.bins(gene_start, gene_end, one=True)
+
+
+                fout.write('\t'.join(map(str, [
+                    gene_id,
+                    seqid,
+                    gene_start,
+                    gene_end,
+                    strand,
+                    'gene',
+                    gene_bin,
+                    helpers._jsonify(gene_attributes)
+                ])) + '\n')
+
+            last_gene_id = gene_id
+
         fout.close()
 
         def derived_feature_generator():
@@ -529,10 +626,26 @@ class _GTFDBCreator(_DBCreator):
                 d['extra'] = []
                 d['attributes'] = helpers._unjsonify(d['attributes'])
                 d['id'] = self._id_handler(d)
-                yield helpers._dict_to_fields(d)
+                yield d
 
         # Batch-insert the derived features
-        c.executemany(constants._INSERT, derived_feature_generator())
+
+        for d in derived_feature_generator():
+            # Insert the feature itself...
+            try:
+                c.execute(constants._INSERT, helpers._dict_to_fields(d))
+            except sqlite3.IntegrityError:
+                fixed = self._do_merge(d)
+                if self.merge_strategy == 'merge':
+                    c.execute(
+                        '''
+                        UPDATE features SET attributes = ?
+                        WHERE id = ?
+                        ''', (helpers._jsonify(fixed['attributes']),
+                              fixed['id']))
+                elif self.merge_strategy == 'create_unique':
+                    c.execute(constants._INSERT,
+                              helpers._dict_to_fields(fixed))
 
         self.conn.commit()
         os.unlink(fout.name)

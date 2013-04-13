@@ -26,14 +26,38 @@ class BaseDB(object):
     """
     orig_fn = None
     def setup(self):
-        self.db = create.create_db(self.orig_fn, ':memory:', verbose=False)
+
+        def gff_id_func(f):
+            if 'ID' in f['attributes']:
+                return f['attributes']['ID'][0]
+            elif 'Name' in f['attributes']:
+                return f['attributes']['Name'][0]
+            else:
+                return '{featuretype}:{seqid}:{start}-{end}:{strand}'.format(**f)
+
+        def gtf_id_func(f):
+            if f['featuretype'] == 'gene':
+                if 'gene_id' in f['attributes']:
+                    return f['attributes']['gene_id'][0]
+            elif f['featuretype'] == 'transcript':
+                if 'transcript_id' in f['attributes']:
+                    return f['attributes']['transcript_id'][0]
+            else:
+                return '{featuretype}:{seqid}:{start}-{end}:{strand}'.format(**f)
+
+        if self.orig_fn.endswith('.gtf'): id_func = gtf_id_func
+        if self.orig_fn.endswith('.gff'): id_func = gff_id_func
+        self.db = create.create_db(
+            self.orig_fn,
+            ':memory:',
+            id_spec=id_func,
+            merge_strategy='create_unique',
+            verbose=False
+        )
         self.c = self.db.conn.cursor()
         self.dialect = self.db.dialect
 
     def table_test(self):
-        """
-        Do the right tables exist?
-        """
         expected_tables = ['features', 'relations', 'meta', 'directives', 'autoincrements']
         self.c.execute('select name from sqlite_master where type="table"')
         observed_tables = [i[0] for i in self.c.execute('select name from sqlite_master where type="table"')]
@@ -89,8 +113,32 @@ class BaseDB(object):
             print "expected count:", expected_count
             assert rawsql_cnt == count_feature_of_type_cnt == iterator_cnt == fileparsed_cnt == expected_count
 
+    def _expected_parents(self):
+        if self.dialect['fmt'] == 'gff3':
+            parents1 = expected.GFF_parent_check_level_1
+            parents2 = expected.GFF_parent_check_level_2
+        if self.dialect['fmt'] == 'gtf':
+            parents1 = expected.GTF_parent_check_level_1
+            parents2 = expected.GTF_parent_check_level_2
+        return parents1, parents2
+
+    def test_parents_level_1(self):
+        parents1, parents2 = self._expected_parents()
+        for child, expected_parents in parents1.items():
+            observed_parents = [i.id for i in self.db.parents(child, level=1)]
+            print 'observed parents for %s:' % child, set(observed_parents)
+            print 'expected parents for %s:' % child, set(expected_parents)
+            assert set(observed_parents) == set(expected_parents)
 
 
+    def test_parents_level_2(self):
+        parents1, parents2 = self._expected_parents()
+        for child, expected_parents in parents2.items():
+            observed_parents = [i.id for i in self.db.parents(child, level=2)]
+            print self.db[child]
+            print 'observed parents for %s:' % child, set(observed_parents)
+            print 'expected parents for %s:' % child, set(expected_parents)
+            assert set(observed_parents) == set(expected_parents)
 
 
 
