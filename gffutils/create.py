@@ -239,6 +239,15 @@ class _DBCreator(object):
         # reset logger to whatever it was before...
         logger.setLevel(self._orig_logger_level)
 
+    def execute(self, query):
+        """
+        Execute a query directly on the database.
+        """
+        c = self.conn.cursor()
+        c.execute(query)
+        for i in cursor:
+            yield i
+
 
 class _GFFDBCreator(_DBCreator):
     def __init__(self, *args, **kwargs):
@@ -648,15 +657,6 @@ class _GTFDBCreator(_DBCreator):
         os.unlink(fout.name)
 
         # TODO: recreate indexes?
-
-    def execute(self, query):
-        """
-        Execute a query directly on the database.
-        """
-        c = self.conn.cursor()
-        c.execute(query)
-        for i in cursor:
-            yield i
 
 
 def create_db(fn, dbfn, id_spec=None, force=False, verbose=True, checklines=10,
