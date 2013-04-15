@@ -25,8 +25,10 @@ def _reconstruct(keyvals, dialect):
     """
     Reconstructs the original attributes string according to the dialect.
     """
-    if not dialect or not keyvals:
+    if not dialect:
         raise helpers.AttributeStringError
+    if not keyvals:
+        return ""
     parts = []
 
     # May need to split multiple values into multiple key/val pairs

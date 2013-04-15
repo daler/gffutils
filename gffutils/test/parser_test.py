@@ -65,7 +65,7 @@ def test_empty_recontruct():
     """
     reconstructing attributes with incomplete information returns empty string
     """
-    assert_raises(helpers.AttributeStringError, parser._reconstruct, None, constants.dialect)
+    assert parser._reconstruct(None, constants.dialect) == ""
     assert_raises(helpers.AttributeStringError, parser._reconstruct, dict(ID='asdf'), None)
     assert_raises(helpers.AttributeStringError, parser._reconstruct, None, None)
 
