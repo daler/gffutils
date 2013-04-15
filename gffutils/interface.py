@@ -406,10 +406,98 @@ class FeatureDB(object):
         for i in c:
             yield _feature.Feature(i, dialect=self.dialect)
 
+    @classmethod
+    def interfeatures(self, features, new_featuretype=None,
+                      merge_attributes=True, dialect=None):
+        """
+        Construct new features representing the space between features.
+
+        For example, if `features` is a list of exons, then this method will
+        return the introns.  If `features` is a list of genes, then this method
+        will return the intergenic regions.
+
+        Providing N features will return N - 1 new features.
+
+        This method purposefully does *not* do any merging or sorting, so you
+        may want to use :meth:`FeatureDB.merge_features` first.
+
+        The new eatures' attributes will be a merge of the neighboring
+        features' attributes.  This is useful if you have provided a list of
+        exons; the introns will then retain the transcript and/or gene parents.
+
+        Parameters
+        ----------
+        `features` : iterable of :class:`feature.Feature` instances
+            Sorted, merged iterable
+
+        `new_featuretype` : string or None
+            The new features will all be of this type, or, if None (default)
+            then the featuretypes will be constructed from the neighboring
+            features, e.g., `inter_exon_exon`.
+
+        `attribute_func` : callable or None
+            If None, then nothing special is done to the attributes.  If
+            callable, then the callable accepts two attribute dictionaries and
+            returns a single attribute dictionary.  If `merge_attributes` is
+            True, then `attribute_func` is called before `merge_attributes`.
+            This could be useful for manually managing IDs for the new
+            features.
+
+        >>> features = [
+        ... "chr1 . exon 1   100 . + . ID=exon1; Parent=mRNA1",
+        ... "chr1 . exon 200 250 . + . ID=exon2; Parent=mRNA1",
+        ... "chr1 . exon 500 600 . + . ID=exon3; Parent=mRNA1",
+        ... ]
+        >>> features = [_feature.feature_from_line(i) for i in features]
+        >>> for i in FeatureDB.interfeatures(
+        ... features, new_featuretype="intron"):
+        ...     print i  # doctest: +NORMALIZE_WHITESPACE
+        chr1 gffutils_derived intron 101 199 . + . ID=exon1,exon2;Parent=mRNA1
+        chr1 gffutils_derived intron 251 499 . + . ID=exon1,exon3;Parent=mRNA1
+
+        """
+        for i, f in enumerate(features):
+            # no inter-feature for the first one
+            if i == 0:
+                interfeature_start = f.stop
+                last_feature = f
+                continue
+
+            interfeature_stop = f.start
+            if new_featuretype is None:
+                new_featuretype = 'inter_%s_%s' % (
+                    last_feature.featuretype, f.featuretype)
+            assert last_feature.strand == f.strand
+            assert last_feature.chrom == f.chrom
+            strand = last_feature.strand
+            chrom = last_feature.chrom
+
+            # Shrink
+            interfeature_start += 1
+            interfeature_stop -= 1
+
+            new_attributes = helpers.merge_attributes(
+                last_feature.attributes, f.attributes)
+
+            new_bin = bins.bins(
+                interfeature_start, interfeature_stop, one=True)
+            _id = None
+            fields = [None, chrom, 'gffutils_derived', new_featuretype,
+                      interfeature_start, interfeature_stop, '.', strand, '.',
+                      new_attributes, [], new_bin]
+            if dialect is None:
+                # Support for @classmethod -- if calling from the class, then
+                # self.dialect is not defined, so use GFF3 as default.
+                try:
+                    dialect = self.dialect
+                except AttributeError:
+                    dialect = constants.dialect
+            yield _feature.Feature(fields, dialect=dialect)
+            interfeature_start = f.stop
+
     # Recycle the docs for _relation so they stay consistent between parents()
     # and children()
     children.__doc__ = children.__doc__.format(
         _relation_docstring=_relation.__doc__)
     parents.__doc__ = parents.__doc__.format(
         _relation_docstring=_relation.__doc__)
-
