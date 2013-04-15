@@ -1,3 +1,4 @@
+import copy
 import os
 import simplejson
 from collections import OrderedDict
@@ -76,6 +77,30 @@ def asinterval(feature):
     """
     import pybedtools
     return pybedtools.create_interval_from_list(str(feature).split('\t'))
+
+
+def merge_attributes(attr1, attr2):
+    """
+    Merges two attribute dictionaries into a single dictionary.
+
+    Parameters
+    ----------
+    `attr1`, `attr2` : dict
+        Attribute dictionaries, assumed to be at least DefaultDict of lists,
+        possibly DefaultOrderedDict.  If ordered, the first dictionary's key
+        order takes precedence.
+    """
+    new_d = copy.deepcopy(attr1)
+    for k in attr1.keys():
+        if k in attr2:
+            new_d[k].extend(attr2[k])
+    for k in attr2.keys():
+        if k not in attr1:
+            new_d[k].extend(attr2[k])
+
+    for k, v in new_d.items():
+        new_d[k] = list(set(v))
+    return new_d
 
 
 class DefaultOrderedDict(OrderedDict):
