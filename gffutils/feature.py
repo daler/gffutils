@@ -80,8 +80,18 @@ class Feature(object):
 def feature_from_line(line):
     """
     Given a line from a GFF file, return a Feature object
+
+    Parameters
+    ----------
+    `line`: string
+        As long as there are only 9 fields (standard GFF/GTF), then it's OK to
+        use spaces instead of tabs to separate fields in `line`.  But if >9
+        fields are to be used, then tabs must be used.
     """
-    fields = line.rstrip('\n\r').split(None, 9)
+    if '\t' in line:
+        fields = line.rstrip('\n\r').split('\t')
+    else:
+        fields = line.rstrip('\n\r').split(None, 8)
     attrs, dialect = parser._split_keyvals(fields[8])
     fields[3] = int(fields[3])
     fields[4] = int(fields[4])
