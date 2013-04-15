@@ -4,7 +4,8 @@ import create
 import bins
 import helpers
 import constants
-import feature
+import feature as _feature
+
 
 class FeatureDB(object):
     def __init__(self, dbfn):
@@ -89,7 +90,7 @@ class FeatureDB(object):
         results = c.fetchall()
         if len(results) != 1:
             raise helpers.FeatureNotFoundError(key)
-        return feature.Feature(*results, dialect=self.dialect)
+        return _feature.Feature(*results, dialect=self.dialect)
 
     def count_features_of_type(self, featuretype):
         """
@@ -176,7 +177,7 @@ class FeatureDB(object):
             tuple(args)
         )
         for i in c:
-            yield feature.Feature(i, dialect=self.dialect)
+            yield _feature.Feature(i, dialect=self.dialect)
 
     def all_features(self, seqid=None, start=None, end=None, strand=None):
         """
@@ -234,7 +235,7 @@ class FeatureDB(object):
             tuple(args)
         )
         for i in c:
-            yield feature.Feature(i, dialect=self.dialect)
+            yield _feature.Feature(i, dialect=self.dialect)
 
     def featuretypes(self):
         """
@@ -267,7 +268,7 @@ class FeatureDB(object):
             featuretype.
         """
 
-        if isinstance(id, feature.Feature):
+        if isinstance(id, _feature.Feature):
             id = id.id
 
         c = self.conn.cursor()
@@ -297,7 +298,7 @@ class FeatureDB(object):
             ORDER BY start'''.format(**locals()),
             tuple(args))
         for i in c:
-            yield feature.Feature(i, dialect=self.dialect)
+            yield _feature.Feature(i, dialect=self.dialect)
 
     def children(self, id, level=None, featuretype=None):
         """
@@ -364,7 +365,7 @@ class FeatureDB(object):
             seqid, coords = region.split(':')
             start, end = coords.split('-')
 
-        elif isinstance(region, feature.Feature):
+        elif isinstance(region, _feature.Feature):
             seqid = region.seqid
             start = region.start
             end = region.end
@@ -403,7 +404,7 @@ class FeatureDB(object):
         c = self.conn.cursor()
         c.execute(query, tuple(args))
         for i in c:
-            yield feature.Feature(i, dialect=self.dialect)
+            yield _feature.Feature(i, dialect=self.dialect)
 
     # Recycle the docs for _relation so they stay consistent between parents()
     # and children()
