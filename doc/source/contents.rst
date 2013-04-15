@@ -14,6 +14,7 @@ Table of Contents
     dialect
     examples
     api
+    developers
     meta
 
 

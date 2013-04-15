@@ -1,3 +1,5 @@
+.. _dialects:
+
 Dialects
 ========
 :mod:`gffutils` borrows the idea of "dialects" from Python's :mod:`csv` module.
