@@ -68,51 +68,64 @@ class Feature(object):
             attach the dialect from the original file.
 
         """
-        self.seqid = seqid
-        self.source = source
-        self.featuretype = featuretype
-        try:
-            start = int(start)
-        except (TypeError, ValueError):
+        # start/end can be provided as int-like, ".", or None, but will be
+        # converted to int or None
+        if start == ".":
             start = None
-        try:
-            end = int(end)
-        except (TypeError, ValueError):
+        elif start is not None:
+            start = int(start)
+        if end == ".":
             end = None
-        self.start = start
-        self.end = end
-        self.score = score
-        self.strand = strand
-        self.frame = frame
+        elif end is not None:
+            end = int(end)
 
+        # Flexible handling of attributes:
+        # If dict, then use that; otherwise assume JSON; otherwise assume
+        # original string.
         self._orig_attribute_str = None
         attributes = attributes or {}
         if isinstance(attributes, basestring):
             try:
                 attributes = helpers._unjsonify(attributes)
+
+            # it's a string but not JSON: assume original attributes string.
             except simplejson.JSONDecodeError:
+                # Saved for later printing
                 self._orig_attribute_str = attributes
+
+                # But Feature.attributes is still a dict
                 attributes, _dialect = parser._split_keyvals(attributes)
 
-        self.attributes = attributes
+                # Use this dialect if none provided.
+                dialect = dialect or _dialect
 
+        # If string, then assume tab-delimited; otherwise list
         extra = extra or []
         if isinstance(extra, basestring):
             try:
                 extra = helpers._unjsonify(extra)
             except simplejson.JSONDecodeError:
                 extra = extra.split('\t')
-        self.extra = extra
 
+        # Calculate bin if not provided
         if bin is None:
             try:
                 bin = bins.bins(start, end, one=True)
             except TypeError:
                 bin = None
+
+        self.seqid = seqid
+        self.source = source
+        self.featuretype = featuretype
+        self.start = start
+        self.end = end
+        self.score = score
+        self.strand = strand
+        self.frame = frame
+        self.attributes = attributes
+        self.extra = extra
         self.bin = bin
-
         self.id = id
-
         self.dialect = dialect or constants.dialect
 
     def __repr__(self):
