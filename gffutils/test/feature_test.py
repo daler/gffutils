@@ -10,6 +10,39 @@ def test_feature_from_line():
             feature.feature_from_line(line2)
 
 
+def test_default_feature():
+    # Default Feature is 8 tab-delimited ".", with a trailing tab
+    assert str(feature.Feature()) == \
+    ".	.	.	.	.	.	.	.	"
+
+
+def test_attributes_representations():
+    # These different ways of supplying attributes should yield identical
+    # results:
+    s = ".	.	.	.	.	.	.	.	ID=asdf"
+    assert str(feature.Feature(attributes='{"ID": ["asdf"]}')) == s
+    assert str(feature.Feature(attributes=dict(ID=["asdf"]))) == s
+    assert str(feature.Feature(attributes="ID=asdf")) == s
+
+
+def test_default_start_stop():
+    # Whether start or end is "." or None, attribute should always be None and
+    # printing should show "."
+    c = ['.', None]
+    for i1 in c:
+        for i2 in c:
+            f = feature.Feature(start=i1, end=i2)
+            assert f.start is None
+            assert f.end is None
+            assert f.stop is None
+            assert str(f) == ".	.	.	.	.	.	.	.	", str(f)
+
+    # Make sure zero works (protects against sloppy "if start:")
+    f = feature.Feature(start=0, end=0)
+    assert f.start == f.end == f.stop == 0
+    assert str(f) == ".	.	.	0	0	.	.	.	", str(f)
+
+
 def test_aliases():
     line = "chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690"
     f = feature.feature_from_line(line)

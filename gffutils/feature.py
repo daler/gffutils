@@ -1,3 +1,4 @@
+import simplejson
 import helpers
 import constants
 import parser
@@ -5,7 +6,9 @@ import bins
 
 
 class Feature(object):
-    def __init__(self, fields, dialect=None):
+    def __init__(self, seqid=".", source=".", featuretype=".",
+                 start=".", end=".", score=".", strand=".", frame=".",
+                 attributes=None, extra=None, bin=None, id=None, dialect=None):
         """
         Represents a feature from the database.
 
@@ -13,10 +16,50 @@ class Feature(object):
         as possible using `dialect`.
 
         Parameters
-        `fields` : list
+        ----------
+        `seqid` : string
 
-            List of fields from the database.  See :attr:`constants._keys` for
-            the order.
+        `source`: string
+
+        `featuretype` : string
+
+        `start`, `end`: int or "."
+            If "." (the default placeholder for GFF files), then the
+            corresponding attribute will be None.
+
+        `score`: string
+
+        `strand`: string
+
+        `frame`: string
+
+        `attributes`: string or dict
+            If a string, first assume it is serialized JSON; if this fails then
+            assume it's the original key/vals string.  If it's a dictionary
+            already, then use as-is.
+
+            The end result is that this instance's `attributes` attribute will
+            always be a dictionary.
+
+            Upon printing, the attributes will be reconstructed based on this
+            dictionary and the dialect -- except if the original attributes
+            string was provided, in which case that will be used directly.
+
+        `extra`: string or list
+            Additional fields after the canonical 9 fields for GFF/GTF.
+
+            If a string, then first assume it's serialized JSON; if this fails
+            then assume it's a tab-delimited string of additional fields.  If
+            it's a list already, then use as-is.
+
+        `bin`: int
+            UCSC genomic bin. If None, will be created based on provided
+            start/end; if start or end is "." then bin will be None.
+
+        `id` : None or string
+            Database-specific primary key for this feature.  The only time this
+            should not be None is if this feature is coming from a database, in
+            which case it will be filled in automatically.
 
         `dialect` : dict or None
 
@@ -25,29 +68,87 @@ class Feature(object):
             attach the dialect from the original file.
 
         """
-        self._fields = fields
+        self.seqid = seqid
+        self.source = source
+        self.featuretype = featuretype
+        try:
+            start = int(start)
+        except (TypeError, ValueError):
+            start = None
+        try:
+            end = int(end)
+        except (TypeError, ValueError):
+            end = None
+        self.start = start
+        self.end = end
+        self.score = score
+        self.strand = strand
+        self.frame = frame
+
+        self._orig_attribute_str = None
+        attributes = attributes or {}
+        if isinstance(attributes, basestring):
+            try:
+                attributes = helpers._unjsonify(attributes)
+            except simplejson.JSONDecodeError:
+                self._orig_attribute_str = attributes
+                attributes, _dialect = parser._split_keyvals(attributes)
+
+        self.attributes = attributes
+
+        extra = extra or []
+        if isinstance(extra, basestring):
+            try:
+                extra = helpers._unjsonify(extra)
+            except simplejson.JSONDecodeError:
+                extra = extra.split('\t')
+        self.extra = extra
+
+        if bin is None:
+            try:
+                bin = bins.bins(start, end, one=True)
+            except TypeError:
+                bin = None
+        self.bin = bin
+
+        self.id = id
+
         self.dialect = dialect or constants.dialect
-        for k, v in zip(constants._keys, fields):
-            if k in ('attributes', 'extra'):
-                if isinstance(v, basestring):
-                    v = helpers._unjsonify(v)
-            setattr(self, k, v)
 
     def __repr__(self):
         memory_loc = hex(id(self))
+        if self.start is None:
+            start = '.'
+        else:
+            start = self.start
+        if self.end is None:
+            end = '.'
+        else:
+            end = self.end
+
         return (
-            "<Feature {x.featuretype} ({x.seqid}:{x.start}-{x.end}"
-            "[{x.strand}]) at {loc}>".format(x=self, loc=memory_loc))
+            "<Feature {x.featuretype} ({x.seqid}:{start}-{end}"
+            "[{x.strand}]) at {loc}>".format(x=self, start=start, end=end,
+                                             loc=memory_loc))
+
 
     def __str__(self):
-        # all but attributes
+        # All fields but attributes (and extra).
         items = [getattr(self, k) for k in constants._gffkeys[:-1]]
+        if items[3] is None:
+            items[3] = "."
+        if items[4] is None:
+            items[4] = "."
 
-        # reconstruct from dict and dialect
-        reconstructed_attributes = parser._reconstruct(
-            self.attributes, self.dialect)
+        # Reconstruct from dict and dialect (if original attributes weren't
+        # provided)
+        if self._orig_attribute_str:
+            reconstructed_attributes = self._orig_attribute_str
+        else:
+            reconstructed_attributes = parser._reconstruct(
+                self.attributes, self.dialect)
 
-        # final line includes reconstructed as well as any previously-added
+        # Final line includes reconstructed as well as any previously-added
         # "extra" fields
         items.append(reconstructed_attributes)
         if self.extra:
@@ -93,10 +194,7 @@ def feature_from_line(line):
     else:
         fields = line.rstrip('\n\r').split(None, 8)
     attrs, dialect = parser._split_keyvals(fields[8])
-    fields[3] = int(fields[3])
-    fields[4] = int(fields[4])
-    _bin = bins.bins(int(fields[3]), int(fields[4]), one=True)
-    _id = None
-    items = [_id] + fields[:8] + [attrs] + [fields[9:]]
-
-    return Feature(items, dialect=dialect)
+    d = dict(zip(constants._gffkeys, fields))
+    d['attributes'] = attrs
+    d['extra'] = fields[9:]
+    return Feature(dialect=dialect, **d)

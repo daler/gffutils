@@ -4,7 +4,7 @@ import create
 import bins
 import helpers
 import constants
-import feature as _feature
+from feature import Feature, feature_from_line
 
 
 class FeatureDB(object):
@@ -41,6 +41,7 @@ class FeatureDB(object):
             self.conn = sqlite3.connect(self.dbfn)
 
         self.conn.text_factory = str
+        self.conn.row_factory = sqlite3.Row
 
         c = self.conn.cursor()
 
@@ -90,7 +91,7 @@ class FeatureDB(object):
         results = c.fetchall()
         if len(results) != 1:
             raise helpers.FeatureNotFoundError(key)
-        return _feature.Feature(*results, dialect=self.dialect)
+        return Feature(dialect=self.dialect, **results[0])
 
     def count_features_of_type(self, featuretype):
         """
@@ -177,7 +178,7 @@ class FeatureDB(object):
             tuple(args)
         )
         for i in c:
-            yield _feature.Feature(i, dialect=self.dialect)
+            yield Feature(dialect=self.dialect, **i)
 
     def all_features(self, seqid=None, start=None, end=None, strand=None):
         """
@@ -235,7 +236,7 @@ class FeatureDB(object):
             tuple(args)
         )
         for i in c:
-            yield _feature.Feature(i, dialect=self.dialect)
+            yield Feature(dialect=self.dialect, **i)
 
     def featuretypes(self):
         """
@@ -268,7 +269,7 @@ class FeatureDB(object):
             featuretype.
         """
 
-        if isinstance(id, _feature.Feature):
+        if isinstance(id, Feature):
             id = id.id
 
         c = self.conn.cursor()
@@ -298,7 +299,7 @@ class FeatureDB(object):
             ORDER BY start'''.format(**locals()),
             tuple(args))
         for i in c:
-            yield _feature.Feature(i, dialect=self.dialect)
+            yield Feature(dialect=self.dialect, **i)
 
     def children(self, id, level=None, featuretype=None):
         """
@@ -365,7 +366,7 @@ class FeatureDB(object):
             seqid, coords = region.split(':')
             start, end = coords.split('-')
 
-        elif isinstance(region, _feature.Feature):
+        elif isinstance(region, Feature):
             seqid = region.seqid
             start = region.start
             end = region.end
@@ -404,7 +405,7 @@ class FeatureDB(object):
         c = self.conn.cursor()
         c.execute(query, tuple(args))
         for i in c:
-            yield _feature.Feature(i, dialect=self.dialect)
+            yield Feature(dialect=self.dialect, **i)
 
     @classmethod
     def interfeatures(self, features, new_featuretype=None,
@@ -448,7 +449,7 @@ class FeatureDB(object):
         ... "chr1 . exon 200 250 . + . ID=exon2; Parent=mRNA1",
         ... "chr1 . exon 500 600 . + . ID=exon3; Parent=mRNA1",
         ... ]
-        >>> features = [_feature.feature_from_line(i) for i in features]
+        >>> features = [feature_from_line(i) for i in features]
         >>> for i in FeatureDB.interfeatures(
         ... features, new_featuretype="intron"):
         ...     print i  # doctest: +NORMALIZE_WHITESPACE
@@ -482,18 +483,29 @@ class FeatureDB(object):
             new_bin = bins.bins(
                 interfeature_start, interfeature_stop, one=True)
             _id = None
-            fields = [None, chrom, 'gffutils_derived', new_featuretype,
-                      interfeature_start, interfeature_stop, '.', strand, '.',
-                      new_attributes, [], new_bin]
+            fields = dict(
+                seqid=chrom,
+                source='gffutils_derived',
+                featuretype=new_featuretype,
+                start=interfeature_start,
+                end=interfeature_stop,
+                score='.',
+                strand=strand,
+                frame='.',
+                attributes=new_attributes,
+                bin=new_bin)
+
             if dialect is None:
                 # Support for @classmethod -- if calling from the class, then
-                # self.dialect is not defined, so use GFF3 as default.
+                # self.dialect is not defined, so defer to Feature's default
+                # (which will be constants.dialect, or GFF3).
                 try:
                     dialect = self.dialect
                 except AttributeError:
-                    dialect = constants.dialect
-            yield _feature.Feature(fields, dialect=dialect)
+                    dialect = None
+            yield Feature(dialect=dialect, **fields)
             interfeature_start = f.stop
+
 
     # Recycle the docs for _relation so they stay consistent between parents()
     # and children()
