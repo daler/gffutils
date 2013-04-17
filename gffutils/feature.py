@@ -130,6 +130,8 @@ class Feature(object):
 
     def __repr__(self):
         memory_loc = hex(id(self))
+
+        # Reconstruct start/end as "."
         if self.start is None:
             start = '.'
         else:
@@ -153,8 +155,8 @@ class Feature(object):
         if items[4] is None:
             items[4] = "."
 
-        # Reconstruct from dict and dialect (if original attributes weren't
-        # provided)
+        # Reconstruct from dict and dialect (only if original attributes
+        # weren't provided)
         if self._orig_attribute_str:
             reconstructed_attributes = self._orig_attribute_str
         else:
@@ -191,7 +193,7 @@ class Feature(object):
         self.end = value
 
 
-def feature_from_line(line):
+def feature_from_line(line, dialect=None):
     """
     Given a line from a GFF file, return a Feature object
 
@@ -206,8 +208,10 @@ def feature_from_line(line):
         fields = line.rstrip('\n\r').split('\t')
     else:
         fields = line.rstrip('\n\r').split(None, 8)
-    attrs, dialect = parser._split_keyvals(fields[8])
+    attrs, _dialect = parser._split_keyvals(fields[8])
     d = dict(zip(constants._gffkeys, fields))
     d['attributes'] = attrs
     d['extra'] = fields[9:]
+    if dialect is None:
+        dialect = _dialect
     return Feature(dialect=dialect, **d)
