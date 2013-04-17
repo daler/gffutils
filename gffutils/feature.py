@@ -146,6 +146,17 @@ class Feature(object):
             "[{x.strand}]) at {loc}>".format(x=self, start=start, end=end,
                                              loc=memory_loc))
 
+    def __getitem__(self, key):
+        if key in constants._keys:
+            return getattr(self, key)
+        else:
+            raise KeyError
+
+    def __setitem__(self, key, value):
+        if key in constants._keys:
+            self.key = value
+        else:
+            raise KeyError
 
     def __str__(self):
         # All fields but attributes (and extra).
