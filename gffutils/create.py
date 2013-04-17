@@ -394,7 +394,7 @@ class _GFFDBCreator(_DBCreator):
             c2.execute('''
                        SELECT child FROM relations WHERE parent IN
                        (SELECT child FROM relations WHERE parent = ?)
-                       ''', parent)
+                       ''', tuple(parent))
             for grandchild in c2:
                 fout.write('\t'.join((parent[0], grandchild[0])) + '\n')
         fout.close()
