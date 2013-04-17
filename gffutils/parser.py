@@ -200,9 +200,6 @@ def _split_keyvals(keyval_str, dialect=None):
 
 
 class Parser(object):
-    _keys = ['seqid', 'source', 'feature', 'start', 'end', 'score', 'strand',
-             'frame', 'attributes', 'extra']
-
     _keys = constants._gffkeys_extra
 
     def __init__(self, filename, checklines=10, transform=None,
