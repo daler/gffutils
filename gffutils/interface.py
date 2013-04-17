@@ -31,6 +31,7 @@ class FeatureDB(object):
         # to a new, separate (and empty) db in memory, we can alternatively
         # pass in a _DBCreator instance to use its db.
         if isinstance(dbfn, create._DBCreator):
+            self._DBCreator_instance = dbfn
             if dbfn.dbfn == ':memory:':
                 self.conn = dbfn.conn
             else:
@@ -506,6 +507,29 @@ class FeatureDB(object):
             yield Feature(dialect=dialect, **fields)
             interfeature_start = f.stop
 
+    def update(self, features, merge_strategy=None):
+        if self._DBCreator_instance is not None:
+            db = self._DBCreator_instance
+
+        else:
+            # TODO: Currently create._DBCreator only accepts a filename, which
+            # it creates a parser.Parser.  It should accept an iterable of
+            # Features, but this will take some refactoring.
+            #
+            # So for now, create an intermediate tempfile.
+            tmp = tempfile.NamedTemporaryFile()
+            for f in features:
+                tmp.write(str(f) + '\n')
+            tmp.seek(0)
+            if self.dialect['fmt'] == 'gtf':
+                db = create._GTFCreator(fn=tmp.name, dbfn=self.dbfn)
+            elif self.dialect['fmt'] == 'gff3':
+                db = create._GFFDBCreator(fn=tmp.name, dbfn=self.dbfn)
+
+        if merge_strategy:
+            db.merge_strategy = merge_strategy
+        db._populate_from_lines(features)
+        db._update_relations()
 
     # Recycle the docs for _relation so they stay consistent between parents()
     # and children()

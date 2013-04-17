@@ -2,6 +2,7 @@ import expected
 from .. import create
 from .. import interface
 from .. import parser
+from .. import feature
 from ..__init__ import example_filename
 import sys
 import os
@@ -10,15 +11,33 @@ import nose.tools as nt
 import difflib
 import pprint
 import copy
+import tempfile
 
 
 testdbfn_gtf = ':memory:'
 testdbfn_gff = ':memory:'
 
-def setup():
-    create.create_db(example_filename('FBgn0031208.gff'), testdbfn_gff, verbose=False, force=True)
-    create.create_db(example_filename('FBgn0031208.gtf'), testdbfn_gtf, verbose=False, force=True)
 
+
+def test_update():
+    # check both in-memory and file-based dbs
+    db = create.create_db(
+        example_filename('FBgn0031208.gff'), ':memory:', verbose=False,
+        force=True)
+    f = feature.feature_from_line('chr2L . testing 1 10 . + . ID="testing_feature"', dialect=db.dialect)
+    db.update([f])
+    x = list(db.features_of_type('testing'))
+    assert len(x) == 1
+    assert str(x[0]) == "chr2L	.	testing	1	10	.	+	.	ID=testing_feature"
+
+    db = create.create_db(
+        example_filename('FBgn0031208.gtf'), ':memory:', verbose=False,
+        force=True)
+    f = feature.feature_from_line('chr2L . testing 1 10 . + . gene_id "fake"', dialect=db.dialect)
+    db.update([f], merge_strategy='merge')
+    x = list(db.features_of_type('testing'))
+    assert len(x) == 1
+    assert str(x[0]) == 'chr2L	.	testing	1	10	.	+	.	gene_id "fake";', str(x[0])
 
 class BaseDB(object):
     """

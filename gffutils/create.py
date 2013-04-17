@@ -411,6 +411,7 @@ class _GFFDBCreator(_DBCreator):
             ''', relations_generator())
 
         # TODO: Index creation.  Which ones affect performance?
+        c.execute("DROP INDEX IF EXISTS binindex")
         c.execute("CREATE INDEX binindex ON features (bin)")
 
         self.conn.commit()
@@ -635,23 +636,20 @@ class _GTFDBCreator(_DBCreator):
                 d['id'] = self._id_handler(d)
                 yield d
 
-        # Insert the just-inferred transcripts and genes according to the
-        # specified merge strategy
+        # Insert the just-inferred transcripts and genes.  We should always do
+        # assume merge_strategy="merge", since these derived features take into
+        # account the current state of the db.
         for d in derived_feature_generator():
             try:
                 c.execute(constants._INSERT, helpers._dict_to_fields(d))
             except sqlite3.IntegrityError:
                 fixed = self._do_merge(d)
-                if self.merge_strategy == 'merge':
-                    c.execute(
-                        '''
-                        UPDATE features SET attributes = ?
-                        WHERE id = ?
-                        ''', (helpers._jsonify(fixed['attributes']),
-                              fixed['id']))
-                elif self.merge_strategy == 'create_unique':
-                    c.execute(constants._INSERT,
-                              helpers._dict_to_fields(fixed))
+                c.execute(
+                    '''
+                    UPDATE features SET attributes = ?
+                    WHERE id = ?
+                    ''', (helpers._jsonify(fixed['attributes']),
+                          fixed['id']))
 
         self.conn.commit()
         os.unlink(fout.name)
