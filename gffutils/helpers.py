@@ -57,6 +57,20 @@ def _unjsonify(x):
         x, object_pairs_hook=DefaultListOrderedDict)
 
 
+def _feature_to_fields(f, jsonify=True):
+    """
+    Convert feature to tuple, for faster sqlite3 import
+    """
+    x = []
+    for k in constants._keys:
+        v = getattr(f, k)
+        if jsonify and (k in ('attributes', 'extra')):
+            x.append(_jsonify(v))
+        else:
+            x.append(v)
+    return tuple(x)
+
+
 def _dict_to_fields(d, jsonify=True):
     """
     Convert dict to tuple, for faster sqlite3 import
