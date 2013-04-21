@@ -272,13 +272,7 @@ class _GFFDBCreator(_DBCreator):
         last_perc = 0
         logger.info("Populating features")
         msg = ("Populating features table and first-order relations: "
-               "%d (%d%%)\r")
-
-        if self.verbose:
-            # This is so we can provide percent-completed estimates below --
-            # but it'll take time to read the file to determine how many valid
-            # lines...
-            self._nfeatures = float(self.parser._valid_line_count())
+               "%d features\r")
 
         # ONEBYONE is used for profiling -- how to get faster inserts?
         # ONEBYONE=False will do a single executemany
@@ -296,11 +290,9 @@ class _GFFDBCreator(_DBCreator):
 
             # Percent complete
             if self.verbose:
-                perc = int(i / self._nfeatures * 100)
-                if perc != last_perc:
-                    sys.stderr.write(msg % (i, perc))
+                if i % 1000 == 0:
+                    sys.stderr.write(msg % i)
                     sys.stderr.flush()
-                last_perc = perc
 
             # TODO: handle ID creation here...should be combined with the
             # INSERT below (that is, don't IGNORE below but catch the error and
@@ -365,7 +357,7 @@ class _GFFDBCreator(_DBCreator):
 
         self.conn.commit()
         if self.verbose:
-            sys.stderr.write('\n')
+            sys.stderr.write((msg % i) + '\n')
 
     def _update_relations(self):
         logger.info("Updating relations")
@@ -429,13 +421,10 @@ class _GTFDBCreator(_DBCreator):
         super(_GTFDBCreator, self).__init__(*args, **kwargs)
 
     def _populate_from_lines(self, lines):
-        msg = ("Populating features table and first-order relations: "
-               "%d (%d%%)\r")
-
-        if self.verbose:
-            # So we can provide percent-completed estimates below -- but it'll
-            # take time to read the file to determine how many valid lines...
-            self._nfeatures = float(self.parser._valid_line_count())
+        msg = (
+            "Populating features table and first-order relations: %d "
+            "features\r"
+        )
 
         c = self.conn.cursor()
 
@@ -499,6 +488,8 @@ class _GTFDBCreator(_DBCreator):
             )
 
         self.conn.commit()
+        if self.verbose:
+            sys.stderr.write((msg % i) + '\n')
 
     def _update_relations(self):
         # TODO: do any indexes speed this up?
