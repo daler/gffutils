@@ -125,7 +125,7 @@ class FeatureDB(object):
         return results
 
     def features_of_type(self, featuretype, seqid=None, start=None, end=None,
-                         strand=None):
+                         strand=None, order_by=None, reverse=False):
         """
         Returns an iterator of :class:`gffutils.Feature` objects.
 
@@ -150,8 +150,20 @@ class FeatureDB(object):
         `strand` : { "-", "+", "." }
 
             If not `None`, restrict to a strand.
+
+        `order_by`: None, string
+            Order by one of the columns in the features table (these are the
+            standard GFF fields -- 'seqid', 'source', 'featuretype', 'start',
+            'end', 'score', 'strand', 'frame', 'attributes').
+
+            Most useful is probably "start", to get features in order.  Default
+            is no ordering.
+
+        `reverse` : bool
+            If `order_by` is not None, then `reverse` controls the sort order
+            like Python's sort() function.  Default is False, so results will
+            be ascending by default.
         """
-        select_clause = constants._SELECT + ' WHERE featuretype = ?'
         args = [featuretype]
         filter_clause = ''
 
@@ -173,11 +185,23 @@ class FeatureDB(object):
             filter_clause += ' AND strand = ?'
             args.append(strand)
 
+        if order_by is not None:
+            assert order_by in constants._gffkeys_extra
+            order_by_clause = " ORDER BY %s " % order_by
+            if reverse:
+                order_by_clause += ' DESC'
+        else:
+            order_by_clause = ""
+
         c = self.conn.cursor()
-        c.execute(
-            select_clause + filter_clause + ' ORDER BY start',
-            tuple(args)
-        )
+        select_clause = constants._SELECT + order_by_clause + ' WHERE featuretype = ?'
+        query = ' '.join([
+            constants._SELECT,
+            "WHERE featuretype = ?",
+            filter_clause,
+            order_by_clause,
+        ])
+        c.execute(query, tuple(args))
         for i in c:
             yield Feature(dialect=self.dialect, **i)
 
@@ -246,7 +270,7 @@ class FeatureDB(object):
         c = self.conn.cursor()
         c.execute(
             '''
-            SELECT DISTINCT feature from features
+            SELECT DISTINCT featuretype from features
             ''')
         for i, in c:
             yield i
