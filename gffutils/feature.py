@@ -203,6 +203,15 @@ class Feature(object):
     def stop(self, value):
         self.end = value
 
+    def astuple(self):
+        t = []
+        for i in constants._keys:
+            v = getattr(self, i)
+            if i in ('attributes', 'extra'):
+                v = helpers._jsonify(v)
+            t.append(v)
+        return tuple(t)
+
 
 def feature_from_line(line, dialect=None):
     """
