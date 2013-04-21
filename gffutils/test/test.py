@@ -52,7 +52,7 @@ class BaseDB(object):
             elif 'Name' in f['attributes']:
                 return f['attributes']['Name'][0]
             else:
-                return '{featuretype}:{seqid}:{start}-{end}:{strand}'.format(**f)
+                return '{0.featuretype}:{0.seqid}:{0.start}-{0.end}:{0.strand}'.format(f)
 
         def gtf_id_func(f):
             if f['featuretype'] == 'gene':
@@ -62,7 +62,7 @@ class BaseDB(object):
                 if 'transcript_id' in f['attributes']:
                     return f['attributes']['transcript_id'][0]
             else:
-                return '{featuretype}:{seqid}:{start}-{end}:{strand}'.format(**f)
+                return '{0.featuretype}:{0.seqid}:{0.start}-{0.end}:{0.strand}'.format(f)
 
         if self.orig_fn.endswith('.gtf'): id_func = gtf_id_func
         if self.orig_fn.endswith('.gff'): id_func = gff_id_func

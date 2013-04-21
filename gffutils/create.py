@@ -10,6 +10,7 @@ import bins
 import helpers
 import feature
 import interface
+import iterators
 
 import logging
 
@@ -22,8 +23,9 @@ logger.addHandler(ch)
 
 
 class _DBCreator(object):
-    def __init__(self, fn, dbfn, force=False, verbose=True, id_spec=None,
-                 merge_strategy='merge', checklines=10, transform=None):
+    def __init__(self, data, dbfn, force=False, verbose=True, id_spec=None,
+                 merge_strategy='merge', checklines=10, transform=None,
+                 force_dialect_check=False):
         """
         Base class for _GFFDBCreator and _GTFDBCreator; see create_db()
         function for docs
@@ -40,10 +42,14 @@ class _DBCreator(object):
         self.conn = conn
         #self.conn.text_factory = sqlite3.OptimizedUnicode
         self.conn.text_factory = str
-        self.fn = fn
+        self._data = data
 
-        self.parser = parser.Parser(
-            fn, checklines=checklines, transform=transform)
+        if isinstance(data, basestring):
+            self.parser = iterators.FileIterator(
+                data, checklines, force_dialect_check)
+        else:
+            self.parser = iterators.FeatureIterator(
+                data, checklines, force_dialect_check)
 
         self.verbose = verbose
         self._orig_logger_level = logger.level
@@ -54,9 +60,9 @@ class _DBCreator(object):
         self._autoincrements[key] += 1
         return '%s_%s' % (key, self._autoincrements[key])
 
-    def _id_handler(self, d):
+    def _id_handler(self, f):
         """
-        Given a dictionary from self.parser, figure out what the ID should be.
+        Given a Feature from self.parser, figure out what the ID should be.
 
         `_autoincrement_key` is which field to use that will be
         auto-incremented.  Typically this will be "feature" (for exon_1,
@@ -75,13 +81,13 @@ class _DBCreator(object):
         # {'gene': 'gene_id'} for GTF
         elif isinstance(self.id_spec, dict):
             try:
-                id_key = self.id_spec[d['featuretype']]
+                id_key = self.id_spec[f.featuretype]
                 if isinstance(id_key, basestring):
                     id_key = [id_key]
 
             # Otherwise, use default auto-increment.
             except KeyError:
-                return self._increment_featuretype_autoid(d['featuretype'])
+                return self._increment_featuretype_autoid(f.featuretype)
 
         # Otherwise assume it's an iterable.
         else:
@@ -91,7 +97,7 @@ class _DBCreator(object):
         for k in id_key:
 
             if hasattr(k, '__call__'):
-                _id = k(d)
+                _id = k(f)
                 if _id:
                     if _id.startswith('autoincrement:'):
                         return self._increment_featuretype_autoid(_id[14:])
@@ -102,27 +108,25 @@ class _DBCreator(object):
             if (len(k) > 3) and (k[0] == ':') and (k[-1] == ':'):
                 # No [0] here -- only attributes key/vals are forced into
                 # lists, not standard GFF fields.
-                return d[k[1:-1]]
+                return getattr(f, k[1:-1])
             else:
-                v = d['attributes'][k]
+                v = f.attributes[k]
             if len(v) == 0:
-                del d['attributes'][k]
+                del f.attributes[k]
             else:
                 return v[0]
 
         # If we get here, then default autoincrement
-        return self._increment_featuretype_autoid(d['featuretype'])
+        return self._increment_featuretype_autoid(f.featuretype)
 
     def _get_feature(self, ID):
         c = self.conn.cursor()
-        return dict(
-            zip(
-                constants._keys,
-                c.execute(constants._SELECT + 'WHERE id = ?', (ID,)).fetchone()
-            )
-        )
 
-    def _do_merge(self, d):
+        results = c.execute(
+            constants._SELECT + 'WHERE id = ?', (ID,)).fetchone()
+        return feature.Feature(**results)
+
+    def _do_merge(self, f):
         """
         Different merge strategies upon name conflicts.
 
@@ -139,41 +143,39 @@ class _DBCreator(object):
         "create_unique":
             Autoincrement based on the ID
         """
-        # Note that `d` comes in un-JSONified
-
         if self.merge_strategy == 'error':
-            raise ValueError("Duplicate ID {id}".format(**d))
+            raise ValueError("Duplicate ID {0.id}".format(f))
         if self.merge_strategy == 'warning':
             logger.warning(
-                "Duplicate lines in file for id '{id}'; "
-                "ignoring all but the first".format(**d))
+                "Duplicate lines in file for id '{0.id}'; "
+                "ignoring all but the first".format(f))
             return None
         elif self.merge_strategy == 'merge':
             # retrieve the existing row
-            existing_d = self._get_feature(d['id'])
+            existing_feature = self._get_feature(f.id)
 
             # does everything besides attributes and extra match?
             for k in constants._gffkeys[:-1]:
                 # Note str() here: `existing_d` came from the db (so start/end
                 # are integers) but `d` came from the file, so they are still
                 # strings.
-                assert str(existing_d[k]) == d[k], (
+                assert getattr(existing_feature, k) == getattr(f, k), (
                     "Same ID, but differing info for %s field. "
                     "Line %s: \n%s" % (
-                        d['id'],
+                        f.id,
                         self.parser.current_line_number,
                         self.parser.current_line))
 
-            attributes = helpers._unjsonify(existing_d['attributes'])
+            attributes = existing_feature.attributes
 
             # update the attributes (using sets for de-duping)
-            for k, v in d['attributes'].items():
+            for k, v in f.attributes.items():
                 attributes[k] = list(set(attributes[k]).union(v))
-            existing_d['attributes'] = attributes
-            return existing_d
+            existing_feature.attributes = attributes
+            return existing_feature
         elif self.merge_strategy == 'create_unique':
-            d['id'] = self._increment_featuretype_autoid(d['id'])
-            return d
+            f.id = self._increment_featuretype_autoid(f.id)
+            return f
 
     def _populate_from_lines(self, lines):
         raise NotImplementedError
@@ -286,7 +288,7 @@ class _GFFDBCreator(_DBCreator):
         ONEBYONE = True
 
         _features, _relations = [], []
-        for i, d in enumerate(lines):
+        for i, f in enumerate(lines):
 
             # Percent complete
             if self.verbose:
@@ -298,10 +300,7 @@ class _GFFDBCreator(_DBCreator):
             # INSERT below (that is, don't IGNORE below but catch the error and
             # re-try with a new ID).  However, is this doable with an
             # execute-many?
-            d['id'] = self._id_handler(d)
-            d['bin'] = helpers._bin_from_dict(d)
-
-            fields = helpers._dict_to_fields(d)
+            f.id = self._id_handler(f)
 
             if ONEBYONE:
 
@@ -310,35 +309,34 @@ class _GFFDBCreator(_DBCreator):
                 # executemany, which probably means writing to file first.
 
                 try:
-                    c.execute(constants._INSERT, helpers._dict_to_fields(d))
+                    c.execute(constants._INSERT, f.astuple())
                 except sqlite3.IntegrityError:
-                    fixed = self._do_merge(d)
+                    fixed = self._do_merge(f)
                     if self.merge_strategy == 'merge':
                         c.execute(
                             '''
                             UPDATE features SET attributes = ?
                             WHERE id = ?
-                            ''', (helpers._jsonify(fixed['attributes']),
-                                  fixed['id']))
+                            ''', (helpers._jsonify(fixed.attributes),
+                                  fixed.id))
 
                     elif self.merge_strategy == 'create_unique':
-                        c.execute(constants._INSERT,
-                                  helpers._dict_to_fields(fixed))
+                        c.execute(constants._INSERT, f.astuple())
 
                 # Works in all cases since attributes is a defaultdict
-                for parent in d['attributes']['Parent']:
+                for parent in f.attributes['Parent']:
                     c.execute(
                         '''
                         INSERT OR IGNORE INTO relations VALUES
                         (?, ?, 1)
-                        ''', (parent, d['id']))
+                        ''', (parent, f.id))
 
             else:
-                _features.append(helpers._dict_to_fields(d))
+                _features.append(f.astuple())
 
                 # Works in all cases since attributes is a defaultdict
-                for parent in d['attributes']['Parent']:
-                    _relations.append((parent, d['id']))
+                for parent in f.attributes['Parent']:
+                    _relations.append((parent, f.id))
 
         if not ONEBYONE:
             # Profiling shows that there's an extra overhead for using dict
@@ -429,35 +427,31 @@ class _GTFDBCreator(_DBCreator):
         c = self.conn.cursor()
 
         last_perc = 0
-        for i, d in enumerate(lines):
+        for i, f in enumerate(lines):
 
             # Percent complete
             if self.verbose:
-                perc = int(i / self._nfeatures * 100)
-                if perc != last_perc:
-                    sys.stderr.write(msg % (i, perc))
+                if i % 1000 == 0:
+                    sys.stderr.write(msg % i)
                     sys.stderr.flush()
-                last_perc = perc
 
-            d['id'] = self._id_handler(d)
-            d['bin'] = helpers._bin_from_dict(d)
+            f.id = self._id_handler(f)
 
             # Insert the feature itself...
             try:
-                c.execute(constants._INSERT, helpers._dict_to_fields(d))
+                c.execute(constants._INSERT, f.astuple())
             except sqlite3.IntegrityError:
-                fixed = self._do_merge(d)
+                fixed = self._do_merge(f)
                 if self.merge_strategy == 'merge':
                     c.execute(
                         '''
                         UPDATE features SET attributes = ?
                         WHERE id = ?
-                        ''', (helpers._jsonify(fixed['attributes']),
-                              fixed['id']))
+                        ''', (helpers._jsonify(fixed.attributes),
+                              fixed.id))
 
                 elif self.merge_strategy == 'create_unique':
-                    c.execute(constants._INSERT,
-                              helpers._dict_to_fields(fixed))
+                    c.execute(constants._INSERT, f.astuple())
 
             # For an on-spec GTF file,
             # self.transcript_key = "transcript_id"
@@ -465,15 +459,15 @@ class _GTFDBCreator(_DBCreator):
             relations = []
             parent = None
             grandparent = None
-            if self.transcript_key in d['attributes']:
-                parent = d['attributes'][self.transcript_key][0]
-                relations.append((parent, d['id'], 1))
+            if self.transcript_key in f.attributes:
+                parent = f.attributes[self.transcript_key][0]
+                relations.append((parent, f.id, 1))
 
-            if self.gene_key in d['attributes']:
-                grandparent = d['attributes'][self.gene_key]
+            if self.gene_key in f.attributes:
+                grandparent = f.attributes[self.gene_key]
                 if len(grandparent) > 0:
                     grandparent = grandparent[0]
-                    relations.append((grandparent, d['id'], 2))
+                    relations.append((grandparent, f.id, 2))
                     if parent is not None:
                         relations.append((grandparent, parent, 1))
 
@@ -619,28 +613,30 @@ class _GTFDBCreator(_DBCreator):
                     'featuretype', 'bin', 'attributes']
             for line in open(fout.name):
                 d = dict(zip(keys, line.strip().split('\t')))
+                d.pop('parent')
                 d['score'] = '.'
                 d['source'] = 'gffutils_derived'
                 d['frame'] = '.'
                 d['extra'] = []
                 d['attributes'] = helpers._unjsonify(d['attributes'])
-                d['id'] = self._id_handler(d)
-                yield d
+                f = feature.Feature(**d)
+                f.id = self._id_handler(f)
+                yield f
 
         # Insert the just-inferred transcripts and genes.  We should always do
         # assume merge_strategy="merge", since these derived features take into
         # account the current state of the db.
-        for d in derived_feature_generator():
+        for f in derived_feature_generator():
             try:
-                c.execute(constants._INSERT, helpers._dict_to_fields(d))
+                c.execute(constants._INSERT, f.astuple())
             except sqlite3.IntegrityError:
-                fixed = self._do_merge(d)
+                fixed = self._do_merge(f)
                 c.execute(
                     '''
                     UPDATE features SET attributes = ?
                     WHERE id = ?
-                    ''', (helpers._jsonify(fixed['attributes']),
-                          fixed['id']))
+                    ''', (helpers._jsonify(fixed.attributes),
+                          fixed.id))
 
         self.conn.commit()
         os.unlink(fout.name)
@@ -651,7 +647,8 @@ class _GTFDBCreator(_DBCreator):
 def create_db(fn, dbfn, id_spec=None, force=False, verbose=True, checklines=10,
               merge_strategy='error', transform=None,
               gtf_transcript_key='transcript_id', gtf_gene_key='gene_id',
-              gtf_subfeature='exon', force_gff=False):
+              gtf_subfeature='exon', force_gff=False,
+              force_dialect_check=False):
     """
     Create a database from a GFF or GTF file.
 
@@ -756,12 +753,27 @@ def create_db(fn, dbfn, id_spec=None, force=False, verbose=True, checklines=10,
         Feature type to use as a "gene component" when inferring gene and
         transcript extents for GTF files.  Default is `exon` according to the
         GTF spec.
+
+    `force_gff` : bool
+        If True, do not do automatic format detection -- only use GFF.
+
+    `force_dialect_check`: bool
+        If True, the dialect will be checkef for every feature (instead of just
+        `checklines` features).  This can be slow, but may be necessary for
+        inconsistently-formatted input files.
     """
 
     # Auto-detect format
-    p = parser.Parser(fn, checklines=checklines, transform=transform)
-    dialect = p._sniff()
-    if (dialect['fmt'] == 'gff3') or force_gff:
+    if isinstance(fn, basestring):
+        iter_class = iterators.FileIterator
+    else:
+        iter_class = iterators.FeatureIterator
+
+    p = iter_class(fn, checklines=checklines, transform=transform,
+                   force_dialect_check=force_dialect_check)
+
+    dialect = p.dialect
+    if force_gff or (dialect['fmt'] == 'gff3'):
         cls = _GFFDBCreator
         id_spec = id_spec or 'ID'
         kwargs = {}
@@ -773,7 +785,7 @@ def create_db(fn, dbfn, id_spec=None, force=False, verbose=True, checklines=10,
             gene_key=gtf_gene_key,
             subfeature=gtf_subfeature)
 
-    c = cls(fn, dbfn, id_spec=id_spec, force=force, verbose=verbose,
+    c = cls(p, dbfn, id_spec=id_spec, force=force, verbose=verbose,
             merge_strategy=merge_strategy, transform=transform, **kwargs)
     c.create()
     db = interface.FeatureDB(c)
