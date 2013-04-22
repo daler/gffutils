@@ -45,10 +45,10 @@ class _DBCreator(object):
         self._data = data
 
         if isinstance(data, basestring):
-            self.parser = iterators.FileIterator(
+            self.iterator = iterators.FileIterator(
                 data, checklines, force_dialect_check)
         else:
-            self.parser = iterators.FeatureIterator(
+            self.iterator = iterators.FeatureIterator(
                 data, checklines, force_dialect_check)
 
         self.verbose = verbose
@@ -62,7 +62,7 @@ class _DBCreator(object):
 
     def _id_handler(self, f):
         """
-        Given a Feature from self.parser, figure out what the ID should be.
+        Given a Feature from self.iterator, figure out what the ID should be.
 
         `_autoincrement_key` is which field to use that will be
         auto-incremented.  Typically this will be "feature" (for exon_1,
@@ -163,8 +163,8 @@ class _DBCreator(object):
                     "Same ID, but differing info for %s field. "
                     "Line %s: \n%s" % (
                         f.id,
-                        self.parser.current_line_number,
-                        self.parser.current_line))
+                        self.iterator.current_line_number,
+                        self.iterator.current_line))
 
             attributes = existing_feature.attributes
 
@@ -205,16 +205,15 @@ class _DBCreator(object):
         In general, if you'll be adding stuff to the meta table, do it here.
         """
         c = self.conn.cursor()
-
         c.executemany('''
                       INSERT INTO directives VALUES (?)
-                      ''', ((i,) for i in self.parser.directives))
+                      ''', ((i,) for i in self.iterator.directives))
         c.execute(
             '''
             INSERT INTO meta (version, dialect)
             VALUES (:version, :dialect)''',
             dict(version=version.version,
-                 dialect=helpers._jsonify(self.parser.dialect))
+                 dialect=helpers._jsonify(self.iterator.dialect))
         )
 
         c.executemany(
@@ -224,7 +223,7 @@ class _DBCreator(object):
 
         self.conn.commit()
 
-        self.warnings = self.parser.warnings
+        self.warnings = self.iterator.warnings
 
     def create(self):
         """
@@ -234,7 +233,7 @@ class _DBCreator(object):
         # Calls each of these methods in order.  _populate_from_lines and
         # _update_relations must be implemented in subclasses.
         self._init_tables()
-        self._populate_from_lines(self.parser)
+        self._populate_from_lines(self.iterator)
         self._update_relations()
         self._finalize()
 
@@ -690,7 +689,7 @@ def create_db(fn, dbfn, id_spec=None, force=False, verbose=True, checklines=10,
         'geneID']}`
 
         If `id_spec` is a callable object, then it accepts a dictionary from
-        the parser and returns one of the following:
+        the iterator and returns one of the following:
 
             * None (in which case the feature type will be auto-incremented)
             * string (which will be used as the primary key)
