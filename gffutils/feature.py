@@ -83,7 +83,7 @@ class Feature(object):
         # If dict, then use that; otherwise assume JSON; otherwise assume
         # original string.
         self._orig_attribute_str = None
-        attributes = attributes or {}
+        attributes = attributes or helpers.DefaultListOrderedDict()
         if isinstance(attributes, basestring):
             try:
                 attributes = helpers._unjsonify(attributes)
