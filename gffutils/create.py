@@ -643,19 +643,25 @@ class _GTFDBCreator(_DBCreator):
         # TODO: recreate indexes?
 
 
-def create_db(fn, dbfn, id_spec=None, force=False, verbose=True, checklines=10,
+def create_db(data, dbfn, id_spec=None, force=False, verbose=True, checklines=10,
               merge_strategy='error', transform=None,
               gtf_transcript_key='transcript_id', gtf_gene_key='gene_id',
               gtf_subfeature='exon', force_gff=False,
-              force_dialect_check=False):
+              force_dialect_check=False, from_string=False):
     """
     Create a database from a GFF or GTF file.
 
     Parameters
     ----------
-    `fn` : string
+    `data` : string or iterable
 
-        Path to the original GFF or GTF file.
+        If a string (and `from_string` is False), then `data` is the path to
+        the original GFF or GTF file.
+
+        If a string and `from_string` is True, then assume `data` is the actual
+        data to use.
+
+        Otherwise, it's an iterable of Feature objects.
 
     `dbfn` : string
 
@@ -760,15 +766,21 @@ def create_db(fn, dbfn, id_spec=None, force=False, verbose=True, checklines=10,
         If True, the dialect will be checkef for every feature (instead of just
         `checklines` features).  This can be slow, but may be necessary for
         inconsistently-formatted input files.
+
+    `from_string`: bool
+        If True, then treat `data` as actual data (rather than the path to
+        a file).
     """
 
     # Auto-detect format
-    if isinstance(fn, basestring):
+    if from_string:
+        iter_class = iterators.StringIterator
+    elif isinstance(data, basestring):
         iter_class = iterators.FileIterator
     else:
         iter_class = iterators.FeatureIterator
 
-    p = iter_class(fn, checklines=checklines, transform=transform,
+    p = iter_class(data, checklines=checklines, transform=transform,
                    force_dialect_check=force_dialect_check)
 
     dialect = p.dialect
@@ -788,5 +800,4 @@ def create_db(fn, dbfn, id_spec=None, force=False, verbose=True, checklines=10,
             merge_strategy=merge_strategy, transform=transform, **kwargs)
     c.create()
     db = interface.FeatureDB(c)
-    db.parser = c.parser
     return db
