@@ -32,8 +32,8 @@ class BaseIterator(object):
 
         if not force_dialect_check:
             self.peek, self._iter = peek(self._custom_iter(), checklines)
-            observed_dialects = [i.dialect for i in self.peek]
-            self.dialect = self._choose_dialect(observed_dialects)
+            self._observed_dialects = [i.dialect for i in self.peek]
+            self.dialect = self._choose_dialect(self._observed_dialects)
         else:
             self._iter = self._custom_iter()
 
