@@ -1,5 +1,7 @@
-from feature import Feature, feature_from_line
+import os
+import tempfile
 import itertools
+from feature import Feature, feature_from_line
 
 
 def peek(it, n):
@@ -49,8 +51,12 @@ class BaseIterator(object):
 
     def _choose_dialect(self, dialects):
         # Do something easy for now; eventually some heuruistics here? Or at
-        # least choose the most common dialect observed
-        return dialects[0]
+        # least choose the most common dialect observed.  Can use
+        # helpers.dialect_compare.
+        try:
+            return dialects[0]
+        except IndexError:
+            return None
 
     def _directive_handler(self, directive):
         self.directives.append(directive)
@@ -86,3 +92,14 @@ class FeatureIterator(BaseIterator):
             self.current_item = feature
             self.current_item_number = i
             yield feature
+
+
+class StringIterator(FileIterator):
+    def _custom_iter(self):
+        tmp = tempfile.NamedTemporaryFile(delete=False)
+        tmp.write(self.data)
+        tmp.close()
+        self.data = tmp.name
+        for feature in super(StringIterator, self)._custom_iter():
+            yield feature
+        os.unlink(tmp.name)
