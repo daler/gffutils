@@ -8,6 +8,35 @@ from feature import Feature, feature_from_line
 
 
 class FeatureDB(object):
+    # docstring to be filled in for methods that call out to
+    # helpers.make_query()
+    _method_doc = """
+        `limit`: string or tuple
+            Limit the results to a genomic region.  If string, then of the form
+            "seqid:start-end"; if tuple, then (seqid, start, end).
+
+        `strand`: "-" | "+" | "."
+            Limit the results to one strand
+
+        `featuretype`: string or tuple
+            Limit the results to one or several featuretypes.
+
+        `order_by`: string or tuple
+            Order results by one or many fields; the string or tuple items must be
+            in: 'seqid', 'source', 'featuretype', 'start', 'end', 'score',
+            'strand', 'frame', 'attributes', 'extra'.
+
+        `reverse`: bool
+            Change sort order; only relevant if `order_by` is not None.  By
+            default, results will be in ascending order, so use `reverse=True` for
+            descending.
+
+        `completely_within': bool
+            If False (default), a single bp overlap with `limit` is sufficient
+            to return a feature; if True, then the feature must be completely
+            within `limit`. Only relevant when `limit` is not None.
+    """
+
     def __init__(self, dbfn):
         """
         Connect to a database created by :func:`gffutils.create_db`.
@@ -124,143 +153,48 @@ class FeatureDB(object):
             results = results[0]
         return results
 
-    def features_of_type(self, featuretype, seqid=None, start=None, end=None,
-                         strand=None, order_by=None, reverse=False):
+    def features_of_type(self, featuretype, limit=None, strand=None,
+                         order_by=None, reverse=False,
+                         completely_within=False):
         """
         Returns an iterator of :class:`gffutils.Feature` objects.
 
         Parameters
         ----------
-        `featuretype` : string
-
-            Feature type to return
-
-        `seqid` : string
-
-            If not `None`, restrict results to this seqid
-
-        `start` : int
-
-            If not `None`, restrict results to only >= `start`
-
-        `end` : int
-
-            If not `None`, restrict results to only <= `end`
-
-        `strand` : { "-", "+", "." }
-
-            If not `None`, restrict to a strand.
-
-        `order_by`: None, string
-            Order by one of the columns in the features table (these are the
-            standard GFF fields -- 'seqid', 'source', 'featuretype', 'start',
-            'end', 'score', 'strand', 'frame', 'attributes').
-
-            Most useful is probably "start", to get features in order.  Default
-            is no ordering.
-
-        `reverse` : bool
-            If `order_by` is not None, then `reverse` controls the sort order
-            like Python's sort() function.  Default is False, so results will
-            be ascending by default.
+        {_method_doc}
         """
-        args = [featuretype]
-        filter_clause = ''
+        query, args = helpers.make_query(
+            args=[],
+            limit=limit,
+            featuretype=featuretype,
+            order_by=order_by,
+            reverse=reverse,
+            strand=strand,
+            completely_within=completely_within,
+        )
 
-        if seqid is not None:
-            filter_clause += ' AND seqid = ?'
-            args.append(seqid)
-
-        # TODO: add bin constraints, too
-
-        if start is not None:
-            filter_clause += ' AND start >= ?'
-            args.append(start)
-
-        if end is not None:
-            filter_clause += ' AND end <= ?'
-            args.append(end)
-
-        if strand is not None:
-            filter_clause += ' AND strand = ?'
-            args.append(strand)
-
-        if order_by is not None:
-            assert order_by in constants._gffkeys_extra
-            order_by_clause = " ORDER BY %s " % order_by
-            if reverse:
-                order_by_clause += ' DESC'
-        else:
-            order_by_clause = ""
-
-        c = self.conn.cursor()
-        select_clause = constants._SELECT + order_by_clause + ' WHERE featuretype = ?'
-        query = ' '.join([
-            constants._SELECT,
-            "WHERE featuretype = ?",
-            filter_clause,
-            order_by_clause,
-        ])
-        c.execute(query, tuple(args))
-        for i in c:
+        for i in self._execute(query, args):
             yield Feature(dialect=self.dialect, **i)
 
-    def all_features(self, seqid=None, start=None, end=None, strand=None):
+    def all_features(self, limit=None, strand=None, featuretype=None,
+                     order_by=None, reverse=False, completely_within=False):
         """
         Returns an iterator of all :class:`Feature` objects in the database.
 
         Parameters
         ----------
-
-        `seqid` : string
-
-            If not `None`, restrict results to this seqid
-
-        `start` : int
-
-            If not `None`, restrict results to only >= `start`
-
-        `end` : int
-
-            If not `None`, restrict results to only <= `end`
-
-        `strand` : { "-", "+", "." }
-
-            If not `None`, restrict to a strand.
-
+        {_method_doc}
         """
-        select_clause = constants._SELECT
-        args = []
-        filter_clause = 'WHERE'
-
-        if seqid is not None:
-            filter_clause += ' AND seqid = ?'
-            args.append(seqid)
-
-        # TODO: add bin constraints, too
-
-        if start is not None:
-            filter_clause += ' AND start >= ?'
-            args.append(start)
-
-        if end is not None:
-            filter_clause += ' AND end <= ?'
-            args.append(end)
-
-        if strand is not None:
-            filter_clause += ' AND strand = ?'
-            args.append(strand)
-
-        # Nothing was added above, so reset to empty string
-        if filter_clause == 'WHERE':
-            filter_clause = ''
-
-        c = self.conn.cursor()
-        c.execute(
-            select_clause + filter_clause + ' ORDER BY start',
-            tuple(args)
+        query, args = helpers.make_query(
+            args=[],
+            limit=limit,
+            strand=strand,
+            featuretype=featuretype,
+            order_by=order_by,
+            reverse=reverse,
+            completely_within=completely_within
         )
-        for i in c:
+        for i in self._execute(query, args):
             yield Feature(dialect=self.dialect, **i)
 
     def featuretypes(self):
@@ -275,7 +209,8 @@ class FeatureDB(object):
         for i, in c:
             yield i
 
-    def _relation(self, id, join_on, join_to, level=None, featuretype=None):
+    def _relation(self, id, join_on, join_to, level=None, featuretype=None,
+                  order_by=None, reverse=False, completely_within=False):
         """
         Parameters
         ----------
@@ -287,46 +222,41 @@ class FeatureDB(object):
             If `level=None` (default), then return all children regardless
             of level.  If `level` is an integer, then constrain to just that
             level.
-
-        `featuretype` : str or None
-
-            If `featuretype` is not `None`, then constrain results to just that
-            featuretype.
+        {_method_doc}
         """
 
         if isinstance(id, Feature):
             id = id.id
 
-        c = self.conn.cursor()
-
+        other = '''
+        JOIN relations
+        ON relations.{join_on} = features.id
+        WHERE relations.{join_to} = ?
+        '''.format(**locals())
         args = [id]
-
-        featuretype_clause = ''
-        if featuretype is not None:
-            featuretype_clause = ' AND features.featuretype = ?'
-            args.append(featuretype)
 
         level_clause = ''
         if level is not None:
-            level_clause = ' AND relations.level = ?'
+            level_clause = 'relations.level = ?'
             args.append(level)
 
+        query, args = helpers.make_query(
+            args=args,
+            other=other,
+            extra=level_clause,
+            featuretype=featuretype,
+            order_by=order_by,
+            reverse=reverse,
+            completely_within=completely_within,
+        )
+
         # modify _SELECT so that only unique results are returned
-        query = constants._SELECT.replace("SELECT", "SELECT DISTINCT")
-        c.execute(
-            query +
-            '''
-            JOIN relations
-            ON relations.{join_on} = features.id
-            WHERE relations.{join_to} = ?
-            {featuretype_clause}
-            {level_clause}
-            ORDER BY start'''.format(**locals()),
-            tuple(args))
-        for i in c:
+        query = query.replace("SELECT", "SELECT DISTINCT")
+        for i in self._execute(query, args):
             yield Feature(dialect=self.dialect, **i)
 
-    def children(self, id, level=None, featuretype=None):
+    def children(self, id, level=None, featuretype=None, order_by=None,
+                 reverse=False, completely_within=False):
         """
         Return children of feature `id`.
 
@@ -334,9 +264,11 @@ class FeatureDB(object):
         """
         return self._relation(
             id, join_on='child', join_to='parent', level=level,
-            featuretype=featuretype)
+            featuretype=featuretype, order_by=order_by, reverse=reverse,
+            completely_within=completely_within)
 
-    def parents(self, id, level=None, featuretype=None):
+    def parents(self, id, level=None, featuretype=None, order_by=None,
+                reverse=False, completely_within=False):
         """
         Return parents of feature `id`.
 
@@ -344,7 +276,16 @@ class FeatureDB(object):
         """
         return self._relation(
             id, join_on='parent', join_to='child', level=level,
-            featuretype=featuretype)
+            featuretype=featuretype, order_by=order_by, reverse=reverse,
+            completely_within=completely_within)
+
+
+    def _execute(self, query, args):
+        self._last_query = query
+        self._last_args = args
+        c = self.conn.cursor()
+        c.execute(query, tuple(args))
+        return c
 
     def execute(self, query):
         """
@@ -561,3 +502,8 @@ class FeatureDB(object):
         _relation_docstring=_relation.__doc__)
     parents.__doc__ = parents.__doc__.format(
         _relation_docstring=_relation.__doc__)
+
+    # Add the docs for methods that call helpers.make_query()
+    for method in [parents, children, features_of_type, all_features]:
+        method.__doc__ = method.__doc__.format(
+            _method_doc=_method_doc)
