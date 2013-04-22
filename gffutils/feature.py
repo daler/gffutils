@@ -228,7 +228,11 @@ def feature_from_line(line, dialect=None):
         fields = line.rstrip('\n\r').split('\t')
     else:
         fields = line.rstrip('\n\r').split(None, 8)
-    attrs, _dialect = parser._split_keyvals(fields[8], dialect=dialect)
+    try:
+        attr_string = fields[8]
+    except IndexError:
+        attr_string = ""
+    attrs, _dialect = parser._split_keyvals(attr_string, dialect=dialect)
     d = dict(zip(constants._gffkeys, fields))
     d['attributes'] = attrs
     d['extra'] = fields[9:]
