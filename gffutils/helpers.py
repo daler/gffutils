@@ -117,6 +117,18 @@ def merge_attributes(attr1, attr2):
     return new_d
 
 
+def dialect_compare(dialect1, dialect2):
+    """
+    Compares two dialects.
+    """
+    orig = set(dialect1.items())
+    new = set(dialect2.items())
+    return dict(
+        added=dict(list(new.difference(orig))),
+        removed=dict(list(orig.difference(new)))
+    )
+
+
 class DefaultOrderedDict(OrderedDict):
     """
     OrderedDict that is also a defaultdict.
