@@ -12,6 +12,129 @@ def example_filename(fn):
     return os.path.join(HERE, 'test', 'data', fn)
 
 
+def make_query(args, other=None, limit=None, strand=None, featuretype=None,
+               extra=None, order_by=None, reverse=False,
+               completely_within=False):
+    """
+    This function composes queries given some commonly-used kwargs that can be
+    passed to FeatureDB methods (like .parents(), .children(), .all_features(),
+    .features_of_type()).
+
+
+    It also provides support for additional JOINs etc (`other`) and extra
+    conditional clauses (`extra`).
+
+    For example, `other` is used in FeatureDB._relation, where `other` is the
+    JOIN substatment.
+
+    `extra` is also used in FeatureDB._relation, where `extra` is the
+    "relations.level = ?" substatment.
+
+    `args` can be pre-filled with args that are passed to `other` and `extra`.
+    """
+
+    _QUERY = ("{_SELECT} {OTHER} {EXTRA} {FEATURETYPE} "
+              "{LIMIT} {STRAND} {ORDER_BY}")
+
+    # Will be used later as _QUERY.format(**d).  Default is just _SELECT, which
+    # returns all records in the features table.
+    # (Recall that constants._SELECT gets the fields in the order needed to
+    # reconstruct a Feature)
+    d = dict(_SELECT=constants._SELECT, OTHER="", FEATURETYPE="", LIMIT="",
+             STRAND="", ORDER_BY="", EXTRA="")
+
+    if other:
+        d['OTHER'] = other
+    if extra:
+        d['EXTRA'] = extra
+
+    # Quick check for args provided
+    required_args = (d['EXTRA'] + d['OTHER']).count('?')
+    if len(args) != required_args:
+        raise ValueError('Not enough args (%s) for subquery' % args)
+
+    # Below, if a kwarg is specified, then we create sections of the query --
+    # appending to args as necessary.  Importantly, the order in which things
+    # are processed here is the same as the order of the placeholders in
+    # _QUERY.
+
+    # e.g., "featuretype = 'exon'"
+    #
+    # or, "featuretype IN ('exon', 'CDS')"
+    if featuretype:
+        if isinstance(featuretype, basestring):
+            d['FEATURETYPE'] = "features.featuretype = ?"
+            args.append(featuretype)
+        else:
+            d['FEATURETYPE'] = (
+                "features.featuretype IN  (%s)"
+                % (','.join(["?" for _ in featuretype]))
+            )
+            args.extend(featuretype)
+
+    # e.g., "seqid = 'chr2L' AND start > 1000 AND end < 5000"
+    if limit:
+        if isinstance(limit, basestring):
+            seqid, startstop = limit.split(':')
+            start, end = startstop.split('-')
+        else:
+            seqid, start, end = limit
+
+        # Identify bins
+        _bins = bins.bins(int(start), int(end), one=False)
+
+        if completely_within:
+            d['LIMIT'] = (
+                "features.seqid = ? AND features.start >= ? "
+                "AND features.end <= ?"
+            )
+            args.extend([seqid, start, end])
+
+        else:
+            d['LIMIT'] = (
+                "features.seqid = ? AND features.start <= ? "
+                "AND features.end >= ?"
+            )
+            # Note order (end, start)
+            args.extend([seqid, end, start])
+
+        # add bin clause
+        d['LIMIT'] += " AND features.bin IN (%s)" % (','.join(map(str, _bins)))
+
+    # e.g., "strand = '+'"
+    if strand:
+        d['STRAND'] = "features.strand = ?"
+        args.append(strand)
+
+    # e.g. "ORDER BY seqid, start DESC"
+    if order_by:
+        if isinstance(order_by, basestring):
+            order_by = [order_by]
+        for k in order_by:
+            if k not in constants._gffkeys_extra:
+                raise ValueError("%s not a valid column" % (k))
+        order_by = ','.join(order_by)
+        if reverse:
+            direction = 'DESC'
+        else:
+            direction = 'ASC'
+        d['ORDER_BY'] = 'ORDER BY %s %s' % (order_by, direction)
+
+    # Ensure only one "WHERE" is included; the rest get "AND "
+    where = False
+    if "where" in d['OTHER'].lower():
+        where = True
+    for i in ['EXTRA', 'FEATURETYPE', 'LIMIT', 'STRAND']:
+        if d[i]:
+            if not where:
+                d[i] = "WHERE " + d[i]
+                where = True
+            else:
+                d[i] = "AND " + d[i]
+
+    return _QUERY.format(**d), args
+
+
 def _bin_from_dict(d):
     """
     Given a dictionary yielded by the parser, return the genomic "UCSC" bin
