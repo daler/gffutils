@@ -90,19 +90,19 @@ chr2L	FlyBase	gene	7529	9484	.	+	.	ID=FBgn0031208;Name=CG11023;
 Traversing the hierarchy returns a generator that can be iterated over.  Here
 are the first-level children of the gene:
 
->>> for i in db.children(gene, level=1):
+>>> for i in db.children(gene, level=1, order_by='start'):
 ...     print i #doctest:+NORMALIZE_WHITESPACE
 chr2L	FlyBase	mRNA	7529	9484	.	+	.	ID=FBtr0300689;Name=CG11023-RB;Parent=FBgn0031208;
 chr2L	FlyBase	mRNA	7529	9484	.	+	.	ID=FBtr0300690;Name=CG11023-RC;Parent=FBgn0031208;
 
 Here are the second-level children, constrained to return only the exons:
 
->>> for i in db.children(gene, level=2, featuretype='exon'):
+>>> for i in db.children(gene, level=2, featuretype='exon', order_by='start'):
 ...     print i #doctest:+NORMALIZE_WHITESPACE
-    chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690;
-    chr2L	FlyBase	exon	8193	9484	.	+	.	ID=FBgn0031208:3;Name=CG11023:3;Parent=FBtr0300689;
-    chr2L	FlyBase	exon	8193	8589	.	+	.	Parent=FBtr0300690;
-    chr2L	FlyBase	exon	8668	9484	.	+	.	ID=FBgn0031208:4;Name=CG11023:4;Parent=FBtr0300690;
+chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690;
+chr2L	FlyBase	exon	8193	9484	.	+	.	ID=FBgn0031208:3;Name=CG11023:3;Parent=FBtr0300689;
+chr2L	FlyBase	exon	8193	8589	.	+	.	Parent=FBtr0300690;
+chr2L	FlyBase	exon	8668	9484	.	+	.	ID=FBgn0031208:4;Name=CG11023:4;Parent=FBtr0300690;
 
 Given an exon, we can go up the hierarchy as well:
 

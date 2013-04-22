@@ -189,7 +189,7 @@ Get all "non-historical" CDSs for this gene.  This illustrates that:
 #. printing a :class:`Feature` reconstructs the line, and
 #. the string representation of a line does not include a `\\n`.
 
->>> for i in db.children(g, featuretype='CDS'):
+>>> for i in db.children(g, featuretype='CDS', order_by='start'):
 ...     if i.source != 'history':
 ...         print i  # doctest:+NORMALIZE_WHITESPACE
 I	Coding_transcript	CDS	4580993	4581241	.	-	0	ID=CDS:D1007.5a;Parent=Transcript:D1007.5a;status=Confirmed;wormpep=CE:CE29034
@@ -476,15 +476,15 @@ Access
 >>> list(db.children('873', level=1))
 [<Feature exon (chr_1:37061-37174[-]) at 0x...>, <Feature exon (chr_1:37315-37620[-]) at 0x...>, <Feature exon (chr_1:37752-38216[-]) at 0x...>]
 
->>> for f in db.children("fgenesh1_pg.C_chr_1000007"):
+>>> for f in db.children("fgenesh1_pg.C_chr_1000007", order_by='featuretype'):
 ...     print '{0.featuretype:>10}: {0.id}'.format(f)
-transcript: 873
        CDS: CDS_1
-      exon: exon_1
        CDS: CDS_2
-      exon: exon_2
        CDS: CDS_3
+      exon: exon_1
+      exon: exon_2
       exon: exon_3
+transcript: 873
 
 
 .. _ncbi_gff3.txt:
@@ -565,16 +565,16 @@ Access
 >>> print db["cr01.sctg102.wum.2.1"]  #doctest:+NORMALIZE_WHITESPACE
 Contig102	gffutils_derived	gene	1629	3377	.	-	.	gene_id "cr01.sctg102.wum.2.1";
 
->>> for f in db.children("cr01.sctg102.wum.2.1"):
+>>> for f in db.children("cr01.sctg102.wum.2.1", order_by='featuretype'):
 ...     print '{0.featuretype:>12}: {0.id}'.format(f)
- coding_exon: coding_exon_4
-  transcript: cr01.sctg102.wum.2.1_transcript
-      intron: intron_3
- coding_exon: coding_exon_3
-      intron: intron_2
- coding_exon: coding_exon_2
-      intron: intron_1
  coding_exon: coding_exon_1
+ coding_exon: coding_exon_2
+ coding_exon: coding_exon_3
+ coding_exon: coding_exon_4
+      intron: intron_1
+      intron: intron_2
+      intron: intron_3
+  transcript: cr01.sctg102.wum.2.1_transcript
 
 
 .. _wormbase_gff2.txt:
@@ -605,7 +605,7 @@ Import
 ...     return f
 
 >>> fn = gffutils.example_filename('wormbase_gff2.txt')
->>> db = gffutils.create_db(fn, ":memory:", transform=transform, id_spec={'Transcript': "Transcript"}, force_gff=True)
+>>> db = gffutils.create_db(fn, ":memory:", transform=transform, id_spec={'Transcript': "Transcript"}, force_gff=True, checklines=1000)
 
 Access
 ``````

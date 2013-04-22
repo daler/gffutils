@@ -1,9 +1,10 @@
 import tempfile
 from nose.tools import assert_raises
 from .. import parser
+from .. import iterators
 from .. import constants
 from .. import helpers
-from ..__init__ import example_filename
+from ..__init__ import example_filename, create_db
 import attr_test_cases
 
 TEST_FILENAMES = [example_filename(i) for i in [
@@ -57,7 +58,7 @@ def parser_smoke_test():
     import logging
     parser.logger.setLevel(logging.CRITICAL)
     for filename in TEST_FILENAMES:
-        p = parser.Parser(filename)
+        p = iterators.FileIterator(filename)
         for i in p:
             continue
 
@@ -90,27 +91,22 @@ def test_parser_from_string():
     tmp.write(line)
     tmp.seek(0)
 
-    p1 = parser.Parser(
-        "chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690",
-        from_string=True)
-    p2 = parser.Parser(tmp.name)
+    p1 = iterators.StringIterator(
+        "chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690"
+    )
+    p2 = iterators.FileIterator(tmp.name)
     lines = zip(p1, p2)
     assert len(lines) == 1
-    assert p1.current_line_number == p2.current_line_number == 0
+    assert p1.current_item_number == p2.current_item_number == 0
     assert lines[0][0] == lines[0][1]
 
 
-def test_checklines_limit():
-    fn = example_filename('ensembl_gtf.txt')
-    p = parser.Parser(fn, checklines=1)
-    p._sniff()
-
 def test_valid_line_count():
-    p = parser.Parser(example_filename('ncbi_gff3.txt'))
-    assert p._valid_line_count() == 17
+    p = iterators.FileIterator(example_filename('ncbi_gff3.txt'))
+    assert len(list(p)) == 17
 
-    p = parser.Parser(example_filename('hybrid1.gff3'))
-    assert p._valid_line_count() == 6
+    p = iterators.FileIterator(example_filename('hybrid1.gff3'))
+    assert len(list(p)) == 6
 
-    p = parser.Parser(example_filename('FBgn0031208.gff'))
-    assert p._valid_line_count() == 27
+    p = iterators.FileIterator(example_filename('FBgn0031208.gff'))
+    assert len(list(p)) == 27
