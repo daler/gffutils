@@ -43,8 +43,8 @@ CREATE TABLE autoincrements (
 
 _keys = ['id', 'seqid', 'source', 'featuretype', 'start', 'end', 'score',
          'strand', 'frame', 'attributes', 'extra', 'bin']
-_gffkeys = ['seqid', 'source', 'featuretype', 'start', 'end', 'score', 'strand',
-            'frame', 'attributes']
+_gffkeys = ['seqid', 'source', 'featuretype', 'start', 'end', 'score',
+            'strand', 'frame', 'attributes']
 _gffkeys_extra = _gffkeys + ['extra']
 
 _SELECT = "SELECT " + ', '.join(_keys) + " FROM features "

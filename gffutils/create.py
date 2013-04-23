@@ -25,7 +25,7 @@ logger.addHandler(ch)
 class _DBCreator(object):
     def __init__(self, data, dbfn, force=False, verbose=True, id_spec=None,
                  merge_strategy='merge', checklines=10, transform=None,
-                 force_dialect_check=False):
+                 force_dialect_check=False, from_string=False):
         """
         Base class for _GFFDBCreator and _GTFDBCreator; see create_db()
         function for docs
@@ -44,17 +44,15 @@ class _DBCreator(object):
         self.conn.text_factory = str
         self._data = data
 
-        if isinstance(data, basestring):
-            self.iterator = iterators.FileIterator(
-                data, checklines, force_dialect_check)
-        else:
-            self.iterator = iterators.FeatureIterator(
-                data, checklines, force_dialect_check)
-
         self.verbose = verbose
         self._orig_logger_level = logger.level
         if not self.verbose:
             logger.setLevel(logging.ERROR)
+
+        self.iterator = iterators.DataIterator(
+            data=data, checklines=checklines, transform=transform,
+            force_dialect_check=force_dialect_check, from_string=from_string
+        )
 
     def _increment_featuretype_autoid(self, key):
         self._autoincrements[key] += 1
@@ -771,33 +769,31 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=True, checklines=10
         If True, then treat `data` as actual data (rather than the path to
         a file).
     """
+    kwargs = dict(
+        data=data, checklines=checklines, transform=transform,
+        force_dialect_check=force_dialect_check, from_string=from_string)
 
-    # Auto-detect format
-    if from_string:
-        iter_class = iterators.StringIterator
-    elif isinstance(data, basestring):
-        iter_class = iterators.FileIterator
-    else:
-        iter_class = iterators.FeatureIterator
+    # First construct an iterator so that we can identify the file format.
+    iterator = iterators.DataIterator(**kwargs)
+    dialect = iterator.dialect
 
-    p = iter_class(data, checklines=checklines, transform=transform,
-                   force_dialect_check=force_dialect_check)
-
-    dialect = p.dialect
     if force_gff or (dialect['fmt'] == 'gff3'):
         cls = _GFFDBCreator
         id_spec = id_spec or 'ID'
-        kwargs = {}
+        add_kwargs = {}
     elif dialect['fmt'] == 'gtf':
         cls = _GTFDBCreator
         id_spec = id_spec or {'gene': 'gene_id', 'transcript': 'transcript_id'}
-        kwargs = dict(
+        add_kwargs = dict(
             transcript_key=gtf_transcript_key,
             gene_key=gtf_gene_key,
             subfeature=gtf_subfeature)
 
-    c = cls(p, dbfn, id_spec=id_spec, force=force, verbose=verbose,
-            merge_strategy=merge_strategy, transform=transform, **kwargs)
+    kwargs.update(**add_kwargs)
+
+    c = cls(dbfn=dbfn, id_spec=id_spec, force=force, verbose=verbose,
+            merge_strategy=merge_strategy, **kwargs)
+
     c.create()
     db = interface.FeatureDB(c)
     return db
