@@ -6,6 +6,7 @@ from .. import constants
 from .. import helpers
 from ..__init__ import example_filename, create_db
 import attr_test_cases
+from textwrap import dedent
 
 TEST_FILENAMES = [example_filename(i) for i in [
     'c_elegans_WS199_ann_gff.txt',
@@ -21,6 +22,19 @@ TEST_FILENAMES = [example_filename(i) for i in [
     'mouse_extra_comma.gff3',
     'wormbase_gff2.txt']]
 
+
+def test_directives():
+    data = dedent("""
+    ##directive1 example
+    .	.	.	.	.	.	.	.
+    .	.	.	.	.	.	.	.
+    .	.	.	.	.	.	.	.
+    .	.	.	.	.	.	.	.
+    """)
+
+    it = iterators.StringIterator(data)
+    db = create_db(data, dbfn=':memory:', from_string=True, verbose=False)
+    assert it.directives == db.directives == ['##directive1 example']
 
 def test_split_attrs():
     # nosetests generator for all the test cases in attr_test_cases.  (note no
@@ -71,7 +85,9 @@ def test_empty_recontruct():
     assert_raises(helpers.AttributeStringError, parser._reconstruct, None, None)
 
 def test_empty_split_keyvals():
-    assert parser._split_keyvals(keyval_str=None) == helpers.DefaultOrderedDict(list)
+    attrs, dialect = parser._split_keyvals(keyval_str=None)
+    assert attrs == helpers.DefaultListOrderedDict()
+    assert dialect == constants.dialect
 
 def test_repeated_keys_conflict():
     """
