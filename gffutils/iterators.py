@@ -32,12 +32,18 @@ class BaseIterator(object):
         self.transform = transform
         self.warnings = []
 
-        if not force_dialect_check:
+        if force_dialect_check:
+            # In this case, self.dialect remains None.  When
+            # parser._split_keyvals gets None as a dialect, it tries to infer
+            # a dialect.
+            self._iter = self._custom_iter()
+
+        else:
+            # Otherwise, check some lines to determine what the dialect should
+            # be
             self.peek, self._iter = peek(self._custom_iter(), checklines)
             self._observed_dialects = [i.dialect for i in self.peek]
             self.dialect = self._choose_dialect(self._observed_dialects)
-        else:
-            self._iter = self._custom_iter()
 
     def _custom_iter(self):
         raise NotImplementedError("Must define in subclasses")
