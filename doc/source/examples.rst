@@ -605,17 +605,35 @@ Import
 ...     return f
 
 >>> fn = gffutils.example_filename('wormbase_gff2.txt')
->>> db = gffutils.create_db(fn, ":memory:", transform=transform, id_spec={'Transcript': "Transcript"}, force_gff=True, checklines=1000)
+
+`force_dialect_check=True` will infer a dialect for every feature.  This can be
+time-consuming, but sometimes necessary.  However, since every feature can
+possibly have a different dialect, the dialect for the entire database is set
+to the default.
+
+`force_dialect_check=True` is needed in this case if we want to be able to have
+the parents of the `SAGE_tag` features be recognized, because the attributes
+for `SAGE_tag` features are formatted differently.
+
+>>> db = gffutils.create_db(fn, ":memory:", transform=transform, id_spec={'Transcript': "Transcript"}, force_gff=True, force_dialect_check=True)
+>>> db.dialect
 
 Access
 ``````
 >>> t = db["B0019.1"]
+
+Note that since the dialect defaults to GFF3, the attributes appear differently
+here than in the original file:
+
 >>> print t  #doctest:+NORMALIZE_WHITESPACE
-I	Coding_transcript	Transcript	12759582	12764949	.	-	.	Transcript "B0019.1" ; WormPep "WP:CE40797" ; WormPep "WP:CE40797" ; Note "amx-2" ; Note "amx-2" ; Prediction_status "Partially_confirmed" ; Prediction_status "Partially_confirmed" ; Gene "WBGene00000138" ; Gene "WBGene00000138" ; CDS "B0019.1" ; Parent "WBGene00000138" ; Parent "WBGene00000138"
+I	Coding_transcript	Transcript	12759582	12764949	.	-	.	Transcript=B0019.1;WormPep=WP:CE40797,WP:CE40797;Note=amx-2,amx-2;Prediction_status=Partially_confirmed,Partially_confirmed;Gene=WBGene00000138,WBGene00000138;CDS=B0019.1;Parent=WBGene00000138,WBGene00000138
 
 >>> len(list(db.children(t, featuretype='exon')))
 15
 
+>>> db['SAGE_tag_1'].attributes['Transcript']
+['B0019.1']
+
+
 >>> len(list(db.children(t, featuretype='SAGE_tag')))
 4
-
