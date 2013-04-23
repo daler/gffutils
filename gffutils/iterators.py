@@ -109,3 +109,15 @@ class StringIterator(FileIterator):
         for feature in super(StringIterator, self)._custom_iter():
             yield feature
         os.unlink(tmp.name)
+
+def DataIterator(data, checklines=10, transform=None,
+                 force_dialect_check=False, from_string=False):
+    kwargs = dict(data=data, checklines=checklines, transform=transform,
+                  force_dialect_check=force_dialect_check)
+    if isinstance(data, basestring):
+        if from_string:
+            return StringIterator(**kwargs)
+        else:
+            return FileIterator(**kwargs)
+    else:
+        return FeatureIterator(**kwargs)
