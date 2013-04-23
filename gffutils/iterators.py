@@ -65,7 +65,7 @@ class BaseIterator(object):
             return None
 
     def _directive_handler(self, directive):
-        self.directives.append(directive)
+        self.directives.append(directive[2:])
 
 
 class FileIterator(BaseIterator):
