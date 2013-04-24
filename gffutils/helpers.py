@@ -310,6 +310,12 @@ class DefaultListOrderedDict(DefaultOrderedDict):
         super(DefaultListOrderedDict, self).__init__(list, *a, **kw)
         self.default_factory = list
 
+    def __copy__(self):
+        return type(self)(self)
+
+    def __deepcopy__(self, memo):
+        import copy
+        return type(self)(copy.deepcopy(self.items()))
 
 if __name__ == "__main__":
     d = DefaultListOrderedDict([('a', 1), ('b', 2)])
