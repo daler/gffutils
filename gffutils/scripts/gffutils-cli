@@ -164,6 +164,35 @@ def clean(filename):
     raise NotImplementedError('sorry, still working on "clean"')
 
 
+# sanitize subcommand ------------------------------------------------------------
+@arg('filename', help='''GFF or GTF file to use''')
+def sanitize(filename, genes_table):
+    """
+    Sanitize a GFF file. Might get merged with clean feature later.
+
+    Cleans and adds useful annotations to a GFF file:
+
+      - Ensures that start > end in all entries
+      - Adds an entry id (eid) to each entry to make files grep-able
+    """
+    raise NotImplementedError('implementation in progress')
+
+
+# annotate subcommand -----------------------------------------------------------
+@arg('filename', help='''GFF or GTF file to use''')
+@arg('genes-table', help='''Genes table in GFF or GTF format to use.''')
+def annotate(filename, genes_table):
+    """
+    Annotate a GFF file with useful information. For now, add annotation
+    of gene IDs based on an input GFF annotation of genes.
+
+    Computes the most inclusive transcription start/end coordinates
+    for each gene, and then uses pybedtools to intersect (in strand-specific 
+    manner) with the input annotation.
+    """
+    raise NotImplementedError('implementation in progress')
+
+
 # search subcommand -----------------------------------------------------------
 @arg('db', help=db_help)
 @arg('text', help='''Text to search for. Case-insensitive; use sql LIKE
