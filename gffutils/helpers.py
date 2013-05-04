@@ -1,6 +1,7 @@
 import gzip
 import os
-
+import tempfile
+import gffutils
 
 def example_filename(fn):
     here = os.path.dirname(__file)
@@ -36,7 +37,7 @@ class FeatureNotFoundError(Exception):
 def clean_gff(fn, newfn=None, addchr=False, featuretypes_to_remove=None,
         chroms_to_ignore=[], sanity_check=True):
     """
-    Helps prepare an optionally gzipped (detected by extnesion) GFF or GTF file
+    Helps prepare an optionally gzipped (detected by extension) GFF or GTF file
     *fn* for import into a database. The new, cleaned file will be saved as
     *newfn* (by default, *newfn* will be *gfffn* plus a ".cleaned" extension).
 
@@ -110,3 +111,59 @@ def inspect_featuretypes(gfffn):
         except IndexError:
             continue
     return list(featuretypes)
+
+##
+## Helpers for gffutils-cli
+##
+## TODO: move clean_gff here?
+##
+def get_db_fname(gff_fname,
+                 ext=".db"):
+    """
+    Get db fname for GFF. If the database has a .db file,
+    return that. Otherwise, create a named temporary file,
+    serialize the db to that, and return the name of the file.
+
+    TODO: Add parameter to control whether or not the .db
+    is created or not.
+    """
+    if not os.path.isfile(gff_fname):
+        # Not sure how we should deal with errors normally in
+        # gffutils -- Ryan?
+        raise Exception, "GFF %s does not exist." %(gff_fname)
+        return None
+    candidate_db_fname = "%s.%s" %(gff_fname, ext)
+    if os.path.isfile(candidate_db_fname):
+        # Standard .db file found, so return it
+        return candidate_db_fname
+    # Otherwise, we need to create a temporary but non-deleted
+    # file to store the db in. It'll be up to the user
+    # of the function the delete the file when done.
+    ## NOTE: Ryan must have a good scheme for dealing with this
+    ## since pybedtools does something similar under the hood, i.e.
+    ## creating temporary files as needed without over proliferation
+    db_fname = tempfile.NamedTemporaryFile(delete=False)
+    # Create the database for the gff file (suppress output
+    # when using function internally)
+    gffutils.create_db(gff_fname, db_fname.name,
+                       verbose=False)
+    return db_fname
+
+
+def sanitize(db_fname):
+    """
+    Sanitize given GFF db. Return a generator of sanitized
+    records?
+
+    TODO: Do something with negative coordinates
+    """
+    db = gffutils.FeatureDB(db_fname)
+    for rec in db:
+        start = int(rec.start)
+        stop = int(rec.stop)
+        new_rec = rec.copy()
+        if start > stop:
+            start
+        print "Rec: ", rec
+
+    

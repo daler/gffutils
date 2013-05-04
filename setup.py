@@ -6,9 +6,21 @@ import sys
 from setuptools import setup
 from distutils.extension import Extension
 
+##
+## Why is Cython required for non-developers?  Can distribute C code...
+##
 try:
     from Cython.Distutils import build_ext
 
+##
+## Very few people can actually run this successfully:
+##
+##   easy_install -U cython
+##
+## virtually on all systems, setuptools is installed
+## and not distribute, so it will just trigger a
+## '-U option not recognized' error.
+##
 except ImportError:
     sys.stderr.write("""
 ==================================================

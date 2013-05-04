@@ -15,6 +15,7 @@ you'll get the cli for free.
 """
 
 import gffutils
+import gffutils.helpers as helpers
 import argh
 from argcomplete.completers import EnvironCompleter
 from argh import arg
@@ -166,7 +167,7 @@ def clean(filename):
 
 # sanitize subcommand ------------------------------------------------------------
 @arg('filename', help='''GFF or GTF file to use''')
-def sanitize(filename, genes_table):
+def sanitize(filename):
     """
     Sanitize a GFF file. Might get merged with clean feature later.
 
@@ -174,7 +175,11 @@ def sanitize(filename, genes_table):
 
       - Ensures that start > end in all entries
       - Adds an entry id (eid) to each entry to make files grep-able
+
+    Outputs result to stdout.
     """
+    db_fname = helpers.get_db_fname(filename)
+    print "Got DB FNAME: ", db_fname
     raise NotImplementedError('implementation in progress')
 
 
