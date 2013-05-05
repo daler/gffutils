@@ -26,7 +26,7 @@ copy_reg.pickle(Feature, feature_reducer, feature_constructor)
 def create_db(fn, dbfn, verbose=True, force=False):
     """
     Detects input format (GFF or GTF and calls the appropriate creation code,
-    resulting in a new database ready for use with FeatureDB.
+    resulting in a new database ready for use with FeatureB.
 
     `fn` is the filename of a GFF or GTF file
 

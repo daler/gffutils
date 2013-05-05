@@ -1043,6 +1043,23 @@ def test_verbose():
     sys.stderr = actual_stderr
     os.unlink('deleteme.db')
 
+def test_random_chr():
+    """
+    Test on GFF files with random chromosome events.
+    """
+    gff_fname = gffutils.example_filename("random-chr.gff")
+    db_fname = helpers.get_db_fname(gff_fname)
+    db = gffutils.FeatureDB(db_fname)
+    # Test that we can get children of only a selected type
+    gene_id = "chr1_random:165882:165969:-@chr1_random:137473:137600:-@chr1_random:97006:97527:-"
+    mRNAs = db.children(gene_id, featuretype="mRNA")
+    for mRNA_entry in mRNAs:
+        assert (mRNA_entry.featuretype == "mRNA"), \
+               "Not all entries are of type mRNA! %s" \
+               %(",".join([entry.featuretype for entry in mRNAs]))
+    print "Parsed random chromosome successfully."
+            
+
 def __test_attributes_modify():
     """
     Test that attributes can be modified in a GFF record.
@@ -1072,3 +1089,4 @@ if __name__ == "__main__":
     # this test case fails
     #test_attributes_modify()
     test_sanitize_gff()
+    test_random_chr()
