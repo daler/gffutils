@@ -23,14 +23,14 @@ class GFFWriter:
         # write header if asked
         if self.with_header:
             timestamp = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-            header = "#gffutils GFF3 file (created %s)" %(timestamp)
+            header = "#GFF3 file (created by gffutils, %s)" %(timestamp)
         
 
     def write_rec(self, rec):
         """
         Output record to file.
         """
-        rec_line = rec.to_string()
+        rec_line = rec.tostring()
         self.out.write("%s\n" %(rec_line))
 
 
