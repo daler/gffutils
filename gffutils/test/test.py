@@ -1046,6 +1046,8 @@ def test_verbose():
 def test_attributes_modify():
     """
     Test that attributes can be modified in a GFF record.
+
+    TODO: This test case fails?
     """
     # Test that attributes can be modified
     gffutils.create_db(gffutils.example_filename('FBgn0031208.gff'), testdbfn_gff,
@@ -1054,13 +1056,10 @@ def test_attributes_modify():
     db = gffutils.FeatureDB(testdbfn_gff)
     gene_id = "FBgn0031208"
     gene_childs = list(db.children(gene_id))
-    print "old attributes: "
-    print gene_childs[0].attributes
+    print "First child is not an mRNA"
+    print gene_childs[0].featuretype
     assert str(gene_childs[0].attributes) == 'ID=FBtr0300689;Name=CG11023-RB;Parent=FBgn0031208;Dbxref=FlyBase_Annotation_IDs:CG11023-RB;score_text=Strongly Supported;score=11'
-
     gene_childs[0].attributes["ID"] = "Modified"
-    print "new attributes: "
-    print gene_childs[0].attributes
     assert str(gene_childs[0].attributes) == 'ID=Modified;Name=CG11023-RB;Parent=FBgn0031208;Dbxref=FlyBase_Annotation_IDs:CG11023-RB;score_text=Strongly Supported;score=11;ID=Modified'
     ###
     ### NOTE: Would be ideal if database checked that this
@@ -1070,4 +1069,5 @@ def test_attributes_modify():
     
 
 if __name__ == "__main__":
+    # this test case fails
     test_attributes_modify()
