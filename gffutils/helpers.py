@@ -147,23 +147,21 @@ def get_db_fname(gff_fname,
     # when using function internally)
     gffutils.create_db(gff_fname, db_fname.name,
                        verbose=False)
-    return db_fname
+    return db_fname.name
 
 
 def sanitize(db_fname):
     """
     Sanitize given GFF db. Return a generator of sanitized
-    records?
+    records.
 
-    TODO: Do something with negative coordinates
+    TODO: Do something with negative coordinates?
     """
     db = gffutils.FeatureDB(db_fname)
-    for rec in db:
-        start = int(rec.start)
-        stop = int(rec.stop)
-        new_rec = rec.copy()
-        if start > stop:
-            start
-        print "Rec: ", rec
+    for rec in db.all():
+        if rec.start > rec.stop:
+            rec.start, rec.stop = \
+                rec.stop, rec.start
+        yield rec
 
     

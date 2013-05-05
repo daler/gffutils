@@ -1,4 +1,5 @@
 import gffutils
+import gffutils.helpers as helpers
 import sys
 import os
 import sqlite3
@@ -168,6 +169,26 @@ def test_clean_gff():
     expected = open(gffutils.example_filename('basic-cleaned.gff')).read()
     assert observed == expected
     os.unlink(gffutils.example_filename('dirty.gff.cleaned'))
+
+
+def test_sanitize_gff():
+    """
+    Test sanitization of GFF. Shoudl be merged with GFF cleaning
+    I believe unless they are intended to have different functionalities.
+    """
+    # Get unsanitized GFF
+    fn = gffutils.example_filename("unsanitized.gff")
+    # Get its database
+    db_fname = helpers.get_db_fname(fn)
+    db = gffutils.FeatureDB(db_fname)
+    # Sanitize the GFF
+    sanitized_recs = helpers.sanitize(db)
+    # Ensure that sanitization work, meaning all
+    # starts must be less than or equal to stops
+    for rec in sanitized_recs:
+        assert (rec.start <= rec.stop), "Sanitization failed."
+    # Remove temporary db file
+    os.unlink(db_fname)
 
 
 def test_inspect_featuretypes():
