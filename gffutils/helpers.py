@@ -1,4 +1,5 @@
 import gzip
+import time
 import os
 import tempfile
 import gffutils
@@ -145,8 +146,12 @@ def get_db_fname(gff_fname,
     db_fname = tempfile.NamedTemporaryFile(delete=False)
     # Create the database for the gff file (suppress output
     # when using function internally)
+    print "Creating db for %s" %(gff_fname)
+    t1 = time.time()
     gffutils.create_db(gff_fname, db_fname.name,
                        verbose=False)
+    t2 = time.time()
+    print "  - Took %.2f seconds" %(t2 - t1)
     return db_fname.name
 
 

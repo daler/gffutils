@@ -1,3 +1,6 @@
+##
+## GFF Writer: serializing gffutils records to GFF text files.
+##
 import os
 import sys
 import time
@@ -19,7 +22,6 @@ class GFFWriter:
         self.out = out
         # whether or not to write header for GFF file
         self.with_header = with_header
-        self.lines_written = 0
         # write header if asked
         if self.with_header:
             timestamp = strftime("%Y-%m-%d %H:%M:%S", gmtime())
