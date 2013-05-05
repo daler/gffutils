@@ -173,7 +173,7 @@ def test_clean_gff():
 
 def test_sanitize_gff():
     """
-    Test sanitization of GFF. Shoudl be merged with GFF cleaning
+    Test sanitization of GFF. Should be merged with GFF cleaning
     I believe unless they are intended to have different functionalities.
     """
     # Get unsanitized GFF
