@@ -150,7 +150,7 @@ def get_db_fname(gff_fname,
     return db_fname.name
 
 
-def sanitize(db_fname):
+def sanitize_gff(db_fname):
     """
     Sanitize given GFF db. Return a generator of sanitized
     records.

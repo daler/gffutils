@@ -967,6 +967,7 @@ class FeatureDB:
         if level is not None:
             level_clause = 'AND relations.level = "%s"' % level
 
+        # Do not order by start
         cursor.execute(
             '''
             SELECT DISTINCT
@@ -976,10 +977,23 @@ class FeatureDB:
             ON relations.child = features.id
             WHERE relations.parent = ?
             {level_clause}
-            {featuretype_clause}
-            ORDER BY start'''.format(**locals()),
+            '''.format(**locals()),
             (id,)
         )
+
+        # cursor.execute(
+        #     '''
+        #     SELECT DISTINCT
+        #     id, chrom, source, featuretype, start, stop, score, strand, frame,
+        #     attributes
+        #     FROM features JOIN relations
+        #     ON relations.child = features.id
+        #     WHERE relations.parent = ?
+        #     {level_clause}
+        #     {featuretype_clause}
+        #     ORDER BY start'''.format(**locals()),
+        #     (id,)
+        # )
         for i in cursor:
             yield self._newfeature(*i)
 
