@@ -87,11 +87,7 @@ class GFFWriter:
         self.write_rec(gene_rec)
         # Get each mRNA's lengths
         mRNA_lens = {}
-        print "GENE ID: %s" %(gene_id)
-        print "mRNA CHILDREN OF GENE: "
         c = list(db.children(gene_id, featuretype="mRNA"))
-        print "C: ", c
-        print [x.featuretype for x in c]
         for mRNA in db.children(gene_id, featuretype="mRNA"):
             mRNA_lens[mRNA.id] = \
                 sum(len(exon) for exon in db.children(mRNA,
@@ -99,14 +95,11 @@ class GFFWriter:
         # Sort mRNAs by length
         sorted_mRNAs = \
             sorted(mRNA_lens.items(), key=lambda x: x[1], reverse=True)
-        print "sorted MRNA: ", sorted_mRNAs
-        raise Exception
         for curr_mRNA in sorted_mRNAs:
             mRNA_id = curr_mRNA[0]
             mRNA_rec = db[mRNA_id]
             # Write mRNA record to file
             self.write_rec(mRNA_rec)
-            print "writing MRNA --> %s" %(mRNA_id)
             # Write mRNA's children records to file
             self.write_mRNA_children(db, mRNA_id)
         # Write non-mRNA children of gene
@@ -135,7 +128,6 @@ class GFFWriter:
                 nonexonic_children.append(child_rec)
         sorted_exons = \
             sorted(exon_starts.items(), key=lambda x: x[1])
-        print "SORTED EXONS: ", sorted_exons
         for curr_exon in sorted_exons:
             exon_id = curr_exon[0]
             exon_rec = db[exon_id]
