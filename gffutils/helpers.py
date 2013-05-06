@@ -4,9 +4,12 @@ import simplejson
 from collections import OrderedDict
 import constants
 import bins
+import gzip
+import time
+import tempfile
+import gffutils
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-
 
 def example_filename(fn):
     return os.path.join(HERE, 'test', 'data', fn)
@@ -193,7 +196,6 @@ def _feature_to_fields(f, jsonify=True):
             x.append(v)
     return tuple(x)
 
-
 def _dict_to_fields(d, jsonify=True):
     """
     Convert dict to tuple, for faster sqlite3 import
@@ -309,6 +311,62 @@ class DefaultListOrderedDict(DefaultOrderedDict):
     def __init__(self, *a, **kw):
         super(DefaultListOrderedDict, self).__init__(list, *a, **kw)
         self.default_factory = list
+
+##
+## Helpers for gffutils-cli
+##
+## TODO: move clean_gff here?
+##
+def get_db_fname(gff_fname,
+                 ext=".db"):
+    """
+    Get db fname for GFF. If the database has a .db file,
+    return that. Otherwise, create a named temporary file,
+    serialize the db to that, and return the name of the file.
+
+    TODO: Add parameter to control whether or not the .db
+    is created or not.
+    """
+    if not os.path.isfile(gff_fname):
+        # Not sure how we should deal with errors normally in
+        # gffutils -- Ryan?
+        raise Exception, "GFF %s does not exist." %(gff_fname)
+        return None
+    candidate_db_fname = "%s.%s" %(gff_fname, ext)
+    if os.path.isfile(candidate_db_fname):
+        # Standard .db file found, so return it
+        return candidate_db_fname
+    # Otherwise, we need to create a temporary but non-deleted
+    # file to store the db in. It'll be up to the user
+    # of the function the delete the file when done.
+    ## NOTE: Ryan must have a good scheme for dealing with this
+    ## since pybedtools does something similar under the hood, i.e.
+    ## creating temporary files as needed without over proliferation
+    db_fname = tempfile.NamedTemporaryFile(delete=False)
+    # Create the database for the gff file (suppress output
+    # when using function internally)
+    print "Creating db for %s" %(gff_fname)
+    t1 = time.time()
+    gffutils.create_db(gff_fname, db_fname.name,
+                       verbose=False)
+    t2 = time.time()
+    print "  - Took %.2f seconds" %(t2 - t1)
+    return db_fname.name
+
+
+def sanitize_gff(db_fname):
+    """
+    Sanitize given GFF db. Return a generator of sanitized
+    records.
+
+    TODO: Do something with negative coordinates?
+    """
+    db = gffutils.FeatureDB(db_fname)
+    for rec in db.all():
+        if rec.start > rec.stop:
+            rec.start, rec.stop = \
+                rec.stop, rec.start
+        yield rec
 
 
 if __name__ == "__main__":
