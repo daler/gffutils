@@ -175,7 +175,8 @@ def test_random_chr():
     db_fname = helpers.get_db_fname(gff_fname)
     db = gffutils.FeatureDB(db_fname)
     # Test that we can get children of only a selected type
-    gene_id = "chr1_random:165882:165969:-@chr1_random:137473:137600:-@chr1_random:97006:97527:-"
+    gene_id = \
+        "chr1_random:165882:165969:-@chr1_random:137473:137600:-@chr1_random:97006:97527:-"
     mRNAs = db.children(gene_id, featuretype="mRNA")
     for mRNA_entry in mRNAs:
         assert (mRNA_entry.featuretype == "mRNA"), \
@@ -184,17 +185,16 @@ def test_random_chr():
     print "Parsed random chromosome successfully."
             
 
-def __test_attributes_modify():
+def test_attributes_modify():
     """
     Test that attributes can be modified in a GFF record.
 
     TODO: This test case fails?
     """
     # Test that attributes can be modified
-    gffutils.create_db(gffutils.example_filename('FBgn0031208.gff'), testdbfn_gff,
-                       verbose=False,
-                       force=True)
-    db = gffutils.FeatureDB(testdbfn_gff)
+    db = gffutils.create_db(gffutils.example_filename('FBgn0031208.gff'), testdbfn_gff,
+                            verbose=False,
+                            force=True)
     gene_id = "FBgn0031208"
     gene_childs = list(db.children(gene_id))
     print "First child is not an mRNA"
