@@ -42,6 +42,7 @@ class _DBCreator(object):
         self.conn = conn
         #self.conn.text_factory = sqlite3.OptimizedUnicode
         self.conn.text_factory = str
+        self.conn.row_factory = sqlite3.Row
         self._data = data
 
         self.verbose = verbose
@@ -119,10 +120,9 @@ class _DBCreator(object):
 
     def _get_feature(self, ID):
         c = self.conn.cursor()
-
         results = c.execute(
-            constants._SELECT + 'WHERE id = ?', (ID,)).fetchone()
-        return feature.Feature(**results)
+            constants._SELECT + ' WHERE id = ?', (ID,)).fetchone()
+        return feature.Feature(dialect=self.iterator.dialect, **results)
 
     def _do_merge(self, f):
         """
@@ -237,6 +237,11 @@ class _DBCreator(object):
 
         # reset logger to whatever it was before...
         logger.setLevel(self._orig_logger_level)
+
+    def update(self, iterator):
+        self._populate_from_lines(iterator)
+        self._update_relations()
+
 
     def execute(self, query):
         """

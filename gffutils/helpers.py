@@ -312,6 +312,7 @@ class DefaultListOrderedDict(DefaultOrderedDict):
         super(DefaultListOrderedDict, self).__init__(list, *a, **kw)
         self.default_factory = list
 
+<<<<<<< HEAD
 ##
 ## Helpers for gffutils-cli
 ##
@@ -353,6 +354,13 @@ def get_db_fname(gff_fname,
     print "  - Took %.2f seconds" %(t2 - t1)
     return db_fname.name
 
+    def __copy__(self):
+        return type(self)(self)
+
+    def __deepcopy__(self, memo):
+        import copy
+        return type(self)(copy.deepcopy(self.items()))
+
 
 def sanitize_gff(db_fname):
     """
@@ -367,6 +375,7 @@ def sanitize_gff(db_fname):
             rec.start, rec.stop = \
                 rec.stop, rec.start
         yield rec
+
 
 
 if __name__ == "__main__":
