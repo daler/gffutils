@@ -19,8 +19,6 @@ import tempfile
 testdbfn_gtf = ':memory:'
 testdbfn_gff = ':memory:'
 
-
-
 def test_update():
     # check both in-memory and file-based dbs
     db = create.create_db(
@@ -46,185 +44,6 @@ class BaseDB(object):
     Generic test class.  Run different versions by subclassing and overriding orig_fn.
     """
     orig_fn = None
-
-def EXPECTED_DATA():
-    # list the children and their expected first-order parents for the GFF test file.
-    GFF_parent_check_level_1 = {'FBtr0300690':['FBgn0031208'],
-                                'FBtr0300689':['FBgn0031208'],
-                                'CG11023:1':['FBtr0300689','FBtr0300690'],
-                                'five_prime_UTR_FBgn0031208:1_737':['FBtr0300689','FBtr0300690'],
-                                'CDS_FBgn0031208:1_737':['FBtr0300689','FBtr0300690'],
-                                'intron_FBgn0031208:1_FBgn0031208:2':['FBtr0300690'],
-                                'intron_FBgn0031208:1_FBgn0031208:3':['FBtr0300689'],
-                                'FBgn0031208:3':['FBtr0300689'],
-                                'CDS_FBgn0031208:3_737':['FBtr0300689'],
-                                'CDS_FBgn0031208:2_737':['FBtr0300690'],
-                                'exon:chr2L:8193-8589:+':['FBtr0300690'],
-                                'intron_FBgn0031208:2_FBgn0031208:4':['FBtr0300690'],
-                                'three_prime_UTR_FBgn0031208:3_737':['FBtr0300689'],
-                                'FBgn0031208:4':['FBtr0300690'],
-                                'CDS_FBgn0031208:4_737':['FBtr0300690'],
-                                'three_prime_UTR_FBgn0031208:4_737':['FBtr0300690'],
-                               }
-
-    # and second-level . . . they should all be grandparents of the same gene.
-    GFF_parent_check_level_2 = {
-                                'CG11023:1':['FBgn0031208'],
-                                'five_prime_UTR_FBgn0031208:1_737':['FBgn0031208'],
-                                'CDS_FBgn0031208:1_737':['FBgn0031208'],
-                                'intron_FBgn0031208:1_FBgn0031208:2':['FBgn0031208'],
-                                'intron_FBgn0031208:1_FBgn0031208:3':['FBgn0031208'],
-                                'FBgn0031208:3':['FBgn0031208'],
-                                'CDS_FBgn0031208:3_737':['FBgn0031208'],
-                                'CDS_FBgn0031208:2_737':['FBgn0031208'],
-                                'FBgn0031208:2':['FBgn0031208'],
-                                'intron_FBgn0031208:2_FBgn0031208:4':['FBgn0031208'],
-                                'three_prime_UTR_FBgn0031208:3_737':['FBgn0031208'],
-                                'FBgn0031208:4':['FBgn0031208'],
-                                'CDS_FBgn0031208:4_737':['FBgn0031208'],
-                                'three_prime_UTR_FBgn0031208:4_737':['FBgn0031208'],
-                               }
-
-    # Same thing for GTF test file . . .
-    GTF_parent_check_level_1 = {
-                                'exon:chr2L:7529-8116:+':['FBtr0300689','FBtr0300690'],
-                                'exon:chr2L:8193-9484:+':['FBtr0300689'],
-                                'exon:chr2L:8193-8589:+':['FBtr0300690'],
-                                'exon:chr2L:8668-9484:+':['FBtr0300690'],
-                                'exon:chr2L:10000-11000:-':['transcript_Fk_gene_1'],
-                                'exon:chr2L:11500-12500:-':['transcript_Fk_gene_2'],
-                                'CDS:chr2L:7680-8116:+':['FBtr0300689','FBtr0300690'],
-                                'CDS:chr2L:8193-8610:+':['FBtr0300689'],
-                                'CDS:chr2L:8193-8589:+':['FBtr0300690'],
-                                'CDS:chr2L:8668-9276:+':['FBtr0300690'],
-                                'CDS:chr2L:10000-11000:-':['transcript_Fk_gene_1'],
-                                'FBtr0300689':['FBgn0031208'],
-                                'FBtr0300690':['FBgn0031208'],
-                                'transcript_Fk_gene_1':['Fk_gene_1'],
-                                'transcript_Fk_gene_2':['Fk_gene_2'],
-                                'start_codon:chr2L:7680-7682:+':['FBtr0300689','FBtr0300690'],
-                                'start_codon:chr2L:10000-11002:-':['transcript_Fk_gene_1'],
-                                'stop_codon:chr2L:8611-8613:+':['FBtr0300689'],
-                                'stop_codon:chr2L:9277-9279:+':['FBtr0300690'],
-                                'stop_codon:chr2L:11001-11003:-':['transcript_Fk_gene_1'],
-                                }
-
-
-    GTF_parent_check_level_2 = {
-            'exon:chr2L:7529-8116:+':['FBgn0031208'],
-                                'exon:chr2L:8193-9484:+':['FBgn0031208'],
-                                'exon:chr2L:8193-8589:+':['FBgn0031208'],
-                                'exon:chr2L:8668-9484:+':['FBgn0031208'],
-                                'exon:chr2L:10000-11000:-':['Fk_gene_1'],
-                                'exon:chr2L:11500-12500:-':['Fk_gene_2'],
-                                'CDS:chr2L:7680-8116:+':['FBgn0031208'],
-                                'CDS:chr2L:8193-8610:+':['FBgn0031208'],
-                                'CDS:chr2L:8193-8589:+':['FBgn0031208'],
-                                'CDS:chr2L:8668-9276:+':['FBgn0031208'],
-                                'CDS:chr2L:10000-11000:-':['Fk_gene_1'],
-                                'FBtr0300689':['FBgn0031208'],
-                                'FBtr0300690':['FBgn0031208'],
-                                'transcript_Fk_gene_1':['Fk_gene_1'],
-                                'transcript_Fk_gene_2':['Fk_gene_2'],
-                                'start_codon:chr2L:7680-7682:+':['FBgn0031208'],
-                                'start_codon:chr2L:10000-11002:-':['Fk_gene_1'],
-                                'stop_codon:chr2L:8611-8613:+':['FBgn0031208'],
-                                'stop_codon:chr2L:9277-9279:+':['FBgn0031208'],
-                                'stop_codon:chr2L:11001-11003:-':['Fk_gene_1'],
-                               }
-
-    expected_feature_counts = {
-                'GFF':{'gene':3,
-                       'mRNA':4,
-                       'exon':6,
-                       'CDS':5,
-                       'five_prime_UTR':1,
-                       'intron':3,
-                       'pcr_product':1,
-                       'protein':2,
-                       'three_prime_UTR':2},
-                'GTF':{'gene':3,
-                       'mRNA':4,
-                       'CDS':5,
-                       'exon':6,
-                       'start_codon':2,
-                       'stop_codon':3}
-                }
-
-    expected_features = {'GFF':['gene',
-                                'mRNA',
-                                'protein',
-                                'five_prime_UTR',
-                                'three_prime_UTR',
-                                'pcr_product',
-                                'CDS',
-                                'exon',
-                                'intron'],
-                        'GTF':['gene',
-                               'mRNA',
-                               'CDS',
-                               'exon',
-                               'start_codon',
-                               'stop_codon']}
-
-    return GFF_parent_check_level_1,GFF_parent_check_level_2,GTF_parent_check_level_1,GTF_parent_check_level_2,expected_feature_counts,expected_features
-
-(
-GFF_parent_check_level_1,
-GFF_parent_check_level_2,
-GTF_parent_check_level_1,
-GTF_parent_check_level_2,
-expected_feature_counts,
-expected_features,
-) = EXPECTED_DATA()
-
-def test_clean_gff():
-    # test the "full" cleaning -- remove some featuretypes, do sanity-checking,
-    # add chr
-    fn = gffutils.example_filename('dirty.gff')
-    gffutils.clean_gff(fn, newfn='cleaned.tmp',featuretypes_to_remove=['pcr_product','protein'],addchr=True)
-    observed = open('cleaned.tmp').readlines()
-    expected = open(gffutils.example_filename('fully-cleaned.gff')).readlines()
-    assert observed==expected
-    os.unlink('cleaned.tmp')
-    gffutils.clean_gff(fn, featuretypes_to_remove=None, sanity_check=False)
-    observed = open(gffutils.example_filename('dirty.gff.cleaned')).read()
-    expected = open(gffutils.example_filename('basic-cleaned.gff')).read()
-    assert observed == expected
-    os.unlink(gffutils.example_filename('dirty.gff.cleaned'))
-
-
-def test_sanitize_gff():
-    """
-    Test sanitization of GFF. Should be merged with GFF cleaning
-    I believe unless they are intended to have different functionalities.
-    """
-    # Get unsanitized GFF
-    fn = gffutils.example_filename("unsanitized.gff")
-    # Get its database
-    db_fname = helpers.get_db_fname(fn)
-    # Sanitize the GFF
-    sanitized_recs = helpers.sanitize_gff(db_fname)
-    # Ensure that sanitization work, meaning all
-    # starts must be less than or equal to stops
-    for rec in sanitized_recs:
-        assert (rec.start <= rec.stop), "Sanitization failed."
-    # Remove temporary db file
-    os.unlink(db_fname)
-    print "Sanitized GFF successfully."
-
-
-def test_inspect_featuretypes():
-    observed = gffutils.inspect_featuretypes(gffutils.example_filename('FBgn0031208.gff'))
-    observed.sort()
-    expected = ['CDS', 'exon', 'five_prime_UTR', 'gene', 'intron', 'mRNA', 'pcr_product', 'protein', 'three_prime_UTR']
-    print observed
-    print expected
-    assert observed == expected
-
-class GenericDBClass(object):
-    featureclass = None
-
     def setup(self):
 
         def gff_id_func(f):
@@ -341,7 +160,6 @@ class GenericDBClass(object):
             assert set(observed_parents) == set(expected_parents)
 
 
-
 class TestGFFClass(BaseDB):
     orig_fn = example_filename('FBgn0031208.gff')
 
@@ -390,6 +208,27 @@ def __test_attributes_modify():
     ### GFF nodes that point to Parent that does not exist.
     ###
     
+
+    
+def test_sanitize_gff():
+    """
+    Test sanitization of GFF. Should be merged with GFF cleaning
+    I believe unless they are intended to have different functionalities.
+    """
+    # Get unsanitized GFF
+    fn = gffutils.example_filename("unsanitized.gff")
+    # Get its database
+    db_fname = helpers.get_db_fname(fn)
+    # Sanitize the GFF
+    sanitized_recs = helpers.sanitize_gff(db_fname)
+    # Ensure that sanitization work, meaning all
+    # starts must be less than or equal to stops
+    for rec in sanitized_recs:
+        assert (rec.start <= rec.stop), "Sanitization failed."
+    # Remove temporary db file
+    os.unlink(db_fname)
+    print "Sanitized GFF successfully."
+
 
 if __name__ == "__main__":
     # this test case fails

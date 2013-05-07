@@ -312,7 +312,28 @@ class DefaultListOrderedDict(DefaultOrderedDict):
         super(DefaultListOrderedDict, self).__init__(list, *a, **kw)
         self.default_factory = list
 
-<<<<<<< HEAD
+    def __copy__(self):
+        return type(self)(self)
+
+    def __deepcopy__(self, memo):
+        import copy
+        return type(self)(copy.deepcopy(self.items()))
+
+
+def sanitize_gff(db_fname):
+    """
+    Sanitize given GFF db. Return a generator of sanitized
+    records.
+
+    TODO: Do something with negative coordinates?
+    """
+    db = gffutils.FeatureDB(db_fname)
+    for rec in db.all_features():
+        if rec.start > rec.stop:
+            rec.start, rec.stop = \
+                rec.stop, rec.start
+        yield rec
+
 ##
 ## Helpers for gffutils-cli
 ##
@@ -349,33 +370,11 @@ def get_db_fname(gff_fname,
     print "Creating db for %s" %(gff_fname)
     t1 = time.time()
     gffutils.create_db(gff_fname, db_fname.name,
+                       merge_strategy="merge",
                        verbose=False)
     t2 = time.time()
     print "  - Took %.2f seconds" %(t2 - t1)
     return db_fname.name
-
-    def __copy__(self):
-        return type(self)(self)
-
-    def __deepcopy__(self, memo):
-        import copy
-        return type(self)(copy.deepcopy(self.items()))
-
-
-def sanitize_gff(db_fname):
-    """
-    Sanitize given GFF db. Return a generator of sanitized
-    records.
-
-    TODO: Do something with negative coordinates?
-    """
-    db = gffutils.FeatureDB(db_fname)
-    for rec in db.all():
-        if rec.start > rec.stop:
-            rec.start, rec.stop = \
-                rec.stop, rec.start
-        yield rec
-
 
 
 if __name__ == "__main__":
