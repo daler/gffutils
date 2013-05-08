@@ -111,7 +111,7 @@ def make_query(args, other=None, limit=None, strand=None, featuretype=None,
         if isinstance(order_by, basestring):
             order_by = [order_by]
         for k in order_by:
-            if k not in constants._gffkeys_extra:
+            if k not in constants._gffkeys_extra and k != 'file_order':
                 raise ValueError("%s not a valid column" % (k))
         order_by = ','.join(order_by)
         if reverse:
