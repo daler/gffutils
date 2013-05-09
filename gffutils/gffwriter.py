@@ -38,7 +38,7 @@ class GFFWriter:
         """
         Output record to file.
         """
-        rec_line = rec.tostring()
+        rec_line = str(rec)
         self.out.write("%s\n" %(rec_line))
 
 
