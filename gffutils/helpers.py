@@ -348,11 +348,8 @@ def sanitize_gff_db(db, gid_field="gid"):
                 yield rec
     # Return sanitized GFF database
     sanitized_db = \
-        gffutils.create_db(sanitized_iterator(), ":memory:")
-    print "SANITIZED DB: ", sanitized_db
-    print "SANITIZED DB: "
-    print list(sanitized_db.all_features())
-    print sanitized_db.schema
+        gffutils.create_db(sanitized_iterator(), ":memory:",
+                           verbose=False)
     return sanitized_db
 
 
@@ -362,19 +359,21 @@ def sanitize_gff_file(gff_fname,
     """
     Sanitize a GFF file.
     """
+    print "SANITIZING IN PLACE? ", in_place
     if in_memory:
         db = gffutils.create_db(gff_fname, ":memory:",
                                 verbose=False)
     else:
         db = get_gff_db(gff_fname)
     if in_place:
-        gff_out = gffwriter.GFFWriter(gff_fname, in_place=in_place)
+        gff_out = gffwriter.GFFWriter(gff_fname,
+                                      in_place=in_place)
     else:
         gff_out = gffwriter.GFFWriter(sys.stdout)
     sanitized_db = sanitize_gff_db(db)
-    nrecs = 0
-    for gene_recs in sanitized_db.all_features(featuretype="gene"):
-        gff_out.write_gene_recs(sanitized_db, gene_recs)
+    for gene_rec in sanitized_db.all_features(featuretype="gene"):
+        print "WRITING: ", gene_rec
+        gff_out.write_gene_recs(sanitized_db, gene_rec)
     gff_out.close()
 
 

@@ -262,15 +262,16 @@ def test_create_db_from_iter():
     Test creation of FeatureDB from iterator.
     """
     print "Testing creation of DB from iterator"
+    db_fname = gffutils.example_filename("gff_example1.gff3")
+    db = gffutils.create_db(db_fname, ":memory:")    
     def my_iterator():
-        db_fname = gffutils.example_filename("gff_example1.gff3")
-        db = gffutils.create_db(db_fname, ":memory:")
         for rec in db.all_features():
             yield rec
     new_db = gffutils.create_db(my_iterator(), ":memory:")
     print list(new_db.all_features())
     gene_feats = new_db.all_features(featuretype="gene")
     assert (len(list(gene_feats)) != 0), "Could not load genes from GFF."
+    
     
 def test_sanitize_gff():
     """
