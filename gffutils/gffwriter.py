@@ -11,7 +11,7 @@ import sys
 import time
 import tempfile
 import shutil
-from time import strftime, gmtime
+from time import strftime, localtime
 from gfffeature import GFFFile, Feature
 
 
@@ -64,7 +64,7 @@ class GFFWriter:
             self.out_stream = out
         # write header if asked
         if self.with_header:
-            timestamp = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+            timestamp = strftime("%Y-%m-%d %H:%M:%S", localtime())
             header = "#GFF3 file (created by gffutils on %s)" %(timestamp)
             self.out_stream.write("%s\n" %(header))
 
