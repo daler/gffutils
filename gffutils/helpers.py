@@ -339,7 +339,6 @@ def sanitize_gff_db(db, gid_field="gid"):
         for gene_recs in db.iter_by_parent_childs():
             # The gene's ID
             gene_id = gene_recs[0].id
-            print "GENE RECS: ", gene_recs, [type(x) for x in gene_recs]
             for rec in gene_recs:
                 # Fixup coordinates if necessary
                 if rec.start > rec.stop:
@@ -353,6 +352,7 @@ def sanitize_gff_db(db, gid_field="gid"):
     print "SANITIZED DB: ", sanitized_db
     print "SANITIZED DB: "
     print list(sanitized_db.all_features())
+    print sanitized_db.schema
     return sanitized_db
 
 
