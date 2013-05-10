@@ -168,3 +168,17 @@ class TestGTFClass(BaseDB):
     orig_fn = example_filename('FBgn0031208.gtf')
 
 
+def test_create_db_from_iter():
+    """
+    Test creation of FeatureDB from iterator.
+    """
+    print "Testing creation of DB from iterator"
+    def my_iterator():
+        db_fname = example_filename("gff_example1.gff3")
+        db = create.create_db(db_fname, ":memory:")
+        for rec in db.all_features():
+            yield rec
+    new_db = create.create_db(my_iterator(), ":memory:")
+    print list(new_db.all_features())
+    gene_feats = new_db.all_features(featuretype="gene")
+    assert (len(list(gene_feats)) != 0), "Could not load genes from GFF."
