@@ -1,4 +1,5 @@
 import copy
+import sys
 import os
 import simplejson
 from collections import OrderedDict
@@ -323,8 +324,7 @@ class DefaultListOrderedDict(DefaultOrderedDict):
 
 def sanitize_gff_db(db, gid_field="gid"):
     """
-    Sanitize given GFF db. Return a generator of sanitized
-    records.
+    Sanitize given GFF db. Returns a sanitized GFF db.
 
     Sanitizing means:
 
@@ -334,17 +334,26 @@ def sanitize_gff_db(db, gid_field="gid"):
 
     TODO: Do something with negative coordinates?
     """
-    # Iterate through the database by each gene's records
-    for gene_recs in db.iter_by_parent_childs(featuretype="gene"):
-        # The gene's ID
-        gene_id = gene_recs[0].id
-        for rec in gene_recs:
-            # Fixup coordinates if necessary
-            if rec.start > rec.stop:
-                rec.start, rec.stop = rec.stop, rec.start
-            # Add a gene id field to each gene's records
-            rec.attributes[gid_field] = [gene_id]
-            yield rec
+    def sanitized_iterator():
+        # Iterate through the database by each gene's records        
+        for gene_recs in db.iter_by_parent_childs():
+            # The gene's ID
+            gene_id = gene_recs[0].id
+            print "GENE RECS: ", gene_recs, [type(x) for x in gene_recs]
+            for rec in gene_recs:
+                # Fixup coordinates if necessary
+                if rec.start > rec.stop:
+                    rec.start, rec.stop = rec.stop, rec.start
+                # Add a gene id field to each gene's records
+                rec.attributes[gid_field] = [gene_id]
+                yield rec
+    # Return sanitized GFF database
+    sanitized_db = \
+        gffutils.create_db(sanitized_iterator(), ":memory:")
+    print "SANITIZED DB: ", sanitized_db
+    print "SANITIZED DB: "
+    print list(sanitized_db.all_features())
+    return sanitized_db
 
 
 def sanitize_gff_file(gff_fname,
@@ -364,8 +373,8 @@ def sanitize_gff_file(gff_fname,
         gff_out = gffwriter.GFFWriter(sys.stdout)
     sanitized_db = sanitize_gff_db(db)
     nrecs = 0
-    for rec in sanitized_db:
-        gff_out.write_rec(rec)
+    for gene_recs in sanitized_db.all_features(featuretype="gene"):
+        gff_out.write_gene_recs(sanitized_db, gene_recs)
     gff_out.close()
 
 

@@ -2,13 +2,15 @@
 ## Features added by yk
 ##
 
+## Library features
 gffwriter.py: helper for serializing GFF database to a GFF text file.
 Uses canonical output ordering to make uniform looking GFF files with
 predictable orders.
 
 interface.py:
   - iter_by_parent_childs: method for iteration through db in
-    'parent-centric' way
+    'parent-centric' way. See code for sanitize_gff_file to see
+    this function in action
 
 db.py:
   - added __len__() feature
@@ -17,7 +19,7 @@ helpers.py:
   - sanitize_gff: sanitize a GFF file
   - annotate_gff: intersect a GFF file with a database annotation.
   - get_db_fname: returns a on-the-fly database for a given GFF filename if one does not
-    already exist for it.  Probably not going to be commonly used in light of ':memory:'
+    already exist for it.  Probably not going to be very commonly used in light of ':memory:'
     databases, but handy for serialized/named dbs.
 
 
@@ -41,9 +43,41 @@ def sanitize_gff_db(db, gid_field="gid"):
 Coupled with GFF writer, one can do this:
 
 output_file = open("mygff.gff3", "w")
-sanitize_gff_db("mygff.gff3", "w")
-db = GFFWriter(output_file, in_place=True)
-helpers.sanitize_gff_db
+# Write to 'mygff.gff3' in place
+gff_out = GFFWriter(output_file, in_place=True)
+# Sanitize the database and write it out
+sanitized_db = helpers.sanitize_gff_db()
+for rec in sanitized_db:
+  gff_out.write_rec(rec)
+gff_out.close()
+
+Now 'mygff.gff3' is a sanitized version of itself. 
 
 
+## Command line interface features
 
+1. You can sanitize a file, by default it gets printed into stdout. Here
+I'm redirecting it to another file.
+
+$ gffutils-cli sanitize ~/jaen/gff-events/SE_genes.mm9.gff3 > test.gff
+Sanitizing GFF /home/yarden/jaen/gff-events/SE_genes.mm9.gff3
+  - Loading GFF in memory
+yarden@tak ~/jaen/gff-events/ver2$ head test.gff
+#GFF3 file (created by gffutils on 2013-05-10 08:45:26)
+chr1	SE	gene	4772649	4775768	.	-	.	ID=chr1:4775654:4775768:-@chr1:4774032:4774186:-@chr1:4772649:4772814:-;Name=chr1:4775654:4775768:-@chr1:4774032:4774186:-@chr1:4772649:4772814:-;gid=chr1:4775654:4775768:-@chr1:4774032:4774186:-@chr1:4772649:4772814:-
+
+Note that it outputs the records in a canonical order as defined by GFFWriter.
+
+It also adds a 'gid' optional record which propagates the 'gene' record's ID= 
+through all the children of a gene. This makes the file grep-able by gene ID, without
+interfering with GFF features. 
+
+You can optionally sanitize the file in place, which is very helpful if you want
+to standardize a bunch of GFF files without creating more files:
+
+$ gffutils-cli sanitize 
+
+Sanitize is inherently "gene-centric".  It does not really make that much
+sense if you use GFF files to store a bunch of features that don't have 
+gene records are parents -- e.g. if your GFF is just a list of CDS regions,
+or a bunch of mRNAs. This is in part why I separated it from "clean_gff".
