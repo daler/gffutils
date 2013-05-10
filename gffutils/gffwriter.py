@@ -10,9 +10,9 @@ import os
 import sys
 import time
 import tempfile
+import shutil
 from time import strftime, gmtime
 from gfffeature import GFFFile, Feature
-from helpers import FeatureNotFoundError, asinterval
 
 
 class GFFWriter:
@@ -192,5 +192,5 @@ class GFFWriter:
         # If we're asked to write in place, substitute the named
         # temporary file for the current file
         if self.in_place:
-            os.rename(self.temp_file.name, self.out)
+            shutil.move(self.temp_file.name, self.out)
 

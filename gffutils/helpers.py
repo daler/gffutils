@@ -8,6 +8,7 @@ import gzip
 import time
 import tempfile
 import gffutils
+import gffutils.gffwriter as gffwriter
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -342,7 +343,7 @@ def sanitize_gff_db(db, gid_field="gid"):
             if rec.start > rec.stop:
                 rec.start, rec.stop = rec.stop, rec.start
             # Add a gene id field to each gene's records
-            rec.attributes[gid_field] = gene_id
+            rec.attributes[gid_field] = [gene_id]
             yield rec
 
 
@@ -353,16 +354,19 @@ def sanitize_gff_file(gff_fname,
     Sanitize a GFF file.
     """
     if in_memory:
-        db = gffutils.create_db(gff_fname, ":memory:")
+        db = gffutils.create_db(gff_fname, ":memory:",
+                                verbose=False)
     else:
         db = get_gff_db(gff_fname)
     if in_place:
         gff_out = gffwriter.GFFWriter(gff_fname, in_place=in_place)
     else:
-        gff_out = gffwriter.GFFWriter(":stdout:")
+        gff_out = gffwriter.GFFWriter(sys.stdout)
     sanitized_db = sanitize_gff_db(db)
-    for rec in sanitized_db.all_features():
-        sanitized_db.write(rec)
+    nrecs = 0
+    for rec in sanitized_db:
+        gff_out.write_rec(rec)
+    gff_out.close()
 
 
 def annotate_gff_db(db):
