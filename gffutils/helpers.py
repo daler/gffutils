@@ -320,34 +320,70 @@ class DefaultListOrderedDict(DefaultOrderedDict):
         return type(self)(copy.deepcopy(self.items()))
 
 
-def sanitize_gff(db_fname):
+def sanitize_gff_db(db, gid_field="gid"):
     """
     Sanitize given GFF db. Return a generator of sanitized
     records.
 
+    Sanitizing means:
+
+    - Ensuring that start < stop for all features
+    - Standardizing gene units by adding a 'gid' attribute
+      that makes the file grep-able
+
     TODO: Do something with negative coordinates?
     """
-    db = gffutils.FeatureDB(db_fname)
-    for rec in db.all_features():
-        if rec.start > rec.stop:
-            rec.start, rec.stop = \
-                rec.stop, rec.start
-        yield rec
+    # Iterate through the database by each gene's records
+    for gene_recs in db.iter_by_parent_childs(featuretype="gene"):
+        # The gene's ID
+        gene_id = gene_recs[0].id
+        for rec in gene_recs:
+            # Fixup coordinates if necessary
+            if rec.start > rec.stop:
+                rec.start, rec.stop = rec.stop, rec.start
+            # Add a gene id field to each gene's records
+            rec.attributes[gid_field] = gene_id
+            yield rec
+
+
+def sanitize_gff_file(gff_fname,
+                      in_memory=True,
+                      in_place=False):
+    """
+    Sanitize a GFF file.
+    """
+    if in_memory:
+        db = gffutils.create_db(gff_fname, ":memory:")
+    else:
+        db = get_gff_db(gff_fname)
+    if in_place:
+        gff_out = gffwriter.GFFWriter(gff_fname, in_place=in_place)
+    else:
+        gff_out = gffwriter.GFFWriter(":stdout:")
+    sanitized_db = sanitize_gff_db(db)
+    for rec in sanitized_db.all_features():
+        sanitized_db.write(rec)
+
+
+def annotate_gff_db(db):
+    """
+    Annotate a GFF file by cross-referencing it with another GFF
+    file, e.g. one containing gene models.
+    """
+    pass
+
 
 ##
 ## Helpers for gffutils-cli
 ##
 ## TODO: move clean_gff here?
 ##
-def get_db_fname(gff_fname,
-                 ext=".db"):
+def get_gff_db(gff_fname,
+               ext=".db"):
     """
-    Get db fname for GFF. If the database has a .db file,
-    return that. Otherwise, create a named temporary file,
-    serialize the db to that, and return the name of the file.
-
-    TODO: Add parameter to control whether or not the .db
-    is created or not.
+    Get db for GFF file. If the database has a .db file,
+    load that. Otherwise, create a named temporary file,
+    serialize the db to that, and return the loaded database.
     """
     if not os.path.isfile(gff_fname):
         # Not sure how we should deal with errors normally in
@@ -369,12 +405,12 @@ def get_db_fname(gff_fname,
     # when using function internally)
     print "Creating db for %s" %(gff_fname)
     t1 = time.time()
-    gffutils.create_db(gff_fname, db_fname.name,
-                       merge_strategy="merge",
-                       verbose=False)
+    db = gffutils.create_db(gff_fname, db_fname.name,
+                            merge_strategy="merge",
+                            verbose=False)
     t2 = time.time()
     print "  - Took %.2f seconds" %(t2 - t1)
-    return db_fname.name
+    return db
 
 
 if __name__ == "__main__":

@@ -9,6 +9,7 @@
 import os
 import sys
 import time
+import tempfile
 from time import strftime, gmtime
 from gfffeature import GFFFile, Feature
 from helpers import FeatureNotFoundError, asinterval
@@ -19,19 +20,53 @@ class GFFWriter:
     Simple GFF writer class for serializing gffutils
     records to a file.
 
+    Parameters:
+    -----------
+
+    out: if a string, parsed as a filename. The strings ':stdout:' and
+         ':stderr:' are treated specially to mean write to stdout/stderr,
+         respectively. If 'out' is not a string, then it is assumed to be
+         a write-able stream.
+
+    with_header: if True, output a header file for the GFF
+
+    in_place: if 'out' is a filename, then write the file inplace (uses
+              named temporary files.)
+
     TODO: Add make separate GTFWriter class or add support
     for GTF here.
     """
-    def __init__(self, out, with_header=True):
-        # write-able output stream
+    def __init__(self, out,
+                 with_header=True,
+                 in_place=False):
         self.out = out
-        # whether or not to write header for GFF file
         self.with_header = with_header
+        self.in_place = in_place
+        # Temporary file to be used (only applies when in_place is True)
+        self.temp_file = None
+        # Output stream to write to
+        self.out_stream = None
+        if type(out) == str:
+            if self.in_place:
+                # Use temporary file
+                self.temp_file = tempfile.NamedTemporaryFile(delete=False)
+                self.out_stream = open(self.temp_file.name, "w")
+            else:
+                # Just use the filename given
+                self.out_stream = open(self.out, "w")
+        else:
+            # Assumed to be a write-able stream
+            if self.in_place:
+                # The in_place parameter is undefined for
+                # streams, since no filenames are involved
+                raise Exception, "Cannot use \'in_place\' when writing " \
+                                 "to a stream."
+            self.out_stream = out
         # write header if asked
         if self.with_header:
             timestamp = strftime("%Y-%m-%d %H:%M:%S", gmtime())
             header = "#GFF3 file (created by gffutils on %s)" %(timestamp)
-            self.out.write("%s\n" %(header))
+            self.out_stream.write("%s\n" %(header))
 
 
     def write_rec(self, rec):
@@ -39,7 +74,7 @@ class GFFWriter:
         Output record to file.
         """
         rec_line = str(rec)
-        self.out.write("%s\n" %(rec_line))
+        self.out_stream.write("%s\n" %(rec_line))
 
 
     def write_recs(self, recs):
@@ -153,5 +188,9 @@ class GFFWriter:
         """
         Close the stream. Assumes stream has 'close' method.
         """
-        self.out.close()
+        self.out_stream.close()
+        # If we're asked to write in place, substitute the named
+        # temporary file for the current file
+        if self.in_place:
+            os.rename(self.temp_file.name, self.out)
 

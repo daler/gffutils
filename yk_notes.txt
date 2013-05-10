@@ -1,0 +1,49 @@
+##
+## Features added by yk
+##
+
+gffwriter.py: helper for serializing GFF database to a GFF text file.
+Uses canonical output ordering to make uniform looking GFF files with
+predictable orders.
+
+interface.py:
+  - iter_by_parent_childs: method for iteration through db in
+    'parent-centric' way
+
+db.py:
+  - added __len__() feature
+
+helpers.py:
+  - sanitize_gff: sanitize a GFF file
+  - annotate_gff: intersect a GFF file with a database annotation.
+  - get_db_fname: returns a on-the-fly database for a given GFF filename if one does not
+    already exist for it.  Probably not going to be commonly used in light of ':memory:'
+    databases, but handy for serialized/named dbs.
+
+
+Example of the kind of features added.  sanitize_gff_db performs a very
+useful operation on GFF databases.
+
+def sanitize_gff_db(db, gid_field="gid"):
+    # Iterate through the database by each gene's records
+    for gene_recs in db.iter_by_parent_childs(featuretype="gene"):
+        # The gene's ID
+        gene_id = gene_recs[0].id
+        for rec in gene_recs:
+            # Fixup coordinates if necessary
+            if rec.start > rec.stop:
+                rec.start, rec.stop = rec.stop, rec.start
+            # Add a gene id field to each gene's records
+            rec.attributes[gid_field] = gene_id
+            yield rec
+
+
+Coupled with GFF writer, one can do this:
+
+output_file = open("mygff.gff3", "w")
+sanitize_gff_db("mygff.gff3", "w")
+db = GFFWriter(output_file, in_place=True)
+helpers.sanitize_gff_db
+
+
+

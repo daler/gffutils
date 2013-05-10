@@ -167,7 +167,12 @@ def clean(filename):
 
 # sanitize subcommand ------------------------------------------------------------
 @arg('filename', help='''GFF or GTF file to use''')
-def sanitize(filename):
+@arg('--in-memory', help='''Load GFF into memory for processing.''')
+@arg("--in-place", 
+     help='''Sanitize file in-place: overwrites current file with sanitized version.''')
+def sanitize(filename,
+             in_memory=True,
+             in_place=False):
     """
     Sanitize a GFF file. Might get merged with clean feature later.
 
@@ -176,10 +181,14 @@ def sanitize(filename):
       - Ensures that start > end in all entries
       - Adds an entry id (eid) to each entry to make files grep-able
 
-    Outputs result to stdout.
+    Outputs result to stdout unless asked to sanitize in place.
     """
-    db_fname = helpers.get_db_fname(filename)
-    print "Got DB FNAME: ", db_fname
+    db = None
+    if not in_memory:
+        db_fname = helpers.get_db_fname(filename)
+        db = 
+    else:
+        db
     raise NotImplementedError('implementation in progress')
 
 
