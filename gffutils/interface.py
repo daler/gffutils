@@ -472,7 +472,8 @@ class FeatureDB(object):
             yield Feature(dialect=dialect, **fields)
             interfeature_start = f.stop
 
-    def update(self, features, merge_strategy=None):
+    def update(self, features, merge_strategy=None, transform=None,
+               id_spec=None):
         if self._DBCreator_instance is not None:
             db = self._DBCreator_instance
 
@@ -493,8 +494,13 @@ class FeatureDB(object):
 
         if merge_strategy:
             db.merge_strategy = merge_strategy
+        if id_spec:
+            db.id_spec = id_spec
+
         db._populate_from_lines(features)
         db._update_relations()
+        db._finalize()
+
 
     # Recycle the docs for _relation so they stay consistent between parents()
     # and children()
