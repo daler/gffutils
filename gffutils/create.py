@@ -795,6 +795,9 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=True, checklines=10
     # That's what we should be using now for `data:
     kwargs['data'] = iterator._iter
 
+    # Since we've already checked lines, we don't want to do it again
+    kwargs['checklines'] = 0
+
     if force_gff or (dialect['fmt'] == 'gff3'):
         cls = _GFFDBCreator
         id_spec = id_spec or 'ID'
