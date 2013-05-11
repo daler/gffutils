@@ -258,3 +258,5 @@ a few cases where I wasn't sure what the convention should be, like
 read GFF files from stdin and not from a filename? This might be a bit tricky 
 since it only makes sense when the input and outputs are plain text GFFs and not
 binary .db files.
+
+- Finally, "test.py:test_update()" fails on my end, not sure if that's expected.
