@@ -58,13 +58,16 @@ def sanitize_gff_db(db, gid_field="gid"):
                            verbose=False)
     return sanitized_db
 
+Note that 'iter_by_parent_childs' returns an iterator of parent-child record lists 
+(where the first entry is the parent, the remaining entries are children.)
+By default it uses "gene" entries as parents but takes a 'featuretype' argument
+to use other features. 
 
-Coupled with GFF writer, one can do this:
+Coupled with GFFWriter, one can do this:
 
-output_file = open("mygff.gff3", "w")
 # Write to 'mygff.gff3' in place: the sanitized
 # gff file will overwrite 'mygff.gff3'
-gff_out = GFFWriter(output_file, in_place=True)
+gff_out = GFFWriter("mygff.gff3", in_place=True)
 # Sanitize the database and write it out
 sanitized_db = helpers.sanitize_gff_db()
 # Write the GFF entries in canonical order
@@ -73,32 +76,103 @@ for gene_rec in sanitized_db.all_features(featuretype="gene"):
 gff_out.close()
 
 This sanitizes the file and writes it out using canonical GFFWriter order.
-Now 'mygff.gff3' is a sanitized version of itself. 
+Now 'mygff.gff3' is a sanitized version of itself. See below for detailed
+example of 'sanitize'.
 
 
 ## Command line interface features
 
-1. You can now sanitize a file using gffutils-cli, by default it gets printed into stdout. Here
-I'm redirecting it to another file.
+1. You can now sanitize a file using gffutils-cli (by default it gets printed into stdout.)
+Suppose you want to pull out the Sox2 gene ENSMUSG00000074637:
 
-$ gffutils-cli sanitize SE_genes.mm9.gff3 > test.gff
-Sanitizing GFF SE_genes.mm9.gff3
+$ grep ENSMUSG00000074637 small_ensembl_test.gff3
+3	protein_coding	gene	34548927	34551383	.	+	.	ID=ENSMUSG00000074637;Name=Sox2;Name=ENSMUSG00000074637
+3	protein_coding	mRNA	34548977	34551381	.	+	.	ID=ENSMUST00000169607;Name=Sox2-201;Parent=ENSMUSG00000074637
+3	protein_coding	mRNA	34548927	34551383	.	+	.	ID=ENSMUST00000099151;Name=Sox2-001;Parent=ENSMUSG00000074637
+3	protein_coding	mRNA	34549058	34551380	.	+	.	ID=ENSMUST00000171472;Name=Sox2-202;Parent=ENSMUSG00000074637
+
+As we know, grepping does not work, since you'll only pull features that have the gene ID as a parent.
+Let's sanitize the file, which will put it in a canonical order, fix potential coordinate issues,
+and add a grep-able attribute.
+
+$ gffutils-cli sanitize small_ensembl_test.gff3 > sanitized.gff3
+Sanitizing GFF small_ensembl_test.gff3
   - Loading GFF in memory
-yarden@tak ~/jaen/gff-events/ver2$ head test.gff
-#GFF3 file (created by gffutils on 2013-05-10 08:45:26)
-chr1	SE	gene	4772649	4775768	.	-	.	ID=chr1:4775654:4775768:-@chr1:4774032:4774186:-@chr1:4772649:4772814:-;Name=chr1:4775654:4775768:-@chr1:4774032:4774186:-@chr1:4772649:4772814:-;gid=chr1:4775654:4775768:-@chr1:4774032:4774186:-@chr1:4772649:4772814:-
 
-Note that it outputs the records in a canonical order as defined by GFFWriter and
-that the file is sanitized 
+The sanitized file has a signature of gffutils:
 
-It also adds a 'gid' optional record which propagates the 'gene' record's ID= 
-through all the children of a gene. This makes the file grep-able by gene ID, without
-interfering with GFF features. 
+$ head -n 2 sanitized.gff3 
+#GFF3 file (created by gffutils on 2013-05-11 12:55:28)
+3	protein_coding	gene	34548927	34551383	.	+	.	ID=ENSMUSG00000074637;Name=Sox2,ENSMUSG00000074637;gid=ENSMUSG00000074637
+
+It added the 'gid' optional attribute to the chilren of ENSMUSG00000074637. Now the file
+is grep-able:
+
+$ grep ENSMUSG00000074637 sanitized.gff3 
+3	protein_coding	gene	34548927	34551383	.	+	.	ID=ENSMUSG00000074637;Name=Sox2,ENSMUSG00000074637;gid=ENSMUSG00000074637
+3	protein_coding	mRNA	34548927	34551383	.	+	.	ID=ENSMUST00000099151;Name=Sox2-001;Parent=ENSMUSG00000074637;gid=ENSMUSG00000074637
+3	protein_coding	exon	34548927	34551383	.	+	.	ID=exon:ENSMUST00000099151:1;Parent=ENSMUST00000099151;gid=ENSMUSG00000074637
+3	protein_coding	CDS	34549338	34550297	.	+	0	ID=CDS:ENSMUST00000099151:1;Parent=ENSMUST00000099151;gid=ENSMUSG00000074637
+3	protein_coding	five_prime_UTR	34548927	34549337	.	+	.	ID=five_prime_UTR:ENSMUST00000099151:1;Parent=ENSMUST00000099151;gid=ENSMUSG00000074637
+3	protein_coding	start_codon	34549338	34549340	.	+	0	ID=start_codon:ENSMUST00000099151:1;Parent=ENSMUST00000099151;gid=ENSMUSG00000074637
+3	protein_coding	stop_codon	34550295	34550297	.	+	0	ID=stop_codon:ENSMUST00000099151:1;Parent=ENSMUST00000099151;gid=ENSMUSG00000074637
+3	protein_coding	mRNA	34549058	34551380	.	+	.	ID=ENSMUST00000171472;Name=Sox2-202;Parent=ENSMUSG00000074637;gid=ENSMUSG00000074637
+3	protein_coding	exon	34549058	34550408	.	+	.	ID=exon:ENSMUST00000171472:1;Parent=ENSMUST00000171472;gid=ENSMUSG00000074637
+3	protein_coding	exon	34550440	34551380	.	+	.	ID=exon:ENSMUST00000171472:2;Parent=ENSMUST00000171472;gid=ENSMUSG00000074637
+3	protein_coding	CDS	34549338	34550297	.	+	0	ID=CDS:ENSMUST00000171472:1;Parent=ENSMUST00000171472;gid=ENSMUSG00000074637
+3	protein_coding	five_prime_UTR	34549058	34549337	.	+	.	ID=five_prime_UTR:ENSMUST00000171472:1;Parent=ENSMUST00000171472;gid=ENSMUSG00000074637
+3	protein_coding	start_codon	34549338	34549340	.	+	0	ID=start_codon:ENSMUST00000171472:1;Parent=ENSMUST00000171472;gid=ENSMUSG00000074637
+3	protein_coding	stop_codon	34550295	34550297	.	+	0	ID=stop_codon:ENSMUST00000171472:1;Parent=ENSMUST00000171472;gid=ENSMUSG00000074637
+3	protein_coding	three_prime_UTR	34550440	34551380	.	+	.	ID=three_prime_UTR:ENSMUST00000171472:1;Parent=ENSMUST00000171472;gid=ENSMUSG00000074637
+3	protein_coding	mRNA	34548977	34551381	.	+	.	ID=ENSMUST00000169607;Name=Sox2-201;Parent=ENSMUSG00000074637;gid=ENSMUSG00000074637
+3	protein_coding	exon	34548977	34550405	.	+	.	ID=exon:ENSMUST00000169607:1;Parent=ENSMUST00000169607;gid=ENSMUSG00000074637
+3	protein_coding	exon	34550440	34550508	.	+	.	ID=exon:ENSMUST00000169607:2;Parent=ENSMUST00000169607;gid=ENSMUSG00000074637
+3	protein_coding	exon	34550596	34551381	.	+	.	ID=exon:ENSMUST00000169607:3;Parent=ENSMUST00000169607;gid=ENSMUSG00000074637
+3	protein_coding	CDS	34549338	34550297	.	+	0	ID=CDS:ENSMUST00000169607:1;Parent=ENSMUST00000169607;gid=ENSMUSG00000074637
+3	protein_coding	five_prime_UTR	34548977	34549337	.	+	.	ID=five_prime_UTR:ENSMUST00000169607:1;Parent=ENSMUST00000169607;gid=ENSMUSG00000074637
+3	protein_coding	start_codon	34549338	34549340	.	+	0	ID=start_codon:ENSMUST00000169607:1;Parent=ENSMUST00000169607;gid=ENSMUSG00000074637
+3	protein_coding	stop_codon	34550295	34550297	.	+	0	ID=stop_codon:ENSMUST00000169607:1;Parent=ENSMUST00000169607;gid=ENSMUSG00000074637
+3	protein_coding	three_prime_UTR	34550440	34550508	.	+	.	ID=three_prime_UTR:ENSMUST00000169607:1;Parent=ENSMUST00000169607;gid=ENSMUSG00000074637
+3	protein_coding	three_prime_UTR	34550596	34551381	.	+	.	ID=three_prime_UTR:ENSMUST00000169607:2;Parent=ENSMUST00000169607;gid=ENSMUSG00000074637
+3	protein_coding	CDS	34549338	34550297	.	+	0	ID=CDS:ENSMUST00000099151:1;Parent=ENSMUST00000099151;gid=ENSMUSG00000074637
+3	protein_coding	CDS	34549338	34550297	.	+	0	ID=CDS:ENSMUST00000169607:1;Parent=ENSMUST00000169607;gid=ENSMUSG00000074637
+3	protein_coding	CDS	34549338	34550297	.	+	0	ID=CDS:ENSMUST00000171472:1;Parent=ENSMUST00000171472;gid=ENSMUSG00000074637
+3	protein_coding	exon	34548927	34551383	.	+	.	ID=exon:ENSMUST00000099151:1;Parent=ENSMUST00000099151;gid=ENSMUSG00000074637
+3	protein_coding	exon	34548977	34550405	.	+	.	ID=exon:ENSMUST00000169607:1;Parent=ENSMUST00000169607;gid=ENSMUSG00000074637
+3	protein_coding	exon	34550440	34550508	.	+	.	ID=exon:ENSMUST00000169607:2;Parent=ENSMUST00000169607;gid=ENSMUSG00000074637
+3	protein_coding	exon	34550596	34551381	.	+	.	ID=exon:ENSMUST00000169607:3;Parent=ENSMUST00000169607;gid=ENSMUSG00000074637
+3	protein_coding	exon	34549058	34550408	.	+	.	ID=exon:ENSMUST00000171472:1;Parent=ENSMUST00000171472;gid=ENSMUSG00000074637
+3	protein_coding	exon	34550440	34551380	.	+	.	ID=exon:ENSMUST00000171472:2;Parent=ENSMUST00000171472;gid=ENSMUSG00000074637
+3	protein_coding	five_prime_UTR	34548927	34549337	.	+	.	ID=five_prime_UTR:ENSMUST00000099151:1;Parent=ENSMUST00000099151;gid=ENSMUSG00000074637
+3	protein_coding	five_prime_UTR	34548977	34549337	.	+	.	ID=five_prime_UTR:ENSMUST00000169607:1;Parent=ENSMUST00000169607;gid=ENSMUSG00000074637
+3	protein_coding	five_prime_UTR	34549058	34549337	.	+	.	ID=five_prime_UTR:ENSMUST00000171472:1;Parent=ENSMUST00000171472;gid=ENSMUSG00000074637
+3	protein_coding	start_codon	34549338	34549340	.	+	0	ID=start_codon:ENSMUST00000099151:1;Parent=ENSMUST00000099151;gid=ENSMUSG00000074637
+3	protein_coding	start_codon	34549338	34549340	.	+	0	ID=start_codon:ENSMUST00000169607:1;Parent=ENSMUST00000169607;gid=ENSMUSG00000074637
+3	protein_coding	start_codon	34549338	34549340	.	+	0	ID=start_codon:ENSMUST00000171472:1;Parent=ENSMUST00000171472;gid=ENSMUSG00000074637
+3	protein_coding	stop_codon	34550295	34550297	.	+	0	ID=stop_codon:ENSMUST00000099151:1;Parent=ENSMUST00000099151;gid=ENSMUSG00000074637
+3	protein_coding	stop_codon	34550295	34550297	.	+	0	ID=stop_codon:ENSMUST00000169607:1;Parent=ENSMUST00000169607;gid=ENSMUSG00000074637
+3	protein_coding	stop_codon	34550295	34550297	.	+	0	ID=stop_codon:ENSMUST00000171472:1;Parent=ENSMUST00000171472;gid=ENSMUSG00000074637
+3	protein_coding	three_prime_UTR	34550440	34550508	.	+	.	ID=three_prime_UTR:ENSMUST00000169607:1;Parent=ENSMUST00000169607;gid=ENSMUSG00000074637
+3	protein_coding	three_prime_UTR	34550596	34551381	.	+	.	ID=three_prime_UTR:ENSMUST00000169607:2;Parent=ENSMUST00000169607;gid=ENSMUSG00000074637
+3	protein_coding	three_prime_UTR	34550440	34551380	.	+	.	ID=three_prime_UTR:ENSMUST00000171472:1;Parent=ENSMUST00000171472;gid=ENSMUSG00000074637
+
+Note that GFFWriter writes the entries in a standard order: the gene, the first mRNA,
+the mRNA's exons, the remaining mRNA's children, the second mRNA, etc.
 
 You can optionally sanitize the file in place, which is very helpful if you want
-to standardize a bunch of GFF files without creating more files:
+to standardize a bunch of GFF files without creating more files.
 
-$ gffutils-cli sanitize 
+$ gffutils-cli sanitize small_ensembl_test.gff3 --in-place
+Sanitizing GFF small_ensembl_test.gff3
+  - Loading GFF in memory
+  - Sanitizing file in place (overwriting current file)
+
+$ head small_ensembl_test.gff3
+#GFF3 file (created by gffutils on 2013-05-11 12:57:58)
+3	protein_coding	gene	34548927	34551383	.	+	.	ID=ENSMUSG00000074637;Name=Sox2,ENSMUSG00000074637;gid=ENSMUSG00000074637
+3	protein_coding	mRNA	34548927	34551383	.	+	.	ID=ENSMUST00000099151;Name=Sox2-001;Parent=ENSMUSG00000074637;gid=ENSMUSG00000074637
+3	protein_coding	exon	34548927	34551383	.	+	.	ID=exon:ENSMUST00000099151:1;Parent=ENSMUST00000099151;gid=ENSMUSG00000074637
+3	protein_coding	CDS	34549338	34550297	.	+	0	ID=CDS:ENSMUST00000099151:1;Parent=ENSMUST00000099151;gid=ENSMUSG00000074637
 
 Sanitize is inherently "gene-centric".  It does not really make that much
 sense if you use GFF files to store a bunch of features that don't have 
@@ -126,7 +200,6 @@ instead of aborting.
 
 I have only tested my features with GFF files, not GTF, but it should theoretically
 work identically for either format.
-
 
 Some questions and misc. notes:
 
