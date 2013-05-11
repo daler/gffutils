@@ -359,12 +359,17 @@ def sanitize_gff_file(gff_fname,
     """
     Sanitize a GFF file.
     """
-    print "SANITIZING IN PLACE? ", in_place
-    if in_memory:
-        db = gffutils.create_db(gff_fname, ":memory:",
-                                verbose=False)
+    db = None
+    if is_gff_db(gff_fname):
+        # It's a database filename, so load it
+        db = gffutils.FeatureDB(gff_fname)
     else:
-        db = get_gff_db(gff_fname)
+        # Need to create a database for file
+        if in_memory:
+            db = gffutils.create_db(gff_fname, ":memory:",
+                                    verbose=False)
+        else:
+            db = get_gff_db(gff_fname)
     if in_place:
         gff_out = gffwriter.GFFWriter(gff_fname,
                                       in_place=in_place)
@@ -372,8 +377,7 @@ def sanitize_gff_file(gff_fname,
         gff_out = gffwriter.GFFWriter(sys.stdout)
     sanitized_db = sanitize_gff_db(db)
     for gene_rec in sanitized_db.all_features(featuretype="gene"):
-        print "WRITING: ", gene_rec
-        gff_out.write_gene_recs(sanitized_db, gene_rec)
+        gff_out.write_gene_recs(sanitized_db, gene_rec.id)
     gff_out.close()
 
 
@@ -384,6 +388,18 @@ def annotate_gff_db(db):
     """
     pass
 
+
+def is_gff_db(db_fname):
+    """
+    Return True if the given filename is a GFF database.
+
+    For now, rely on .db extension.
+    """
+    if not os.path.isfile(db_fname):
+        return False
+    if db_fname.endswith(".db"):
+        return True
+    return False
 
 ##
 ## Helpers for gffutils-cli

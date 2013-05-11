@@ -14,6 +14,7 @@ objects (and sub-parsers), just add an argument to the appropriate function and
 you'll get the cli for free.
 """
 
+import os
 import gffutils
 import gffutils.helpers as helpers
 import argh
@@ -48,9 +49,18 @@ def fetch(db, ids):
     """
     Fetch IDs.
     """
-    db = gffutils.FeatureDB(db)
+    if not os.path.isfile(db):
+        raise Exception, "Cannot fetch: %s does not exist." %(db)
+    gff_db = None
+    if not helpers.is_gff_db(db):
+        gff_db = helpers.get_gff_db(db)
+    else:
+        gff_db = db
     for i in ids.split(','):
-        yield db[i]
+        try:
+            yield gff_db[i]
+        except helpers.FeatureNotFoundError:
+            print >> sys.stderr, "%s not found" %(i)
 
 
 # children subcommand ---------------------------------------------------------
@@ -167,7 +177,7 @@ def clean(filename):
 
 
 # sanitize subcommand ------------------------------------------------------------
-@arg('filename', help='''GFF or GTF file to use''')
+@arg('filename', help='''GFF or GTF file to use (or GFF database.)''')
 @arg('--in-memory', help='''Load GFF into memory for processing.''')
 @arg("--in-place", 
      help='''Sanitize file in-place: overwrites current file with sanitized version.''')
@@ -206,6 +216,15 @@ def annotate(filename, genes_table):
     Computes the most inclusive transcription start/end coordinates
     for each gene, and then uses pybedtools to intersect (in strand-specific 
     manner) with the input annotation.
+    """
+    raise NotImplementedError('implementation in progress')
+
+
+# convert subcommand -----------------------------------------------------------
+@arg('filename', help='''GFF or GTF file to convert''')
+def convert(filename):
+    """
+    Convert a GTF file to GFF or vice versa.
     """
     raise NotImplementedError('implementation in progress')
 
