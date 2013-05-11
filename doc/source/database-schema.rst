@@ -17,7 +17,7 @@ CREATE TABLE features (
     featuretype text,
     start int,
     end int,
-    score float,
+    score text,
     strand text,
     frame text,
     attributes text,

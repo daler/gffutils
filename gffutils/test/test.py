@@ -299,3 +299,14 @@ if __name__ == "__main__":
     #test_attributes_modify()
     test_sanitize_gff()
     test_random_chr()
+=======
+    def my_iterator():
+        db_fname = example_filename("gff_example1.gff3")
+        db = create.create_db(db_fname, ":memory:")
+        for rec in db.all_features():
+            yield rec
+    new_db = create.create_db(my_iterator(), ":memory:")
+    print list(new_db.all_features())
+    gene_feats = new_db.all_features(featuretype="gene")
+    assert (len(list(gene_feats)) != 0), "Could not load genes from GFF."
+>>>>>>> c7608263f007b0d35af637488f3d6507520594f6

@@ -500,7 +500,8 @@ class FeatureDB(object):
             yield Feature(dialect=dialect, **fields)
             interfeature_start = f.stop
 
-    def update(self, features, merge_strategy=None):
+    def update(self, features, merge_strategy=None, transform=None,
+               id_spec=None):
         if self._DBCreator_instance is not None:
             db = self._DBCreator_instance
 
@@ -521,8 +522,70 @@ class FeatureDB(object):
 
         if merge_strategy:
             db.merge_strategy = merge_strategy
+        if id_spec:
+            db.id_spec = id_spec
+
         db._populate_from_lines(features)
         db._update_relations()
+        db._finalize()
+
+    def create_introns(self, exon_featuretype='exon', grandparent_featuretype='gene',
+                       parent_featuretype=None, new_featuretype='intron',
+                       merge_attributes=True):
+        """
+        Create introns from existing annotations.
+
+
+        Parameters
+        ----------
+        `exon_featuretype`: string
+            Feature type to use in order to infer introns.  Typically `"exon"`.
+
+        `grandparent_featuretype` : string
+            If `grandparent_featuretype` is not None, then group exons by children
+            of this featuretype.  If `granparent_featuretype` is "gene" (default),
+            then all genes will be retrieved, then *all* children of each gene
+            (e.g., mRNA, rRNA, ncRNA, etc) will then be searched for exons from
+            which to infer introns. Mutually exclusive with `parent_featuretype`.
+
+        `parent_featuretype` : string
+            If `parent_featuretype` is not None, then only use this featuretype
+            to infer introns.  Use this if you only want a subset of
+            featuretypes to have introns (e.g., "mRNA" only, and not ncRNA or
+            rRNA). Mutually exclusive with `grandparent_featuretype`.
+
+        `new_featuretype`: string
+            Feature type to use for the inferred introns; default is
+            `"intron"`.
+
+        `merge_attributes`: bool
+            Whether or not to merge attributes from all exons; if False then no
+            attributes will be created for the introns.
+        """
+        if (grandparent_featuretype and parent_featuretype) or (
+             grandparent_featuretype is None and parent_featuretype is None
+        ):
+            raise ValueError("exactly one of `grandparent_featuretype` or "
+                             "`parent_featuretype` should be provided")
+
+        if grandparent_featuretype:
+            def child_gen():
+                for gene in self.features_of_type(grandparent_featuretype):
+                    for child in self.children(gene, level=1):
+                        yield child
+        elif parent_featuretype:
+            def child_gen():
+                for child in self.features_of_type(parent_featuretype):
+                    yield child
+
+        for child in child_gen():
+            exons = self.children(child, level=1, featuretype=exon_featuretype,
+                                  order_by='start')
+            for intron in self.interfeatures(
+                exons, new_featuretype=new_featuretype,
+                merge_attributes=merge_attributes, dialect=self.dialect
+            ):
+                yield intron
 
     # Recycle the docs for _relation so they stay consistent between parents()
     # and children()

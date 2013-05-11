@@ -8,7 +8,8 @@ import bins
 class Feature(object):
     def __init__(self, seqid=".", source=".", featuretype=".",
                  start=".", end=".", score=".", strand=".", frame=".",
-                 attributes=None, extra=None, bin=None, id=None, dialect=None):
+                 attributes=None, extra=None, bin=None, id=None, dialect=None,
+                 file_order=None):
         """
         Represents a feature from the database.
 
@@ -66,6 +67,10 @@ class Feature(object):
             The dialect to use when reconstructing attribute strings; defaults
             to the GFF3 spec.  :class:`FeatureDB` objects will automatically
             attach the dialect from the original file.
+
+        `file_order` : int
+            This is the `rowid` special field used in a sqlite3 database; this
+            is provided by FeatureDB.
 
         """
         # start/end can be provided as int-like, ".", or None, but will be
@@ -127,6 +132,7 @@ class Feature(object):
         self.bin = bin
         self.id = id
         self.dialect = dialect or constants.dialect
+        self.file_order = file_order
 
     def __repr__(self):
         memory_loc = hex(id(self))

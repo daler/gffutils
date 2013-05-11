@@ -8,7 +8,7 @@ CREATE TABLE features (
     featuretype text,
     start int,
     end int,
-    score float,
+    score text,
     strand text,
     frame text,
     attributes text,
@@ -47,7 +47,7 @@ _gffkeys = ['seqid', 'source', 'featuretype', 'start', 'end', 'score',
             'strand', 'frame', 'attributes']
 _gffkeys_extra = _gffkeys + ['extra']
 
-_SELECT = "SELECT " + ', '.join(_keys) + " FROM features "
+_SELECT = "SELECT " + ', '.join(_keys) + ", features.rowid as file_order FROM features "
 _INSERT = "INSERT INTO features (" \
     + ', '.join(_keys) + ") VALUES (" + ','.join(list('?' * len(_keys))) + ")"
 
