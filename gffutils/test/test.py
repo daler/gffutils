@@ -286,7 +286,7 @@ def test_sanitize_gff():
     sanitized_recs = helpers.sanitize_gff_db(db)
     # Ensure that sanitization work, meaning all
     # starts must be less than or equal to stops
-    for rec in sanitized_recs:
+    for rec in sanitized_recs.all_features():
         assert (rec.start <= rec.stop), "Sanitization failed."
     print "Sanitized GFF successfully."
 
@@ -299,14 +299,3 @@ if __name__ == "__main__":
     #test_attributes_modify()
     test_sanitize_gff()
     test_random_chr()
-=======
-    def my_iterator():
-        db_fname = example_filename("gff_example1.gff3")
-        db = create.create_db(db_fname, ":memory:")
-        for rec in db.all_features():
-            yield rec
-    new_db = create.create_db(my_iterator(), ":memory:")
-    print list(new_db.all_features())
-    gene_feats = new_db.all_features(featuretype="gene")
-    assert (len(list(gene_feats)) != 0), "Could not load genes from GFF."
->>>>>>> c7608263f007b0d35af637488f3d6507520594f6
