@@ -137,8 +137,8 @@ class GFFWriter:
             self.write_rec(mRNA_rec)
             # Write mRNA's children records to file
             self.write_mRNA_children(db, mRNA_id)
-        # Write non-mRNA children of gene
-        for gene_child in db.children(gene_id):
+        # Write non-mRNA children of gene (only level1)
+        for gene_child in db.children(gene_id, level=1):
             if gene_child.featuretype != "mRNA":
                 self.write_rec(gene_child)
 
