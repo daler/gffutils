@@ -157,8 +157,7 @@ class GFFWriter:
         for child_rec in mRNA_children:
             if child_rec.featuretype == "exon":
                 # Record start positions of all exons
-                exon_starts[child_rec.id] = \
-                    child_rec.start
+                exon_starts[child_rec.id] = child_rec.start
             else:
                 nonexonic_children.append(child_rec)
         sorted_exons = \
