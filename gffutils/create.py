@@ -358,6 +358,8 @@ class _GFFDBCreator(_DBCreator):
 
         self.conn.commit()
         if self.verbose:
+            # i is not set here! Bug?
+            i = 0
             sys.stderr.write((msg % i) + '\n')
 
     def _update_relations(self):

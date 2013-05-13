@@ -14,10 +14,13 @@ objects (and sub-parsers), just add an argument to the appropriate function and
 you'll get the cli for free.
 """
 
+import os
 import gffutils
+import gffutils.helpers as helpers
 import argh
 from argcomplete.completers import EnvironCompleter
 from argh import arg
+import sys
 
 # D.R.Y.
 db_help = '''Database to use.  If a GFF or GTF file is provided instead for
@@ -46,9 +49,18 @@ def fetch(db, ids):
     """
     Fetch IDs.
     """
-    db = gffutils.FeatureDB(db)
+    if not os.path.isfile(db):
+        raise Exception, "Cannot fetch: %s does not exist." %(db)
+    gff_db = None
+    if not helpers.is_gff_db(db):
+        gff_db = helpers.get_gff_db(db)
+    else:
+        gff_db = db
     for i in ids.split(','):
-        yield db[i]
+        try:
+            yield gff_db[i]
+        except helpers.FeatureNotFoundError:
+            print >> sys.stderr, "%s not found" %(i)
 
 
 # children subcommand ---------------------------------------------------------
@@ -164,6 +176,59 @@ def clean(filename):
     raise NotImplementedError('sorry, still working on "clean"')
 
 
+# sanitize subcommand ------------------------------------------------------------
+@arg('filename', help='''GFF or GTF file to use (or GFF database.)''')
+@arg('--in-memory', help='''Load GFF into memory for processing.''')
+@arg("--in-place", 
+     help='''Sanitize file in-place: overwrites current file with sanitized version.''')
+def sanitize(filename,
+             in_memory=True,
+             in_place=False):
+    """
+    Sanitize a GFF file. Might get merged with clean feature later.
+
+    Cleans and adds useful annotations to a GFF file:
+
+      - Ensures that start > end in all entries
+      - Adds an entry id (eid) to each entry to make files grep-able
+
+    Outputs result to stdout unless asked to sanitize in place.
+    """
+    print >> sys.stderr, "Sanitizing GFF %s" %(filename)
+    if in_memory:
+        print >> sys.stderr, "  - Loading GFF in memory"
+    if in_place:
+        print >> sys.stderr, "  - Sanitizing file in place " \
+                             "(overwriting current file)"
+    helpers.sanitize_gff_file(filename,
+                              in_memory=in_memory,
+                              in_place=in_place)
+
+
+# annotate subcommand -----------------------------------------------------------
+@arg('filename', help='''GFF or GTF file to use''')
+@arg('genes-table', help='''Genes table in GFF or GTF format to use.''')
+def annotate(filename, genes_table):
+    """
+    Annotate a GFF file with useful information. For now, add annotation
+    of gene IDs based on an input GFF annotation of genes.
+
+    Computes the most inclusive transcription start/end coordinates
+    for each gene, and then uses pybedtools to intersect (in strand-specific 
+    manner) with the input annotation.
+    """
+    raise NotImplementedError('implementation in progress')
+
+
+# convert subcommand -----------------------------------------------------------
+@arg('filename', help='''GFF or GTF file to convert''')
+def convert(filename):
+    """
+    Convert a GTF file to GFF or vice versa.
+    """
+    raise NotImplementedError('implementation in progress')
+
+
 # search subcommand -----------------------------------------------------------
 @arg('db', help=db_help)
 @arg('text', help='''Text to search for. Case-insensitive; use sql LIKE
@@ -190,4 +255,5 @@ if __name__ == "__main__":
         common,
         clean,
         search,
+        sanitize
     ])
