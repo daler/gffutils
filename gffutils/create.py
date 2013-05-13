@@ -326,19 +326,21 @@ class _GFFDBCreator(_DBCreator):
                         c.execute(constants._INSERT, f.astuple())
 
                 # Works in all cases since attributes is a defaultdict
-                for parent in f.attributes['Parent']:
-                    c.execute(
-                        '''
-                        INSERT OR IGNORE INTO relations VALUES
-                        (?, ?, 1)
-                        ''', (parent, f.id))
+                if 'Parent' in f.attributes:
+                    for parent in f.attributes['Parent']:
+                        c.execute(
+                            '''
+                            INSERT OR IGNORE INTO relations VALUES
+                            (?, ?, 1)
+                            ''', (parent, f.id))
+
 
             else:
                 _features.append(f.astuple())
 
-                # Works in all cases since attributes is a defaultdict
-                for parent in f.attributes['Parent']:
-                    _relations.append((parent, f.id))
+                if 'Parent' in f.attributes:
+                    for parent in f.attributes['Parent']:
+                        _relations.append((parent, f.id))
 
         if not ONEBYONE:
             # Profiling shows that there's an extra overhead for using dict
