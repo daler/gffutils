@@ -58,23 +58,21 @@ class GFFWriter:
             if self.in_place:
                 # The in_place parameter is undefined for
                 # streams, since no filenames are involved
-                raise Exception, "Cannot use \'in_place\' when writing " \
-                                 "to a stream."
+                raise ValueError("Cannot use 'in_place' when writing to "
+                                 "a stream.")
             self.out_stream = out
         # write header if asked
         if self.with_header:
             timestamp = strftime("%Y-%m-%d %H:%M:%S", localtime())
-            header = "#GFF3 file (created by gffutils on %s)" %(timestamp)
-            self.out_stream.write("%s\n" %(header))
-
+            header = "#GFF3 file (created by gffutils on %s)" % (timestamp)
+            self.out_stream.write("%s\n" % (header))
 
     def write_rec(self, rec):
         """
         Output record to file.
         """
         rec_line = str(rec)
-        self.out_stream.write("%s\n" %(rec_line))
-
+        self.out_stream.write("%s\n" % (rec_line))
 
     def write_recs(self, recs):
         """
@@ -82,7 +80,6 @@ class GFFWriter:
         """
         for rec in recs:
             self.write_rec(rec)
-
 
     def write_gene_recs(self, db, gene_id):
         """
@@ -106,12 +103,12 @@ class GFFWriter:
             ...
           # Non-mRNA children here
           ...
-        
+
         Output records of a gene to a file, given a GFF database
         and a gene_id. Outputs records in canonical order: gene record
         first, then longest mRNA, followed by longest mRNA exons,
         followed by rest, followed by next longest mRNA, and so on.
-        
+
         Includes the gene record itself in the output.
 
         TODO: This probably doesn't handle deep GFF hierarchies.
@@ -141,7 +138,6 @@ class GFFWriter:
             if gene_child.featuretype != "mRNA":
                 self.write_rec(gene_child)
 
-
     def write_mRNA_children(self, db, mRNA_id):
         """
         Write out the children records of the mRNA given by the ID
@@ -164,13 +160,12 @@ class GFFWriter:
         for curr_exon in sorted_exons:
             exon_id = curr_exon[0]
             exon_rec = db[exon_id]
-            # Write out the exon 
+            # Write out the exon
             self.write_rec(exon_rec)
             # Write out exon's chilren
             self.write_exon_children(db, exon_id)
         # Output remaining record types
         self.write_recs(nonexonic_children)
-
 
     def write_exon_children(self, db, exon_id):
         """
@@ -180,7 +175,6 @@ class GFFWriter:
         exon_children = db.children(exon_id)
         for exon_child in exon_children:
             self.write_rec(exon_child)
-                
 
     def close(self):
         """
@@ -191,4 +185,3 @@ class GFFWriter:
         # temporary file for the current file
         if self.in_place:
             shutil.move(self.temp_file.name, self.out)
-

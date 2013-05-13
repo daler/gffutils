@@ -13,6 +13,7 @@ import gffutils.gffwriter as gffwriter
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
+
 def example_filename(fn):
     return os.path.join(HERE, 'test', 'data', fn)
 
@@ -198,6 +199,7 @@ def _feature_to_fields(f, jsonify=True):
             x.append(v)
     return tuple(x)
 
+
 def _dict_to_fields(d, jsonify=True):
     """
     Convert dict to tuple, for faster sqlite3 import
@@ -335,7 +337,7 @@ def sanitize_gff_db(db, gid_field="gid"):
     TODO: Do something with negative coordinates?
     """
     def sanitized_iterator():
-        # Iterate through the database by each gene's records        
+        # Iterate through the database by each gene's records
         for gene_recs in db.iter_by_parent_childs():
             # The gene's ID
             gene_id = gene_recs[0].id
@@ -401,6 +403,7 @@ def is_gff_db(db_fname):
         return True
     return False
 
+
 ##
 ## Helpers for gffutils-cli
 ##
@@ -416,9 +419,8 @@ def get_gff_db(gff_fname,
     if not os.path.isfile(gff_fname):
         # Not sure how we should deal with errors normally in
         # gffutils -- Ryan?
-        raise Exception, "GFF %s does not exist." %(gff_fname)
-        return None
-    candidate_db_fname = "%s.%s" %(gff_fname, ext)
+        raise ValueError("GFF %s does not exist." % (gff_fname))
+    candidate_db_fname = "%s.%s" % (gff_fname, ext)
     if os.path.isfile(candidate_db_fname):
         # Standard .db file found, so return it
         return candidate_db_fname
@@ -431,13 +433,13 @@ def get_gff_db(gff_fname,
     db_fname = tempfile.NamedTemporaryFile(delete=False)
     # Create the database for the gff file (suppress output
     # when using function internally)
-    print "Creating db for %s" %(gff_fname)
+    print "Creating db for %s" % (gff_fname)
     t1 = time.time()
     db = gffutils.create_db(gff_fname, db_fname.name,
                             merge_strategy="merge",
                             verbose=False)
     t2 = time.time()
-    print "  - Took %.2f seconds" %(t2 - t1)
+    print "  - Took %.2f seconds" % (t2 - t1)
     return db
 
 

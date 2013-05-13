@@ -243,7 +243,6 @@ class _DBCreator(object):
         self._populate_from_lines(iterator)
         self._update_relations()
 
-
     def execute(self, query):
         """
         Execute a query directly on the database.
@@ -649,8 +648,8 @@ class _GTFDBCreator(_DBCreator):
         # TODO: recreate indexes?
 
 
-def create_db(data, dbfn, id_spec=None, force=False, verbose=True, checklines=10,
-              merge_strategy='error', transform=None,
+def create_db(data, dbfn, id_spec=None, force=False, verbose=True,
+              checklines=10, merge_strategy='error', transform=None,
               gtf_transcript_key='transcript_id', gtf_gene_key='gene_id',
               gtf_subfeature='exon', force_gff=False,
               force_dialect_check=False, from_string=False):

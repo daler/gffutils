@@ -22,14 +22,14 @@ class FeatureDB(object):
             Limit the results to one or several featuretypes.
 
         `order_by`: string or tuple
-            Order results by one or many fields; the string or tuple items must be
-            in: 'seqid', 'source', 'featuretype', 'start', 'end', 'score',
+            Order results by one or many fields; the string or tuple items must
+            be in: 'seqid', 'source', 'featuretype', 'start', 'end', 'score',
             'strand', 'frame', 'attributes', 'extra'.
 
         `reverse`: bool
             Change sort order; only relevant if `order_by` is not None.  By
-            default, results will be in ascending order, so use `reverse=True` for
-            descending.
+            default, results will be in ascending order, so use `reverse=True`
+            for descending.
 
         `completely_within': bool
             If False (default), a single bp overlap with `limit` is sufficient
@@ -176,7 +176,6 @@ class FeatureDB(object):
         for i in self._execute(query, args):
             yield Feature(dialect=self.dialect, **i)
 
-
     def iter_by_parent_childs(self, featuretype="gene"):
         """
         Iterate through GFF database by parent-child units. Return
@@ -185,7 +184,7 @@ class FeatureDB(object):
         this returns a generator where each item is a list of records
         belonging to a gene (where the first record is the 'gene' record)
         itself.
-        
+
         TODO: Maybe add option to limit this by depth?
 
         Alternative names:
@@ -202,7 +201,6 @@ class FeatureDB(object):
             unit_records = \
                 [parent_rec] + list(self.children(parent_rec.id))
             yield unit_records
-                                
 
     def all_features(self, limit=None, strand=None, featuretype=None,
                      order_by=None, reverse=False, completely_within=False):
@@ -306,7 +304,6 @@ class FeatureDB(object):
             id, join_on='parent', join_to='child', level=level,
             featuretype=featuretype, order_by=order_by, reverse=reverse,
             completely_within=completely_within)
-
 
     def _execute(self, query, args):
         self._last_query = query
@@ -529,9 +526,9 @@ class FeatureDB(object):
         db._update_relations()
         db._finalize()
 
-    def create_introns(self, exon_featuretype='exon', grandparent_featuretype='gene',
-                       parent_featuretype=None, new_featuretype='intron',
-                       merge_attributes=True):
+    def create_introns(self, exon_featuretype='exon',
+                       grandparent_featuretype='gene', parent_featuretype=None,
+                       new_featuretype='intron', merge_attributes=True):
         """
         Create introns from existing annotations.
 
@@ -542,11 +539,12 @@ class FeatureDB(object):
             Feature type to use in order to infer introns.  Typically `"exon"`.
 
         `grandparent_featuretype` : string
-            If `grandparent_featuretype` is not None, then group exons by children
-            of this featuretype.  If `granparent_featuretype` is "gene" (default),
-            then all genes will be retrieved, then *all* children of each gene
-            (e.g., mRNA, rRNA, ncRNA, etc) will then be searched for exons from
-            which to infer introns. Mutually exclusive with `parent_featuretype`.
+            If `grandparent_featuretype` is not None, then group exons by
+            children of this featuretype.  If `granparent_featuretype` is
+            "gene" (default), then all genes will be retrieved, then *all*
+            children of each gene (e.g., mRNA, rRNA, ncRNA, etc) will then be
+            searched for exons from which to infer introns. Mutually exclusive
+            with `parent_featuretype`.
 
         `parent_featuretype` : string
             If `parent_featuretype` is not None, then only use this featuretype
@@ -563,7 +561,7 @@ class FeatureDB(object):
             attributes will be created for the introns.
         """
         if (grandparent_featuretype and parent_featuretype) or (
-             grandparent_featuretype is None and parent_featuretype is None
+            grandparent_featuretype is None and parent_featuretype is None
         ):
             raise ValueError("exactly one of `grandparent_featuretype` or "
                              "`parent_featuretype` should be provided")

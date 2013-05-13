@@ -117,10 +117,11 @@ class StringIterator(FileIterator):
             yield feature
         os.unlink(tmp.name)
 
+
 def DataIterator(data, checklines=10, transform=None,
                  force_dialect_check=False, from_string=False, **kwargs):
     _kwargs = dict(data=data, checklines=checklines, transform=transform,
-                  force_dialect_check=force_dialect_check, **kwargs)
+                   force_dialect_check=force_dialect_check, **kwargs)
     if isinstance(data, basestring):
         if from_string:
             return StringIterator(**_kwargs)
