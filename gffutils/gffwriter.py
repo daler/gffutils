@@ -12,7 +12,6 @@ import time
 import tempfile
 import shutil
 from time import strftime, localtime
-from gfffeature import GFFFile, Feature
 
 
 class GFFWriter:
