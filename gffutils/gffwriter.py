@@ -23,10 +23,8 @@ class GFFWriter:
     Parameters:
     -----------
 
-    out: if a string, parsed as a filename. The strings ':stdout:' and
-         ':stderr:' are treated specially to mean write to stdout/stderr,
-         respectively. If 'out' is not a string, then it is assumed to be
-         a write-able stream.
+    out: if a string, parsed as a filename. If 'out' is not a string,
+         then it is assumed to be a write-able stream.
 
     with_header: if True, output a header file for the GFF
 
@@ -96,7 +94,7 @@ class GFFWriter:
           mRNA_1
             # Exons of mRNA, sorted by start position (ascending)
             exon_1
-              # Children of exon, no particular order
+              # Children of exon, sorted by start position
               exon_child_1
               exon_child_2
             exon_2
