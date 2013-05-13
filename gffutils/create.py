@@ -25,7 +25,7 @@ logger.addHandler(ch)
 class _DBCreator(object):
     def __init__(self, data, dbfn, force=False, verbose=True, id_spec=None,
                  merge_strategy='merge', checklines=10, transform=None,
-                 force_dialect_check=False, from_string=False):
+                 force_dialect_check=False, from_string=False, dialect=None):
         """
         Base class for _GFFDBCreator and _GTFDBCreator; see create_db()
         function for docs
@@ -52,7 +52,8 @@ class _DBCreator(object):
 
         self.iterator = iterators.DataIterator(
             data=data, checklines=checklines, transform=transform,
-            force_dialect_check=force_dialect_check, from_string=from_string
+            force_dialect_check=force_dialect_check, from_string=from_string,
+            dialect=dialect
         )
 
     def _increment_featuretype_autoid(self, key):
@@ -811,10 +812,11 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=True, checklines=10
             subfeature=gtf_subfeature)
 
     kwargs.update(**add_kwargs)
-
+    kwargs['dialect'] = dialect
     c = cls(dbfn=dbfn, id_spec=id_spec, force=force, verbose=verbose,
             merge_strategy=merge_strategy, **kwargs)
 
     c.create()
     db = interface.FeatureDB(c)
+
     return db

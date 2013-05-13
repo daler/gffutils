@@ -21,7 +21,7 @@ class Directive(object):
 
 class BaseIterator(object):
     def __init__(self, data, checklines=10, transform=None,
-                 force_dialect_check=False):
+                 force_dialect_check=False, dialect=None):
         self.data = data
         self.checklines = checklines
         self.current_item = None
@@ -32,12 +32,18 @@ class BaseIterator(object):
         self.transform = transform
         self.warnings = []
 
+        if force_dialect_check and dialect is not None:
+            raise ValueError("force_dialect_check is True, but a dialect "
+                             "is provided")
         if force_dialect_check:
             # In this case, self.dialect remains None.  When
             # parser._split_keyvals gets None as a dialect, it tries to infer
             # a dialect.
             self._iter = self._custom_iter()
-
+        elif dialect is not None:
+            self._observed_dialects = [dialect]
+            self.dialect = dialect
+            self._iter = self._custom_iter()
         else:
             # Otherwise, check some lines to determine what the dialect should
             # be
@@ -50,6 +56,7 @@ class BaseIterator(object):
 
     def __iter__(self):
         for i in self._iter:
+            i.dialect = self.dialect
             if self.transform:
                 yield self.transform(i)
             else:
@@ -111,13 +118,13 @@ class StringIterator(FileIterator):
         os.unlink(tmp.name)
 
 def DataIterator(data, checklines=10, transform=None,
-                 force_dialect_check=False, from_string=False):
-    kwargs = dict(data=data, checklines=checklines, transform=transform,
-                  force_dialect_check=force_dialect_check)
+                 force_dialect_check=False, from_string=False, **kwargs):
+    _kwargs = dict(data=data, checklines=checklines, transform=transform,
+                  force_dialect_check=force_dialect_check, **kwargs)
     if isinstance(data, basestring):
         if from_string:
-            return StringIterator(**kwargs)
+            return StringIterator(**_kwargs)
         else:
-            return FileIterator(**kwargs)
+            return FileIterator(**_kwargs)
     else:
-        return FeatureIterator(**kwargs)
+        return FeatureIterator(**_kwargs)
