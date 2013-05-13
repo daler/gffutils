@@ -22,22 +22,23 @@ class GFFWriter:
     Parameters:
     -----------
 
-    out: if a string, parsed as a filename. The strings ':stdout:' and
-         ':stderr:' are treated specially to mean write to stdout/stderr,
-         respectively. If 'out' is not a string, then it is assumed to be
-         a write-able stream.
+    out: string or file-like object
+        If a string, parsed as a filename. The strings `':stdout:'` and
+        `':stderr:'` are treated specially to mean write to stdout/stderr,
+        respectively. If `out` is not a string, then it is assumed to be
+        a write-able stream.
 
-    with_header: if True, output a header file for the GFF
+    with_header: bool
+        If True, output a header file for the GFF
 
-    in_place: if 'out' is a filename, then write the file inplace (uses
-              named temporary files.)
+    in_place: bool
+        If True and if `out` is a filename, then write the file in place (uses
+        named temporary files.)
 
     TODO: Add make separate GTFWriter class or add support
     for GTF here.
     """
-    def __init__(self, out,
-                 with_header=True,
-                 in_place=False):
+    def __init__(self, out, with_header=True, in_place=False):
         self.out = out
         self.with_header = with_header
         self.in_place = in_place
