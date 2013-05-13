@@ -1,12 +1,17 @@
 import copy
+import sys
 import os
 import simplejson
 from collections import OrderedDict
 import constants
 import bins
+import gzip
+import time
+import tempfile
+import gffutils
+import gffutils.gffwriter as gffwriter
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-
 
 def example_filename(fn):
     return os.path.join(HERE, 'test', 'data', fn)
@@ -193,7 +198,6 @@ def _feature_to_fields(f, jsonify=True):
             x.append(v)
     return tuple(x)
 
-
 def _dict_to_fields(d, jsonify=True):
     """
     Convert dict to tuple, for faster sqlite3 import
@@ -316,6 +320,126 @@ class DefaultListOrderedDict(DefaultOrderedDict):
     def __deepcopy__(self, memo):
         import copy
         return type(self)(copy.deepcopy(self.items()))
+
+
+def sanitize_gff_db(db, gid_field="gid"):
+    """
+    Sanitize given GFF db. Returns a sanitized GFF db.
+
+    Sanitizing means:
+
+    - Ensuring that start < stop for all features
+    - Standardizing gene units by adding a 'gid' attribute
+      that makes the file grep-able
+
+    TODO: Do something with negative coordinates?
+    """
+    def sanitized_iterator():
+        # Iterate through the database by each gene's records        
+        for gene_recs in db.iter_by_parent_childs():
+            # The gene's ID
+            gene_id = gene_recs[0].id
+            for rec in gene_recs:
+                # Fixup coordinates if necessary
+                if rec.start > rec.stop:
+                    rec.start, rec.stop = rec.stop, rec.start
+                # Add a gene id field to each gene's records
+                rec.attributes[gid_field] = [gene_id]
+                yield rec
+    # Return sanitized GFF database
+    sanitized_db = \
+        gffutils.create_db(sanitized_iterator(), ":memory:",
+                           verbose=False)
+    return sanitized_db
+
+
+def sanitize_gff_file(gff_fname,
+                      in_memory=True,
+                      in_place=False):
+    """
+    Sanitize a GFF file.
+    """
+    db = None
+    if is_gff_db(gff_fname):
+        # It's a database filename, so load it
+        db = gffutils.FeatureDB(gff_fname)
+    else:
+        # Need to create a database for file
+        if in_memory:
+            db = gffutils.create_db(gff_fname, ":memory:",
+                                    verbose=False)
+        else:
+            db = get_gff_db(gff_fname)
+    if in_place:
+        gff_out = gffwriter.GFFWriter(gff_fname,
+                                      in_place=in_place)
+    else:
+        gff_out = gffwriter.GFFWriter(sys.stdout)
+    sanitized_db = sanitize_gff_db(db)
+    for gene_rec in sanitized_db.all_features(featuretype="gene"):
+        gff_out.write_gene_recs(sanitized_db, gene_rec.id)
+    gff_out.close()
+
+
+def annotate_gff_db(db):
+    """
+    Annotate a GFF file by cross-referencing it with another GFF
+    file, e.g. one containing gene models.
+    """
+    pass
+
+
+def is_gff_db(db_fname):
+    """
+    Return True if the given filename is a GFF database.
+
+    For now, rely on .db extension.
+    """
+    if not os.path.isfile(db_fname):
+        return False
+    if db_fname.endswith(".db"):
+        return True
+    return False
+
+##
+## Helpers for gffutils-cli
+##
+## TODO: move clean_gff here?
+##
+def get_gff_db(gff_fname,
+               ext=".db"):
+    """
+    Get db for GFF file. If the database has a .db file,
+    load that. Otherwise, create a named temporary file,
+    serialize the db to that, and return the loaded database.
+    """
+    if not os.path.isfile(gff_fname):
+        # Not sure how we should deal with errors normally in
+        # gffutils -- Ryan?
+        raise Exception, "GFF %s does not exist." %(gff_fname)
+        return None
+    candidate_db_fname = "%s.%s" %(gff_fname, ext)
+    if os.path.isfile(candidate_db_fname):
+        # Standard .db file found, so return it
+        return candidate_db_fname
+    # Otherwise, we need to create a temporary but non-deleted
+    # file to store the db in. It'll be up to the user
+    # of the function the delete the file when done.
+    ## NOTE: Ryan must have a good scheme for dealing with this
+    ## since pybedtools does something similar under the hood, i.e.
+    ## creating temporary files as needed without over proliferation
+    db_fname = tempfile.NamedTemporaryFile(delete=False)
+    # Create the database for the gff file (suppress output
+    # when using function internally)
+    print "Creating db for %s" %(gff_fname)
+    t1 = time.time()
+    db = gffutils.create_db(gff_fname, db_fname.name,
+                            merge_strategy="merge",
+                            verbose=False)
+    t2 = time.time()
+    print "  - Took %.2f seconds" %(t2 - t1)
+    return db
+
 
 if __name__ == "__main__":
     d = DefaultListOrderedDict([('a', 1), ('b', 2)])

@@ -176,6 +176,34 @@ class FeatureDB(object):
         for i in self._execute(query, args):
             yield Feature(dialect=self.dialect, **i)
 
+
+    def iter_by_parent_childs(self, featuretype="gene"):
+        """
+        Iterate through GFF database by parent-child units. Return
+        a generator where each item is a feature of 'featuretype'
+        and all of its children. For example, when featuretype is gene,
+        this returns a generator where each item is a list of records
+        belonging to a gene (where the first record is the 'gene' record)
+        itself.
+        
+        TODO: Maybe add option to limit this by depth?
+
+        Alternative names:
+          iter_by_parent_children
+          iter_by_parent_childs
+          iter_by_parent_unit
+          iter_by_unit
+        """
+        # Get all the parent records of the requested feature type
+        parent_recs = self.all_features(featuretype=featuretype)
+        # Return a generator of these parent records and their
+        # children
+        for parent_rec in parent_recs:
+            unit_records = \
+                [parent_rec] + list(self.children(parent_rec.id))
+            yield unit_records
+                                
+
     def all_features(self, limit=None, strand=None, featuretype=None,
                      order_by=None, reverse=False, completely_within=False):
         """
