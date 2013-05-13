@@ -46,7 +46,7 @@ class GFFWriter:
         self.temp_file = None
         # Output stream to write to
         self.out_stream = None
-        if type(out) == str:
+        if isinstance(out, basestring):
             if self.in_place:
                 # Use temporary file
                 self.temp_file = tempfile.NamedTemporaryFile(delete=False)
