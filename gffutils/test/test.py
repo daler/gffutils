@@ -26,20 +26,50 @@ def test_update():
     db = create.create_db(
         example_filename('FBgn0031208.gff'), ':memory:', verbose=False,
         force=True)
-    f = feature.feature_from_line('chr2L . testing 1 10 . + . ID="testing_feature"', dialect=db.dialect)
+
+    f = feature.feature_from_line(
+        'chr2L . testing 1 10 . + . ID=testing_feature;n=1',
+        dialect=db.dialect)
+
+    # no merge strategy required because it's a new feature
     db.update([f])
     x = list(db.features_of_type('testing'))
     assert len(x) == 1
-    assert str(x[0]) == "chr2L	.	testing	1	10	.	+	.	ID=testing_feature"
+    assert str(x[0]) == "chr2L	.	testing	1	10	.	+	.	ID=testing_feature;n=1"
+
+    # Merging appends items to attributes ( n=1 --> n=1,2 )
+    f = feature.feature_from_line(
+        'chr2L . testing 1 10 . + . ID=testing_feature;n=1',
+        dialect=db.dialect)
+    f.attributes['n'] = '2'
+    db.update([f], merge_strategy='merge')
+    x = list(db.features_of_type('testing'))
+    assert len(x) == 1
+    assert str(x[0]) == "chr2L	.	testing	1	10	.	+	.	ID=testing_feature;n=1,2"
+
+    # Replace
+    f = feature.feature_from_line(
+        'chr2L . testing 1 10 . + . ID=testing_feature;n=1',
+        dialect=db.dialect)
+    f.attributes['n'] = '3'
+    db.update([f], merge_strategy='replace')
+    x = list(db.features_of_type('testing'))
+    assert len(x) == 1
+    assert str(x[0]) == "chr2L	.	testing	1	10	.	+	.	ID=testing_feature;n=3"
+
+
 
     db = create.create_db(
         example_filename('FBgn0031208.gtf'), ':memory:', verbose=False,
         force=True)
-    f = feature.feature_from_line('chr2L . testing 1 10 . + . gene_id "fake"', dialect=db.dialect)
+    f = feature.feature_from_line('chr2L . testing 1 10 . + . gene_id "fake"; n "1"', dialect=db.dialect)
     db.update([f], merge_strategy='merge')
     x = list(db.features_of_type('testing'))
     assert len(x) == 1
-    assert str(x[0]) == 'chr2L	.	testing	1	10	.	+	.	gene_id "fake";', str(x[0])
+    assert str(x[0]) == 'chr2L	.	testing	1	10	.	+	.	gene_id "fake"; n "1";', str(x[0])
+
+    # TODO: fix GTF update methods
+
 
 class BaseDB(object):
     """
