@@ -27,6 +27,8 @@ def test_update():
         example_filename('FBgn0031208.gff'), ':memory:', verbose=False,
         force=True)
 
+    orig_num_features = len(list(db.all_features()))
+
     f = feature.feature_from_line(
         'chr2L . testing 1 10 . + . ID=testing_feature;n=1',
         dialect=db.dialect)
@@ -37,6 +39,9 @@ def test_update():
     assert len(x) == 1
     assert str(x[0]) == "chr2L	.	testing	1	10	.	+	.	ID=testing_feature;n=1"
 
+    num_features = len(list(db.all_features()))
+    assert num_features == orig_num_features + 1, num_features
+
     # Merging appends items to attributes ( n=1 --> n=1,2 )
     f = feature.feature_from_line(
         'chr2L . testing 1 10 . + . ID=testing_feature;n=1',
@@ -46,6 +51,18 @@ def test_update():
     x = list(db.features_of_type('testing'))
     assert len(x) == 1
     assert str(x[0]) == "chr2L	.	testing	1	10	.	+	.	ID=testing_feature;n=1,2"
+
+
+    # Merging while iterating
+    num_entries = 0
+    for gene_recs in list(db.iter_by_parent_childs()):
+        # Add attribute to each gene record
+        rec = gene_recs[0]
+        rec.attributes["new"] = "new_value"
+        db.update([rec])
+        num_entries += 1
+    assert (num_entries > 1), "Only %d left after update" %(num_entries)
+
 
     # Replace
     f = feature.feature_from_line(
