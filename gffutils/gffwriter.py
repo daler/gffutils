@@ -6,12 +6,11 @@
 ##   It's based on code by a man named Daler
 ##   And I need a job, so I want to be a GFF Writer, GFF Writer.
 ##
-import os
-import sys
 import time
 import tempfile
 import shutil
 from time import strftime, localtime
+from version import version
 
 
 class GFFWriter:
@@ -23,13 +22,13 @@ class GFFWriter:
     -----------
 
     out: string or file-like object
-        If a string, parsed as a filename. The strings `':stdout:'` and
-        `':stderr:'` are treated specially to mean write to stdout/stderr,
-        respectively. If `out` is not a string, then it is assumed to be
-        a write-able stream.
+        If a string, parsed as a filename, otherwise, a file-like object to
+        write to.
 
     with_header: bool
-        If True, output a header file for the GFF
+        If True, output a header file for the GFF.  The header indicates the
+        file was created with gffutils and includes a timestamp and version
+        info.
 
     in_place: bool
         If True and if `out` is a filename, then write the file in place (uses
@@ -65,15 +64,15 @@ class GFFWriter:
         # write header if asked
         if self.with_header:
             timestamp = strftime("%Y-%m-%d %H:%M:%S", localtime())
-            header = "#GFF3 file (created by gffutils on %s)" % (timestamp)
+            header = "#GFF3 file (created by gffutils (v%s) on %s)" \
+                % (version, timestamp)
             self.out_stream.write("%s\n" % (header))
 
     def write_rec(self, rec):
         """
         Output record to file.
         """
-        rec_line = str(rec)
-        self.out_stream.write("%s\n" % (rec_line))
+        self.out_stream.write("%s\n" % rec)
 
     def write_recs(self, recs):
         """
