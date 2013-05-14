@@ -141,6 +141,9 @@ class _DBCreator(object):
 
         "create_unique":
             Autoincrement based on the ID
+
+        "replace":
+            Replaces existing feature with `f`.
         """
         if self.merge_strategy == 'error':
             raise ValueError("Duplicate ID {0.id}".format(f))
@@ -149,6 +152,8 @@ class _DBCreator(object):
                 "Duplicate lines in file for id '{0.id}'; "
                 "ignoring all but the first".format(f))
             return None
+        elif self.merge_strategy == 'replace':
+            return f
         elif self.merge_strategy == 'merge':
             # retrieve the existing row
             existing_feature = self._get_feature(f.id)
@@ -175,6 +180,9 @@ class _DBCreator(object):
         elif self.merge_strategy == 'create_unique':
             f.id = self._increment_featuretype_autoid(f.id)
             return f
+        else:
+            raise ValueError("Invalid merge strategy '%s'"
+                             % (self.merge_strategy))
 
     def _populate_from_lines(self, lines):
         raise NotImplementedError
@@ -314,7 +322,7 @@ class _GFFDBCreator(_DBCreator):
                     c.execute(constants._INSERT, f.astuple())
                 except sqlite3.IntegrityError:
                     fixed = self._do_merge(f)
-                    if self.merge_strategy == 'merge':
+                    if self.merge_strategy in ['merge', 'replace']:
                         c.execute(
                             '''
                             UPDATE features SET attributes = ?
@@ -448,7 +456,7 @@ class _GTFDBCreator(_DBCreator):
                 c.execute(constants._INSERT, f.astuple())
             except sqlite3.IntegrityError:
                 fixed = self._do_merge(f)
-                if self.merge_strategy == 'merge':
+                if self.merge_strategy in ['merge', 'replace']:
                     c.execute(
                         '''
                         UPDATE features SET attributes = ?
