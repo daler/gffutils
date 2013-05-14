@@ -146,26 +146,14 @@ class GFFWriter:
         order, where exons are sorted by start position and given
         first.
         """
-        mRNA_children = db.children(mRNA_id)
+        mRNA_children = db.children(mRNA_id, order_by='start')
         nonexonic_children = []
-        # Write out the exons first, sorted by position
-        exon_starts = {}
         for child_rec in mRNA_children:
             if child_rec.featuretype == "exon":
-                # Record start positions of all exons
-                exon_starts[child_rec.id] = child_rec.start
+                self.write_rec(child_rec)
+                self.write_exon_children(db, child_rec)
             else:
                 nonexonic_children.append(child_rec)
-        sorted_exons = \
-            sorted(exon_starts.items(), key=lambda x: x[1])
-        for curr_exon in sorted_exons:
-            exon_id = curr_exon[0]
-            exon_rec = db[exon_id]
-            # Write out the exon
-            self.write_rec(exon_rec)
-            # Write out exon's chilren
-            self.write_exon_children(db, exon_id)
-        # Output remaining record types
         self.write_recs(nonexonic_children)
 
     def write_exon_children(self, db, exon_id):
@@ -173,7 +161,7 @@ class GFFWriter:
         Write out the children records of the exon given by
         the ID (not including the exon record itself).
         """
-        exon_children = db.children(exon_id)
+        exon_children = db.children(exon_id, order_by='start')
         for exon_child in exon_children:
             self.write_rec(exon_child)
 
