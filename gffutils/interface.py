@@ -498,7 +498,7 @@ class FeatureDB(object):
             interfeature_start = f.stop
 
     def update(self, features, merge_strategy=None, transform=None,
-               id_spec=None):
+               id_spec=None, verbose=False):
         if self._DBCreator_instance is not None:
             db = self._DBCreator_instance
 
@@ -513,9 +513,9 @@ class FeatureDB(object):
                 tmp.write(str(f) + '\n')
             tmp.seek(0)
             if self.dialect['fmt'] == 'gtf':
-                db = create._GTFCreator(fn=tmp.name, dbfn=self.dbfn)
+                db = create._GTFCreator(fn=tmp.name, dbfn=self.dbfn, verbose=verbose)
             elif self.dialect['fmt'] == 'gff3':
-                db = create._GFFDBCreator(fn=tmp.name, dbfn=self.dbfn)
+                db = create._GFFDBCreator(fn=tmp.name, dbfn=self.dbfn, verbose=verbose)
 
         if merge_strategy:
             db.merge_strategy = merge_strategy
