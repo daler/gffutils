@@ -25,7 +25,7 @@ logger.addHandler(ch)
 class _DBCreator(object):
     def __init__(self, data, dbfn, force=False, verbose=True, id_spec=None,
                  merge_strategy='merge', checklines=10, transform=None,
-                 force_dialect_check=False, from_string=False):
+                 force_dialect_check=False, from_string=False, dialect=None):
         """
         Base class for _GFFDBCreator and _GTFDBCreator; see create_db()
         function for docs
@@ -52,7 +52,8 @@ class _DBCreator(object):
 
         self.iterator = iterators.DataIterator(
             data=data, checklines=checklines, transform=transform,
-            force_dialect_check=force_dialect_check, from_string=from_string
+            force_dialect_check=force_dialect_check, from_string=from_string,
+            dialect=dialect
         )
 
     def _increment_featuretype_autoid(self, key):
@@ -140,6 +141,9 @@ class _DBCreator(object):
 
         "create_unique":
             Autoincrement based on the ID
+
+        "replace":
+            Replaces existing feature with `f`.
         """
         if self.merge_strategy == 'error':
             raise ValueError("Duplicate ID {0.id}".format(f))
@@ -148,6 +152,8 @@ class _DBCreator(object):
                 "Duplicate lines in file for id '{0.id}'; "
                 "ignoring all but the first".format(f))
             return None
+        elif self.merge_strategy == 'replace':
+            return f
         elif self.merge_strategy == 'merge':
             # retrieve the existing row
             existing_feature = self._get_feature(f.id)
@@ -174,6 +180,9 @@ class _DBCreator(object):
         elif self.merge_strategy == 'create_unique':
             f.id = self._increment_featuretype_autoid(f.id)
             return f
+        else:
+            raise ValueError("Invalid merge strategy '%s'"
+                             % (self.merge_strategy))
 
     def _populate_from_lines(self, lines):
         raise NotImplementedError
@@ -241,7 +250,6 @@ class _DBCreator(object):
     def update(self, iterator):
         self._populate_from_lines(iterator)
         self._update_relations()
-
 
     def execute(self, query):
         """
@@ -314,7 +322,7 @@ class _GFFDBCreator(_DBCreator):
                     c.execute(constants._INSERT, f.astuple())
                 except sqlite3.IntegrityError:
                     fixed = self._do_merge(f)
-                    if self.merge_strategy == 'merge':
+                    if self.merge_strategy in ['merge', 'replace']:
                         c.execute(
                             '''
                             UPDATE features SET attributes = ?
@@ -326,19 +334,21 @@ class _GFFDBCreator(_DBCreator):
                         c.execute(constants._INSERT, f.astuple())
 
                 # Works in all cases since attributes is a defaultdict
-                for parent in f.attributes['Parent']:
-                    c.execute(
-                        '''
-                        INSERT OR IGNORE INTO relations VALUES
-                        (?, ?, 1)
-                        ''', (parent, f.id))
+                if 'Parent' in f.attributes:
+                    for parent in f.attributes['Parent']:
+                        c.execute(
+                            '''
+                            INSERT OR IGNORE INTO relations VALUES
+                            (?, ?, 1)
+                            ''', (parent, f.id))
+
 
             else:
                 _features.append(f.astuple())
 
-                # Works in all cases since attributes is a defaultdict
-                for parent in f.attributes['Parent']:
-                    _relations.append((parent, f.id))
+                if 'Parent' in f.attributes:
+                    for parent in f.attributes['Parent']:
+                        _relations.append((parent, f.id))
 
         if not ONEBYONE:
             # Profiling shows that there's an extra overhead for using dict
@@ -446,7 +456,7 @@ class _GTFDBCreator(_DBCreator):
                 c.execute(constants._INSERT, f.astuple())
             except sqlite3.IntegrityError:
                 fixed = self._do_merge(f)
-                if self.merge_strategy == 'merge':
+                if self.merge_strategy in ['merge', 'replace']:
                     c.execute(
                         '''
                         UPDATE features SET attributes = ?
@@ -648,8 +658,8 @@ class _GTFDBCreator(_DBCreator):
         # TODO: recreate indexes?
 
 
-def create_db(data, dbfn, id_spec=None, force=False, verbose=True, checklines=10,
-              merge_strategy='error', transform=None,
+def create_db(data, dbfn, id_spec=None, force=False, verbose=True,
+              checklines=10, merge_strategy='error', transform=None,
               gtf_transcript_key='transcript_id', gtf_gene_key='gene_id',
               gtf_subfeature='exon', force_gff=False,
               force_dialect_check=False, from_string=False):
@@ -813,10 +823,11 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=True, checklines=10
             subfeature=gtf_subfeature)
 
     kwargs.update(**add_kwargs)
-
+    kwargs['dialect'] = dialect
     c = cls(dbfn=dbfn, id_spec=id_spec, force=force, verbose=verbose,
             merge_strategy=merge_strategy, **kwargs)
 
     c.create()
     db = interface.FeatureDB(c)
+
     return db

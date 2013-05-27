@@ -17,30 +17,42 @@ Package modules
 
 General workflow
 ----------------
-::
+Three kinds of input data can be provided: a filename, an iterator of
+:class:`Feature` objects, or a string containing GFF/GTF lines.
 
-    Creation:
+These are all provided to :class:`DataIterator`, which delegates out to the
+right iterator class (:class:`FileIterator`, :class:`FeatureIterator`,
+:class:`StringIterator`).  The iterator class must define
+a :class:`_custom_iter` method, which is responsible for taking input in
+whatever form (filename, Feature objects, string of lines, respectively) and
+always yielding :class:`Feature` objects.
 
-        Parser -> dictionary for each line -> imported into database using appropriate _DBCreator subclass
+These iterator classes are subclasses of :class:`BaseIterator`.
 
-    Access:
+Upon initialization, a :class:`BaseIterator` figures out what the dialect is.
+This means consuming `checklines` :class:`Feature` objects from
+:meth:`_custom_iter`.  It uses the :func:`iterators.peek` function to do this,
+which returns a list of the first `checklines` objects, along with a new,
+re-wound iterator.  This new iterator is stored as the
+:attr:`BaseIterator._iter` attribute.
 
-        Interface with db using FeatureDB(database) -> Feature instances
+At this point, the :class:`BaseIterator` has a dialect.  Its :meth:`__iter__`
+method iterates over the :meth:`_custom_iter`, Upon iterating, it
+will add this dialect to every :class:`Feature`.  This means that, no matter
+what format `data` is, the following will print the lines correctly::
 
-        str(Feature) -> GFF/GTF line
+    >>> for feature in DataIterator(data):
+    ...     print feature
 
+A dialect can be optionally provided, which will disable the automatic dialect
+inference.  This makes it straightforward to sanitize input, or convert to
+a new dialect.  For example, to convert from GTF to GFF dialects::
 
-Parsing
-~~~~~~~
-The :class:`parser.Parser` class handles the conversion of GFF/GTF lines into
-dictionaries.  The :func:`parser._split_keyvals` function handles the
-conversion of attribute strings -- field 9 of a GFF/GTF -- into dictionaries.  The
-dictionaries are actually :class:`helpers.DefaultOrderedDict` instances, which
-combine features of :class:`DefaultDict` and :class:`OrderedDict`.  This way,
-the order of attribute key/val pairs is preserved upon reconstruction.  This
-same :func:`parser._split.keyvals` function also inspects the format of the
-provided attribute string to identify the "dialect" (see :ref:`dialects` for
-more on this).
+    >>> for feature in DataIterator(GTF_data, dialect=GFF_dialect):
+    ...     print feature
+
+If `dialect` is not None, then that dialect will be used; otherwise, it will be
+auto-detected.
 
 Import
 ~~~~~~
@@ -90,3 +102,6 @@ Since the db creation imported the data into a uniform format, access requires
 only a single class, :class:`interface.FeatureDB`.  Most methods on this class
 simply perform queries on the database and return iterators of
 :class:`feature.Feature` instances.
+
+The :class:`Feature` instances yielded from these iterators inherit the
+database's dialect so that they print correctly.

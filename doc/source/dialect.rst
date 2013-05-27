@@ -18,7 +18,7 @@ recommendations about how files should be formatted, in practice there is wide
 variation.  :mod:`gffutils` tries to accomodate real-world GFF and GTF files by
 examining the first N lines of a file and figuring out what "dialect" the file
 is using (N=10 by default, but can be changed with the `checklines` kwarg to
-:class:`gffutils.Parser` or :func:`gffutils.create_db`).
+:func:`gffutils.create_db`).
 
 The dialect is simply a dictionary of various attributes that have been
 empirically found to differ among real-world files.   You can find the current

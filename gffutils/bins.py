@@ -120,6 +120,7 @@ def print_bin_sizes():
         print 'level: {i:1};  bins {binstart:<4} to {binstop:<4}; '\
               'size: {actual_size:<12} {size:<6}'.format(**locals())
 
+
 def test():
     # These should obviously fit inside the first bin
     assert bins(0, 1, fmt='bed') == 4681
@@ -184,4 +185,3 @@ def test():
 if __name__ == "__main__":
     print_bin_sizes()
     test()
-

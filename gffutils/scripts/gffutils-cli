@@ -17,6 +17,7 @@ you'll get the cli for free.
 import os
 import gffutils
 import gffutils.helpers as helpers
+import gffutils.gffwriter as gffwriter
 import argh
 from argcomplete.completers import EnvironCompleter
 from argh import arg
@@ -157,14 +158,18 @@ def common(db):
 @arg('--force', help='''Overwrite an existing database''')
 @arg('--quiet', help='''Suppress the reporting of timing information when
      creating the database''')
-def create(filename, output=None, force=False, quiet=False):
+@arg('--merge', help='''Merge strategy to be used if if duplicate IDs are found.''')
+def create(filename, output=None, force=False, quiet=False, merge="merge"):
     """
     Create a database.
     """
     verbose = not quiet
     if output is None:
         output = filename + '.db'
-    gffutils.create_db(filename, output, force=force, verbose=verbose)
+    gffutils.create_db(filename, output,
+                       force=force,
+                       verbose=verbose,
+                       merge_strategy=merge)
 
 
 # clean subcommand ------------------------------------------------------------
@@ -179,7 +184,7 @@ def clean(filename):
 # sanitize subcommand ------------------------------------------------------------
 @arg('filename', help='''GFF or GTF file to use (or GFF database.)''')
 @arg('--in-memory', help='''Load GFF into memory for processing.''')
-@arg("--in-place", 
+@arg('--in-place', 
      help='''Sanitize file in-place: overwrites current file with sanitized version.''')
 def sanitize(filename,
              in_memory=True,
@@ -203,6 +208,29 @@ def sanitize(filename,
     helpers.sanitize_gff_file(filename,
                               in_memory=in_memory,
                               in_place=in_place)
+
+
+@arg('filename', help='''GFF or GTF file to use.''')
+@arg('--in-place', help='''Remove duplicates in place (overwrite current file.)''')
+def rmdups(filename, in_place=False):
+    """
+    Remove duplicates from a GFF file. 
+    """
+    merge_strategy = "merge"
+    if not in_place:
+        # Write to stdout
+        gff_out = gffwriter.GFFWriter(sys.stdout)
+    else:
+        # Write to file in place
+        gff_out = gffwriter.GFFWriter(filename, in_place=True)
+    # Create database with merge
+    db = gffutils.create_db(filename, ":memory:",
+                            verbose=False,
+                            merge_strategy=merge_strategy)
+    # Write out the records
+    for rec in db.all_features():
+        gff_out.write_rec(rec)
+    gff_out.close()
 
 
 # annotate subcommand -----------------------------------------------------------
@@ -255,5 +283,6 @@ if __name__ == "__main__":
         common,
         clean,
         search,
-        sanitize
+        sanitize,
+        rmdups
     ])
