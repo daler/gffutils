@@ -1,0 +1,17 @@
+chr2L	FlyBase	gene	7529	9484	.	+	.	ID=FBgn0031208;Name=CG11023;
+chr2L	FlyBase	mRNA	7529	9484	.	+	.	ID=FBtr0300689;Name=CG11023-RB;Parent=FBgn0031208;
+chr2L	FlyBase	mRNA	7529	9484	.	+	.	ID=FBtr0300690;Name=CG11023-RC;Parent=FBgn0031208;
+chr2L	FlyBase	five_prime_UTR	7529	7679	.	+	.	ID=five_prime_UTR_FBgn0031208:1_737;Name=CG11023-u5;Parent=FBtr0300689,FBtr0300690;
+chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690;
+chr2L	FlyBase	CDS	7680	8116	.	+	0	ID=CDS_FBgn0031208:1_737;Name=CG11023-cds;Parent=FBtr0300689,FBtr0300690;
+chr2L	FlyBase	intron	8117	8192	.	+	.	ID=intron_FBgn0031208:1_FBgn0031208:2;Name=CG11023-in;Parent=FBtr0300690;
+chr2L	FlyBase	intron	8117	8192	.	+	.	ID=intron_FBgn0031208:1_FBgn0031208:3;Name=CG11023-in;Parent=FBtr0300689;
+chr2L	FlyBase	exon	8193	8589	.	+	.	Parent=FBtr0300690;
+chr2L	FlyBase	exon	8193	9484	.	+	.	ID=FBgn0031208:3;Name=CG11023:3;Parent=FBtr0300689;
+chr2L	FlyBase	CDS	8193	8610	.	+	2	ID=CDS_FBgn0031208:3_737;Name=CG11023-cds;Parent=FBtr0300689;
+chr2L	FlyBase	CDS	8193	8589	.	+	2	ID=CDS_FBgn0031208:2_737;Name=CG11023-cds;Parent=FBtr0300690;
+chr2L	FlyBase	exon	8668	9484	.	+	.	ID=FBgn0031208:4;Name=CG11023:4;Parent=FBtr0300690;
+chr2L	FlyBase	CDS	8668	9276	.	+	0	ID=CDS_FBgn0031208:4_737;Name=CG11023-cds;Parent=FBtr0300690;
+chr2L	FlyBase	intron	8590	8667	.	+	.	ID=intron_FBgn0031208:2_FBgn0031208:4;Name=CG11023-in;Parent=FBtr0300690;
+chr2L	FlyBase	three_prime_UTR	8611	9484	.	+	.	ID=three_prime_UTR_FBgn0031208:3_737;Name=CG11023-u3;Parent=FBtr0300689;
+chr2L	FlyBase	three_prime_UTR	9277	9484	.	+	.	ID=three_prime_UTR_FBgn0031208:4_737;Name=CG11023-u3;Parent=FBtr0300690;

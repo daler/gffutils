@@ -1,1 +1,1 @@
-__version__="0.7"
+version=0.8
