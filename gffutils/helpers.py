@@ -135,19 +135,33 @@ def make_query(args, other=None, limit=None, strand=None, featuretype=None,
         d['STRAND'] = "features.strand = ?"
         args.append(strand)
 
-    # e.g. "ORDER BY seqid, start DESC"
+    # TODO: implement file_order!
+    valid_order_by = constants._gffkeys_extra + ['file_order', 'length']
+    _order_by = []
     if order_by:
+        # Default is essentially random order.
+        #
+        # e.g. "ORDER BY seqid, start DESC"
         if isinstance(order_by, basestring):
-            order_by = [order_by]
+            _order_by.append(order_by)
+
         for k in order_by:
-            if k not in constants._gffkeys_extra and k != 'file_order':
-                raise ValueError("%s not a valid column" % (k))
-        order_by = ','.join(order_by)
+            if k not in valid_order_by:
+                raise ValueError("%s not a valid order-by value in %s"
+                                 % (k, valid_order_by))
+
+            # There's no length field, so order by end - start
+            if k == 'length':
+                k = '(end - start)'
+
+            _order_by.append(k)
+
+        _order_by = ','.join(_order_by)
         if reverse:
             direction = 'DESC'
         else:
             direction = 'ASC'
-        d['ORDER_BY'] = 'ORDER BY %s %s' % (order_by, direction)
+        d['ORDER_BY'] = 'ORDER BY %s %s' % (_order_by, direction)
 
     # Ensure only one "WHERE" is included; the rest get "AND ".  This is ugly.
     where = False
