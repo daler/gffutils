@@ -799,15 +799,16 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=True,
     iterator = iterators.DataIterator(**kwargs)
     dialect = iterator.dialect
 
-    # However, a side-effect of this is that  if `data` was a generator, then
-    # we've just consumed `checklines` items (see
-    # iterators.BaseIterator.__init__, which calls iterators.peek).
-    #
-    # But it also chains those consumed items back onto the beginning, and the
-    # result is available as as iterator._iter.
-    #
-    # That's what we should be using now for `data:
-    kwargs['data'] = iterator._iter
+    if isinstance(iterator, iterators.FeatureIterator):
+        # However, a side-effect of this is that  if `data` was a generator,
+        # then we've just consumed `checklines` items (see
+        # iterators.BaseIterator.__init__, which calls iterators.peek).
+        #
+        # But it also chains those consumed items back onto the beginning, and
+        # the result is available as as iterator._iter.
+        #
+        # That's what we should be using now for `data:
+        kwargs['data'] = iterator._iter
 
     # Since we've already checked lines, we don't want to do it again
     kwargs['checklines'] = 0
