@@ -1,6 +1,8 @@
 import tempfile
 from nose.tools import assert_raises
 from .. import parser
+from .. import create
+from .. import feature
 from .. import iterators
 from .. import constants
 from .. import helpers
@@ -34,7 +36,7 @@ def test_directives():
 
     it = iterators.StringIterator(data)
     db = create_db(data, dbfn=':memory:', from_string=True, verbose=False)
-    assert it.directives == db.directives == ['##directive1 example']
+    assert it.directives == db.directives == ['directive1 example'], (it.directives, db.directives)
 
 def test_split_attrs():
     # nosetests generator for all the test cases in attr_test_cases.  (note no
@@ -94,9 +96,13 @@ def test_repeated_keys_conflict():
     if dialect says repeated keys, but len(vals) > 1, then the keys are not
     actually repeated....
     """
-    dialect = constants.dialect.copy()
-    dialect['repeated keys'] = True
-    assert_raises(helpers.AttributeStringError, parser._split_keyvals, "Parent=1,2,3", dialect)
+    #
+    # This is now only checked when infer_dialect is True -- and is disabled
+    # when a dialect is provided
+    #
+    #dialect = constants.dialect.copy()
+    #dialect['repeated keys'] = True
+    #assert_raises(helpers.AttributeStringError, parser._split_keyvals, "Parent=1,2,3", dialect)
 
 def test_parser_from_string():
     """
