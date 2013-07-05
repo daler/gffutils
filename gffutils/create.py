@@ -23,7 +23,7 @@ logger.addHandler(ch)
 
 
 class _DBCreator(object):
-    def __init__(self, data, dbfn, force=False, verbose=True, id_spec=None,
+    def __init__(self, data, dbfn, force=False, verbose=False, id_spec=None,
                  merge_strategy='merge', checklines=10, transform=None,
                  force_dialect_check=False, from_string=False, dialect=None):
         """
@@ -55,6 +55,13 @@ class _DBCreator(object):
             force_dialect_check=force_dialect_check, from_string=from_string,
             dialect=dialect
         )
+
+    def set_verbose(self, verbose=None):
+        if verbose:
+            logger.setLevel(logging.INFO)
+        else:
+            logger.setLevel(logging.ERROR)
+        self.verbose = verbose
 
     def _increment_featuretype_autoid(self, key):
         self._autoincrements[key] += 1
@@ -244,9 +251,6 @@ class _DBCreator(object):
         self._update_relations()
         self._finalize()
 
-        # reset logger to whatever it was before...
-        logger.setLevel(self._orig_logger_level)
-
     def update(self, iterator):
         self._populate_from_lines(iterator)
         self._update_relations()
@@ -303,8 +307,7 @@ class _GFFDBCreator(_DBCreator):
             # Percent complete
             if self.verbose:
                 if i % 1000 == 0:
-                    sys.stderr.write(msg % i)
-                    sys.stderr.flush()
+                    logger.info(msg % i)
 
             # TODO: handle ID creation here...should be combined with the
             # INSERT below (that is, don't IGNORE below but catch the error and
@@ -367,9 +370,7 @@ class _GFFDBCreator(_DBCreator):
 
         self.conn.commit()
         if self.verbose:
-            # i is not set here! Bug?
-            i = 0
-            sys.stderr.write((msg % i) + '\n')
+            logger.info(msg % i)
 
     def _update_relations(self):
         logger.info("Updating relations")
@@ -445,6 +446,7 @@ class _GTFDBCreator(_DBCreator):
 
             # Percent complete
             if self.verbose:
+
                 if i % 1000 == 0:
                     sys.stderr.write(msg % i)
                     sys.stderr.flush()

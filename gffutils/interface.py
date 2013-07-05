@@ -522,6 +522,7 @@ class FeatureDB(object):
         if id_spec:
             db.id_spec = id_spec
 
+        db.set_verbose(False)
         db._populate_from_lines(features)
         db._update_relations()
         db._finalize()
