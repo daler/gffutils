@@ -1,3 +1,13 @@
+"""
+This module provides different kinds of iterators, all wrapped by the
+DataIterator class which should generally be the only one used in practice.
+
+The BaseIterator class allows "peeking" `checklines` lines into the data --
+even if it's a consumable iterator -- in order to figure out what the dialect
+is and therefore decide whether the data is GFF or GTF format, which is
+important for figuring out how to construct the database.
+
+"""
 import os
 import tempfile
 import itertools

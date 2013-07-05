@@ -513,9 +513,11 @@ class FeatureDB(object):
                 tmp.write(str(f) + '\n')
             tmp.seek(0)
             if self.dialect['fmt'] == 'gtf':
-                db = create._GTFCreator(fn=tmp.name, dbfn=self.dbfn, verbose=verbose)
+                db = create._GTFCreator(fn=tmp.name, dbfn=self.dbfn,
+                                        verbose=verbose)
             elif self.dialect['fmt'] == 'gff3':
-                db = create._GFFDBCreator(fn=tmp.name, dbfn=self.dbfn, verbose=verbose)
+                db = create._GFFDBCreator(fn=tmp.name, dbfn=self.dbfn,
+                                          verbose=verbose)
 
         if merge_strategy:
             db.merge_strategy = merge_strategy
@@ -608,8 +610,7 @@ class FeatureDB(object):
                                       'implemented')
         chrom = chroms[0]
 
-
-       # To start, we create a merged feature of just the first feature.
+        # To start, we create a merged feature of just the first feature.
         current_merged_start = features[0].start
         current_merged_stop = features[0].stop
 
@@ -658,8 +659,6 @@ class FeatureDB(object):
                                  frame='.',
                                  attributes='')
         yield merged_feature
-
-
 
     def children_bp(self, feature, child_featuretype='exon', merge=False):
         """
