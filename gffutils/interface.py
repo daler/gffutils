@@ -116,6 +116,8 @@ class FeatureDB(object):
         return '\n'.join(results)
 
     def __getitem__(self, key):
+        if isinstance(key, Feature):
+            key = key.id
         c = self.conn.cursor()
         c.execute(constants._SELECT + ' WHERE id = ?', (key,))
         results = c.fetchall()
