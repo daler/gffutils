@@ -95,44 +95,98 @@ def _split_keyvals(keyval_str, dialect=None):
     if not keyval_str:
         return quals, dialect
 
+    # If a dialect was provided, then use that directly.
+    if not infer_dialect:
+        if dialect['trailing semicolon']:
+            keyval_str = keyval_str[:-1]
+
+        parts = keyval_str.split(dialect['field separator'])
+
+        kvsep = dialect['keyval separator']
+        if dialect['leading semicolon']:
+            pieces = []
+            for p in parts:
+                if p and p[0] == ';':
+                    p = p[1:]
+                pieces.append(p.strip().split(kvsep))
+                key_vals = [(p[0], " ".join(p[1:])) for p in pieces]
+
+        if dialect['fmt'] == 'gff3':
+            key_vals = [p.split(kvsep) for p in parts]
+        else:
+            leadingsemicolon = dialect['leading semicolon']
+            pieces = []
+            for i, p in enumerate(parts):
+                if i == 0 and leadingsemicolon:
+                    p = p[1:]
+                pieces.append(p.strip().split(kvsep))
+                key_vals = [(p[0], " ".join(p[1:])) for p in pieces]
+
+        quoted = dialect['quoted GFF2 values']
+        for item in key_vals:
+            # Easy if it follows spec
+            if len(item) == 2:
+                key, val = item
+
+            # Only key provided?
+            else:
+                assert len(item) == 1, item
+                key = item[0]
+                val = ''
+
+            if quoted:
+                if (len(val) > 0 and val[0] == '"' and val[-1] == '"'):
+                    val = val[1:-1]
+
+
+            if val:
+                # TODO: if there are extra commas for a value, just use empty
+                # strings
+                # quals[key].extend([v for v in val.split(',') if v])
+                vals = val.split(',')
+                quals[key].extend(vals)
+
+            else:
+                # since it's a defaultdict, asking for a key creates the empty list
+                quals[key]
+
+        for key, vals in quals.items():
+            quals[key] = vals
+
+        return quals, dialect
+
+    # If we got here, then we need to infer the dialect....
 
     # ensembl GTF has trailing semicolon
     if keyval_str[-1] == ';':
         keyval_str = keyval_str[:-1]
-        if infer_dialect:
-            dialect['trailing semicolon'] = True
+        dialect['trailing semicolon'] = True
 
     # GFF2/GTF has a semicolon with at least one space after it.
     # Spaces can be on both sides (e.g. wormbase)
     # GFF3 works with no spaces.
     # So split on the first one we can recognize...
-    if infer_dialect:
-        for sep in (' ; ', '; ', ';'):
-            parts = keyval_str.split(sep)
-            if len(parts) > 1:
-                dialect['field separator'] = sep
-                break
-    else:
-        parts = keyval_str.split(dialect['field separator'])
+    for sep in (' ; ', '; ', ';'):
+        parts = keyval_str.split(sep)
+        if len(parts) > 1:
+            dialect['field separator'] = sep
+            break
 
     # Is it GFF3?  They have key-vals separated by "="
     if gff3_kw_pat.match(parts[0]):
         key_vals = [p.split('=') for p in parts]
-        if infer_dialect:
-            dialect['fmt'] = 'gff3'
-            dialect['keyval separator'] = '='
+        dialect['fmt'] = 'gff3'
+        dialect['keyval separator'] = '='
 
     # Otherwise, key-vals separated by space.  Key is first item.
     else:
-        if infer_dialect:
-            dialect['keyval separator'] = " "
+        dialect['keyval separator'] = " "
         pieces = []
         for p in parts:
             # Fix misplaced semicolons in keys in some GFF2 files
             if p and p[0] == ';':
                 p = p[1:]
-                if infer_dialect:
-                    dialect['leading semicolon'] = True
+                dialect['leading semicolon'] = True
             pieces.append(p.strip().split(' '))
         key_vals = [(p[0], " ".join(p[1:])) for p in pieces]
 
@@ -149,14 +203,13 @@ def _split_keyvals(keyval_str, dialect=None):
             val = ''
 
         # Is the key already in there?
-        if infer_dialect and key in quals:
+        if key in quals:
             dialect['repeated keys'] = True
 
         # Remove quotes in GFF2
         if (len(val) > 0 and val[0] == '"' and val[-1] == '"'):
             val = val[1:-1]
-            if infer_dialect:
-                dialect['quoted GFF2 values'] = True
+            dialect['quoted GFF2 values'] = True
         if val:
             # TODO: if there are extra commas for a value, just use empty
             # strings
@@ -172,8 +225,8 @@ def _split_keyvals(keyval_str, dialect=None):
             # since it's a defaultdict, asking for a key creates the empty list
             quals[key]
 
-    for key, vals in quals.items():
-
+    #for key, vals in quals.items():
+    #
         # TODO: urllib.unquote breaks round trip invariance for "hybrid1.gff3"
         # test file.  This is because the "Note" field has %xx escape chars,
         # but "Dbxref" has ":" which, if everything were consistent, should
@@ -189,7 +242,7 @@ def _split_keyvals(keyval_str, dialect=None):
 
         # unquoted = [urllib.unquote(v) for v in vals]
 
-        quals[key] = vals
+        #quals[key] = vals
 
     if (
         (dialect['keyval separator'] == ' ') and
