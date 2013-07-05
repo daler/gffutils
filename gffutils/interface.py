@@ -411,9 +411,9 @@ class FeatureDB(object):
         Providing N features will return N - 1 new features.
 
         This method purposefully does *not* do any merging or sorting, so you
-        may want to use :meth:`FeatureDB.merge_features` first.
+        may want to use :meth:`FeatureDB.merge` first.
 
-        The new eatures' attributes will be a merge of the neighboring
+        The new features' attributes will be a merge of the neighboring
         features' attributes.  This is useful if you have provided a list of
         exons; the introns will then retain the transcript and/or gene parents.
 
@@ -584,6 +584,80 @@ class FeatureDB(object):
                 merge_attributes=merge_attributes, dialect=self.dialect
             ):
                 yield intron
+
+    def merge(self, feature, ignore_strand=False):
+
+        # Consume iterator up front...
+        features = list(features)
+
+        # Either set all strands to '+' or check for strand-consistency.
+        if ignore_strand:
+            strand = '+'
+        else:
+            strands = [i.strand for i in features]
+            if len(set(strands)) > 1:
+                raise ValueError('Specify ignore_strand=True to force merging '
+                                 'of multiple strands')
+            strand = strands[0]
+
+        # Sanity check to make sure all features are from the same chromosome.
+        chroms = [i.chrom for i in features]
+        if len(set(chroms)) > 1:
+            raise NotImplementedError('Merging multiple chromosomes not '
+                                      'implemented')
+        chrom = chroms[0]
+
+
+       # To start, we create a merged feature of just the first feature.
+        current_merged_start = features[0].start
+        current_merged_stop = features[0].stop
+
+        # We don't need to check the first one, so start at feature #2.
+        for feature in features[1:]:
+            # Does this feature start within the currently merged feature?...
+            if feature.start <= current_merged_stop + 1:
+                # ...It starts within, so leave current_merged_start where it
+                # is.  Does it extend any farther?
+                if feature.stop >= current_merged_stop:
+                    # Extends further, so set a new stop position
+                    current_merged_stop = feature.stop
+                else:
+                    # If feature.stop < current_merged_stop, it's completely
+                    # within the previous feature.  Nothing more to do.
+                    continue
+            else:
+                # The start position is outside the merged feature, so we're
+                # done with the current merged feature.  Prepare for output...
+                merged_feature = Feature(chrom=feature.chrom,
+                                         source='.',
+                                         featuretype=featuretype,
+                                         start=current_merged_start,
+                                         stop=current_merged_stop,
+                                         score='.',
+                                         strand=strand,
+                                         frame='.',
+                                         attributes='')
+                yield merged_feature
+
+                # and we start a new one, initializing with this feature's
+                # start and stop.
+                current_merged_start = feature.start
+                current_merged_stop = feature.stop
+
+        # need to yield the last one.
+        if len(features) == 1:
+            feature = features[0]
+        merged_feature = Feature(chrom=feature.chrom,
+                                 source='.',
+                                 featuretype=featuretype,
+                                 start=current_merged_start,
+                                 stop=current_merged_stop,
+                                 score='.',
+                                 strand=strand,
+                                 frame='.',
+                                 attributes='')
+        yield merged_feature
+
 
     # Recycle the docs for _relation so they stay consistent between parents()
     # and children()
