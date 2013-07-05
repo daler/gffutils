@@ -24,17 +24,28 @@ def make_query(args, other=None, limit=None, strand=None, featuretype=None,
     """
     This function composes queries given some commonly-used kwargs that can be
     passed to FeatureDB methods (like .parents(), .children(), .all_features(),
-    .features_of_type()).
+    .features_of_type()).  It handles, in one place, things like restricting to
+    featuretype, limiting to a genomic range, limiting to one strand, or
+    returning results ordered by different criteria.
 
+    Additional filtering/subsetting/sorting behavior should be added here.
 
-    It also provides support for additional JOINs etc (`other`) and extra
-    conditional clauses (`extra`).
+    (Note: this ended up having better performance (and flexibility) than
+    sqlalchemy)
 
-    For example, `other` is used in FeatureDB._relation, where `other` is the
-    JOIN substatment.
+    This function also provides support for additional JOINs etc (supplied via
+    the `other` kwarg) and extra conditional clauses (`extra` kwarg).  See the
+    `_QUERY` var below for the order in which they are used.
 
-    `extra` is also used in FeatureDB._relation, where `extra` is the
-    "relations.level = ?" substatment.
+    For example, FeatureDB._relation uses `other` to supply the JOIN
+    substatment, and that same method also uses `extra` to supply the
+    "relations.level = ?" substatment (see the source for FeatureDB._relation
+    for more details).
+
+    `args` contains the arguments that will ultimately be supplied to the
+    sqlite3.connection.execute function.  It may be further populated below --
+    for example, if strand="+", then the query will include a strand clause,
+    and the strand will be appended to the args.
 
     `args` can be pre-filled with args that are passed to `other` and `extra`.
     """
@@ -42,8 +53,8 @@ def make_query(args, other=None, limit=None, strand=None, featuretype=None,
     _QUERY = ("{_SELECT} {OTHER} {EXTRA} {FEATURETYPE} "
               "{LIMIT} {STRAND} {ORDER_BY}")
 
-    # Will be used later as _QUERY.format(**d).  Default is just _SELECT, which
-    # returns all records in the features table.
+    # Construct a dictionary `d` that will be used later as _QUERY.format(**d).
+    # Default is just _SELECT, which returns all records in the features table.
     # (Recall that constants._SELECT gets the fields in the order needed to
     # reconstruct a Feature)
     d = dict(_SELECT=constants._SELECT, OTHER="", FEATURETYPE="", LIMIT="",
@@ -54,20 +65,26 @@ def make_query(args, other=None, limit=None, strand=None, featuretype=None,
     if extra:
         d['EXTRA'] = extra
 
-    # Quick check for args provided
+    # If `other` and `extra` take args (that is, they have "?" in them), then
+    # they should have been provided in `args`.
     required_args = (d['EXTRA'] + d['OTHER']).count('?')
     if len(args) != required_args:
         raise ValueError('Not enough args (%s) for subquery' % args)
 
     # Below, if a kwarg is specified, then we create sections of the query --
-    # appending to args as necessary.  Importantly, the order in which things
-    # are processed here is the same as the order of the placeholders in
-    # _QUERY.
-
-    # e.g., "featuretype = 'exon'"
+    # appending to args as necessary.
     #
-    # or, "featuretype IN ('exon', 'CDS')"
+    # IMPORTANT: the order in which things are processed here is the same as
+    # the order of the placeholders in _QUERY.  That is, we need to build the
+    # args in parallel with the query to avoid putting the wrong args in the
+    # wrong place.
+
     if featuretype:
+        # Handle single or iterables of featuretypes.
+        #
+        # e.g., "featuretype = 'exon'"
+        #
+        # or, "featuretype IN ('exon', 'CDS')"
         if isinstance(featuretype, basestring):
             d['FEATURETYPE'] = "features.featuretype = ?"
             args.append(featuretype)
@@ -78,17 +95,23 @@ def make_query(args, other=None, limit=None, strand=None, featuretype=None,
             )
             args.extend(featuretype)
 
-    # e.g., "seqid = 'chr2L' AND start > 1000 AND end < 5000"
     if limit:
+        # Restrict to a genomic region.  Makes use of the UCSC binning strategy
+        # for performance.
+        #
+        # `limit` is a string or a tuple of (chrom, start, stop)
+        #
+        # e.g., "seqid = 'chr2L' AND start > 1000 AND end < 5000"
         if isinstance(limit, basestring):
             seqid, startstop = limit.split(':')
             start, end = startstop.split('-')
         else:
             seqid, start, end = limit
 
-        # Identify bins
+        # Identify possible bins
         _bins = bins.bins(int(start), int(end), one=False)
 
+        # Use different overlap conditions
         if completely_within:
             d['LIMIT'] = (
                 "features.seqid = ? AND features.start >= ? "
@@ -104,11 +127,11 @@ def make_query(args, other=None, limit=None, strand=None, featuretype=None,
             # Note order (end, start)
             args.extend([seqid, end, start])
 
-        # add bin clause
+        # Add bin clause
         d['LIMIT'] += " AND features.bin IN (%s)" % (','.join(map(str, _bins)))
 
-    # e.g., "strand = '+'"
     if strand:
+        # e.g., "strand = '+'"
         d['STRAND'] = "features.strand = ?"
         args.append(strand)
 
@@ -126,7 +149,7 @@ def make_query(args, other=None, limit=None, strand=None, featuretype=None,
             direction = 'ASC'
         d['ORDER_BY'] = 'ORDER BY %s %s' % (order_by, direction)
 
-    # Ensure only one "WHERE" is included; the rest get "AND "
+    # Ensure only one "WHERE" is included; the rest get "AND ".  This is ugly.
     where = False
     if "where" in d['OTHER'].lower():
         where = True
