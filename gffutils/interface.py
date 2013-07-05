@@ -659,6 +659,23 @@ class FeatureDB(object):
         yield merged_feature
 
 
+
+    def children_bp(self, feature, child_featuretype='exon', merge=False):
+        """
+        Returns the total bp of all children of a featuretype
+
+        Useful for getting the exonic bp of an mRNA.
+        """
+        children = self.children(feature, featuretype=child_featuretype,
+                                 order_by='start')
+        if merge:
+            children = self.merge(children)
+
+        total = 0
+        for child in children:
+            total += len(child)
+        return total
+
     # Recycle the docs for _relation so they stay consistent between parents()
     # and children()
     children.__doc__ = children.__doc__.format(
