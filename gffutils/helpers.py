@@ -145,16 +145,17 @@ def make_query(args, other=None, limit=None, strand=None, featuretype=None,
         if isinstance(order_by, basestring):
             _order_by.append(order_by)
 
-        for k in order_by:
-            if k not in valid_order_by:
-                raise ValueError("%s not a valid order-by value in %s"
-                                 % (k, valid_order_by))
+        else:
+            for k in order_by:
+                if k not in valid_order_by:
+                    raise ValueError("%s not a valid order-by value in %s"
+                                     % (k, valid_order_by))
 
-            # There's no length field, so order by end - start
-            if k == 'length':
-                k = '(end - start)'
+                # There's no length field, so order by end - start
+                if k == 'length':
+                    k = '(end - start)'
 
-            _order_by.append(k)
+                _order_by.append(k)
 
         _order_by = ','.join(_order_by)
         if reverse:
