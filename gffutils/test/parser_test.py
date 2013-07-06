@@ -132,3 +132,20 @@ def test_valid_line_count():
 
     p = iterators.FileIterator(example_filename('FBgn0031208.gff'))
     assert len(list(p)) == 27
+
+def test_inconsistent_dialect():
+    """
+    The second feature does not have a trailing semicolon (wormbase_gff2_alt is
+    like this).  But since the first feature does, that's what the db's dialect
+    is set to, which can cause errors when parsing attributes.
+    """
+    db = create.create_db(
+    """
+    chr1	.	gene	1	100	.	+	.	gene_id "gene1";
+    chr1	.	mRNA	1	100	.	+	.	transcript_id "mRNA1"
+    """, ':memory:', from_string=True)
+    items = list(db.all_features())
+    print items[0]
+    # before, was ['"mRNA1'] -- note extra "
+    assert items[1].attributes['transcript_id'] == ['mRNA1'], items[1].attributes['transcript_id']
+

@@ -98,7 +98,7 @@ def _split_keyvals(keyval_str, dialect=None):
     # If a dialect was provided, then use that directly.
     if not infer_dialect:
         if dialect['trailing semicolon']:
-            keyval_str = keyval_str[:-1]
+            keyval_str = keyval_str.rstrip(';')
 
         parts = keyval_str.split(dialect['field separator'])
 
