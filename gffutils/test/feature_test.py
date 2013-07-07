@@ -1,3 +1,4 @@
+from .. import parser
 from .. import feature
 from .. import helpers
 
@@ -20,9 +21,13 @@ def test_attributes_representations():
     # These different ways of supplying attributes should yield identical
     # results:
     s = ".	.	.	.	.	.	.	.	ID=asdf"
-    assert str(feature.Feature(attributes='{"ID": ["asdf"]}')) == s
-    assert str(feature.Feature(attributes=dict(ID=["asdf"]))) == s
-    assert str(feature.Feature(attributes="ID=asdf")) == s
+    for item in (
+        '{"ID": ["asdf"]}',
+        dict(ID=["asdf"]),
+        "ID=asdf"
+    ):
+        result = str(feature.Feature(attributes=item))
+        assert result == s, result
 
 
 def test_default_start_stop():
@@ -58,7 +63,7 @@ def test_aliases():
 def test_string_representation():
     line = "chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690"
     f = feature.feature_from_line(line)
-    assert line == str(f)
+    assert line == str(f), str(f)
 
     line = "chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690	some	more	stuff"
     f = feature.feature_from_line(line)
@@ -89,3 +94,29 @@ def test_repr():
     print repr(f)
     print hex(id(f))
     assert repr(f) == ("<Feature exon (chr2L:7529-8116[+]) at %s>" % hex(id(f)))
+
+def test_attributes():
+    a = feature.Attributes()
+    a['gene_id'] = ['a']
+    print a
+
+
+    attr, dialect = parser._split_keyvals('transcript_id "mRNA1"')
+    print attr._order, attr
+    s = parser._reconstruct(attr, dialect)
+    print s
+
+    a = feature.feature_from_line(
+        """
+        chr1	.	mRNA	1	100	.	+	.	transcript_id "mRNA1"
+        """)
+    print a
+
+def test_unjsonify():
+    attributes, dialect = parser._split_keyvals('transcript_id "mRNA1"')
+    assert isinstance(attributes, feature.Attributes)
+    assert str(attributes) == "transcript_id: ['mRNA1']"
+    s = helpers._jsonify(attributes)
+    assert s == '{"transcript_id":["mRNA1"]}', s
+    d = helpers._unjsonify(s, isattributes=True)
+    assert d == attributes

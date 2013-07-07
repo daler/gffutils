@@ -149,3 +149,4 @@ def test_inconsistent_dialect():
     # before, was ['"mRNA1'] -- note extra "
     assert items[1].attributes['transcript_id'] == ['mRNA1'], items[1].attributes['transcript_id']
 
+

@@ -48,7 +48,7 @@ def test_update():
     f = feature.feature_from_line(
         'chr2L . testing 1 10 . + . ID=testing_feature;n=1',
         dialect=db.dialect)
-    f.attributes['n'] = '2'
+    f.attributes['n'] = ['2']
     db.update([f], merge_strategy='merge')
     x = list(db.features_of_type('testing'))
     assert len(x) == 1
@@ -78,13 +78,13 @@ def test_update():
     print "\n\nafter\n\n"
     for child in db.children(gene):
         print child.id
-        assert child.attributes['gene_id'] == ['FBgn0031208'], (child, child.attributes['gene_id'])
+        assert child.attributes['gene_id'] == ['FBgn0031208'], (child, child.attributes)
 
     num_entries = 0
     for gene_recs in list(db.iter_by_parent_childs()):
         # Add attribute to each gene record
         rec = gene_recs[0]
-        rec.attributes["new"] = "new_value"
+        rec.attributes["new"] = ["new_value"]
         db.update([rec])
         num_entries += 1
     print list(db.all_features())
@@ -97,7 +97,7 @@ def test_update():
     f = feature.feature_from_line(
         'chr2L . testing 1 10 . + . ID=testing_feature;n=1',
         dialect=db.dialect)
-    f.attributes['n'] = '3'
+    f.attributes['n'] = ['3']
     db.update([f], merge_strategy='replace')
     x = list(db.features_of_type('testing'))
     assert len(x) == 1
