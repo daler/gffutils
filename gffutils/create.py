@@ -117,12 +117,10 @@ class _DBCreator(object):
                 # lists, not standard GFF fields.
                 return getattr(f, k[1:-1])
             else:
-                v = f.attributes[k]
-            if len(v) == 0:
-                del f.attributes[k]
-            else:
-                return v[0]
-
+                try:
+                    return f.attributes[k][0]
+                except KeyError:
+                    pass
         # If we get here, then default autoincrement
         return self._increment_featuretype_autoid(f.featuretype)
 

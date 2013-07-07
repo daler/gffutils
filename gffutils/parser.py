@@ -7,6 +7,7 @@ import constants
 from helpers import DefaultOrderedDict, example_filename
 import helpers
 import bins
+import feature
 
 import logging
 
@@ -91,7 +92,7 @@ def _split_keyvals(keyval_str, dialect=None):
         dialect = copy.copy(constants.dialect)
         infer_dialect = True
 
-    quals = DefaultOrderedDict(list)
+    quals = feature.Attributes()
     if not keyval_str:
         return quals, dialect
 
@@ -133,6 +134,11 @@ def _split_keyvals(keyval_str, dialect=None):
                 assert len(item) == 1, item
                 key = item[0]
                 val = ''
+
+            try:
+                quals[key]
+            except KeyError:
+                quals[key] = []
 
             if quoted:
                 if (len(val) > 0 and val[0] == '"' and val[-1] == '"'):
@@ -205,6 +211,8 @@ def _split_keyvals(keyval_str, dialect=None):
         # Is the key already in there?
         if key in quals:
             dialect['repeated keys'] = True
+        else:
+            quals[key] = []
 
         # Remove quotes in GFF2
         if (len(val) > 0 and val[0] == '"' and val[-1] == '"'):
