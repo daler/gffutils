@@ -135,10 +135,10 @@ class Feature(object):
         # If dict, then use that; otherwise assume JSON; otherwise assume
         # original string.
         self._orig_attribute_str = None
-        attributes = attributes or helpers.DefaultListOrderedDict()
+        attributes = attributes or Attributes()
         if isinstance(attributes, basestring):
             try:
-                attributes = helpers._unjsonify(attributes)
+                attributes = helpers._unjsonify(attributes, isattributes=True)
 
             # it's a string but not JSON: assume original attributes string.
             except simplejson.JSONDecodeError:

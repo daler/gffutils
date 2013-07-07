@@ -1,3 +1,4 @@
+from simplejson import JSONEncoder
 import copy
 import sys
 import os
@@ -10,6 +11,7 @@ import time
 import tempfile
 import gffutils
 import gffutils.gffwriter as gffwriter
+import feature
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -212,16 +214,25 @@ class DuplicateIDError(Exception):
 class AttributeStringError(Exception):
     pass
 
+class AttributesEncoder(JSONEncoder):
+    def default(self, obj):
+        return obj._d
+
 
 def _jsonify(x):
     """Use most compact form of JSON"""
+    if isinstance(x, feature.Attributes):
+        return simplejson.dumps(x, separators=(',', ':'), cls=AttributesEncoder)
     return simplejson.dumps(x, separators=(',', ':'))
 
 
-def _unjsonify(x):
+def _unjsonify(x, isattributes=False):
     """Convert JSON string to an ordered defaultdict."""
-    return simplejson.loads(
-        x, object_pairs_hook=DefaultListOrderedDict)
+    if isattributes:
+        return simplejson.loads(
+            x, object_pairs_hook=feature.Attributes)
+    else:
+        return simplejson.loads(x)
 
 
 def _feature_to_fields(f, jsonify=True):
