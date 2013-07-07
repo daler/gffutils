@@ -2,21 +2,30 @@
 Benchmarking script, trying different methods of maintaining order when
 populating a dictionary.
 """
+import time
 import sys
 from gffutils.helpers import DefaultOrderedDict
+from gffutils.feature import Attributes
 from collections import defaultdict
 from collections import OrderedDict
 import random
 
 
 nlines = 200000
-nkeys = 1
-vals_per_key = 1
+nkeys = 5
+vals_per_key = 3
 
 
 seen = set()
 order = []
 
+def attributesupdate(d, k, v, seen, order):
+    """
+    Append value `v` to list at key `k` in dict `d`
+    """
+    val = d.setdefault(k, [])
+    val.append(v)
+    return seen, order
 
 def dictupdate(d, k, v, seen, order):
     """
@@ -47,23 +56,27 @@ lookup = {
     'default': (lambda: defaultdict(list), defaultupdate),
     'ordered': (lambda: OrderedDict(), dictupdate),
     'naiveordered': (lambda: defaultdict(list), naiveorderupdate),
+    'attributes': (lambda: Attributes(), attributesupdate),
 }
 
 try:
-    kind = sys.argv[1]
+    kinds = sys.argv[1:]
 except IndexError:
     sys.stderr.write("usage: %s [%s]\n" % (sys.argv[0], '|'.join(lookup.keys())))
     sys.exit(1)
 
-func, update = lookup[kind]
+for kind in kinds:
+    func, update = lookup[kind]
 
-for line in range(nlines):
-    d = func()
-    seen = set()
-    order = []
-    for i in range(nkeys):
-        for j in range(vals_per_key):
-            seen, order = update(d, i, j, seen, order)
+    t0 = time.time()
+    for line in range(nlines):
+        d = func()
+        seen = set()
+        order = []
+        for i in range(nkeys):
+            for j in range(vals_per_key):
+                seen, order = update(d, i, j, seen, order)
+    print "%s: %.3fs" % (kind, time.time() - t0)
 
 # check at least the last created dict to make sure it's correct
 #assert dict(d) == {0: [0, 1, 2], 1: [0, 1, 2], 2: [0, 1, 2], 3: [0, 1, 2], 4: [0, 1, 2]}
