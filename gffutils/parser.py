@@ -12,7 +12,6 @@ import feature
 
 import logging
 
-
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 ch = logging.StreamHandler()
@@ -93,7 +92,7 @@ def _split_keyvals(keyval_str, dialect=None):
         dialect = copy.copy(constants.dialect)
         infer_dialect = True
 
-    quals = feature.Attributes()
+    quals = feature.dict_class()
     if not keyval_str:
         return quals, dialect
 
@@ -145,20 +144,12 @@ def _split_keyvals(keyval_str, dialect=None):
                 if (len(val) > 0 and val[0] == '"' and val[-1] == '"'):
                     val = val[1:-1]
 
-
             if val:
                 # TODO: if there are extra commas for a value, just use empty
                 # strings
                 # quals[key].extend([v for v in val.split(',') if v])
                 vals = val.split(',')
                 quals[key].extend(vals)
-
-            else:
-                # since it's a defaultdict, asking for a key creates the empty list
-                quals[key]
-
-        for key, vals in quals.items():
-            quals[key] = vals
 
         return quals, dialect
 
@@ -229,10 +220,6 @@ def _split_keyvals(keyval_str, dialect=None):
                     "Internally inconsistent attributes formatting: "
                     "some have repeated keys, some do not.")
             quals[key].extend(vals)
-
-        else:
-            # since it's a defaultdict, asking for a key creates the empty list
-            quals[key]
 
     #for key, vals in quals.items():
     #

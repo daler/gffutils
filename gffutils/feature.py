@@ -12,7 +12,7 @@ class Attributes(collections.MutableMapping):
     def __init__(self, *args, **kwargs):
         self._order = []
         self._d = dict()
-        self.update(dict(*args, **kwargs))
+        self.update(*args, **kwargs)
 
     def __setitem__(self, key, value):
         if not isinstance(value, list):
@@ -52,6 +52,16 @@ class Attributes(collections.MutableMapping):
     def update(self, *args, **kwargs):
         for k, v in dict(*args, **kwargs).iteritems():
             self[k] = v
+
+# Useful for profiling: which dictionary-like class to store attributes in.
+# This is used in Feature below and in parser.py
+
+dict_class = Attributes
+#dict_class = dict
+#dict_class = helper_classes.DefaultOrderedDict
+#dict_class = collections.defaultdict
+#dict_class = collections.OrderedDict
+#dict_class = helper_classes.DefaultListOrderedDict
 
 
 class Feature(object):
@@ -137,7 +147,7 @@ class Feature(object):
         # If dict, then use that; otherwise assume JSON; otherwise assume
         # original string.
         self._orig_attribute_str = None
-        attributes = attributes or Attributes()
+        attributes = attributes or dict_class()
         if isinstance(attributes, basestring):
             try:
                 attributes = helpers._unjsonify(attributes, isattributes=True)
