@@ -1,12 +1,14 @@
-from collections import defaultdict, MutableMapping
+import collections
 import simplejson
 import helpers
+import helper_classes
 import constants
 import parser
 import bins
 
+
 # http://stackoverflow.com/a/3387975
-class Attributes(MutableMapping):
+class Attributes(collections.MutableMapping):
     def __init__(self, *args, **kwargs):
         self._order = []
         self._d = dict()

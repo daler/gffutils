@@ -4,7 +4,8 @@ import re
 import urllib
 import copy
 import constants
-from helpers import DefaultOrderedDict, example_filename
+from helper_classes import DefaultOrderedDict
+from helpers import example_filename
 import helpers
 import bins
 import feature
