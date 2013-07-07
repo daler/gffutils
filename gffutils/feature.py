@@ -1,8 +1,55 @@
+from collections import defaultdict, MutableMapping
 import simplejson
 import helpers
 import constants
 import parser
 import bins
+
+# http://stackoverflow.com/a/3387975
+class Attributes(MutableMapping):
+    def __init__(self, *args, **kwargs):
+        self._order = []
+        self._d = dict()
+        self.update(dict(*args, **kwargs))
+
+    def __setitem__(self, key, value):
+        if not isinstance(value, list):
+            raise ValueError(
+                'Attribute value "%s" for key "%s" must be a list'
+                % (repr(value), repr(key)))
+        self._d[key] = value
+        self._order.append(key)
+
+    def __getitem__(self, key):
+        return self._d[key]
+
+    def __delitem__(self, key):
+        del self._d[key]
+
+    def __iter__(self):
+        return iter(self.keys)
+
+    def __len__(self):
+        return len(self._d)
+
+    def keys(self):
+        return self._order
+
+    def values(self):
+        return [self._d[k] for k in self._order]
+
+    def items(self):
+        return [(k, self._d[k]) for k in self._order]
+
+    def __str__(self):
+        s = []
+        for i in self.items():
+            s.append("%s: %s" % i)
+        return '\n'.join(s)
+
+    def update(self, *args, **kwargs):
+        for k, v in dict(*args, **kwargs).iteritems():
+            self[k] = v
 
 
 class Feature(object):
