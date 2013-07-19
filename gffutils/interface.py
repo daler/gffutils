@@ -355,16 +355,23 @@ class FeatureDB(object):
             partially.  If True, only return features that are completely
             within `region`.
         """
+        strand = None
         if isinstance(region, basestring):
-            seqid, coords = region.split(':')
+            toks = region.split(':')
+            seqid, coords = toks[:2]
+            if len(toks) == 3:
+                strand = toks[2]
             start, end = coords.split('-')
 
         elif isinstance(region, Feature):
             seqid = region.seqid
             start = region.start
             end = region.end
+            strand = region.strand
         else:
-            seqid, start, end = region
+            seqid, start, end = region[:3]
+            if len(region) == 4:
+                strand = region[3]
 
         # Get a list of all possible bins for this region
         _bins = list(bins.bins(int(start), int(end), one=False))
@@ -394,6 +401,11 @@ class FeatureDB(object):
                 ['featuretype = ?' for _ in featuretype])
             query += ' AND (%s) ' % feature_clause
             args.extend(featuretype)
+
+        if strand is not None:
+            strand_clause = ' and strand = ? '
+            query += strand_clause
+            args.append(strand)
 
         c = self.conn.cursor()
         c.execute(query, tuple(args))
