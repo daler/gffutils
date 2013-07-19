@@ -367,7 +367,7 @@ class FeatureDB(object):
             seqid, start, end = region
 
         # Get a list of all possible bins for this region
-        _bins = list(bins.bins(start, end, one=False))
+        _bins = list(bins.bins(int(start), int(end), one=False))
 
         if completely_within:
             position_clause = 'start >= ? AND end <= ?'
