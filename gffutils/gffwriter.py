@@ -92,7 +92,7 @@ class GFFWriter:
           mRNA_1
             # Exons of mRNA, sorted by start position (ascending)
             exon_1
-              # Children of exon, no particular order
+              # Children of exon, sorted by start position
               exon_child_1
               exon_child_2
             exon_2

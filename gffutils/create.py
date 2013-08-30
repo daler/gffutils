@@ -172,8 +172,8 @@ class _DBCreator(object):
                     "Same ID, but differing info for %s field. "
                     "Line %s: \n%s" % (
                         f.id,
-                        self.iterator.current_line_number,
-                        self.iterator.current_line))
+                        self.iterator.current_item_number,
+                        self.iterator.current_item))
 
             attributes = existing_feature.attributes
 
