@@ -537,6 +537,8 @@ class FeatureDB(object):
         """
         Create introns from existing annotations.
 
+        Returns an iterator of new introns that can then be passed to the
+        `update` method to permanently add to the database.
 
         Parameters
         ----------
@@ -546,10 +548,11 @@ class FeatureDB(object):
         `grandparent_featuretype` : string
             If `grandparent_featuretype` is not None, then group exons by
             children of this featuretype.  If `granparent_featuretype` is
-            "gene" (default), then all genes will be retrieved, then *all*
-            children of each gene (e.g., mRNA, rRNA, ncRNA, etc) will then be
-            searched for exons from which to infer introns. Mutually exclusive
-            with `parent_featuretype`.
+            "gene" (default), then introns will be created for all first-level
+            children of genes.  This may include mRNA, rRNA, ncRNA, etc.  If
+            you only want to infer introns from one of these featuretypes
+            (e.g., mRNA), then use the `parent_featuretype` kwarg which is
+            mutually exclusive with `grandparent_featuretype`.
 
         `parent_featuretype` : string
             If `parent_featuretype` is not None, then only use this featuretype
@@ -562,7 +565,7 @@ class FeatureDB(object):
             `"intron"`.
 
         `merge_attributes`: bool
-            Whether or not to merge attributes from all exons; if False then no
+            Whether or not to merge attributes from all exons. If False then no
             attributes will be created for the introns.
         """
         if (grandparent_featuretype and parent_featuretype) or (

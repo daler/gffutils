@@ -223,19 +223,16 @@ class AttributesEncoder(JSONEncoder):
 def _jsonify(x):
     """Use most compact form of JSON"""
     if isinstance(x, feature.Attributes):
-        return simplejson.dumps(x, separators=(',', ':'),
-                                cls=AttributesEncoder)
+        return simplejson.dumps(x.items(), separators=(',', ':'))
     return simplejson.dumps(x, separators=(',', ':'))
 
 
 def _unjsonify(x, isattributes=False):
     """Convert JSON string to an ordered defaultdict."""
     if isattributes:
-        return simplejson.loads(
-            x, object_pairs_hook=feature.Attributes)
-    else:
-        return simplejson.loads(x)
-
+        obj = simplejson.loads(x)
+        return feature.Attributes(obj)
+    return simplejson.loads(x)
 
 def _feature_to_fields(f, jsonify=True):
     """
