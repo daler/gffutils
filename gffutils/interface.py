@@ -37,7 +37,7 @@ class FeatureDB(object):
             within `limit`. Only relevant when `limit` is not None.
     """
 
-    def __init__(self, dbfn):
+    def __init__(self, dbfn, text_factory=str):
         """
         Connect to a database created by :func:`gffutils.create_db`.
 
@@ -48,6 +48,10 @@ class FeatureDB(object):
 
             Path to a database created by :func:`gffutils.create_db`.
 
+        `text_factory` : callable
+
+            Optionally set the way sqlite3 handle strings.  Besides the default
+            `str`, another option might be sqlite3.OptimizedUnicode.
 
         .. note::
 
@@ -77,7 +81,7 @@ class FeatureDB(object):
             self.dbfn = dbfn
             self.conn = sqlite3.connect(self.dbfn)
 
-        self.conn.text_factory = str
+        self.conn.text_factory = text_factory
         self.conn.row_factory = sqlite3.Row
 
         c = self.conn.cursor()
