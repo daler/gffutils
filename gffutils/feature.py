@@ -309,7 +309,19 @@ def feature_from_line(line, dialect=None):
         As long as there are only 9 fields (standard GFF/GTF), then it's OK to
         use spaces instead of tabs to separate fields in `line`.  But if >9
         fields are to be used, then tabs must be used.
+
+        It's also OK to use triple-quoted strings as long as there is only one
+        non-empty line.
     """
+    lines = line.splitlines(False)
+    _lines = []
+    for i in lines:
+        i = i.strip()
+        if len(i) > 0:
+            _lines.append(i)
+
+    assert len(_lines) == 1, _lines
+    line = _lines[0]
     if '\t' in line:
         fields = line.rstrip('\n\r').split('\t')
     else:
