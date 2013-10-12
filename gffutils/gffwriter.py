@@ -1,11 +1,6 @@
 ##
 ## GFF Writer (writer): serializing gffutils records as GFF text files.
 ##
-##   Dear Sir or Madam, will you read my code?
-##   It took me years to write, will you take a look?
-##   It's based on code by a man named Daler
-##   And I need a job, so I want to be a GFF Writer, GFF Writer.
-##
 import time
 import tempfile
 import shutil

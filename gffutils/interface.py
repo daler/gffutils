@@ -197,8 +197,8 @@ class FeatureDB(object):
                               order_by=None, reverse=False,
                               completely_within=False):
         """
-        For each parent of type `featuretype`, yield a list L of that parent and
-        all of its children. The parent will always be L[0].
+        For each parent of type `featuretype`, yield a list L of that parent
+        and all of its children. The parent will always be L[0].
 
         Additional kwargs are passed to :meth:`FeatureDB.children`, and will
         therefore only affect items L[1:] in each yielded list.
@@ -248,9 +248,9 @@ class FeatureDB(object):
     def _relation(self, id, join_on, join_to, level=None, featuretype=None,
                   order_by=None, reverse=False, completely_within=False):
 
-        # The following docstring will be included in the parents() and children()
-        # docstrings to maintain consistency, since they both delegate to this
-        # method.
+        # The following docstring will be included in the parents() and
+        # children() docstrings to maintain consistency, since they both
+        # delegate to this method.
         """
         Parameters
         ----------

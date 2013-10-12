@@ -59,11 +59,18 @@ def bins(start, stop, fmt='gff', one=True):
     Uses the definition of a "genomic bin" described in Fig 7 of
     http://genome.cshlp.org/content/12/6/996.abstract.
 
-    If `one=True` (default), then only return the smallest bin that completely
-    contains these coordinates (useful for assigning a single bin).
+    Parameters
+    ----------
+    one : boolean
+        If `one=True` (default), then only return the smallest bin that
+        completely contains these coordinates (useful for assigning a single
+        bin).
 
-    If `one=False`, then return the set of *all* bins that overlap these
-    coordinates (useful for looking for features that could intersect)
+        If `one=False`, then return the set of *all* bins that overlap these
+        coordinates (useful for looking for features that could intersect)
+
+    fmt : 'gff' | 'bed'
+        This specifies 1-based start coords (gff) or 0-based start coords (bed)
     """
     # Jump to highest resolution bin that will fit these coords (depending on
     # whether we have a BED or GFF-style coordinate).

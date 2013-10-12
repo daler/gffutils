@@ -131,8 +131,6 @@ class _DBCreator(object):
         """
         Different merge strategies upon name conflicts.
 
-        
-
         "error":
             Raise error
 
@@ -341,7 +339,6 @@ class _GFFDBCreator(_DBCreator):
                             INSERT OR IGNORE INTO relations VALUES
                             (?, ?, 1)
                             ''', (parent, f.id))
-
 
             else:
                 _features.append(f.astuple())

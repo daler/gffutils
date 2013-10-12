@@ -234,6 +234,7 @@ def _unjsonify(x, isattributes=False):
         return feature.Attributes(obj)
     return simplejson.loads(x)
 
+
 def _feature_to_fields(f, jsonify=True):
     """
     Convert feature to tuple, for faster sqlite3 import
