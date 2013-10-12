@@ -55,7 +55,6 @@ class Attributes(collections.MutableMapping):
             self[k] = v
 
 
-
 # Useful for profiling: which dictionary-like class to store attributes in.
 # This is used in Feature below and in parser.py
 
@@ -65,6 +64,10 @@ dict_class = dict
 #dict_class = collections.defaultdict
 #dict_class = collections.OrderedDict
 #dict_class = helper_classes.DefaultListOrderedDict
+
+_position_lookup = dict(enumerate(['seqid', 'source', 'featuretype', 'start',
+                                   'end', 'score', 'strand', 'frame',
+                                   'attributes']))
 
 
 class Feature(object):
@@ -222,18 +225,21 @@ class Feature(object):
                                              loc=memory_loc))
 
     def __getitem__(self, key):
-        # allows x['chrom'].  Is this useful?  Maybe keys should be used to
-        # access attributes, like how pybedtools works.
-        if key in constants._keys:
-            return getattr(self, key)
+        if isinstance(key, int):
+            # TODO: allow access to "extra" fields
+            attr = _position_lookup[key]
+            return getattr(self, attr)
         else:
-            raise KeyError
+            return self.attributes[key]
 
     def __setitem__(self, key, value):
-        if key in constants._keys:
-            self.key = value
+        if isinstance(key, int):
+            # TODO: allow setting of "extra" fields
+            attr = _position_lookup[key]
+            setattr(self, attr, value)
+
         else:
-            raise KeyError
+            self.attributes[key] = value
 
     def __str__(self):
         # All fields but attributes (and extra).
