@@ -90,7 +90,7 @@ def test_update():
     print list(db.all_features())
 
 
-    assert (num_entries > 1), "Only %d left after update" %(num_entries)
+    assert (num_entries > 1), "Only %d left after update" % (num_entries)
 
 
     # Replace

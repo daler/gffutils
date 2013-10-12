@@ -1,7 +1,7 @@
 from .. import parser
 from .. import feature
 from .. import helpers
-
+from .. import constants
 
 def test_feature_from_line():
     # spaces and tabs should give identical results
@@ -95,28 +95,36 @@ def test_repr():
     print hex(id(f))
     assert repr(f) == ("<Feature exon (chr2L:7529-8116[+]) at %s>" % hex(id(f)))
 
-def test_attributes():
-    a = feature.Attributes()
-    a['gene_id'] = ['a']
-    print a
+def test_attribute_order():
 
-
-    attr, dialect = parser._split_keyvals('transcript_id "mRNA1"')
-    print attr._order, attr
-    s = parser._reconstruct(attr, dialect)
-    print s
-
+    # default order is gene_id, transcript_id.  But feature_from_line -- if
+    # dialect not provided -- will infer its own dialect.  In this case,
+    # transcript_id comes first.
+    attributes = 'transcript_id "mRNA1"; gene_id "gene1";'
     a = feature.feature_from_line(
         """
-        chr1	.	mRNA	1	100	.	+	.	transcript_id "mRNA1"
-        """)
-    print a
+        chr1	.	mRNA	1	100	.	+	.	%s
+        """ % attributes)
+    assert str(a) == 'chr1	.	mRNA	1	100	.	+	.	transcript_id "mRNA1"; gene_id "gene1";', str(a)
+
+    # ensure that using the default dialect uses the default order (and
+    # indidentally converts to GFF3 format)
+    orig_dialect = a.dialect
+    a.dialect = constants.dialect
+    assert str(a) == 'chr1	.	mRNA	1	100	.	+	.	gene_id=gene1;transcript_id=mRNA1', str(a)
+
+    # adding an attribute shoud always result in that attribute coming last (as
+    # long as that attribute is not in the dialect order)
+    a['dummy'] = ['asdf']
+    assert str(a) == 'chr1	.	mRNA	1	100	.	+	.	gene_id=gene1;transcript_id=mRNA1;dummy=asdf', str(a)
+
 
 def test_unjsonify():
     attributes, dialect = parser._split_keyvals('transcript_id "mRNA1"')
-    assert isinstance(attributes, feature.Attributes)
-    assert str(attributes) == "transcript_id: ['mRNA1']"
+    assert attributes == {'transcript_id': ['mRNA1']}, attributes
+
     s = helpers._jsonify(attributes)
     assert s == '{"transcript_id":["mRNA1"]}', s
+
     d = helpers._unjsonify(s, isattributes=True)
     assert d == attributes
