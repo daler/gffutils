@@ -9,8 +9,10 @@ import bins
 
 # http://stackoverflow.com/a/3387975
 class Attributes(collections.MutableMapping):
+    '''
+    Mostly like a dictionary, but requires values to be lists
+    '''
     def __init__(self, *args, **kwargs):
-        self._order = []
         self._d = dict()
         self.update(*args, **kwargs)
 
@@ -20,7 +22,6 @@ class Attributes(collections.MutableMapping):
                 'Attribute value "%s" for key "%s" must be a list'
                 % (repr(value), repr(key)))
         self._d[key] = value
-        self._order.append(key)
 
     def __getitem__(self, key):
         return self._d[key]
@@ -35,13 +36,13 @@ class Attributes(collections.MutableMapping):
         return len(self._d)
 
     def keys(self):
-        return self._order
+        return self._d.keys()
 
     def values(self):
-        return [self._d[k] for k in self._order]
+        return self._d.values()
 
     def items(self):
-        return [(k, self._d[k]) for k in self._order]
+        return self._d.items()
 
     def __str__(self):
         s = []
@@ -53,11 +54,13 @@ class Attributes(collections.MutableMapping):
         for k, v in dict(*args, **kwargs).iteritems():
             self[k] = v
 
+
+
 # Useful for profiling: which dictionary-like class to store attributes in.
 # This is used in Feature below and in parser.py
 
-dict_class = Attributes
-#dict_class = dict
+#dict_class = Attributes
+dict_class = dict
 #dict_class = helper_classes.DefaultOrderedDict
 #dict_class = collections.defaultdict
 #dict_class = collections.OrderedDict
@@ -143,11 +146,17 @@ class Feature(object):
         elif end is not None:
             end = int(end)
 
-        # Flexible handling of attributes:
-        # If dict, then use that; otherwise assume JSON; otherwise assume
-        # original string.
         self._orig_attribute_str = None
+
+        # Flexible handling of attributes:
+        # If dict, then use that; otherwise assume JSON and convert to a dict;
+        # otherwise assume original string and convert to a dict.
+        #
+        # dict_class is set at the module level above...this is so you can swap
+        # in and out different dict implementations (ordered, defaultdict, etc)
+        # for testing.
         attributes = attributes or dict_class()
+
         if isinstance(attributes, basestring):
             try:
                 attributes = helpers._unjsonify(attributes, isattributes=True)
@@ -163,7 +172,8 @@ class Feature(object):
                 # Use this dialect if none provided.
                 dialect = dialect or _dialect
 
-        # If string, then assume tab-delimited; otherwise list
+        # If string, then try un-JSONifying it into a list; if that doesn't
+        # work then assume it's tab-delimited and convert to a list.
         extra = extra or []
         if isinstance(extra, basestring):
             try:
@@ -212,6 +222,8 @@ class Feature(object):
                                              loc=memory_loc))
 
     def __getitem__(self, key):
+        # allows x['chrom'].  Is this useful?  Maybe keys should be used to
+        # access attributes, like how pybedtools works.
         if key in constants._keys:
             return getattr(self, key)
         else:
@@ -255,6 +267,8 @@ class Feature(object):
     def __len__(self):
         return self.stop - self.start + 1
 
+    # aliases for official GFF field names; this way x.chrom == x.seqid; and
+    # x.start == x.end.
     @property
     def chrom(self):
         return self.seqid
@@ -272,6 +286,10 @@ class Feature(object):
         self.end = value
 
     def astuple(self):
+        """
+        Return a tuple suitable for import into a database, with attributes
+        field and extra field jsonified into strings
+        """
         t = []
         for i in constants._keys:
             v = getattr(self, i)

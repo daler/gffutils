@@ -58,14 +58,21 @@ class FeatureDB(object):
         """
         # Since specifying the string ":memory:" will actually try to connect
         # to a new, separate (and empty) db in memory, we can alternatively
-        # pass in a _DBCreator instance to use its db.
+        # pass in a _DBCreator instance to use its existing, in-memory db.
         if isinstance(dbfn, create._DBCreator):
+            # Save a reference to it, so that if we call the update() methood
+            # below, it will update this db.  TODO: is this needed?
             self._DBCreator_instance = dbfn
+
+            # If in-memory, then use it's connection
             if dbfn.dbfn == ':memory:':
                 self.conn = dbfn.conn
+
+            # otherwise make a new connection to the file
             else:
                 self.dbfn = dbfn.dbfn
                 self.conn = sqlite3.connect(self.dbfn)
+        # otherwise assume dbfn is a string.
         else:
             self.dbfn = dbfn
             self.conn = sqlite3.connect(self.dbfn)
@@ -76,6 +83,8 @@ class FeatureDB(object):
         c = self.conn.cursor()
 
         # Load some meta info
+        # TODO: this is a good place to check for previous versions, and offer
+        # to upgrade...
         c.execute(
             '''
             SELECT version, dialect FROM meta
@@ -92,8 +101,8 @@ class FeatureDB(object):
         self.directives = [directive[0] for directive in c if directive]
 
         # Load autoincrements so that when we add new features, we can start
-        # autoincrementing from here (instead of from 1, which would cause name
-        # collisions)
+        # autoincrementing from where we last left off (instead of from 1,
+        # which would cause name collisions)
         c.execute(
             '''
             SELECT base, n FROM autoincrements
@@ -121,6 +130,7 @@ class FeatureDB(object):
         c = self.conn.cursor()
         c.execute(constants._SELECT + ' WHERE id = ?', (key,))
         results = c.fetchall()
+        # TODO: raise error if more than one key is found
         if len(results) != 1:
             raise helpers.FeatureNotFoundError(key)
         return Feature(dialect=self.dialect, **results[0])
@@ -178,22 +188,16 @@ class FeatureDB(object):
         for i in self._execute(query, args):
             yield Feature(dialect=self.dialect, **i)
 
-    def iter_by_parent_childs(self, featuretype="gene"):
+    # TODO: convert this to a syntax similar to itertools.groupby
+    def iter_by_parent_childs(self, featuretype="gene", level=None,
+                              order_by=None, reverse=False,
+                              completely_within=False):
         """
-        Iterate through GFF database by parent-child units. Return
-        a generator where each item is a feature of 'featuretype'
-        and all of its children. For example, when featuretype is gene,
-        this returns a generator where each item is a list of records
-        belonging to a gene (where the first record is the 'gene' record)
-        itself.
+        For each parent of type `featuretype`, yield a list L of that parent and
+        all of its children. The parent will always be L[0].
 
-        TODO: Maybe add option to limit this by depth?
-
-        Alternative names:
-          iter_by_parent_children
-          iter_by_parent_childs
-          iter_by_parent_unit
-          iter_by_unit
+        Additional kwargs are passed to :meth:`FeatureDB.children`, and will
+        therefore only affect items L[1:] in each yielded list.
         """
         # Get all the parent records of the requested feature type
         parent_recs = self.all_features(featuretype=featuretype)
@@ -239,6 +243,10 @@ class FeatureDB(object):
 
     def _relation(self, id, join_on, join_to, level=None, featuretype=None,
                   order_by=None, reverse=False, completely_within=False):
+
+        # The following docstring will be included in the parents() and children()
+        # docstrings to maintain consistency, since they both delegate to this
+        # method.
         """
         Parameters
         ----------
@@ -286,8 +294,8 @@ class FeatureDB(object):
     def children(self, id, level=None, featuretype=None, order_by=None,
                  reverse=False, completely_within=False):
         """
-        Return children of feature `id`.
-
+        Return children of feature `id`, subject to various optional
+        constraints.
         {_relation_docstring}
         """
         return self._relation(
@@ -298,8 +306,8 @@ class FeatureDB(object):
     def parents(self, id, level=None, featuretype=None, order_by=None,
                 reverse=False, completely_within=False):
         """
-        Return parents of feature `id`.
-
+        Return parents of feature `id`, subject to various optional
+        constraints.
         {_relation_docstring}
         """
         return self._relation(
@@ -412,8 +420,8 @@ class FeatureDB(object):
 
         Providing N features will return N - 1 new features.
 
-        This method purposefully does *not* do any merging or sorting, so you
-        may want to use :meth:`FeatureDB.merge` first.
+        This method purposefully does *not* do any merging or sorting of
+        coordinates, so you may want to use :meth:`FeatureDB.merge` first.
 
         The new features' attributes will be a merge of the neighboring
         features' attributes.  This is useful if you have provided a list of
