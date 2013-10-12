@@ -131,20 +131,20 @@ class BaseDB(object):
     def setup(self):
 
         def gff_id_func(f):
-            if 'ID' in f['attributes']:
-                return f['attributes']['ID'][0]
-            elif 'Name' in f['attributes']:
-                return f['attributes']['Name'][0]
+            if 'ID' in f.attributes:
+                return f.attributes['ID'][0]
+            elif 'Name' in f.attributes:
+                return f.attributes['Name'][0]
             else:
                 return '{0.featuretype}:{0.seqid}:{0.start}-{0.end}:{0.strand}'.format(f)
 
         def gtf_id_func(f):
-            if f['featuretype'] == 'gene':
-                if 'gene_id' in f['attributes']:
-                    return f['attributes']['gene_id'][0]
-            elif f['featuretype'] == 'transcript':
-                if 'transcript_id' in f['attributes']:
-                    return f['attributes']['transcript_id'][0]
+            if f.featuretype == 'gene':
+                if 'gene_id' in f.attributes:
+                    return f.attributes['gene_id'][0]
+            elif f.featuretype == 'transcript':
+                if 'transcript_id' in f.attributes:
+                    return f.attributes['transcript_id'][0]
             else:
                 return '{0.featuretype}:{0.seqid}:{0.start}-{0.end}:{0.strand}'.format(f)
 
