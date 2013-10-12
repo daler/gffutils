@@ -12,6 +12,7 @@ import os
 import tempfile
 import itertools
 from feature import Feature, feature_from_line
+from textwrap import dedent
 
 
 def peek(it, n):
@@ -119,13 +120,13 @@ class FeatureIterator(BaseIterator):
 
 class StringIterator(FileIterator):
     def _custom_iter(self):
-        tmp = tempfile.NamedTemporaryFile(delete=False)
-        tmp.write(self.data)
-        tmp.close()
-        self.data = tmp.name
+        self.tmp = tempfile.NamedTemporaryFile(delete=False)
+        self.tmp.write(dedent(self.data))
+        self.tmp.close()
+        self.data = self.tmp.name
         for feature in super(StringIterator, self)._custom_iter():
             yield feature
-        os.unlink(tmp.name)
+        os.unlink(self.tmp.name)
 
 
 def DataIterator(data, checklines=10, transform=None,
