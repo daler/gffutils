@@ -221,6 +221,9 @@ def _split_keyvals(keyval_str, dialect=None):
                     "some have repeated keys, some do not.")
             quals[key].extend(vals)
 
+        # keep track of the order of keys
+        dialect['order'].append(key)
+
     #for key, vals in quals.items():
     #
         # TODO: urllib.unquote breaks round trip invariance for "hybrid1.gff3"
