@@ -46,10 +46,16 @@ Many :class:`FeatureDB` methods return :class:`Feature` objects:
     gffutils.Feature
 
 
-If you'd like to parse GFF/GTF files yourself, try the :class:`Parser` class:
+Utilities
+---------
 
 .. autosummary::
     :toctree: autodocs
 
-    gffutils.Parser
-    gffutils.Parser.show_warnings
+    gffutils.helpers.asinterval
+    gffutils.helpers.merge_attributes
+    gffutils.helpers.sanitize_gff_db
+    gffutils.helpers.annotate_gff_db
+    gffutils.helpers.infer_dialect
+    gffutils.helpers.example_filename
+
