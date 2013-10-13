@@ -12,12 +12,29 @@ import tempfile
 import gffutils
 import gffutils.gffwriter as gffwriter
 import feature
+import parser
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 
 def example_filename(fn):
     return os.path.join(HERE, 'test', 'data', fn)
+
+
+def infer_dialect(attributes):
+    """
+    Infer the dialect based on the attributes.
+
+    Parameters
+    ----------
+    attributes : str or iterable
+        A single attributes string from a GTF or GFF line, or an iterable of
+        such strings.
+    """
+    if isinstance(attributes, basestring):
+        attributes = [attributes]
+    dialects = [parser._split_keyvals(i)[1] for i in attributes]
+    return _choose_dialect(dialects)
 
 
 def _choose_dialect(dialects):
