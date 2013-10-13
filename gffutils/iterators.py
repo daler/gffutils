@@ -12,6 +12,7 @@ import os
 import tempfile
 import itertools
 from feature import Feature, feature_from_line
+import helpers
 from textwrap import dedent
 
 
@@ -53,14 +54,14 @@ class BaseIterator(object):
             self._iter = self._custom_iter()
         elif dialect is not None:
             self._observed_dialects = [dialect]
-            self.dialect = dialect
+            self.dialect = helpers._choose_dialect(self._observed_dialects)
             self._iter = self._custom_iter()
         else:
             # Otherwise, check some lines to determine what the dialect should
             # be
             self.peek, self._iter = peek(self._custom_iter(), checklines)
             self._observed_dialects = [i.dialect for i in self.peek]
-            self.dialect = self._choose_dialect(self._observed_dialects)
+            self.dialect = helpers._choose_dialect(self._observed_dialects)
 
     def _custom_iter(self):
         raise NotImplementedError("Must define in subclasses")
@@ -72,15 +73,6 @@ class BaseIterator(object):
                 yield self.transform(i)
             else:
                 yield i
-
-    def _choose_dialect(self, dialects):
-        # Do something easy for now; eventually some heuruistics here? Or at
-        # least choose the most common dialect observed.  Can use
-        # helpers.dialect_compare.
-        try:
-            return dialects[0]
-        except IndexError:
-            return None
 
     def _directive_handler(self, directive):
         self.directives.append(directive[2:])

@@ -20,6 +20,35 @@ def example_filename(fn):
     return os.path.join(HERE, 'test', 'data', fn)
 
 
+def _choose_dialect(dialects):
+    """
+    Given a list of dialects, choose the one to use as the "canonical" version.
+
+    If `dialects` is an empty list, then use the default GFF3 dialect
+
+    Parameters
+    ----------
+    dialects : iterable
+        iterable of dialect dictionaries
+    """
+    # NOTE: can use helpers.dialect_compare if you need to make this more
+    # complex....
+
+    # For now, this function favors the first dialect, and then appends the
+    # order of additional fields seen in the attributes of other lines giving
+    # priority to dialects that come first in the iterable.
+    if len(dialects) == 0:
+        return constants.dialect
+    final_order = []
+    for dialect in dialects:
+        for o in dialect['order']:
+            if o not in final_order:
+                final_order.append(o)
+    dialect = dialects[0]
+    dialect['order'] = final_order
+    return dialect
+
+
 def make_query(args, other=None, limit=None, strand=None, featuretype=None,
                extra=None, order_by=None, reverse=False,
                completely_within=False):
