@@ -116,7 +116,7 @@ class _DBCreator(object):
             else:
                 try:
                     return f.attributes[k][0]
-                except KeyError:
+                except (KeyError, IndexError):
                     pass
         # If we get here, then default autoincrement
         return self._increment_featuretype_autoid(f.featuretype)
