@@ -12,12 +12,58 @@ import tempfile
 import gffutils
 import gffutils.gffwriter as gffwriter
 import feature
+import parser
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 
 def example_filename(fn):
     return os.path.join(HERE, 'test', 'data', fn)
+
+
+def infer_dialect(attributes):
+    """
+    Infer the dialect based on the attributes.
+
+    Parameters
+    ----------
+    attributes : str or iterable
+        A single attributes string from a GTF or GFF line, or an iterable of
+        such strings.
+    """
+    if isinstance(attributes, basestring):
+        attributes = [attributes]
+    dialects = [parser._split_keyvals(i)[1] for i in attributes]
+    return _choose_dialect(dialects)
+
+
+def _choose_dialect(dialects):
+    """
+    Given a list of dialects, choose the one to use as the "canonical" version.
+
+    If `dialects` is an empty list, then use the default GFF3 dialect
+
+    Parameters
+    ----------
+    dialects : iterable
+        iterable of dialect dictionaries
+    """
+    # NOTE: can use helpers.dialect_compare if you need to make this more
+    # complex....
+
+    # For now, this function favors the first dialect, and then appends the
+    # order of additional fields seen in the attributes of other lines giving
+    # priority to dialects that come first in the iterable.
+    if len(dialects) == 0:
+        return constants.dialect
+    final_order = []
+    for dialect in dialects:
+        for o in dialect['order']:
+            if o not in final_order:
+                final_order.append(o)
+    dialect = dialects[0]
+    dialect['order'] = final_order
+    return dialect
 
 
 def make_query(args, other=None, limit=None, strand=None, featuretype=None,
@@ -222,19 +268,17 @@ class AttributesEncoder(JSONEncoder):
 
 def _jsonify(x):
     """Use most compact form of JSON"""
-    if isinstance(x, feature.Attributes):
-        return simplejson.dumps(x, separators=(',', ':'),
-                                cls=AttributesEncoder)
+    if isinstance(x, feature.dict_class):
+        return simplejson.dumps(x, separators=(',', ':'))
     return simplejson.dumps(x, separators=(',', ':'))
 
 
 def _unjsonify(x, isattributes=False):
     """Convert JSON string to an ordered defaultdict."""
     if isattributes:
-        return simplejson.loads(
-            x, object_pairs_hook=feature.Attributes)
-    else:
-        return simplejson.loads(x)
+        obj = simplejson.loads(x)
+        return feature.dict_class(obj)
+    return simplejson.loads(x)
 
 
 def _feature_to_fields(f, jsonify=True):

@@ -44,6 +44,16 @@ def _reconstruct(keyvals, dialect):
     else:
         items = keyvals.items()
 
+    def sort_key(x):
+        # sort keys by their order in the dialect; anything not in there will
+        # be in arbitrary order at the end.
+        try:
+            return dialect['order'].index(x[0])
+        except ValueError:
+            return 1e6
+
+    items.sort(key=sort_key)
+
     for key, val in items:
 
         # Multival sep is usually a comma:
@@ -154,6 +164,10 @@ def _split_keyvals(keyval_str, dialect=None):
         return quals, dialect
 
     # If we got here, then we need to infer the dialect....
+    #
+    # Reset the order to an empty list so that it will only be populated with
+    # keys that are found in the file.
+    dialect['order'] = []
 
     # ensembl GTF has trailing semicolon
     if keyval_str[-1] == ';':
@@ -220,6 +234,9 @@ def _split_keyvals(keyval_str, dialect=None):
                     "Internally inconsistent attributes formatting: "
                     "some have repeated keys, some do not.")
             quals[key].extend(vals)
+
+        # keep track of the order of keys
+        dialect['order'].append(key)
 
     #for key, vals in quals.items():
     #

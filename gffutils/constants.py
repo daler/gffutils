@@ -114,4 +114,8 @@ dialect = {
     #
     # (the first one has repeated keys)
     'repeated keys': False,
+
+    # If these keys exist, then print them in this order.
+    'order': ['ID', 'Name', 'gene_id', 'transcript_id'],
+
 }

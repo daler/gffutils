@@ -71,10 +71,7 @@ class _DBCreator(object):
         """
         Given a Feature from self.iterator, figure out what the ID should be.
 
-        `_autoincrement_key` is which field to use that will be
-        auto-incremented.  Typically this will be "feature" (for exon_1,
-        exon_2, etc), but another useful one is "id", which is is used for
-        duplicate IDs.
+        This uses `self.id_spec` identify the ID.
         """
 
         # If id_spec is a string, convert to iterable for later
@@ -119,7 +116,7 @@ class _DBCreator(object):
             else:
                 try:
                     return f.attributes[k][0]
-                except KeyError:
+                except (KeyError, IndexError):
                     pass
         # If we get here, then default autoincrement
         return self._increment_featuretype_autoid(f.featuretype)
@@ -135,20 +132,20 @@ class _DBCreator(object):
         Different merge strategies upon name conflicts.
 
         "error":
-            raise error
+            Raise error
 
         "warning"
-            show warning
+            Log a warning
 
         "merge":
-            combine old and new attributes -- but only if everything else
+            Combine old and new attributes -- but only if everything else
             matches; otherwise error.  This can be slow, but is thorough.
 
         "create_unique":
-            Autoincrement based on the ID
+            Autoincrement based on the ID, always creating a new ID.
 
         "replace":
-            Replaces existing feature with `f`.
+            Replaces existing database feature with `f`.
         """
         if self.merge_strategy == 'error':
             raise ValueError("Duplicate ID {0.id}".format(f))
@@ -342,7 +339,6 @@ class _GFFDBCreator(_DBCreator):
                             INSERT OR IGNORE INTO relations VALUES
                             (?, ?, 1)
                             ''', (parent, f.id))
-
 
             else:
                 _features.append(f.astuple())

@@ -243,8 +243,8 @@ the parser.  This will modify the data upon import into the database:
 
 >>> def transform_func(x):
 ...     # adds some text to the end of transcript IDs
-...     if 'transcript_id' in x['attributes']:
-...         x['attributes']['transcript_id'][0] += '_transcript'
+...     if 'transcript_id' in x.attributes:
+...         x.attributes['transcript_id'][0] += '_transcript'
 ...     return x
 
 
@@ -272,7 +272,7 @@ end because of that transform function:
 <Feature transcript (I:12759579-12764949[-]) at 0x...>
 
 >>> print t  #doctest:+NORMALIZE_WHITESPACE
-I	gffutils_derived	transcript	12759579	12764949	.	-	.	transcript_id "B0019.1_transcript"; gene_id "B0019.1";
+I	gffutils_derived	transcript	12759579	12764949	.	-	.	gene_id "B0019.1"; transcript_id "B0019.1_transcript";
 
 How many annotated transcripts are there for this gene?
 
@@ -364,14 +364,14 @@ File contents
 Import
 ``````
 >>> def transform(f):
-...     if f['featuretype'] == 'gene':
+...     if f.featuretype == 'gene':
 ...         return f
-...     elif "RNA" in f['featuretype']:
-...         f['attributes']['ID'][0] += '_transcript'
+...     elif "RNA" in f.featuretype:
+...         f.attributes['ID'][0] += '_transcript'
 ...     else:
-...         if 'Parent' in f['attributes']:
-...             f['attributes']['Parent'] \
-...                = [i + '_transcript' for i in f['attributes']['Parent']]
+...         if 'Parent' in f.attributes:
+...             f.attributes['Parent'] \
+...                = [i + '_transcript' for i in f.attributes['Parent']]
 ...     return f
 ...
 
@@ -386,11 +386,11 @@ to the calling code to decide how to handle this (say, by checking for the
 presence of the key "Complete".
 
 
->>> for k, v in db['GL0000007'].attributes.items():
+>>> for k, v in sorted(db['GL0000007'].attributes.items()):
 ...     print k, '=', v
+Complete = []
 ID = ['GL0000007']
 Name = ['GL0000007']
-Complete = []
 
 This illustrates that the CDS finds the proper transcript parent.
 
@@ -431,12 +431,12 @@ Import
 Access
 ``````
 
->>> for k, v in db['A00469'].attributes.items():
+>>> for k, v in sorted(db['A00469'].attributes.items()):
 ...     print k, '=', v
-ID = ['A00469']
-Dbxref = ['AFFX-U133:205840_x_at', 'Locuslink:2688', 'Genbank-mRNA:A00469', 'Swissprot:P01241', 'PFAM:PF00103', 'AFFX-U95:1332_f_at', 'Swissprot:SOMA_HUMAN']
-Note = ['growth%20hormone%201']
 Alias = ['GH1']
+Dbxref = ['AFFX-U133:205840_x_at', 'Locuslink:2688', 'Genbank-mRNA:A00469', 'Swissprot:P01241', 'PFAM:PF00103', 'AFFX-U95:1332_f_at', 'Swissprot:SOMA_HUMAN']
+ID = ['A00469']
+Note = ['growth%20hormone%201']
 
 .. _jgi_gff2.txt:
 
@@ -550,10 +550,10 @@ Import
 ``````
 
 >>> def transform(f):
-...     if f['featuretype'] in ['coding_exon', 'intron']:
-...         _id = f['attributes']['CDS'][0]
-...         f['attributes']['gene_id'] = [_id]
-...         f['attributes']['transcript_id'] = [_id + '_transcript']
+...     if f.featuretype in ['coding_exon', 'intron']:
+...         _id = f.attributes['CDS'][0]
+...         f.attributes['gene_id'] = [_id]
+...         f.attributes['transcript_id'] = [_id + '_transcript']
 ...     return f
 
 >>> fn = gffutils.example_filename('wormbase_gff2_alt.txt')
@@ -598,10 +598,13 @@ File contents
 Import
 ``````
 >>> def transform(f):
-...     if f['featuretype'] == 'Transcript':
-...         f['attributes']['Parent'] = f['attributes']['Gene']
+...     if f.featuretype == 'Transcript':
+...         f.attributes['Parent'] = f.attributes['Gene']
 ...     else:
-...         f['attributes']['Parent'] = f['attributes']['Transcript']
+...         try:
+...             f.attributes['Parent'] = f.attributes['Transcript']
+...         except KeyError:
+...             pass
 ...     return f
 
 >>> fn = gffutils.example_filename('wormbase_gff2.txt')
@@ -613,20 +616,37 @@ to the default.
 
 `force_dialect_check=True` is needed in this case if we want to be able to have
 the parents of the `SAGE_tag` features be recognized, because the attributes
-for `SAGE_tag` features are formatted differently.
+for `SAGE_tag` features are formatted differently.  That is, they don't have
+quoted values, and the separating semicolon does not have a space on either
+side as is the case for the other features.
 
 >>> db = gffutils.create_db(fn, ":memory:", transform=transform, id_spec={'Transcript': "Transcript"}, force_gff=True, force_dialect_check=True)
+
+The dialect for the database will be None:
+
 >>> db.dialect
+
+For cases like this, we should probably construct our own dialog to force all
+attributes to have the same format.  To help with this, we can use the
+:func:`helpers.infer_dialect` function by providing attributes:
+
+>>> from gffutils import helpers
+>>> dialect = helpers.infer_dialect([
+... 'Transcript "B0019.1" ; WormPep "WP:CE40797" ; Note "amx-2" ; Prediction_status "Partially_confirmed" ; Gene "WBGene00000138" ; CDS "B0019.1" ; WormPep "WP:CE40797" ; Note "amx-2" ; Prediction_status "Partially_confirmed" ; Gene "WBGene00000138"',
+... ])
+
+>>> db.dialect = dialect
+
 
 Access
 ``````
 >>> t = db["B0019.1"]
 
-Note that since the dialect defaults to GFF3, the attributes appear differently
-here than in the original file:
+Since we've set the dialect for the database, any features returned from the
+database should follow that dialect:
 
 >>> print t  #doctest:+NORMALIZE_WHITESPACE
-I	Coding_transcript	Transcript	12759582	12764949	.	-	.	Transcript=B0019.1;WormPep=WP:CE40797,WP:CE40797;Note=amx-2,amx-2;Prediction_status=Partially_confirmed,Partially_confirmed;Gene=WBGene00000138,WBGene00000138;CDS=B0019.1;Parent=WBGene00000138,WBGene00000138
+I	Coding_transcript	Transcript	12759582	12764949	.	-	.	Transcript "B0019.1" ; WormPep "WP:CE40797" ; WormPep "WP:CE40797" ; Note "amx-2" ; Note "amx-2" ; Prediction_status "Partially_confirmed" ; Prediction_status "Partially_confirmed" ; Gene "WBGene00000138" ; Gene "WBGene00000138" ; CDS "B0019.1" ; Parent "WBGene00000138" ; Parent "WBGene00000138"
 
 >>> len(list(db.children(t, featuretype='exon')))
 15

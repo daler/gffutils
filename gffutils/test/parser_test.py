@@ -88,7 +88,7 @@ def test_empty_recontruct():
 
 def test_empty_split_keyvals():
     attrs, dialect = parser._split_keyvals(keyval_str=None)
-    assert attrs == helpers.DefaultListOrderedDict()
+    assert attrs == feature.dict_class()
     assert dialect == constants.dialect
 
 def test_repeated_keys_conflict():
@@ -149,4 +149,8 @@ def test_inconsistent_dialect():
     # before, was ['"mRNA1'] -- note extra "
     assert items[1].attributes['transcript_id'] == ['mRNA1'], items[1].attributes['transcript_id']
 
+def test_attributes():
+    s = "chr2L	FlyBase	mRNA	7529	9484	.	+	.	ID=FBtr0300690;Name=CG11023-RC;Parent=FBgn0031208;"
+    f = feature.feature_from_line(s)
+    assert str(f) == s, str(f)
 
