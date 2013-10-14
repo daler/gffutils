@@ -296,13 +296,11 @@ class Feature(object):
         Return a tuple suitable for import into a database, with attributes
         field and extra field jsonified into strings
         """
-        t = []
-        for i in constants._keys:
-            v = getattr(self, i)
-            if i in ('attributes', 'extra'):
-                v = helpers._jsonify(v)
-            t.append(v)
-        return tuple(t)
+        return (
+            self.id, self.seqid, self.source, self.featuretype, self.start, self.end, self.score,
+            self.strand, self.frame, helpers._jsonify(self.attributes), helpers._jsonify(self.extra),
+            self.bin
+        )
 
 
 def feature_from_line(line, dialect=None):
