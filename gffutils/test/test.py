@@ -31,7 +31,7 @@ def test_update():
 
     f = feature.feature_from_line(
         'chr2L . testing 1 10 . + . ID=testing_feature;n=1',
-        dialect=db.dialect)
+        dialect=db.dialect, strict=False)
 
     # no merge strategy required because we're adding a new feature
     db.update([f])
@@ -47,7 +47,7 @@ def test_update():
     # which appends items to attributes ( n=1 --> n=1,2 )
     f = feature.feature_from_line(
         'chr2L . testing 1 10 . + . ID=testing_feature;n=1',
-        dialect=db.dialect)
+        dialect=db.dialect, strict=False)
     f.attributes['n'] = ['2']
     db.update([f], merge_strategy='merge')
     x = list(db.features_of_type('testing'))
@@ -96,7 +96,7 @@ def test_update():
     # Replace
     f = feature.feature_from_line(
         'chr2L . testing 1 10 . + . ID=testing_feature;n=1',
-        dialect=db.dialect)
+        dialect=db.dialect, strict=False)
     f.attributes['n'] = ['3']
     db.update([f], merge_strategy='replace')
     x = list(db.features_of_type('testing'))
@@ -111,7 +111,7 @@ def test_update():
     db = create.create_db(
         example_filename('FBgn0031208.gtf'), ':memory:', verbose=False,
         force=True)
-    f = feature.feature_from_line('chr2L . testing 1 10 . + . gene_id "fake"; n "1"')
+    f = feature.feature_from_line('chr2L . testing 1 10 . + . gene_id "fake"; n "1"', strict=False)
     db.update([f], merge_strategy='merge')
     x = list(db.features_of_type('testing'))
     assert len(x) == 1

@@ -303,33 +303,43 @@ class Feature(object):
         )
 
 
-def feature_from_line(line, dialect=None):
+
+def feature_from_line(line, dialect=None, strict=True):
     """
     Given a line from a GFF file, return a Feature object
 
     Parameters
     ----------
-    `line`: string
-        As long as there are only 9 fields (standard GFF/GTF), then it's OK to
-        use spaces instead of tabs to separate fields in `line`.  But if >9
-        fields are to be used, then tabs must be used.
+    line : string
 
-        It's also OK to use triple-quoted strings as long as there is only one
-        non-empty line.
+    strict : bool
+        If True (default), assume `line` is a single, tab-delimited string that
+        has at least 9 fields.
+
+        If False, then the input can have a more flexible format, useful for
+        creating single ad hoc features or for writing tests.  In this case,
+        `line` can be a multi-line string (as long as it has a single non-empty
+        line), and, as long as there are only 9 fields (standard GFF/GTF), then
+        it's OK to use spaces instead of tabs to separate fields in `line`.
+        But if >9 fields are to be used, then tabs must be used.
     """
-    lines = line.splitlines(False)
-    _lines = []
-    for i in lines:
-        i = i.strip()
-        if len(i) > 0:
-            _lines.append(i)
+    if not strict:
+        lines = line.splitlines(False)
+        _lines = []
+        for i in lines:
+            i = i.strip()
+            if len(i) > 0:
+                _lines.append(i)
 
-    assert len(_lines) == 1, _lines
-    line = _lines[0]
-    if '\t' in line:
-        fields = line.rstrip('\n\r').split('\t')
+        assert len(_lines) == 1, _lines
+        line = _lines[0]
+
+        if '\t' in line:
+            fields = line.rstrip('\n\r').split('\t')
+        else:
+            fields = line.rstrip('\n\r').split(None, 8)
     else:
-        fields = line.rstrip('\n\r').split(None, 8)
+        fields = line.rstrip('\n\r').split('\t')
     try:
         attr_string = fields[8]
     except IndexError:

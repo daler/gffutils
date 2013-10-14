@@ -454,7 +454,7 @@ class FeatureDB(object):
         ... "chr1 . exon 200 250 . + . ID=exon2; Parent=mRNA1",
         ... "chr1 . exon 500 600 . + . ID=exon3; Parent=mRNA1",
         ... ]
-        >>> features = [feature_from_line(i) for i in features]
+        >>> features = [feature_from_line(i, strict=False) for i in features]
         >>> for i in FeatureDB.interfeatures(
         ... features, new_featuretype="intron"):
         ...     print i  # doctest: +NORMALIZE_WHITESPACE

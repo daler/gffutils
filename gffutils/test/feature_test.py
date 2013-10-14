@@ -7,8 +7,8 @@ def test_feature_from_line():
     # spaces and tabs should give identical results
     line1 = "chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690"
     line2 = "chr2L FlyBase exon 7529 8116 . + . Name=CG11023:1;Parent=FBtr0300689,FBtr0300690"
-    assert feature.feature_from_line(line1) == \
-            feature.feature_from_line(line2)
+    assert feature.feature_from_line(line1, strict=False) == \
+            feature.feature_from_line(line2, strict=False)
 
 
 def test_default_feature():
@@ -72,7 +72,7 @@ def test_string_representation():
 
 def test_pbt_interval_conversion():
     line = "chr2L FlyBase exon 7529 8116 . + . Name=CG11023:1;Parent=FBtr0300689,FBtr0300690"
-    f = feature.feature_from_line(line)
+    f = feature.feature_from_line(line, strict=False)
     pbt = helpers.asinterval(f)
     assert pbt.chrom == f.chrom == f.seqid
     assert pbt.start == f.start -1
@@ -104,7 +104,7 @@ def test_attribute_order():
     a = feature.feature_from_line(
         """
         chr1	.	mRNA	1	100	.	+	.	%s
-        """ % attributes)
+        """ % attributes, strict=False)
     assert str(a) == 'chr1	.	mRNA	1	100	.	+	.	transcript_id "mRNA1"; gene_id "gene1";', str(a)
 
     # ensure that using the default dialect uses the default order (and
