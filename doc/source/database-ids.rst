@@ -3,9 +3,8 @@
 
 Database IDs
 ============
-A :term:`primary key` is a unique identifier used in a database.  When
-importing a GFF or GTF file with :mod:`gffutils` into a database, each unique
-feature in the file should have its own primary key.
+Each feature in a GFF or GTF file needs to have a unique identifier to be used
+as a :term:`primary key` in the database.
 
 Primary keys are important because they are used to retrieve information from
 the database using dictionary syntax.  For example in the :ref:`introduction`,
@@ -13,9 +12,10 @@ the example file has a line like this::
 
     chr2L   FlyBase gene    7529    9484    .       +       .       ID=FBgn0031208;Name=CG11023;
 
-By default the primary key GFF3 features (like this one) is the "ID" field of
-the attributes.  So the unique key used for the database for this feature is
-`FBgn0031208`.  This means we can access the gene from the database like this::
+By default, the primary key for GFF3-format features (like this one) is the
+"ID" field of the attributes.  So the unique key used for the database for this
+feature is `FBgn0031208`.  This means we can access the gene from the database
+like this::
 
     gene = db['FBgn0031208']
 
@@ -35,43 +35,46 @@ IDs like this::
 
     utrs = db.children('FBgn0031208', featuretype='five_prime_UTR')
 
-If your input GFF or GTF file is formatted in the canonical way, the default
-settings should work fine.  The rest of this section details strategies for
-instructing :mod:`gffutils` to use the most meaningful primary key for your
-particular input file.
+This shows that, depending on your particular use-case, it may be sufficient to
+have easy-to-use primary keys just for the genes, and it doesn't matter so much
+what the other features have.  However, this is not always the case.  The rest
+of this section details strategies for instructing :mod:`gffutils` to use the
+most meaningful primary key for your particular input file.
 
 
 `id_spec`
 ---------
-The `id_spec` (ID specification) kwarg determines how to extract information
+The `id_spec` (ID specification) argument determines how to extract information
 from each line in order to construct a unique ID for the feature.  It can have
-several different forms -- None, string, list, dictionary, or callable.
+several different forms -- None, string, list, dictionary, or callable.  They
+have the following effects:
 
 :None:
     The primary key for each feature will be an auto-incremented version of the
-    feature type (e.g., "gene_1", "gene_2", etc).
+    feature type (e.g., "gene_1", "gene_2", etc).  This is also the fallback
+    mode when other methods (string, list, dict, or callable) fail.
 
 :string:
-    Use the attribute value.
+    Use the attribute value specified in the string.
 
-    For example, `id_spec="ID"`. The primary key for each feature will be the
-    value of the "ID" attribute.  If this is not found, then an
-    auto-incremented version of the feature type is used
+    For example, using `id_spec="ID"` means that the primary key for each
+    feature will be the value of the "ID" attribute.  If this is not found,
+    then an auto-incremented version of the feature type is used
 
 :list:
 
     Use the first available attribute value from the list.
 
-    For example, `id_spec=["ID", "Name"]`: the primary key for each feature
-    will be the value of the "ID" attribute.  If no "ID" attribute is found,
-    then use the value of the "Name" field.  If this is not found, then an
-    auto-incremented version of the feature type is used.
+    For example, using `id_spec=["ID", "Name"]` means that the primary key for
+    each feature will be the value of the "ID" attribute.  If no "ID" attribute
+    is found, then use the value of the "Name" field.  If this is not found
+    either, then an auto-incremented version of the feature type is used.
 
 :dict:
 
     Use different strategies according to the featuretype.
 
-    For example, `id_spec={"gene": "Name", "mRNA": ["ID", "transcript_id"]}`:
+    Example: `id_spec={"gene": "Name", "mRNA": ["ID", "transcript_id"]}`
 
     * For "gene" features, the primary key will be the value of the "Name" attribute.
       If this is not found, then use an auto-incremented version of "gene".
@@ -82,18 +85,24 @@ several different forms -- None, string, list, dictionary, or callable.
     * For any other feature, the primary key will be the an auto-incremented version fo
       the feature type.
 
+.. seealso::
+
+    The examples :ref:`jgi_gff2.txt` and :ref:`ncbi_gff3.txt` illustrate the
+    use of custom `id_spec` dictionaries.
+
 :special string:
 
     Use a GFF field value (from the first 8 columns) rather than an attributes
     value.  Must be surrounded by `:`.
 
-    For example, `id_spec=":seqid:"`:  use the "seqid" field as the primary
+    For example, `id_spec=":seqid:"` would use the "seqid" field as the primary
     key.
 
-    .. seealso::
+.. seealso::
 
-        :ref:`parser-dictionaries` has more info about the keys that are
-        available.
+    The example :ref:`F3-unique-3.v2.gff` illustrates the use of
+    `id_spec=:seqid:`.
+
 
 :function:
 
@@ -123,13 +132,6 @@ in the original file, :mod:`gffutils` infers the gene and transcript boundaries
 (as described in :ref:`gtf`, and will use this `id_spec` for those inferred
 regions.
 
-
-.. seealso::
-
-    * The example :ref:`F3-unique-3.v2.gff` illustrates the use of
-      `id_spec=:seqid:`.
-    * The examples :ref:`jgi_gff2.txt` and :ref:`ncbi_gff3.txt` illustrate the use of custom `id_spec`
-      dictionaries.
 
 `transform`
 ~~~~~~~~~~~
