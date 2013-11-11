@@ -536,7 +536,7 @@ class _GTFDBCreator(_DBCreator):
             '''
             SELECT DISTINCT firstlevel.parent, relations.parent
             FROM (
-                SELECT DISTINCT relations.parent
+                SELECT DISTINCT parent
                 FROM relations
                 JOIN features ON features.id = relations.child
                 WHERE features.featuretype = ?
