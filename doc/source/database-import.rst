@@ -18,6 +18,5 @@ particular file.
 In the end, we need to assign unique IDs to each feature in the file (which is
 used as the primary key for the :ref:`featurestable`, which can get tricky
 depending on your GFF or GTF file.  The section :ref:`database-ids` details
-these settings.
-
-
+these settings, and the :ref:`examples` show all sorts of tricks for getting
+improperly-formatted files to work with :mod:`gffutils`.

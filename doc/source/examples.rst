@@ -2,178 +2,167 @@
 
 Examples
 --------
+
+
+Often, GTF/GFF files have non-standard formatting.  While :mod:`gffutils` is
+set up to handle standard formatting by default, it also allows great
+flexibility for working with non-standard files.  These examples collect
+various real-world, difficult-to-work-with files and show how to make them work
+with :mod:`gffutils`.  If you have a troublesome file, the best thing to do is
+to look at the first few lines for these examples and see if you can find one
+with matching formatting.
+
 These example files ship with :mod:`gffutils`.  For interactive use, their
 absolute path can be obtained with the :func:`gffutils.example_filename`
-function.
+function. Each example shows the contents of the file, along with text
+explaining the troublesome parts and which settings to use in order to
+successfully import into a database and retrieve features.
 
-Each section has a **"File contents"** subsection that contains the contents of the
-example file but is hidden by default.
+
+.. note::
+
+    Be mindful of the difference between the ID attribute of a feature and the
+    primary key of that feature in the database.
+
+    :attr:`Feature.id` will always return the primary key.  `Feature["ID"]` will
+    return the ID attribute of the feature, if it has one.  In many (but not
+    all) cases, `Feature.id == Feature["ID"]`
+
+.. note::
+
+    Also be mindful of the difference between an attribute of a Python object
+    vs the 9th field of a GFF line, which is called the "attributes" field
+    according to the spec. Confusing?  Yes!
 
 .. _mouse_extra_comma.gff3:
 
 .. rst-class:: html-toggle
 
-`mouse_extra_comma.gff3`
-~~~~~~~~~~~~~~~~~~~~~~~~
-Example line:
-
-.. literalinclude:: ../../gffutils/test/data/mouse_extra_comma.gff3
-    :lines: 1
-
+mouse_extra_comma.gff3
+~~~~~~~~~~~~~~~~~~~~~~
 This file has gene, mRNA, protein, UTR, CDS, and exon annotations. However, not
 all of them have a useful ID in their attributes.
 
 
-
-
-.. rst-class:: html-toggle
-
 File contents
 `````````````
 
-
 .. literalinclude:: ../../gffutils/test/data/mouse_extra_comma.gff3
+
 
 Import
 ``````
+The defaults for :mod:`gffutils` will load this example into a database.
+However, the CDSs do not have ID attributes, and the default for GFF files is
+`id_spec="ID"`.  As described at :ref:`id_spec`, they will be accessed by the
+names `"CDS_1"`, `"CDS_2"`, and so on.
 
-Imagine if we were to use `id_spec=["ID", "Name"]` and
-`merge_strategy="merge"`.  :mod:`gffutils` would attempt to merge those CDS
-features -- which all share the same name -- but would raise an exception
-because their non-attribute fields (e.g., genomic coords) don't match.
-
-Instead, we could use `merge_strategy="create_unique"`, which would create
-unique IDs for those CDSs, appending a `_1`, `_2`, `_3`, and `_4` for each.
-
-Another alternative would be to use `id_spec="ID"`, in which case only the gene
-and mRNA features would be easily accessible.
+Note that using `id_spec=["ID", "Name"]` won't work, because the CDSs share the
+same Name attribute, `CDS:NC_000083.5:LOC100040603`. We could use
+`id_spec=["ID", "Name"]` in combination with `merge_strategy="create_unique"`,
+which would give ids like `CDS:NC_000083.5:LOC100040603_1` (with an underscore
+an integer at the end for each consecutive occurence of the same ID).  But
+we'll go with the simpler default strategy for this file:
 
 >>> import gffutils
 >>> fn = gffutils.example_filename('mouse_extra_comma.gff3')
->>> db = gffutils.create_db(fn, ':memory:', id_spec=['ID', 'Name'], merge_strategy='create_unique')
+>>> db = gffutils.create_db(fn, ':memory:')
 
 Example access
 ``````````````
-
-Since the mRNA on line 2 has an ID, we can access it by its name:
+Since the mRNA on line 2 has an ID, we can simply access it by ID:
 
 >>> db['XM_001475631.1']
 <Feature mRNA (chr17:6797760-6818159[+]) at 0x...>
 
-However, the protein on line 3 does not have an ID.  This is a limitation of
-how this particular GFF file is formatted.  :mod:`gffutils` falls back to using
-an auto-increment of the feature type, "protein", so we can access it like
-this:
-
->>> db['protein_1']
-<Feature protein (chr17:6806527-6812289[+]) at 0x...>
-
-For a large file, it would be difficult to know whether the protein you want is
-`protein_1` or `protein_972` . . . luckily, it's still possible to get this
-protein another way -- as a child of an mRNA with a known ID:
-
->>> db.children('XM_001475631.1', featuretype='protein').next()
-<Feature protein (chr17:6806527-6812289[+]) at 0x...>
-
-Or, as a level-2 child of the gene:
->>> db.children('NC_000083.5:LOC100040603', level=2, featuretype='protein')
-<Feature protein (chr17:6806527-6812289[+]) at 0x...>
-
-Access those CDSs either as children of the mRNA:
+It's not very convenient to access the CDSs by their newly created ids
+`"CDS_1"`, `"CDS_2"`, etc.  (Which one was "1"?  Is that from the same gene as
+CDS "5"?) But we can access those CDSs as children of the mRNA:
 
 >>> [f.id for f in db.children('XM_001475631.1', featuretype='CDS')]
-['CDS:NC_000083.5:LOC100040603', 'CDS:NC_000083.5:LOC100040603_1', 'CDS:NC_000083.5:LOC100040603_2', 'CDS:NC_000083.5:LOC100040603_3', 'CDS:NC_000083.5:LOC100040603_4']
+['CDS_1', 'CDS_2', 'CDS_3', 'CDS_4', 'CDS_5']
 
-Or get them individually.  This demonstrates that 1) the database ID is
-different from the "Name" field in the attributes -- which doesn't change, and
-2) the attributes are reconstructed.  Note the trailing comma, which was in the
-original line, is represented by an extra item in the "Parent" attribute
-list.
+Or as "grandchildren" of the gene:
 
->>> cds4 = db['CDS:NC_000083.5:LOC100040603_4']
->>> for attr in cds4.attributes.items():
-...     print attr
-('Name', ['CDS:NC_000083.5:LOC100040603'])
-('Parent', ['XM_001475631.1', ''])
+>>> [f.id for f in db.children('NC_000083.5:LOC100040603', featuretype='CDS', level=2)]
+['CDS_1', 'CDS_2', 'CDS_3', 'CDS_4', 'CDS_5']
 
->>> print cds4 # doctest:+NORMALIZE_WHITESPACE
-chr17	RefSeq	CDS	6812219	6812289	.	+	2	Name=CDS:NC_000083.5:LOC100040603;Parent=XM_001475631.1,
+Note that the database id values are all unique for the CDSs, but their
+`"Name"` attributes are still all the same, as expected:
+
+>>> set([f['Name'][0] for f in db.children('XM_001475631.1', featuretype='CDS')])
+set(['CDS:NC_000083.5:LOC100040603'])
 
 
 
-
-.. _c_elegans__WS199_ann_gff.txt:
-
-.. rst-class:: html-toggle
-
-`c_elegans_WS199_ann_gff.txt`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Example line:
-
-.. literalinclude:: ../../gffutils/test/data/c_elegans_WS199_ann_gff.txt
-    :lines: 2
-
-
+c_elegans_WS199_ann_gff.txt
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 This is a minimal file, with only one feature and that one feature has no
-genomic coordinates.
+genomic coordinates.  It illustrates how things behave when there is very
+little information for a feature.
 
-.. rst-class:: html-toggle
 
 File contents
 `````````````
+
 .. literalinclude:: ../../gffutils/test/data/c_elegans_WS199_ann_gff.txt
 
 Import
 ``````
+Import is straightforward:
+
 >>> fn = gffutils.example_filename('c_elegans_WS199_ann_gff.txt')
 >>> db = gffutils.create_db(fn, ':memory:')
 
 
 Access
 ``````
+Confirm there's only a single feature imported:
+
 >>> list(db.all_features())
 [<Feature experimental_result_region (I:.-.[+]) at 0x...]
 
-With no obvious ID fields in the attributes, we can access it by name using the
-feature type:
+With no obvious ID fields in the attributes, we can access the single feature
+by name using the feature type:
 
 >>> db['experimental_result_region_1']
 <Feature experimental_result_region (I:.-.[+]) at 0x...>
 
+This shows that the internal representation of null values is None:
 
-.. _c_elegans_WS199_shortened_gff.txt:
+>>> f = db['experimental_result_region_1']
+>>> assert f.start is None
+>>> assert f.stop is None
 
-.. rst-class:: html-toggle
+But the string representation shows "`.`" placeholders:
 
-`c_elegans_WS199_shortened_gff.txt`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Example line:
+>>> print f #doctest: +NORMALIZE_WHITESPACE
+I	Expr_profile	experimental_result_region	.	.	.	+	.	expr_profile=B0019.1
 
-.. literalinclude:: ../../gffutils/test/data/c_elegans_WS199_shortened_gff.txt
-    :lines: 7
-
-
+c_elegans_WS199_shortened_gff.txt
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 This file contains many different kinds of features; much like
 :ref:`mouse_extra_comma.gff3` above, some features have IDs, some do not, and
 there are many that share the same feature ID.  This example shows a common
 way of subsetting features (here, getting all the non-historical CDSs for
 a gene).
 
-.. rst-class:: html-toggle
-
 File contents
 `````````````
 
 .. literalinclude:: ../../gffutils/test/data/c_elegans_WS199_shortened_gff.txt
 
+
 Import
 ``````
 If `merge_strategy="merge"`, is used here, exceptions will be raised because
-all those CDSs cannot be logically merged since they have different
-coordinates. So `merge_strategy="create_unique"` is used instead.
+all those CDSs cannot be logically merged: they have different
+coordinates. So `merge_strategy="create_unique"` is used instead. This kwarg
+will add an underscore and an integer to each duplicate value used as a primary
+key:
 
 >>> fn = gffutils.example_filename('c_elegans_WS199_shortened_gff.txt')
->>> db = gffutils.create_db(fn, ":memory:", id_spec="ID", merge_strategy='create_unique')
+>>> db = gffutils.create_db(fn, ":memory:", merge_strategy='create_unique')
 
 Access
 ``````
@@ -208,20 +197,13 @@ I	Coding_transcript	CDS	4583560	4583805	.	-	0	ID=CDS:D1007.5b;Parent=Transcript:
 
 .. _ensembl_gtf.txt:
 
-.. rst-class:: html-toggle
 
-`ensembl_gtf.txt`
-~~~~~~~~~~~~~~~~~
-
-Example line:
-
-.. literalinclude:: ../../gffutils/test/data/ensembl_gtf.txt
-    :lines: 2
+ensembl_gtf.txt
+~~~~~~~~~~~~~~~
 
 In this GTF file, gene_id and transcript_id are identical, creating problems
 for unique IDs in the database.
 
-.. rst-class:: html-toggle
 
 File contents
 `````````````
@@ -234,12 +216,14 @@ As part of the import process, :mod:`gffutils` creates new "derived" features
 for genes and transcripts (see :ref:`gtf`).  These are not explicitly defined in a GTF file, but
 can be inferred.  Even though gene and transcript features do not exist in the
 file, they will still be created.  This is why `id_spec={'gene': 'gene_id'}`
-works.
+works: the primary key of "gene" features -- which don't exist in the GTF file
+but are inferred by :mod:`gffutils` -- will be the "gene_id" attribute.
 
 Note that in this example, gene_id and transcript_id are identical.  This
-causes all sorts of problems; but to get around this we can write a transform
-function that applies an arbitrary transformation to a dictionary returned by
-the parser.  This will modify the data upon import into the database:
+causes all sorts of problems.  To get around this we can write a transform
+function (see :ref:`transform` for details) that applies an arbitrary
+transformation to a dictionary returned by the parser.  This will modify the
+data upon import into the database:
 
 >>> def transform_func(x):
 ...     # adds some text to the end of transcript IDs
@@ -251,11 +235,15 @@ the parser.  This will modify the data upon import into the database:
 Now we can supply this tranform function to :func:`create_db`:
 
 >>> fn = gffutils.example_filename('ensembl_gtf.txt')
->>> db = gffutils.create_db(fn, ":memory:", id_spec={'gene': 'gene_id', 'transcript': "transcript_id"}, merge_strategy="create_unique", transform=transform_func)
+>>> db = gffutils.create_db(fn, ":memory:",
+... id_spec={'gene': 'gene_id', 'transcript': "transcript_id"},
+... merge_strategy="create_unique",
+... transform=transform_func)
 
 Access
 ``````
-We can access the derived "gene" feature by its ID:
+We can access the derived "gene" feature by its ID (recall it doesn't actually
+exist in the GTF file):
 
 >>> g = db["B0019.1"]
 >>> g
@@ -274,31 +262,19 @@ end because of that transform function:
 >>> print t  #doctest:+NORMALIZE_WHITESPACE
 I	gffutils_derived	transcript	12759579	12764949	.	-	.	gene_id "B0019.1"; transcript_id "B0019.1_transcript";
 
-How many annotated transcripts are there for this gene?
-
->>> list(db.children(g, level=1))
-[<Feature transcript (I:12759579-12764949[-]) at 0x...>]
 
 
 .. _F3-unique-3.v2.gff:
 
-.. rst-class:: html-toggle
-
-`F3-unique-3.v2.gff`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Example line:
-
-.. literalinclude:: ../../gffutils/test/data/F3-unique-3.v2.gff
-    :lines: 16
-
+F3-unique-3.v2.gff
+~~~~~~~~~~~~~~~~~~
 This file does not contain hierarchical information, and has many directives.
 Since much of the benefit of :mod:`gffutils` comes from being able to navigate
 the hierarchical relationships, it might be overkill to use :mod:`gffutils` on
 this file.  An exeception would be if you want to be able to look up the read
-names by their ID.
+names by their ID.  Here, we use yet a differnt way of overriding the way
+:mod:`gffutils` decides on a primary key for the database.
 
-
-.. rst-class:: html-toggle
 
 File contents
 `````````````
@@ -307,10 +283,17 @@ File contents
 
 Import
 ``````
-By default, `id_spec` looks into the attributes field of a line to determine
-what the ID of a feature should be.  For this example, however, we would like
-to make the first field, "seqid", the primary key.  This is accomplished by
-surrounding the key with `:`, so here, `id_spec=":seqid:"`.
+By default, the `id_spec="some_string"` parameter tells :mod:`gffutils` to
+create a primary key based on the value of the "some_string" attribute.  For
+this example, however, we would like to make the first field the primary key.
+Luckily, :mod:`gffutils` will accept the name of a GFF field, surrounded by
+":".  The names of the fields are in `gffutils.constants._gffkeys`:
+
+>>> gffutils.constants._gffkeys
+['seqid', 'source', 'featuretype', 'start', 'end', 'score', 'strand', 'frame', 'attributes']
+
+We want to use the first field, `seqid`, as the primary key for the
+database, so we use `id_spec=":seqid:"`.
 
 >>> fn = gffutils.example_filename('F3-unique-3.v2.gff')
 >>> db = gffutils.create_db(fn, ':memory:', id_spec=[':seqid:'])
@@ -319,6 +302,7 @@ surrounding the key with `:`, so here, `id_spec=":seqid:"`.
 'solid-gff-version 0.2'
 
 Now we can access the features by their sequence name:
+
 >>> db['3_8_425_F3']
 <Feature read (3_8_425_F3:1119124-1119143[-]) at 0x...>
 
@@ -327,18 +311,14 @@ Now we can access the features by their sequence name:
 
 .. rst-class:: html-toggle
 
-`glimmer_nokeyval.gff3`
-~~~~~~~~~~~~~~~~~~~~~~~
-Example line:
-
-.. literalinclude:: ../../gffutils/test/data/glimmer_nokeyval.gff3
-    :lines: 3
-
+glimmer_nokeyval.gff3
+~~~~~~~~~~~~~~~~~~~~~
 This is a problematic file in which the attributes are not all in format
-"key=val".  This demonstrates how :mod:`gffutils` handles cases like this: by
-implicitly treating them as keys and setting the value to an empty list.
+"key=val".  This example demonstrates how :mod:`gffutils` handles cases like
+this: by implicitly treating them as keys and setting the value to an empty
+list.
 
-Similar to the `ensembl_gtf.txt` file, gene and transcript names are not
+Like the the :ref:`ensembl_gtf.txt` file, gene and transcript names are not
 different.  Based on IDs alone, it's not clear whether the CDS's parent is the
 gene or the mRNA.
 
@@ -369,6 +349,8 @@ Import
 ...     elif "RNA" in f.featuretype:
 ...         f.attributes['ID'][0] += '_transcript'
 ...     else:
+...         # assume that anything else is a child of a transcript, so we need
+...         # to edit the "Parent" attribute
 ...         if 'Parent' in f.attributes:
 ...             f.attributes['Parent'] \
 ...                = [i + '_transcript' for i in f.attributes['Parent']]
@@ -402,19 +384,16 @@ GL0000006_transcript
 
 .. rst-class:: html-toggle
 
-`hybrid1.gff3`
-~~~~~~~~~~~~~~
-Example line:
-
-.. literalinclude:: ../../gffutils/test/data/hybrid1.gff3
-    :lines: 7
-
+hybrid1.gff3
+~~~~~~~~~~~~
 This file contains a FASTA sequence at the end.  Currently, :mod:`gffutils`
-assumes that there are no further annotatins and stops parsing the file at this
-point.  Also note that the "Note" attributes field contains url-encoded
-characters. These are kept verbatim.
+assumes that there are no further annotations and stops parsing the file at
+this point (specifically, when it sees the string "##FASTA" at the beginning of
+a line).
 
-.. rst-class:: html-toggle
+Another issue with this file is that the "Note" attributes field contains
+url-encoded characters. These are kept verbatim.
+
 
 File contents
 `````````````
@@ -424,12 +403,14 @@ File contents
 
 Import
 ``````
+Straightforward:
 
 >>> fn = gffutils.example_filename('hybrid1.gff3')
 >>> db = gffutils.create_db(fn, ":memory:")
 
 Access
 ``````
+Print out the attributes:
 
 >>> for k, v in sorted(db['A00469'].attributes.items()):
 ...     print k, '=', v
@@ -440,21 +421,18 @@ Note = ['growth%20hormone%201']
 
 .. _jgi_gff2.txt:
 
-.. rst-class:: html-toggle
 
-`jgi_gff2.txt`
-~~~~~~~~~~~~~~
-Example line:
-
-.. literalinclude:: ../../gffutils/test/data/jgi_gff2.txt
-    :lines: 1
-
+jgi_gff2.txt
+~~~~~~~~~~~~
 This file is GFF2 format -- the attribute format is like GTF, but without the
-required "gene_id" and "transcript_id" fields.  To get around this, we can
-supply the `gtf_transcript_key` kwarg, which will override the default
-`"transcript_id"`.
+required "gene_id" and "transcript_id" fields that are used to infer genes and
+transcripts. To get around this, we can supply the `gtf_transcript_key` kwarg,
+which will override the default `"transcript_id"` (see :ref:`gtf` for more
+background on this).
 
-.. rst-class:: html-toggle
+There is information in the file on which exon goes to which transcript, but no
+such information about which CDS goes to which transcript.  There is, however,
+information about the parent protein.
 
 File contents
 `````````````
@@ -464,17 +442,39 @@ File contents
 Import
 ``````
 Inspecting the file, we see that the "name" attribute is repeated on each line.
-We can use that as the gene ID for inferring the gene extents.
+We can use that as the gene ID for inferring the gene extents, like "gene_id"
+in a normal GTF file.  Similarly, the "transcriptId" attribute here can be used
+like "transcript_id" in a normal GTF file for inferring transcript extents.
+
+We also need to make a choice about how we're going to use this database.  Do
+we want to have the CDS features be considered children of transcripts?  In
+that case, we'll need the transform function, which creates a "transcriptId"
+attribute out of an existing "proteinId" attribute:
+
+>>> def transform(d):
+...     try:
+...         d['transcriptId'] = d['proteinId']
+...     except KeyError:
+...         pass
+...     return d
+
 
 >>> fn = gffutils.example_filename('jgi_gff2.txt')
 >>> db = gffutils.create_db(fn, ":memory:",
 ... id_spec={'transcript': 'transcriptId', 'gene': 'name'},
-... gtf_transcript_key='transcriptId', gtf_gene_key='name')
+... gtf_transcript_key='transcriptId', gtf_gene_key='name',
+... transform=transform)
 
 Access
 ``````
+Since we used that transform function, the exons and CDSs are all children of
+the "873" transcript:
+
 >>> list(db.children('873', level=1))
-[<Feature exon (chr_1:37061-37174[-]) at 0x...>, <Feature exon (chr_1:37315-37620[-]) at 0x...>, <Feature exon (chr_1:37752-38216[-]) at 0x...>]
+[<Feature CDS (chr_1:37061-37174[-]) at 0x...>, <Feature CDS (chr_1:37315-37620[-]) at 0x...>, <Feature CDS (chr_1:37752-38216[-]) at 0x...>, <Feature exon (chr_1:37061-37174[-]) at 0x...>, <Feature exon (chr_1:37315-37620[-]) at 0x...>, <Feature exon (chr_1:37752-38216[-]) at 0x...>]
+
+
+Here we can see that all children of the gene are accounted for:
 
 >>> for f in db.children("fgenesh1_pg.C_chr_1000007", order_by='featuretype'):
 ...     print '{0.featuretype:>10}: {0.id}'.format(f)
@@ -489,19 +489,11 @@ transcript: 873
 
 .. _ncbi_gff3.txt:
 
-.. rst-class:: html-toggle
-
-`ncbi_gff3.txt`
-~~~~~~~~~~~~~~~
-Example line:
-
-.. literalinclude:: ../../gffutils/test/data/ncbi_gff3.txt
-    :lines: 6
-
+ncbi_gff3.txt
+~~~~~~~~~~~~~
 This file is problematic because all genes have the same ID attribute.  We can
 get around this by using the "db_xref" field as the key for genes.
 
-.. rst-class:: html-toggle
 
 File contents
 `````````````
@@ -510,12 +502,17 @@ File contents
 
 Import
 ``````
+For "gene" featuretypes, we want to use the "db_xref" field as the primary key;
+all other featuretypes will be incremented versions of the featuretype
+("CDS_1", "CDS_2", etc).
 
 >>> fn = gffutils.example_filename('ncbi_gff3.txt')
 >>> db = gffutils.create_db(fn, ":memory:", id_spec={'gene': 'db_xref'})
 
 Access
 ``````
+Genes can now be accessed by the db_xref:
+
 >>> db['GeneID:4537201']
 <Feature gene (NC_008596.1:12272-13301[+]) at 0x...>
 
@@ -523,15 +520,9 @@ Access
 
 .. _wormbase_gff2_alt.txt:
 
-.. rst-class:: html-toggle
 
-`wormbase_gff2_alt.txt`
-~~~~~~~~~~~~~~~~~~~~~~~
-Example line:
-
-.. literalinclude:: ../../gffutils/test/data/wormbase_gff2_alt.txt
-    :lines: 2
-
+wormbase_gff2_alt.txt
+~~~~~~~~~~~~~~~~~~~~~
 This file has no gene_id or transcript_id fields; it appears to use "CDS" as
 a gene-level kind of object.  So we can use a transform function to add
 "gene_id" and "transcript_id" fields to all non-CDS features so that the file
@@ -539,7 +530,6 @@ conforms to a GTF standard and gene extents can be inferred.  Furthermore, by
 default :mod:`gffutils` uses `'exon'` as the default feature type to merge into
 genes.  Here, we need to specify `gtf_subfeature='coding_exon'`.
 
-.. rst-class:: html-toggle
 
 File contents
 `````````````
@@ -548,6 +538,8 @@ File contents
 
 Import
 ``````
+The transform function to manipulate the attribute dictionary: add "gene_id"
+and "transcript_id" attributes to intron and coding_exon features:
 
 >>> def transform(f):
 ...     if f.featuretype in ['coding_exon', 'intron']:
@@ -561,9 +553,13 @@ Import
 
 Access
 ``````
+Note that the inferred genes have a source of "gffutils_derived": 
 
 >>> print db["cr01.sctg102.wum.2.1"]  #doctest:+NORMALIZE_WHITESPACE
 Contig102	gffutils_derived	gene	1629	3377	.	-	.	gene_id "cr01.sctg102.wum.2.1";
+
+
+Get a report of the childrent of the gene:
 
 >>> for f in db.children("cr01.sctg102.wum.2.1", order_by='featuretype'):
 ...     print '{0.featuretype:>12}: {0.id}'.format(f)
@@ -579,16 +575,13 @@ Contig102	gffutils_derived	gene	1629	3377	.	-	.	gene_id "cr01.sctg102.wum.2.1";
 
 .. _wormbase_gff2.txt:
 
-.. rst-class:: html-toggle
 
-`wormbase_gff2.txt`
-~~~~~~~~~~~~~~~~~~~
-Example line:
-
-.. literalinclude:: ../../gffutils/test/data/wormbase_gff2.txt
-    :lines: 3
-
-.. rst-class:: html-toggle
+wormbase_gff2.txt
+~~~~~~~~~~~~~~~~~
+This file is problematic because of inconsistent formatting: the `SAGE_tag`
+features have a different attributes format than the rest of the features.  So
+we need to do some work with the dialect used for parsing attributes into
+dictionaries.
 
 File contents
 `````````````
@@ -597,6 +590,21 @@ File contents
 
 Import
 ``````
+We will need `force_dialect_check=True` in this case if we want to be able to have
+the parents of the `SAGE_tag` features be recognized, because the attributes
+for `SAGE_tag` features are formatted differently.  That is, they don't have
+quoted values, and the separating semicolon does not have a space on either
+side as is the case for the other features.
+
+The default of `False` means that only the first few lines are checked to
+determine the dialect to be used for all lines.  But that won't work here
+because of the inconsistent formatting.  So we have to take the more
+time-consuming approach of checking every dialect in order to figure out how to
+parse them into a dictionary.
+
+
+Transform function to create appropriate "Parent" attributes:
+
 >>> def transform(f):
 ...     if f.featuretype == 'Transcript':
 ...         f.attributes['Parent'] = f.attributes['Gene']
@@ -609,22 +617,12 @@ Import
 
 >>> fn = gffutils.example_filename('wormbase_gff2.txt')
 
-`force_dialect_check=True` will infer a dialect for every feature.  This can be
-time-consuming, but sometimes necessary.  However, since every feature can
-possibly have a different dialect, the dialect for the entire database is set
-to the default.
-
-`force_dialect_check=True` is needed in this case if we want to be able to have
-the parents of the `SAGE_tag` features be recognized, because the attributes
-for `SAGE_tag` features are formatted differently.  That is, they don't have
-quoted values, and the separating semicolon does not have a space on either
-side as is the case for the other features.
 
 >>> db = gffutils.create_db(fn, ":memory:", transform=transform, id_spec={'Transcript': "Transcript"}, force_gff=True, force_dialect_check=True)
 
 The dialect for the database will be None:
 
->>> db.dialect
+>>> assert db.dialect is None
 
 For cases like this, we should probably construct our own dialog to force all
 attributes to have the same format.  To help with this, we can use the

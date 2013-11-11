@@ -41,11 +41,13 @@ instructing :mod:`gffutils` to use the most meaningful primary key for your
 particular input file.
 
 
+.. _id_spec:
+
 `id_spec`
 ---------
 The `id_spec` (ID specification) kwarg determines how to extract information
-from each line in order to construct a unique ID for the feature.  It can have
-several different forms -- None, string, list, dictionary, or callable.
+from each line in order to construct a primary key for the feature.  It can
+have several different forms -- None, string, list, dictionary, or callable.
 
 :None:
     The primary key for each feature will be an auto-incremented version of the
@@ -131,8 +133,10 @@ regions.
     * The examples :ref:`jgi_gff2.txt` and :ref:`ncbi_gff3.txt` illustrate the use of custom `id_spec`
       dictionaries.
 
+.. _transform:
+
 `transform`
-~~~~~~~~~~~
+-----------
 The `transform` kwarg is a function that accepts a dictionary from
 a :class:`gffutils.Parser` instance (see :ref:`parser-dictionaries` for what
 these are expected to look like) and that returns a dictionary with the same
