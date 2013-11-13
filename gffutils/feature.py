@@ -279,7 +279,15 @@ class Feature(object):
         items.append(reconstructed_attributes)
         if self.extra:
             items.append('\t'.join(self.extra))
-        return '\t'.join(map(str, items))
+        encoded_items = []
+        for i in items:
+            try:
+                encoded_items.append(str(i))
+            except UnicodeEncodeError:
+                # assume already in unicode
+                encoded_items.append(i.encode('utf-8'))
+
+        return '\t'.join(encoded_items)
 
     def __hash__(self):
         return hash(str(self))
