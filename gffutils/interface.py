@@ -617,14 +617,28 @@ class FeatureDB(object):
             ):
                 yield intron
 
-    def merge(self, feature, ignore_strand=False):
+    def merge(self, features, ignore_strand=False):
+        """
+        Merge overlapping features together.
+
+        features : iterator of Feature instances
+
+        ignore_strand : bool
+            If True, features on multiple strands will be merged, and the final
+            strand will be set to '.'.  Otherwise, ValueError will be raised if
+            trying to merge features on differnt strands.
+        """
 
         # Consume iterator up front...
         features = list(features)
 
+        if len(features) == 0:
+            raise StopIteration
+
+
         # Either set all strands to '+' or check for strand-consistency.
         if ignore_strand:
-            strand = '+'
+            strand = '.'
         else:
             strands = [i.strand for i in features]
             if len(set(strands)) > 1:
