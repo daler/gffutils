@@ -545,7 +545,7 @@ class FeatureDB(object):
         """
         if make_backup:
             if hasattr(self, 'dbfn'):
-                shutil.copy(self.dbfn, self.dbfn + '.bak')
+                shutil.copy2(self.dbfn, self.dbfn + '.bak')
 
         # No matter what `features` came in as, convert to gffutils.Feature
         # instances.  Since the tricky part -- attribute strings -- have been
@@ -570,8 +570,12 @@ class FeatureDB(object):
         # database in "creation mode" Note that simply creating a DBCreator
         # doesn't do anything.
         elif self.dialect['fmt'] == 'gtf':
+            if 'id_spec' not in kwargs:
+                kwargs['id_spec'] =  {'gene': 'gene_id', 'transcript': 'transcript_id'}
             db = create._GTFCreator(data=features, dbfn=self.dbfn, dialect=self.dialect, **kwargs)
         elif self.dialect['fmt'] == 'gff3':
+            if 'id_spec' not in kwargs:
+                kwargs['id_spec'] = 'ID'
             db = create._GFFDBCreator(data=features, dbfn=self.dbfn, dialect=self.dialect, **kwargs)
         else:
             raise ValueError
