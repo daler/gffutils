@@ -544,7 +544,7 @@ class FeatureDB(object):
         Remaining kwargs are passed to create_db.
         """
         if make_backup:
-            if hasattr(self, dbfn):
+            if hasattr(self, 'dbfn'):
                 shutil.copy(self.dbfn, self.dbfn + '.bak')
 
         # No matter what `features` came in as, convert to gffutils.Feature
