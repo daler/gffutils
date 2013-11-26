@@ -136,11 +136,11 @@ class FeatureDB(object):
             key = key.id
         c = self.conn.cursor()
         c.execute(constants._SELECT + ' WHERE id = ?', (key,))
-        results = c.fetchall()
+        results = c.fetchone()
         # TODO: raise error if more than one key is found
-        if len(results) != 1:
+        if results is None:
             raise helpers.FeatureNotFoundError(key)
-        return Feature(dialect=self.dialect, **results[0])
+        return Feature(dialect=self.dialect, **results)
 
     def count_features_of_type(self, featuretype):
         """
