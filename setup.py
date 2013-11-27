@@ -11,7 +11,7 @@ version = open(version_py).read().strip().split('=')[-1].replace('"', '')
 setup(
     name='gffutils',
     version=version,
-    install_requires=['argh', 'argcomplete'],
+    install_requires=['argh', 'argcomplete', 'simplejson'],
     packages=['gffutils', 'gffutils.scripts'],
     scripts=['gffutils/scripts/gffutils-cli'],
     author='Ryan Dale',
