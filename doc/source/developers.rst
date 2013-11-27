@@ -141,5 +141,11 @@ Some notes that don't fit elsewhere:
   hold for most cases.  I figured it was a good compromise.
 
 * upon getting features back from a db, the dialect is "injected" into each
-  feature.
+  feature.  Each Feature's dialect can still be changed, though, for on-the-fly
+  dialect conversion
 
+* many methods on FeatureDB share optional constraints for the underlying query
+  -- genomic region, strand, featuretype, order_by, etc.  These are factored
+  out into :func:`helpers.make_query`, which handles this type of query.
+  I decided on this sort of minimal ORM rather than accept the overhead of
+  something like sqlalchemy.
