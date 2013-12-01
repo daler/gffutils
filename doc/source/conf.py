@@ -13,6 +13,7 @@
 
 import sys, os
 import cloud_sptheme as csp
+import sphinx_rtd_theme
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -28,13 +29,13 @@ sys.path.insert(0, os.path.abspath('../..'))
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest',
               'sphinx.ext.coverage', 'sphinx.ext.viewcode',
-              'sphinx.ext.autosummary',
+              'sphinx.ext.autosummary', 'numpydoc',
 
               # pip install cloud-sptheme
-              'cloud_sptheme.ext.index_styling',
-              'cloud_sptheme.ext.relbar_toc',
-              'cloud_sptheme.ext.autodoc_sections',
-              'cloud_sptheme.ext.issue_tracker',
+              #'cloud_sptheme.ext.index_styling',
+              #'cloud_sptheme.ext.relbar_toc',
+              #'cloud_sptheme.ext.autodoc_sections',
+              #'cloud_sptheme.ext.issue_tracker',
               ]
 
 autosummary_generate = True
@@ -111,7 +112,8 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'cloud'
+#html_theme = 'cloud'
+html_theme = "sphinx_rtd_theme"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -120,12 +122,13 @@ html_theme = 'cloud'
 # For Cloud theme, see
 # http://pythonhosted.org/cloud_sptheme/cloud_theme.html
 html_theme_options = {
-    'stickysidebar': True,
-    'roottarget': index_doc
+#    'stickysidebar': True,
+#    'roottarget': index_doc
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
-html_theme_path = [csp.get_theme_dir()]
+#html_theme_path = [csp.get_theme_dir()]
+html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".

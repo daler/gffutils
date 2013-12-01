@@ -1,4 +1,6 @@
 import sqlite3
+import shutil
+import tempfile
 
 import create
 import bins
@@ -80,6 +82,7 @@ class FeatureDB(object):
         else:
             self.dbfn = dbfn
             self.conn = sqlite3.connect(self.dbfn)
+            self._DBCreator_instance = None
 
         self.conn.text_factory = text_factory
         self.conn.row_factory = sqlite3.Row
@@ -133,11 +136,11 @@ class FeatureDB(object):
             key = key.id
         c = self.conn.cursor()
         c.execute(constants._SELECT + ' WHERE id = ?', (key,))
-        results = c.fetchall()
+        results = c.fetchone()
         # TODO: raise error if more than one key is found
-        if len(results) != 1:
+        if results is None:
             raise helpers.FeatureNotFoundError(key)
-        return Feature(dialect=self.dialect, **results[0])
+        return Feature(dialect=self.dialect, **results)
 
     def count_features_of_type(self, featuretype):
         """
@@ -523,34 +526,60 @@ class FeatureDB(object):
             yield Feature(dialect=dialect, **fields)
             interfeature_start = f.stop
 
-    def update(self, features, merge_strategy=None, transform=None,
-               id_spec=None, verbose=False):
+    def update(self, features, make_backup=True, **kwargs):
+        """
+        Update database with features.
+
+        features : str, iterable, FeatureDB instance
+            If FeatureDB, all features will be used. If string, assume it's
+            a filename of a GFF or GTF file.  Otherwise, assume it's an
+            iterable of Feature objects.  The classes in gffutils.iterators may
+            be helpful in this case.
+
+        make_backup : bool
+            If True, and the database you're about to update is a file on disk,
+            makes a copy of the existing database and saves it with a .bak
+            extension.
+
+        Remaining kwargs are passed to create_db.
+        """
+        if make_backup:
+            if hasattr(self, 'dbfn'):
+                shutil.copy2(self.dbfn, self.dbfn + '.bak')
+
+        # No matter what `features` came in as, convert to gffutils.Feature
+        # instances.  Since the tricky part -- attribute strings -- have been
+        # parsed into dicts in a Feature, we no longer have to worry about
+        # that.  This also allows GTF features to be used to update a GFF
+        # database, or vice versa.
+        if isinstance(features, basestring):
+            indb = create.create_db(features, intermediate, **kwargs)
+            features = indb.all_features()
+
+        if isinstance(features, FeatureDB):
+            features = features.all_features()
+
+        # We need a _DBCreator instance, which has the populate_from_lines and
+        # update_relations methods.  If this FeatureDB was created in memory,
+        # the originating _DBCreator should be still accessible:
         if self._DBCreator_instance is not None:
             db = self._DBCreator_instance
 
+        # Otherwise, figure out what kind of new _DBCreator subclass to make
+        # based on the dialect.  This is sort of just re-connecings to the
+        # database in "creation mode" Note that simply creating a DBCreator
+        # doesn't do anything.
+        elif self.dialect['fmt'] == 'gtf':
+            if 'id_spec' not in kwargs:
+                kwargs['id_spec'] =  {'gene': 'gene_id', 'transcript': 'transcript_id'}
+            db = create._GTFCreator(data=features, dbfn=self.dbfn, dialect=self.dialect, **kwargs)
+        elif self.dialect['fmt'] == 'gff3':
+            if 'id_spec' not in kwargs:
+                kwargs['id_spec'] = 'ID'
+            db = create._GFFDBCreator(data=features, dbfn=self.dbfn, dialect=self.dialect, **kwargs)
         else:
-            # TODO: Currently create._DBCreator only accepts a filename, which
-            # it creates a parser.Parser.  It should accept an iterable of
-            # Features, but this will take some refactoring.
-            #
-            # So for now, create an intermediate tempfile.
-            tmp = tempfile.NamedTemporaryFile()
-            for f in features:
-                tmp.write(str(f) + '\n')
-            tmp.seek(0)
-            if self.dialect['fmt'] == 'gtf':
-                db = create._GTFCreator(fn=tmp.name, dbfn=self.dbfn,
-                                        verbose=verbose)
-            elif self.dialect['fmt'] == 'gff3':
-                db = create._GFFDBCreator(fn=tmp.name, dbfn=self.dbfn,
-                                          verbose=verbose)
+            raise ValueError
 
-        if merge_strategy:
-            db.merge_strategy = merge_strategy
-        if id_spec:
-            db.id_spec = id_spec
-
-        db.set_verbose(False)
         db._populate_from_lines(features)
         db._update_relations()
         db._finalize()
@@ -617,14 +646,28 @@ class FeatureDB(object):
             ):
                 yield intron
 
-    def merge(self, feature, ignore_strand=False):
+    def merge(self, features, ignore_strand=False):
+        """
+        Merge overlapping features together.
+
+        features : iterator of Feature instances
+
+        ignore_strand : bool
+            If True, features on multiple strands will be merged, and the final
+            strand will be set to '.'.  Otherwise, ValueError will be raised if
+            trying to merge features on differnt strands.
+        """
 
         # Consume iterator up front...
         features = list(features)
 
+        if len(features) == 0:
+            raise StopIteration
+
+
         # Either set all strands to '+' or check for strand-consistency.
         if ignore_strand:
-            strand = '+'
+            strand = '.'
         else:
             strands = [i.strand for i in features]
             if len(set(strands)) > 1:

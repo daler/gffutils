@@ -4,7 +4,6 @@ import re
 import urllib
 import copy
 import constants
-from helper_classes import DefaultOrderedDict
 from helpers import example_filename
 import helpers
 import bins
@@ -57,15 +56,24 @@ def _reconstruct(keyvals, dialect):
     for key, val in items:
 
         # Multival sep is usually a comma:
-        val_str = dialect['multival separator'].join(val)
-        if val_str:
+        if val is not None:
+            encoded_val = []
+            for i in val:
+                try:
+                    encoded_val.append(str(i))
+                except UnicodeEncodeError:
+                    # assume already in unicode
+                    encoded_val.append(i.encode('utf-8'))
+            val_str = dialect['multival separator'].join(encoded_val)
 
-            # Surround with quotes if needed
-            if dialect['quoted GFF2 values']:
-                val_str = '"%s"' % val_str
+            if val_str:
 
-            # Typically "=" for GFF3 or " " otherwise
-            part = dialect['keyval separator'].join([key, val_str])
+                # Surround with quotes if needed
+                if dialect['quoted GFF2 values']:
+                    val_str = '"%s"' % val_str
+
+                # Typically "=" for GFF3 or " " otherwise
+                part = dialect['keyval separator'].join([key, val_str])
         else:
             part = key
         parts.append(part)

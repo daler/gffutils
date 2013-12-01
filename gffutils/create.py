@@ -203,6 +203,24 @@ class _DBCreator(object):
         Table creation
         """
         c = self.conn.cursor()
+        v = sqlite3.sqlite_version_info
+
+        # WAL is in sqlite 3.7+.
+        if v[0] >= 3 and v[1] >= 7:
+            c.executescript(
+                '''
+                PRAGMA synchronous=NORMAL;
+                PRAGMA journal_mode=WAL;
+                ''')
+
+
+        c.executescript(
+            '''
+            PRAGMA main.page_size=4096;
+            PRAGMA main.cache_size=10000;
+            PRAGMA main.locking_mode=EXCLUSIVE;
+            ''')
+
         c.executescript(constants.SCHEMA)
         self.conn.commit()
 
@@ -271,14 +289,6 @@ class _GFFDBCreator(_DBCreator):
 
     def _populate_from_lines(self, lines):
         c = self.conn.cursor()
-        c.execute(
-            '''
-            PRAGMA synchronous=NORMAL;
-            ''')
-        c.execute(
-            '''
-            PRAGMA journal_mode=WAL;
-            ''')
         self._drop_indexes()
         last_perc = 0
         logger.info("Populating features")
@@ -536,7 +546,7 @@ class _GTFDBCreator(_DBCreator):
             '''
             SELECT DISTINCT firstlevel.parent, relations.parent
             FROM (
-                SELECT DISTINCT relations.parent
+                SELECT DISTINCT parent
                 FROM relations
                 JOIN features ON features.id = relations.child
                 WHERE features.featuretype = ?

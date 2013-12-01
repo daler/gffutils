@@ -30,6 +30,8 @@ respectively.
 
 By default, `transcript_key="transcript_id"` and `gene_key="gene_id"`.  But if
 your particular data file does not conform to this, then they can be changed.
+The example :ref:`jgi_gff2.txt` shows a case where `transcript_key` needs to be
+changed.
 
 
 `subfeature`

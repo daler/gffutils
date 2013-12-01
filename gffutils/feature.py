@@ -81,25 +81,42 @@ class Feature(object):
         When printed, reproduces the original line from the file as faithfully
         as possible using `dialect`.
 
+        Usually you won't want to use this directly, since it has various
+        implementation details needed for operating in the context of FeatureDB
+        objects.  Instead, try the :func:`feature_from_line` function.
+
         Parameters
         ----------
-        `seqid` : string
 
-        `source`: string
+        seqid : string
+            Name of the sequence (often chromosome)
 
-        `featuretype` : string
+        source : string
+            Source of the feature; typically the originating database or
+            program that predicted the feature
 
-        `start`, `end`: int or "."
-            If "." (the default placeholder for GFF files), then the
-            corresponding attribute will be None.
+        featuretype : string
+            Type of feature.  For example "gene", "exon", "TSS", etc
 
-        `score`: string
+        start, end : int or "."
+            1-based coordinates; start must be <= end.  If "." (the default
+            placeholder for GFF files), then the corresponding attribute will
+            be None.
 
-        `strand`: string
+        score : string
+            Stored as a string.
 
-        `frame`: string
+        strand : "+" | "-" | "."
+            Strand of the feature; "." when strand is not relevant.
 
-        `attributes`: string or dict
+        frame : "0" | "1" | "2"
+            Coding frame.  0 means in-frame; 1 means there is one extra base at
+            the beginning, so the first codon starts at the second base;
+            2 means two extra bases at the beginning.  Interpretation is strand
+            specific; "beginning" for a minus-strand feature is at the end
+            coordinate.
+
+        attributes : string or dict
             If a string, first assume it is serialized JSON; if this fails then
             assume it's the original key/vals string.  If it's a dictionary
             already, then use as-is.
@@ -111,29 +128,29 @@ class Feature(object):
             dictionary and the dialect -- except if the original attributes
             string was provided, in which case that will be used directly.
 
-        `extra`: string or list
+        extra : string or list
             Additional fields after the canonical 9 fields for GFF/GTF.
 
             If a string, then first assume it's serialized JSON; if this fails
             then assume it's a tab-delimited string of additional fields.  If
             it's a list already, then use as-is.
 
-        `bin`: int
+        bin : int
             UCSC genomic bin. If None, will be created based on provided
             start/end; if start or end is "." then bin will be None.
 
-        `id` : None or string
+        id : None or string
             Database-specific primary key for this feature.  The only time this
             should not be None is if this feature is coming from a database, in
             which case it will be filled in automatically.
 
-        `dialect` : dict or None
+        dialect : dict or None
 
             The dialect to use when reconstructing attribute strings; defaults
             to the GFF3 spec.  :class:`FeatureDB` objects will automatically
             attach the dialect from the original file.
 
-        `file_order` : int
+        file_order : int
             This is the `rowid` special field used in a sqlite3 database; this
             is provided by FeatureDB.
 
@@ -262,7 +279,15 @@ class Feature(object):
         items.append(reconstructed_attributes)
         if self.extra:
             items.append('\t'.join(self.extra))
-        return '\t'.join(map(str, items))
+        encoded_items = []
+        for i in items:
+            try:
+                encoded_items.append(str(i))
+            except UnicodeEncodeError:
+                # assume already in unicode
+                encoded_items.append(i.encode('utf-8'))
+
+        return '\t'.join(encoded_items)
 
     def __hash__(self):
         return hash(str(self))
