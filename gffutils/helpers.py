@@ -1,4 +1,3 @@
-from simplejson import JSONEncoder
 import copy
 import sys
 import os
@@ -259,11 +258,6 @@ class DuplicateIDError(Exception):
 
 class AttributeStringError(Exception):
     pass
-
-
-class AttributesEncoder(JSONEncoder):
-    def default(self, obj):
-        return obj._d
 
 
 def _jsonify(x):
