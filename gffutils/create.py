@@ -163,9 +163,6 @@ class _DBCreator(object):
 
             # does everything besides attributes and extra match?
             for k in constants._gffkeys[:-1]:
-                # Note str() here: `existing_d` came from the db (so start/end
-                # are integers) but `d` came from the file, so they are still
-                # strings.
                 assert getattr(existing_feature, k) == getattr(f, k), (
                     "Same ID, but differing info for %s field. "
                     "Line %s: \n%s" % (
@@ -173,13 +170,21 @@ class _DBCreator(object):
                         self.iterator.current_item_number,
                         self.iterator.current_item))
 
-            attributes = existing_feature.attributes
+            old_attributes = existing_feature.attributes
+            new_attributes = f.attributes
 
             # update the attributes (using sets for de-duping)
-            for k, v in f.attributes.items():
-                attributes[k] = list(set(attributes[k]).union(v))
-            existing_feature.attributes = attributes
+            #
+            # It's possible that the new feature has a new attribute key, so
+            # only use the keys that are shared and already exist.
+            old_keys = set(old_attributes.keys())
+            new_keys = set(new_attributes.keys())
+            common_keys = old_keys.intersection(new_keys)
+            for k in common_keys:
+                new_attributes[k] = list(set(old_attributes[k]).union(new_attributes[k]))
+            existing_feature.attributes = new_attributes
             return existing_feature
+
         elif self.merge_strategy == 'create_unique':
             f.id = self._increment_featuretype_autoid(f.id)
             return f
