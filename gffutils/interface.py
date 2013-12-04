@@ -57,6 +57,22 @@ class FeatureDB(object):
             or sqlite3.OptimizedUnicode (returns ascii when possible, unicode
             otherwise)
 
+        encoding : str
+
+            When non-ASCII characters are encountered, assume they are in this
+            encoding.
+
+        keep_order : bool
+
+            If True, all features returned from this instance will have the
+            order of their attributes maintained.  This can be turned on or off
+            database-wide by setting the `keep_order` attribute or with this
+            kwarg, or on a feature-by-feature basis by setting the `keep_order`
+            attribute of an individual feature.
+
+            Default is False, since this includes a sorting step that can get
+            time-consuming for many features.
+
         .. note::
 
             `dbfn` can also be a subclass of :class:`_DBCreator`, useful for
@@ -87,6 +103,7 @@ class FeatureDB(object):
         self.conn.row_factory = sqlite3.Row
 
         self.encoding = encoding
+        self.keep_order = keep_order
         c = self.conn.cursor()
 
         # Load some meta info

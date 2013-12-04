@@ -683,7 +683,7 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=True,
               checklines=10, merge_strategy='error', transform=None,
               gtf_transcript_key='transcript_id', gtf_gene_key='gene_id',
               gtf_subfeature='exon', force_gff=False,
-              force_dialect_check=False, from_string=False):
+              force_dialect_check=False, from_string=False, keep_order=False):
     """
     Create a database from a GFF or GTF file.
 
@@ -806,6 +806,19 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=True,
     `from_string`: bool
         If True, then treat `data` as actual data (rather than the path to
         a file).
+
+
+    keep_order : bool
+
+        If True, all features returned from this instance will have the
+        order of their attributes maintained.  This can be turned on or off
+        database-wide by setting the `keep_order` attribute or with this
+        kwarg, or on a feature-by-feature basis by setting the `keep_order`
+        attribute of an individual feature.
+
+        Default is False, since this includes a sorting step that can get
+        time-consuming for many features.
+
     """
     kwargs = dict(
         data=data, checklines=checklines, transform=transform,
