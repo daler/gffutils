@@ -21,9 +21,23 @@ logger.addHandler(ch)
 gff3_kw_pat = re.compile('\w+=')
 
 
-def _reconstruct(keyvals, dialect):
+def _reconstruct(keyvals, dialect, strict=False):
     """
     Reconstructs the original attributes string according to the dialect.
+
+    Parameters
+    ==========
+    keyvals : dict
+        Attributes from a GFF/GTF feature
+
+    dialect : dict
+        Dialect containing info on how to reconstruct a string version of the
+        attributes
+
+    strict : bool
+        If True, then perform sorting of attribute keys to ensure they are in
+        the same order as those provided in the original file.  Default is
+        False, which saves time especially on large data sets.
     """
     if not dialect:
         raise helpers.AttributeStringError
@@ -51,20 +65,14 @@ def _reconstruct(keyvals, dialect):
         except ValueError:
             return 1e6
 
-    items.sort(key=sort_key)
+    if strict:
+        items.sort(key=sort_key)
 
     for key, val in items:
 
         # Multival sep is usually a comma:
         if val is not None:
-            encoded_val = []
-            for i in val:
-                try:
-                    encoded_val.append(str(i))
-                except UnicodeEncodeError:
-                    # assume already in unicode
-                    encoded_val.append(i.encode('utf-8'))
-            val_str = dialect['multival separator'].join(encoded_val)
+            val_str = dialect['multival separator'].join(val)
 
             if val_str:
 

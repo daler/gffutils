@@ -261,33 +261,29 @@ class Feature(object):
     def __str__(self):
         # All fields but attributes (and extra).
         items = [getattr(self, k) for k in constants._gffkeys[:-1]]
+
+        # Handle start/stop, which are either None or int
         if items[3] is None:
             items[3] = "."
+        else:
+            items[3] = str(items[3])
+
         if items[4] is None:
             items[4] = "."
-
-        # Reconstruct from dict and dialect (only if original attributes
-        # weren't provided)
-        if self._orig_attribute_str:
-            reconstructed_attributes = self._orig_attribute_str
         else:
-            reconstructed_attributes = parser._reconstruct(
-                self.attributes, self.dialect)
+            items[4] = str(items[4])
+
+        # Reconstruct from dict and dialect
+        reconstructed_attributes = parser._reconstruct(
+            self.attributes, self.dialect, strict=self.strict)
 
         # Final line includes reconstructed as well as any previously-added
         # "extra" fields
         items.append(reconstructed_attributes)
         if self.extra:
             items.append('\t'.join(self.extra))
-        encoded_items = []
-        for i in items:
-            try:
-                encoded_items.append(str(i))
-            except UnicodeEncodeError:
-                # assume already in unicode
-                encoded_items.append(i.encode('utf-8'))
 
-        return '\t'.join(encoded_items)
+        return '\t'.join(items)
 
     def __hash__(self):
         return hash(str(self))
@@ -316,15 +312,27 @@ class Feature(object):
     def stop(self, value):
         self.end = value
 
-    def astuple(self):
+    def astuple(self, encoding=None):
         """
         Return a tuple suitable for import into a database, with attributes
         field and extra field jsonified into strings
+
+        If `encoding` is not None, then convert string fields to unicode using
+        the provided encoding.
         """
+        if not encoding:
+            return (
+                self.id, self.seqid, self.source, self.featuretype, self.start, self.end, self.score,
+                self.strand, self.frame, helpers._jsonify(self.attributes), helpers._jsonify(self.extra),
+                self.bin
+            )
         return (
-            self.id, self.seqid, self.source, self.featuretype, self.start, self.end, self.score,
-            self.strand, self.frame, helpers._jsonify(self.attributes), helpers._jsonify(self.extra),
-            self.bin
+            self.id.decode(encoding), self.seqid.decode(encoding),
+            self.source.decode(encoding), self.featuretype.decode(encoding),
+            self.start, self.end, self.score.decode(encoding),
+            self.strand.decode(encoding), self.frame.decode(encoding),
+            helpers._jsonify(self.attributes).decode(encoding),
+            helpers._jsonify(self.extra).decode(encoding), self.bin
         )
 
 

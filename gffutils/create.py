@@ -25,13 +25,13 @@ logger.addHandler(ch)
 class _DBCreator(object):
     def __init__(self, data, dbfn, force=False, verbose=False, id_spec=None,
                  merge_strategy='merge', checklines=10, transform=None,
-                 force_dialect_check=False, from_string=False, dialect=None):
+                 force_dialect_check=False, from_string=False, dialect=None, default_encoding='utf-8'):
         """
         Base class for _GFFDBCreator and _GTFDBCreator; see create_db()
         function for docs
         """
         self.merge_strategy = merge_strategy
-
+        self.default_encoding = default_encoding
         self._autoincrements = collections.defaultdict(int)
         if force:
             if os.path.exists(dbfn):
@@ -40,8 +40,6 @@ class _DBCreator(object):
         self.id_spec = id_spec
         conn = sqlite3.connect(dbfn)
         self.conn = conn
-        #self.conn.text_factory = sqlite3.OptimizedUnicode
-        self.conn.text_factory = str
         self.conn.row_factory = sqlite3.Row
         self._data = data
 
@@ -276,6 +274,13 @@ class _DBCreator(object):
         for i in cursor:
             yield i
 
+    def _insert(self, feature, cursor):
+        try:
+            cursor.execute(constants._INSERT, feature.astuple())
+        except sqlite3.ProgrammingError:
+            curso.execute(constants._INSERT, feature.astuple(self.default_encoding))
+
+
 
 class _GFFDBCreator(_DBCreator):
     def __init__(self, *args, **kwargs):
@@ -326,7 +331,10 @@ class _GFFDBCreator(_DBCreator):
                 # executemany, which probably means writing to file first.
 
                 try:
-                    c.execute(constants._INSERT, f.astuple())
+                    try:
+                        c.execute(constants._INSERT, f.astuple())
+                    except sqlite3.ProgrammingError:
+                        c.execute(constants._INSERT, f.astuple('utf-8'))
                 except sqlite3.IntegrityError:
                     fixed = self._do_merge(f)
                     if self.merge_strategy in ['merge', 'replace']:

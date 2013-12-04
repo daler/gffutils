@@ -39,7 +39,7 @@ class FeatureDB(object):
             within `limit`. Only relevant when `limit` is not None.
     """
 
-    def __init__(self, dbfn, text_factory=str):
+    def __init__(self, dbfn, text_factory=None, encoding='utf-8'):
         """
         Connect to a database created by :func:`gffutils.create_db`.
 
@@ -52,8 +52,10 @@ class FeatureDB(object):
 
         `text_factory` : callable
 
-            Optionally set the way sqlite3 handle strings.  Besides the default
-            `str`, another option might be sqlite3.OptimizedUnicode.
+            Optionally set the way sqlite3 handle strings.  The default is to
+            return unicode; other options might be str (to always return ascii)
+            or sqlite3.OptimizedUnicode (returns ascii when possible, unicode
+            otherwise)
 
         .. note::
 
@@ -84,9 +86,11 @@ class FeatureDB(object):
             self.conn = sqlite3.connect(self.dbfn)
             self._DBCreator_instance = None
 
-        self.conn.text_factory = text_factory
+        if text_factory is not None:
+            self.conn.text_factory = text_factory
         self.conn.row_factory = sqlite3.Row
 
+        self.encoding = encoding
         c = self.conn.cursor()
 
         # Load some meta info
@@ -135,7 +139,10 @@ class FeatureDB(object):
         if isinstance(key, Feature):
             key = key.id
         c = self.conn.cursor()
-        c.execute(constants._SELECT + ' WHERE id = ?', (key,))
+        try:
+            c.execute(constants._SELECT + ' WHERE id = ?', (key,))
+        except sqlite3.ProgrammingError:
+            c.execute(constants._SELECT + ' WHERE id = ?', (key.decode(self.encoding),))
         results = c.fetchone()
         # TODO: raise error if more than one key is found
         if results is None:
@@ -566,7 +573,7 @@ class FeatureDB(object):
             db = self._DBCreator_instance
 
         # Otherwise, figure out what kind of new _DBCreator subclass to make
-        # based on the dialect.  This is sort of just re-connecings to the
+        # based on the dialect.  This is sort of just re-connecting to the
         # database in "creation mode" Note that simply creating a DBCreator
         # doesn't do anything.
         elif self.dialect['fmt'] == 'gtf':
