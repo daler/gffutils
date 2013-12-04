@@ -71,7 +71,7 @@ def _reconstruct(keyvals, dialect, keep_order=False):
     for key, val in items:
 
         # Multival sep is usually a comma:
-        if val is not None:
+        if val:
             val_str = dialect['multival separator'].join(val)
 
             if val_str:
