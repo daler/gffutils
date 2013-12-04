@@ -1,0 +1,8 @@
+chr1_random	SE	gene	97006	165969	.	-	.	ID=chr1_random:165882:165969:-@chr1_random:137473:137600:-@chr1_random:97006:97527:-;Name=chr1_random:165882:165969:-@chr1_random:137473:137600:-@chr1_random:97006:97527:-
+chr1_random	SE	mRNA	97006	165969	.	-	.	ID=chr1_random:165882:165969:-@chr1_random:137473:137600:-@chr1_random:97006:97527:-.A;Parent=chr1_random:165882:165969:-@chr1_random:137473:137600:-@chr1_random:97006:97527:-
+chr1_random	SE	mRNA	97006	165969	.	-	.	ID=chr1_random:165882:165969:-@chr1_random:137473:137600:-@chr1_random:97006:97527:-.B;Parent=chr1_random:165882:165969:-@chr1_random:137473:137600:-@chr1_random:97006:97527:-
+chr1_random	SE	exon	165882	165969	.	-	.	ID=chr1_random:165882:165969:-@chr1_random:137473:137600:-@chr1_random:97006:97527:-.up;Parent=chr1_random:165882:165969:-@chr1_random:137473:137600:-@chr1_random:97006:97527:-.A
+chr1_random	SE	exon	137473	137600	.	-	.	ID=chr1_random:165882:165969:-@chr1_random:137473:137600:-@chr1_random:97006:97527:-.se;Parent=chr1_random:165882:165969:-@chr1_random:137473:137600:-@chr1_random:97006:97527:-.A
+chr1_random	SE	exon	97006	97527	.	-	.	ID=chr1_random:165882:165969:-@chr1_random:137473:137600:-@chr1_random:97006:97527:-.dn;Parent=chr1_random:165882:165969:-@chr1_random:137473:137600:-@chr1_random:97006:97527:-.A
+chr1_random	SE	exon	165882	165969	.	-	.	ID=chr1_random:165882:165969:-@chr1_random:137473:137600:-@chr1_random:97006:97527:-.up;Parent=chr1_random:165882:165969:-@chr1_random:137473:137600:-@chr1_random:97006:97527:-.B
+chr1_random	SE	exon	97006	97527	.	-	.	ID=chr1_random:165882:165969:-@chr1_random:137473:137600:-@chr1_random:97006:97527:-.dn;Parent=chr1_random:165882:165969:-@chr1_random:137473:137600:-@chr1_random:97006:97527:-.B
