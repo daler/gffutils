@@ -46,11 +46,11 @@ class FeatureDB(object):
         Parameters
         ----------
 
-        `dbfn` : str
+        dbfn : str
 
             Path to a database created by :func:`gffutils.create_db`.
 
-        `text_factory` : callable
+        text_factory : callable
 
             Optionally set the way sqlite3 handle strings.  The default is to
             return unicode; other options might be str (to always return ascii)
@@ -288,9 +288,9 @@ class FeatureDB(object):
         Parameters
         ----------
 
-        `id` : string or a Feature object
+        id : string or a Feature object
 
-        `level` : None or int
+        level : None or int
 
             If `level=None` (default), then return all children regardless
             of level.  If `level` is an integer, then constrain to just that
@@ -385,17 +385,17 @@ class FeatureDB(object):
 
         Parameters
         ----------
-        `region` : string, tuple, or Feature instance
+        region : string, tuple, or Feature instance
             If string, then of the form "seqid:start-end".  If tuple, then
             (seqid, start, end).  If :class:`Feature`, then use the features
             seqid, start, and end values.
 
-        `featuretype` : None, string, or iterable
+        featuretype : None, string, or iterable
             If not None, then restrict output.  If string, then only report
             that feature type.  If iterable, then report all featuretypes in
             the iterable.
 
-        `completely_within` : bool
+        completely_within : bool
             If False (default), returns features that overlap `region`, even
             partially.  If True, only return features that are completely
             within `region`.
@@ -478,15 +478,15 @@ class FeatureDB(object):
 
         Parameters
         ----------
-        `features` : iterable of :class:`feature.Feature` instances
+        features : iterable of :class:`feature.Feature` instances
             Sorted, merged iterable
 
-        `new_featuretype` : string or None
+        new_featuretype : string or None
             The new features will all be of this type, or, if None (default)
             then the featuretypes will be constructed from the neighboring
             features, e.g., `inter_exon_exon`.
 
-        `attribute_func` : callable or None
+        attribute_func : callable or None
             If None, then nothing special is done to the attributes.  If
             callable, then the callable accepts two attribute dictionaries and
             returns a single attribute dictionary.  If `merge_attributes` is

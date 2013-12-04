@@ -689,7 +689,7 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=True,
 
     Parameters
     ----------
-    `data` : string or iterable
+    data : string or iterable
 
         If a string (and `from_string` is False), then `data` is the path to
         the original GFF or GTF file.
@@ -699,12 +699,12 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=True,
 
         Otherwise, it's an iterable of Feature objects.
 
-    `dbfn` : string
+    dbfn : string
 
         Path to the database that will be created.  Can be the special string
         ":memory:" to create an in-memory database.
 
-    `id_spec` : string, list, dict, callable, or None
+    id_spec : string, list, dict, callable, or None
 
         This parameter guides what will be used as the primary key for the
         database, which in turn determines how you will access individual
@@ -740,12 +740,12 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=True,
               if "autoincrement:chr10", then the first feature will be
               "chr10_1", the second "chr10_2", and so on.
 
-    `force` : bool
+    force : bool
 
         If `False` (default), then raise an exception if `dbfn` already exists.
         Use `force=True` to overwrite any existing databases.
 
-    `verbose` : bool
+    verbose : bool
 
         Report percent complete and other feedback on how the db creation is
         progressing.
@@ -754,11 +754,11 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=True,
         once to see how many items there are; for large files you may want to
         use `verbose=False` to avoid this.
 
-    `checklines` : int
+    checklines : int
 
         Number of lines to check the dialect.
 
-    `merge_strategy` : { "merge", "create_unique", "error", "warning" }
+    merge_strategy : { "merge", "create_unique", "error", "warning" }
 
         This parameter specifies the behavior when two items have an identical
         primary key.
@@ -778,32 +778,32 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=True,
         Using `merge_strategy="warning"`, a warning will be printed to the
         logger, and the duplicate feature will be skipped.
 
-    `transform` : callable
+    transform : callable
 
         Function (or other callable object) that accepts a dictionary and
         returns a dictionary.
 
-    `gtf_transcript_key`, `gtf_gene_key` : string
+    gtf_transcript_key, gtf_gene_key : string
 
         Which attribute to use as the transcript ID and gene ID respectively
         for GTF files.  Default is `transcript_id` and `gene_id` according to
         the GTF spec.
 
-    `gtf_subfeature` : string
+    gtf_subfeature : string
 
         Feature type to use as a "gene component" when inferring gene and
         transcript extents for GTF files.  Default is `exon` according to the
         GTF spec.
 
-    `force_gff` : bool
+    force_gff : bool
         If True, do not do automatic format detection -- only use GFF.
 
-    `force_dialect_check`: bool
+    force_dialect_check : bool
         If True, the dialect will be checkef for every feature (instead of just
         `checklines` features).  This can be slow, but may be necessary for
         inconsistently-formatted input files.
 
-    `from_string`: bool
+    from_string : bool
         If True, then treat `data` as actual data (rather than the path to
         a file).
 
