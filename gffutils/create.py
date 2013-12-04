@@ -38,7 +38,10 @@ class _DBCreator(object):
                 os.unlink(dbfn)
         self.dbfn = dbfn
         self.id_spec = id_spec
-        conn = sqlite3.connect(dbfn)
+        if isinstance(dbfn, basestring):
+            conn = sqlite3.connect(dbfn)
+        else:
+            conn = dbfn
         self.conn = conn
         self.conn.row_factory = sqlite3.Row
         self._data = data
