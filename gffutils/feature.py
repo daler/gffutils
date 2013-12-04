@@ -74,7 +74,7 @@ class Feature(object):
     def __init__(self, seqid=".", source=".", featuretype=".",
                  start=".", end=".", score=".", strand=".", frame=".",
                  attributes=None, extra=None, bin=None, id=None, dialect=None,
-                 file_order=None):
+                 file_order=None, strict=False):
         """
         Represents a feature from the database.
 
@@ -154,6 +154,11 @@ class Feature(object):
             This is the `rowid` special field used in a sqlite3 database; this
             is provided by FeatureDB.
 
+        strict : bool
+            If True, then the attributes in the printed string will be in the
+            order specified in the dialect.  Disabled by default, since this
+            sorting step is time-consuming over many features.
+
         """
         # start/end can be provided as int-like, ".", or None, but will be
         # converted to int or None
@@ -166,7 +171,6 @@ class Feature(object):
         elif end is not None:
             end = int(end)
 
-        self._orig_attribute_str = None
 
         # Flexible handling of attributes:
         # If dict, then use that; otherwise assume JSON and convert to a dict;
@@ -183,8 +187,6 @@ class Feature(object):
 
             # it's a string but not JSON: assume original attributes string.
             except simplejson.JSONDecodeError:
-                # Saved for later printing
-                self._orig_attribute_str = attributes
 
                 # But Feature.attributes is still a dict
                 attributes, _dialect = parser._split_keyvals(attributes)
@@ -222,6 +224,7 @@ class Feature(object):
         self.id = id
         self.dialect = dialect or constants.dialect
         self.file_order = file_order
+        self.strict = strict
 
     def __repr__(self):
         memory_loc = hex(id(self))
