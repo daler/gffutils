@@ -842,6 +842,9 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=True,
             merge_strategy=merge_strategy, **kwargs)
 
     c.create()
-    db = interface.FeatureDB(c)
+    if dbfn == ':memory:':
+        db = interface.FeatureDB(c.conn, keep_order=keep_order)
+    else:
+        db = interface.FeatureDB(c, keep_order=keep_order)
 
     return db

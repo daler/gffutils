@@ -66,25 +66,21 @@ class FeatureDB(object):
         """
         # Since specifying the string ":memory:" will actually try to connect
         # to a new, separate (and empty) db in memory, we can alternatively
-        # pass in a _DBCreator instance to use its existing, in-memory db.
+        # pass in a sqlite connection instance to use its existing, in-memory
+        # db.
         if isinstance(dbfn, create._DBCreator):
-            # Save a reference to it, so that if we call the update() methood
-            # below, it will update this db.  TODO: is this needed?
-            self._DBCreator_instance = dbfn
+            self.conn = dbfn.conn
+            self.dbfn = dbfn.dbfn
 
-            # If in-memory, then use it's connection
-            if dbfn.dbfn == ':memory:':
-                self.conn = dbfn.conn
-
-            # otherwise make a new connection to the file
-            else:
-                self.dbfn = dbfn.dbfn
-                self.conn = sqlite3.connect(self.dbfn)
+        elif isinstance(dbfn, sqlite3.Connection):
+            self.conn = dbfn
+            self.dbfn = dbfn
         # otherwise assume dbfn is a string.
+        elif dbfn == ':memory:':
+            raise ValueError("cannot connect to memory db; please provide the connection")
         else:
             self.dbfn = dbfn
             self.conn = sqlite3.connect(self.dbfn)
-            self._DBCreator_instance = None
 
         if text_factory is not None:
             self.conn.text_factory = text_factory
@@ -551,7 +547,7 @@ class FeatureDB(object):
         Remaining kwargs are passed to create_db.
         """
         if make_backup:
-            if hasattr(self, 'dbfn'):
+            if isinstance(self.dbfn, basestring):
                 shutil.copy2(self.dbfn, self.dbfn + '.bak')
 
         # No matter what `features` came in as, convert to gffutils.Feature
@@ -566,24 +562,15 @@ class FeatureDB(object):
         if isinstance(features, FeatureDB):
             features = features.all_features()
 
-        # We need a _DBCreator instance, which has the populate_from_lines and
-        # update_relations methods.  If this FeatureDB was created in memory,
-        # the originating _DBCreator should be still accessible:
-        if self._DBCreator_instance is not None:
-            db = self._DBCreator_instance
-
-        # Otherwise, figure out what kind of new _DBCreator subclass to make
-        # based on the dialect.  This is sort of just re-connecting to the
-        # database in "creation mode" Note that simply creating a DBCreator
-        # doesn't do anything.
-        elif self.dialect['fmt'] == 'gtf':
+        if self.dialect['fmt'] == 'gtf':
             if 'id_spec' not in kwargs:
                 kwargs['id_spec'] =  {'gene': 'gene_id', 'transcript': 'transcript_id'}
-            db = create._GTFCreator(data=features, dbfn=self.dbfn, dialect=self.dialect, **kwargs)
+            db = create._GTFDBCreator(data=features, dbfn=self.dbfn, dialect=self.dialect, **kwargs)
         elif self.dialect['fmt'] == 'gff3':
             if 'id_spec' not in kwargs:
                 kwargs['id_spec'] = 'ID'
             db = create._GFFDBCreator(data=features, dbfn=self.dbfn, dialect=self.dialect, **kwargs)
+
         else:
             raise ValueError
 
