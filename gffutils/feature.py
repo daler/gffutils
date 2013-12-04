@@ -74,7 +74,7 @@ class Feature(object):
     def __init__(self, seqid=".", source=".", featuretype=".",
                  start=".", end=".", score=".", strand=".", frame=".",
                  attributes=None, extra=None, bin=None, id=None, dialect=None,
-                 file_order=None, strict=False):
+                 file_order=None, keep_order=False):
         """
         Represents a feature from the database.
 
@@ -154,7 +154,7 @@ class Feature(object):
             This is the `rowid` special field used in a sqlite3 database; this
             is provided by FeatureDB.
 
-        strict : bool
+        keep_order : bool
             If True, then the attributes in the printed string will be in the
             order specified in the dialect.  Disabled by default, since this
             sorting step is time-consuming over many features.
@@ -224,7 +224,7 @@ class Feature(object):
         self.id = id
         self.dialect = dialect or constants.dialect
         self.file_order = file_order
-        self.strict = strict
+        self.keep_order = keep_order
 
     def __repr__(self):
         memory_loc = hex(id(self))
@@ -278,7 +278,7 @@ class Feature(object):
 
         # Reconstruct from dict and dialect
         reconstructed_attributes = parser._reconstruct(
-            self.attributes, self.dialect, strict=self.strict)
+            self.attributes, self.dialect, keep_order=self.keep_order)
 
         # Final line includes reconstructed as well as any previously-added
         # "extra" fields
@@ -340,7 +340,7 @@ class Feature(object):
 
 
 
-def feature_from_line(line, dialect=None, strict=True):
+def feature_from_line(line, dialect=None, strict=True, keep_order=False):
     """
     Given a line from a GFF file, return a Feature object
 
@@ -384,6 +384,7 @@ def feature_from_line(line, dialect=None, strict=True):
     d = dict(zip(constants._gffkeys, fields))
     d['attributes'] = attrs
     d['extra'] = fields[9:]
+    d['keep_order'] = keep_order
     if dialect is None:
         dialect = _dialect
     return Feature(dialect=dialect, **d)

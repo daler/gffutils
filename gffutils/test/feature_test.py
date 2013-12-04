@@ -112,7 +112,7 @@ def test_attribute_order():
     # indidentally converts to GFF3 format)
     orig_dialect = a.dialect
     a.dialect = constants.dialect
-    a.strict = True
+    a.keep_order = True
     assert str(a) == 'chr1	.	mRNA	1	100	.	+	.	gene_id=gene1;transcript_id=mRNA1', str(a)
 
     # adding an attribute shoud always result in that attribute coming last (as

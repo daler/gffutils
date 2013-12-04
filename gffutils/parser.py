@@ -21,7 +21,7 @@ logger.addHandler(ch)
 gff3_kw_pat = re.compile('\w+=')
 
 
-def _reconstruct(keyvals, dialect, strict=False):
+def _reconstruct(keyvals, dialect, keep_order=False):
     """
     Reconstructs the original attributes string according to the dialect.
 
@@ -34,7 +34,7 @@ def _reconstruct(keyvals, dialect, strict=False):
         Dialect containing info on how to reconstruct a string version of the
         attributes
 
-    strict : bool
+    keep_order : bool
         If True, then perform sorting of attribute keys to ensure they are in
         the same order as those provided in the original file.  Default is
         False, which saves time especially on large data sets.
@@ -65,7 +65,7 @@ def _reconstruct(keyvals, dialect, strict=False):
         except ValueError:
             return 1e6
 
-    if strict:
+    if keep_order:
         items.sort(key=sort_key)
 
     for key, val in items:

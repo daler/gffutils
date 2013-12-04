@@ -39,7 +39,7 @@ class FeatureDB(object):
             within `limit`. Only relevant when `limit` is not None.
     """
 
-    def __init__(self, dbfn, text_factory=None, encoding='utf-8'):
+    def __init__(self, dbfn, text_factory=None, encoding='utf-8', keep_order=False):
         """
         Connect to a database created by :func:`gffutils.create_db`.
 

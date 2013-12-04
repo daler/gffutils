@@ -59,7 +59,7 @@ def attrs_OK(attr_str, attr_dict, acceptable_reconstruction=None):
     result, dialect = parser._split_keyvals(attr_str)
     assert result == attr_dict, result
 
-    reconstructed = parser._reconstruct(result, dialect)
+    reconstructed = parser._reconstruct(result, dialect, keep_order=True)
     if acceptable_reconstruction:
         assert reconstructed == acceptable_reconstruction, reconstructed
     else:
@@ -152,5 +152,6 @@ def test_inconsistent_dialect():
 def test_attributes():
     s = "chr2L	FlyBase	mRNA	7529	9484	.	+	.	ID=FBtr0300690;Name=CG11023-RC;Parent=FBgn0031208;"
     f = feature.feature_from_line(s)
+    f.keep_order = True
     assert str(f) == s, str(f)
 
