@@ -133,6 +133,16 @@ class FeatureDB(object):
             ''')
         self._autoincrements = dict(c)
 
+
+    def _feature_returner(self, **kwargs):
+        """
+        Returns a feature, adding additional database-specific defaults
+        """
+        kwargs.setdefault('dialect', self.dialect)
+        kwargs.setdefault('keep_order', self.keep_order)
+        return Feature(**kwargs)
+
+
     def schema(self):
         """
         Returns the database schema as a string.
@@ -160,7 +170,7 @@ class FeatureDB(object):
         # TODO: raise error if more than one key is found
         if results is None:
             raise helpers.FeatureNotFoundError(key)
-        return Feature(dialect=self.dialect, **results)
+        return self._feature_returner(**results)
 
     def count_features_of_type(self, featuretype):
         """
@@ -213,7 +223,7 @@ class FeatureDB(object):
         )
 
         for i in self._execute(query, args):
-            yield Feature(dialect=self.dialect, **i)
+            yield self._feature_returner(**i)
 
     # TODO: convert this to a syntax similar to itertools.groupby
     def iter_by_parent_childs(self, featuretype="gene", level=None,
@@ -254,7 +264,7 @@ class FeatureDB(object):
             completely_within=completely_within
         )
         for i in self._execute(query, args):
-            yield Feature(dialect=self.dialect, **i)
+            yield self._feature_returner(**i)
 
     def featuretypes(self):
         """
@@ -316,7 +326,7 @@ class FeatureDB(object):
         # modify _SELECT so that only unique results are returned
         query = query.replace("SELECT", "SELECT DISTINCT")
         for i in self._execute(query, args):
-            yield Feature(dialect=self.dialect, **i)
+            yield self._feature_returner(**i)
 
     def children(self, id, level=None, featuretype=None, order_by=None,
                  reverse=False, completely_within=False):
@@ -445,7 +455,7 @@ class FeatureDB(object):
         c = self.conn.cursor()
         c.execute(query, tuple(args))
         for i in c:
-            yield Feature(dialect=self.dialect, **i)
+            yield self._feature_returner(**i)
 
     @classmethod
     def interfeatures(self, features, new_featuretype=None,
@@ -543,7 +553,7 @@ class FeatureDB(object):
                     dialect = self.dialect
                 except AttributeError:
                     dialect = None
-            yield Feature(dialect=dialect, **fields)
+            yield self._feature_returner(**fields)
             interfeature_start = f.stop
 
     def update(self, features, make_backup=True, **kwargs):
@@ -713,7 +723,7 @@ class FeatureDB(object):
             else:
                 # The start position is outside the merged feature, so we're
                 # done with the current merged feature.  Prepare for output...
-                merged_feature = Feature(chrom=feature.chrom,
+                merged_feature = dict(chrom=feature.chrom,
                                          source='.',
                                          featuretype=featuretype,
                                          start=current_merged_start,
@@ -722,7 +732,7 @@ class FeatureDB(object):
                                          strand=strand,
                                          frame='.',
                                          attributes='')
-                yield merged_feature
+                yield self._feature_returner(**merged_feature)
 
                 # and we start a new one, initializing with this feature's
                 # start and stop.
@@ -732,7 +742,7 @@ class FeatureDB(object):
         # need to yield the last one.
         if len(features) == 1:
             feature = features[0]
-        merged_feature = Feature(chrom=feature.chrom,
+        merged_feature = dict(chrom=feature.chrom,
                                  source='.',
                                  featuretype=featuretype,
                                  start=current_merged_start,
@@ -741,7 +751,7 @@ class FeatureDB(object):
                                  strand=strand,
                                  frame='.',
                                  attributes='')
-        yield merged_feature
+        yield self._feature_returner(**merged_feature)
 
     def children_bp(self, feature, child_featuretype='exon', merge=False):
         """
