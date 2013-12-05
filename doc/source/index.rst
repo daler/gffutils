@@ -45,7 +45,7 @@ Create the database
 :mod:`gffutils` must pre-process input files by importing into a local sqlite3
 file-based database.  `force=True` will overwrite any existing database:
 
->>> db = gffutils.create_db(fn, dbfn='test.db', force=True)
+>>> db = gffutils.create_db(fn, dbfn='test.db', force=True, keep_order=True)
 
 Since real-world files don't always completely adhere to the format
 specifications, :mod:`gffutils` provides lots of configuration options to
@@ -59,7 +59,7 @@ Once the database has been created, downstream code can connect to it simply
 by:
 
 >>> import gffutils
->>> db = gffutils.FeatureDB('test.db')
+>>> db = gffutils.FeatureDB('test.db', keep_order=True)
 
 Access features by name, which returns a :class:`Feature` instance:
 
@@ -79,7 +79,7 @@ Access items within the attributes field (values are always in a list, even if
 only one item):
 
 >>> gene.attributes['Name']
-['CG11023']
+[u'CG11023']
 
 Printing a :class:`Feature` returns the original GFF line:
 
