@@ -238,7 +238,8 @@ Now we can supply this tranform function to :func:`create_db`:
 >>> db = gffutils.create_db(fn, ":memory:",
 ... id_spec={'gene': 'gene_id', 'transcript': "transcript_id"},
 ... merge_strategy="create_unique",
-... transform=transform_func)
+... transform=transform_func,
+... keep_order=True)
 
 Access
 ``````
@@ -618,7 +619,13 @@ Transform function to create appropriate "Parent" attributes:
 >>> fn = gffutils.example_filename('wormbase_gff2.txt')
 
 
->>> db = gffutils.create_db(fn, ":memory:", transform=transform, id_spec={'Transcript': "Transcript"}, force_gff=True, force_dialect_check=True)
+>>> db = gffutils.create_db(fn,
+... ":memory:",
+... transform=transform,
+... id_spec={'Transcript': "Transcript"},
+... force_gff=True,
+... force_dialect_check=True,
+... keep_order=True)
 
 The dialect for the database will be None:
 
