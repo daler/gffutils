@@ -132,7 +132,7 @@ class _DBCreator(object):
             constants._SELECT + ' WHERE id = ?', (ID,)).fetchone()
         return feature.Feature(dialect=self.iterator.dialect, **results)
 
-    def _do_merge(self, f):
+    def _do_merge(self, f, merge_strategy):
         """
         Different merge strategies upon name conflicts.
 
@@ -152,27 +152,33 @@ class _DBCreator(object):
         "replace":
             Replaces existing database feature with `f`.
         """
-        if self.merge_strategy == 'error':
+        if merge_strategy == 'error':
             raise ValueError("Duplicate ID {0.id}".format(f))
-        if self.merge_strategy == 'warning':
+        if merge_strategy == 'warning':
             logger.warning(
                 "Duplicate lines in file for id '{0.id}'; "
                 "ignoring all but the first".format(f))
             return None
-        elif self.merge_strategy == 'replace':
+        elif merge_strategy == 'replace':
             return f
-        elif self.merge_strategy == 'merge':
+        elif merge_strategy == 'merge':
             # retrieve the existing row
             existing_feature = self._get_feature(f.id)
 
             # does everything besides attributes and extra match?
+            other_attributes_same = True
             for k in constants._gffkeys[:-1]:
-                assert getattr(existing_feature, k) == getattr(f, k), (
-                    "Same ID, but differing info for %s field. "
-                    "Line %s: \n%s" % (
-                        f.id,
-                        self.iterator.current_item_number,
-                        self.iterator.current_item))
+                if getattr(existing_feature, k) != getattr(f, k):
+                    other_attributes_same = False
+
+            if not other_attributes_same:
+                return self._do_merge(f, merge_strategy='create_unique')
+
+                    #"Same ID, but differing info for %s field. "
+                    #"Line %s: \n%s" % (
+                    #    f.id,
+                    #    self.iterator.current_item_number,
+                    #    self.iterator.current_item))
 
             old_attributes = existing_feature.attributes
             new_attributes = f.attributes
@@ -189,12 +195,12 @@ class _DBCreator(object):
             existing_feature.attributes = new_attributes
             return existing_feature
 
-        elif self.merge_strategy == 'create_unique':
+        elif merge_strategy == 'create_unique':
             f.id = self._increment_featuretype_autoid(f.id)
             return f
         else:
             raise ValueError("Invalid merge strategy '%s'"
-                             % (self.merge_strategy))
+                             % (merge_strategy))
 
     def _populate_from_lines(self, lines):
         raise NotImplementedError
@@ -446,7 +452,7 @@ class _GTFDBCreator(_DBCreator):
             try:
                 c.execute(constants._INSERT, f.astuple())
             except sqlite3.IntegrityError:
-                fixed = self._do_merge(f)
+                fixed = self._do_merge(f, self.merge_strategy)
                 if self.merge_strategy in ['merge', 'replace']:
                     c.execute(
                         '''
@@ -635,7 +641,7 @@ class _GTFDBCreator(_DBCreator):
             try:
                 c.execute(constants._INSERT, f.astuple())
             except sqlite3.IntegrityError:
-                fixed = self._do_merge(f)
+                fixed = self._do_merge(f, self.merge_strategy)
                 c.execute(
                     '''
                     UPDATE features SET attributes = ?
