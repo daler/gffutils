@@ -39,6 +39,7 @@ extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest',
               ]
 
 autosummary_generate = True
+numpydoc_show_class_members = False
 issue_tracker_url = 'https://github.com/daler/gffutils/issues/{issue}'
 doctest_global_setup = """
 import gffutils

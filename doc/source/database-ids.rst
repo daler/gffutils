@@ -3,7 +3,7 @@
 
 Database IDs
 ============
-A :term:`primary key` is a unique identifier used in a database.  When
+A primary key is a unique identifier used in a database.  When
 importing a GFF or GTF file with :mod:`gffutils` into a database, each unique
 feature in the file should have its own primary key.
 
@@ -87,24 +87,20 @@ have several different forms -- None, string, list, dictionary, or callable.
 :special string:
 
     Use a GFF field value (from the first 8 columns) rather than an attributes
-    value.  Must be surrounded by `:`.
+    value.  Must be surrounded by `:`.  The options to use can be found in the
+    list :obj:`gffutils.constants._gffkeys` [:-1].
 
     For example, `id_spec=":seqid:"`:  use the "seqid" field as the primary
     key.
 
-    .. seealso::
-
-        :ref:`parser-dictionaries` has more info about the keys that are
-        available.
 
 :function:
 
     Apply a custom function (or other callable object), and use its return
     value as the primary key.
 
-    The function must accept a dictionary returned by
-    a :class:`gffutils.Parser` instance (see :ref:`parser-dictionaries` for
-    more details). It can return one of the following:
+    The function must accept a single :class:`gffutils.Feature` object.  It can
+    return one of the following:
 
     * None, in which case the behavior is the same as `id_spec=None`.
     * A special string starting with `autoincrement:X`, which will
@@ -112,7 +108,6 @@ have several different forms -- None, string, list, dictionary, or callable.
       `autoincrement:chr21`, then the primary key of the first feature will be
       `chr21_1`, the second will be `chr21_2`, and so on.
     * A string to be used as the primary key.
-
 
 
 The default for GFF3 files is `id_spec="ID"`.  If a feature has an "ID"
@@ -137,12 +132,11 @@ regions.
 
 `transform`
 -----------
-The `transform` kwarg is a function that accepts a dictionary from
-a :class:`gffutils.Parser` instance (see :ref:`parser-dictionaries` for what
-these are expected to look like) and that returns a dictionary with the same
-keys.  It is used to modify, on-the-fly, items as they are being imported into
-the database.  It is generally used for files that don't fit the standard GFF3
-or GTF specs.
+The `transform` kwarg is a function that accepts single
+:class:`gffutils.Feature` object and that returns a (possibly modified)
+:class:`gffutils.Feature` object.  It is used to modify, on-the-fly, items as
+they are being imported into the database.  It is generally used for files that
+don't fit the standard GFF3 or GTF specs.
 
 One example use-case is that FlyBase GFF3 files do have have a leading "chr"
 for the seqid GFF field.  If we wanted to add this to each feature as it is

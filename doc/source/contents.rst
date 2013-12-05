@@ -10,8 +10,8 @@ Table of Contents
     database-schema
     database-ids
     gtf
-    parser
     dialect
+    attributes
     examples
     api
     developers
