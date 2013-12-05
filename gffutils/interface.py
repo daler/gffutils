@@ -39,7 +39,7 @@ class FeatureDB(object):
             within `limit`. Only relevant when `limit` is not None.
     """
 
-    def __init__(self, dbfn, text_factory=None, encoding='utf-8', keep_order=False):
+    def __init__(self, dbfn, text_factory=None, default_encoding='utf-8', keep_order=False):
         """
         Connect to a database created by :func:`gffutils.create_db`.
 
@@ -52,10 +52,9 @@ class FeatureDB(object):
 
         text_factory : callable
 
-            Optionally set the way sqlite3 handle strings.  The default is to
-            return unicode; other options might be str (to always return ascii)
-            or sqlite3.OptimizedUnicode (returns ascii when possible, unicode
-            otherwise)
+            Optionally set the way sqlite3 handles strings.  Default is
+            sqlite3.OptimizedUnicode, which returns ascii when possible,
+            unicode otherwise
 
         encoding : str
 
@@ -102,7 +101,7 @@ class FeatureDB(object):
             self.conn.text_factory = text_factory
         self.conn.row_factory = sqlite3.Row
 
-        self.encoding = encoding
+        self.default_encoding = default_encoding
         self.keep_order = keep_order
         c = self.conn.cursor()
 
@@ -133,7 +132,6 @@ class FeatureDB(object):
             ''')
         self._autoincrements = dict(c)
 
-
     def _feature_returner(self, **kwargs):
         """
         Returns a feature, adding additional database-specific defaults
@@ -141,7 +139,6 @@ class FeatureDB(object):
         kwargs.setdefault('dialect', self.dialect)
         kwargs.setdefault('keep_order', self.keep_order)
         return Feature(**kwargs)
-
 
     def schema(self):
         """
@@ -165,7 +162,7 @@ class FeatureDB(object):
         try:
             c.execute(constants._SELECT + ' WHERE id = ?', (key,))
         except sqlite3.ProgrammingError:
-            c.execute(constants._SELECT + ' WHERE id = ?', (key.decode(self.encoding),))
+            c.execute(constants._SELECT + ' WHERE id = ?', (key.decode(self.default_encoding),))
         results = c.fetchone()
         # TODO: raise error if more than one key is found
         if results is None:

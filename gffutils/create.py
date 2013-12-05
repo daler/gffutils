@@ -25,7 +25,9 @@ logger.addHandler(ch)
 class _DBCreator(object):
     def __init__(self, data, dbfn, force=False, verbose=False, id_spec=None,
                  merge_strategy='merge', checklines=10, transform=None,
-                 force_dialect_check=False, from_string=False, dialect=None, default_encoding='utf-8'):
+                 force_dialect_check=False, from_string=False, dialect=None,
+                 default_encoding='utf-8',
+                 text_factory=None):
         """
         Base class for _GFFDBCreator and _GTFDBCreator; see create_db()
         function for docs
@@ -44,6 +46,8 @@ class _DBCreator(object):
             conn = dbfn
         self.conn = conn
         self.conn.row_factory = sqlite3.Row
+        if text_factory is not None:
+            self.conn.text_factory = text_factory
         self._data = data
 
         self.verbose = verbose
@@ -683,7 +687,8 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=True,
               checklines=10, merge_strategy='error', transform=None,
               gtf_transcript_key='transcript_id', gtf_gene_key='gene_id',
               gtf_subfeature='exon', force_gff=False,
-              force_dialect_check=False, from_string=False, keep_order=False):
+              force_dialect_check=False, from_string=False, keep_order=False,
+              text_factory=None):
     """
     Create a database from a GFF or GTF file.
 

@@ -390,6 +390,14 @@ def test_region():
     assert len(out_of_range) == 0
 
 
+def test_nonascii():
+    # smoke test (prev. version returned UnicodeD
+    db = gffutils.create_db(gffutils.example_filename('nonascii'), ":memory:")
+    for i in db.all_features():
+        print i
+
+
+
 
 if __name__ == "__main__":
     # this test case fails
