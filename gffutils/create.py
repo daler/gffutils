@@ -311,16 +311,11 @@ class _GFFDBCreator(_DBCreator):
         msg = ("Populating features table and first-order relations: "
                "%d features\r")
 
-        # ONEBYONE is used for profiling -- how to get faster inserts?
-        # ONEBYONE=False will do a single executemany
-        # ONEBYONE=True will do many single execute
-        #
         # c.executemany() was not as much of an improvement as I had expected.
         #
         # Compared to a benchmark of doing each insert separately:
         # executemany using a list of dicts to iterate over is ~15% slower
         # executemany using a list of tuples to iterate over is ~8% faster
-        ONEBYONE = True
 
         _features, _relations = [], []
         for i, f in enumerate(lines):
@@ -336,60 +331,31 @@ class _GFFDBCreator(_DBCreator):
             # execute-many?
             f.id = self._id_handler(f)
 
-            if ONEBYONE:
-
-                # TODO: these are two, one-by-one execute statements.
-                # Profiling shows that this is a slow step. Need to use
-                # executemany, which probably means writing to file first.
-
+            try:
                 try:
-                    try:
-                        c.execute(constants._INSERT, f.astuple())
-                    except sqlite3.ProgrammingError:
-                        c.execute(constants._INSERT, f.astuple('utf-8'))
-                except sqlite3.IntegrityError:
-                    fixed = self._do_merge(f)
-                    if self.merge_strategy in ['merge', 'replace']:
-                        c.execute(
-                            '''
-                            UPDATE features SET attributes = ?
-                            WHERE id = ?
-                            ''', (helpers._jsonify(fixed.attributes),
-                                  fixed.id))
+                    c.execute(constants._INSERT, f.astuple())
+                except sqlite3.ProgrammingError:
+                    c.execute(constants._INSERT, f.astuple('utf-8'))
+            except sqlite3.IntegrityError:
+                fixed = self._do_merge(f, self.merge_strategy)
+                if self.merge_strategy in ['merge', 'replace']:
+                    c.execute(
+                        '''
+                        UPDATE features SET attributes = ?
+                        WHERE id = ?
+                        ''', (helpers._jsonify(fixed.attributes),
+                              fixed.id))
 
-                    elif self.merge_strategy == 'create_unique':
-                        c.execute(constants._INSERT, f.astuple())
+                elif self.merge_strategy == 'create_unique':
+                    c.execute(constants._INSERT, f.astuple())
 
-                # Works in all cases since attributes is a defaultdict
-                if 'Parent' in f.attributes:
-                    for parent in f.attributes['Parent']:
-                        c.execute(
-                            '''
-                            INSERT OR IGNORE INTO relations VALUES
-                            (?, ?, 1)
-                            ''', (parent, f.id))
-
-            else:
-                _features.append(f.astuple())
-
-                if 'Parent' in f.attributes:
-                    for parent in f.attributes['Parent']:
-                        _relations.append((parent, f.id))
-
-        if not ONEBYONE:
-            # Profiling shows that there's an extra overhead for using dict
-            # syntax in sqlite3 queries.  Even though we do the lookup above
-            # (when appending to _features), it's still faster to use the tuple
-            # syntax.
-            c.executemany(constants._INSERT, _features)
-
-            c.executemany(
-                '''
-                INSERT INTO relations VALUES (?,?, 1);
-                ''', _relations)
-
-            del _relations
-            del _features
+            if 'Parent' in f.attributes:
+                for parent in f.attributes['Parent']:
+                    c.execute(
+                        '''
+                        INSERT OR IGNORE INTO relations VALUES
+                        (?, ?, 1)
+                        ''', (parent, f.id))
 
         self.conn.commit()
         if self.verbose:
