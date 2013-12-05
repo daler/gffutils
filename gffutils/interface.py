@@ -454,7 +454,6 @@ class FeatureDB(object):
         for i in c:
             yield self._feature_returner(**i)
 
-    @classmethod
     def interfeatures(self, features, new_featuretype=None,
                       merge_attributes=True, dialect=None):
         """
@@ -490,19 +489,6 @@ class FeatureDB(object):
             True, then `attribute_func` is called before `merge_attributes`.
             This could be useful for manually managing IDs for the new
             features.
-
-        >>> features = [
-        ... "chr1 . exon 1   100 . + . ID=exon1; Parent=mRNA1",
-        ... "chr1 . exon 200 250 . + . ID=exon2; Parent=mRNA1",
-        ... "chr1 . exon 500 600 . + . ID=exon3; Parent=mRNA1",
-        ... ]
-        >>> features = [feature_from_line(i, strict=False) for i in features]
-        >>> for i in FeatureDB.interfeatures(
-        ... features, new_featuretype="intron"):
-        ...     print i  # doctest: +NORMALIZE_WHITESPACE
-        chr1 gffutils_derived intron 101 199 . + . ID=exon1,exon2;Parent=mRNA1
-        chr1 gffutils_derived intron 251 499 . + . ID=exon1,exon3;Parent=mRNA1
-
         """
         for i, f in enumerate(features):
             # no inter-feature for the first one
