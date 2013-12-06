@@ -161,7 +161,7 @@ class BaseDB(object):
         self.dialect = self.db.dialect
 
     def table_test(self):
-        expected_tables = ['features', 'relations', 'meta', 'directives', 'autoincrements']
+        expected_tables = ['features', 'relations', 'meta', 'directives', 'autoincrements', 'duplicates']
         self.c.execute('select name from sqlite_master where type="table"')
         observed_tables = [i[0] for i in self.c.execute('select name from sqlite_master where type="table"')]
         assert set(expected_tables) == set(observed_tables), observed_tables
