@@ -204,6 +204,38 @@ class _DBCreator(object):
             raise ValueError("Invalid merge strategy '%s'"
                              % (merge_strategy))
 
+    def _add_duplicate(self, idspecid, newid):
+        """
+        Adds a duplicate ID (as identified by id_spec) and its new ID to the
+        duplicates table so that they can be later searched for merging.
+
+        Parameters
+        ----------
+        newid : str
+            The primary key used in the features table
+
+        idspecid : str
+            The ID identified by id_spec
+        """
+        c = self.conn.cursor()
+        try:
+            c.execute(
+                '''
+                INSERT INTO duplicates
+                (idspecid, newid)
+                VALUES (?, ?)''',
+                (idspecid, newid))
+        except sqlite3.ProgrammingError:
+            c.execute(
+                '''
+                INSERT INTO duplicates
+                (idspecid, newid)
+                VALUES (?, ?)''',
+                (idspecid.decode(self.default_encoding),
+                 newid.decode(self.default_encoding))
+            )
+        logger.debug('added id=%s; new=%s' % (idspecid, newid))
+        self.conn.commit()
     def _populate_from_lines(self, lines):
         raise NotImplementedError
 
