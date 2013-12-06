@@ -295,11 +295,14 @@ class _DBCreator(object):
             yield i
 
     def _insert(self, feature, cursor):
+        """
+        Insert a feature into the database.
+        """
         try:
             cursor.execute(constants._INSERT, feature.astuple())
         except sqlite3.ProgrammingError:
-            curso.execute(constants._INSERT, feature.astuple(self.default_encoding))
-
+            cursor.execute(
+                constants._INSERT, feature.astuple(self.default_encoding))
 
 
 class _GFFDBCreator(_DBCreator):
@@ -340,10 +343,7 @@ class _GFFDBCreator(_DBCreator):
             f.id = self._id_handler(f)
 
             try:
-                try:
-                    c.execute(constants._INSERT, f.astuple())
-                except sqlite3.ProgrammingError:
-                    c.execute(constants._INSERT, f.astuple('utf-8'))
+                self._insert(f, c)
             except sqlite3.IntegrityError:
                 fixed = self._do_merge(f, self.merge_strategy)
                 if self.merge_strategy in ['merge', 'replace']:
@@ -452,7 +452,7 @@ class _GTFDBCreator(_DBCreator):
 
             # Insert the feature itself...
             try:
-                c.execute(constants._INSERT, f.astuple())
+                self._insert(f, c)
             except sqlite3.IntegrityError:
                 fixed = self._do_merge(f, self.merge_strategy)
                 if self.merge_strategy in ['merge', 'replace']:
@@ -641,7 +641,7 @@ class _GTFDBCreator(_DBCreator):
         # account the current state of the db.
         for f in derived_feature_generator():
             try:
-                c.execute(constants._INSERT, f.astuple())
+                self._insert(f, c)
             except sqlite3.IntegrityError:
                 fixed = self._do_merge(f, self.merge_strategy)
                 c.execute(
