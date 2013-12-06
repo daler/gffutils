@@ -236,6 +236,26 @@ class _DBCreator(object):
             )
         logger.debug('added id=%s; new=%s' % (idspecid, newid))
         self.conn.commit()
+
+    def _candidate_merges(self, f):
+        """
+        Identifies those features that originally had the same ID as `f`
+        (according to the id_spec),  but were modified because of duplicate
+        IDs.
+        """
+        candidates = [self._get_feature(f.id)]
+        c = self.conn.cursor()
+        results = c.execute(
+            constants._SELECT + '''
+            JOIN duplicates ON
+            duplicates.newid = features.id WHERE duplicates.idspecid = ?''',
+            (f.id,)
+        )
+        for i in results:
+            candidates.append(
+                feature.Feature(dialect=self.iterator.dialect, **i))
+        return list(set(candidates))
+
     def _populate_from_lines(self, lines):
         raise NotImplementedError
 
