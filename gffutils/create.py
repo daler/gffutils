@@ -17,7 +17,7 @@ import logging
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 ch = logging.StreamHandler()
-ch.setLevel(logging.INFO)
+ch.setLevel(logging.DEBUG)
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 
@@ -47,13 +47,13 @@ class _DBCreator(object):
         self.conn = conn
         self.conn.row_factory = sqlite3.Row
         if text_factory is not None:
+            logger.debug('setting text factory to %s' % text_factory)
             self.conn.text_factory = text_factory
         self._data = data
 
-        self.verbose = verbose
         self._orig_logger_level = logger.level
-        if not self.verbose:
-            logger.setLevel(logging.ERROR)
+
+        self.set_verbose(verbose)
 
         self.iterator = iterators.DataIterator(
             data=data, checklines=checklines, transform=transform,
@@ -62,7 +62,9 @@ class _DBCreator(object):
         )
 
     def set_verbose(self, verbose=None):
-        if verbose:
+        if verbose == 'debug':
+            logger.setLevel(logging.DEBUG)
+        elif verbose:
             logger.setLevel(logging.INFO)
         else:
             logger.setLevel(logging.ERROR)
