@@ -297,8 +297,9 @@ Aha! A single 5'UTR.  What about 3'UTRs?
 2L	FlyBase	three_prime_UTR	9277	9484	.	+	.	Name=CG11023-u3;Parent=FBtr0300690;parent_type=mRNA
 
 
->>> for i in db.features_of_type('intron'):
-...     print i #doctest:+NORMALIZE_WHITESPACE
-
 >>> for i in db2.features_of_type('intron'):
-...     print i
+...     print i #doctest:+NORMALIZE_WHITESPACE
+2L	FlyBase	intron	8117	8228	.	+	.	Name=CG11023-in;Parent=FBtr0330654;parent_type=mRNA
+2L	FlyBase	intron	8117	8192	.	+	.	Name=CG11023-in;Parent=FBtr0300689,FBtr0300690;parent_type=mRNA
+2L	FlyBase	intron	8590	8667	.	+	.	Name=CG11023-in;Parent=FBtr0300690;parent_type=mRNA
+
