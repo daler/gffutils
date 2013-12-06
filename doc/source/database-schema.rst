@@ -48,7 +48,17 @@ CREATE TABLE autoincrements (
     primary key (base)
     );
 <BLANKLINE>
+CREATE TABLE duplicates (
+    idspecid text,
+    newid text,
+    primary key (newid)
+    );
 <BLANKLINE>
+<BLANKLINE>
+<BLANKLINE>
+
+
+
 
 .. _featurestable:
 
