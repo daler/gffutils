@@ -655,7 +655,7 @@ class _GTFDBCreator(_DBCreator):
         # TODO: recreate indexes?
 
 
-def create_db(data, dbfn, id_spec=None, force=False, verbose=True,
+def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
               checklines=10, merge_strategy='error', transform=None,
               gtf_transcript_key='transcript_id', gtf_gene_key='gene_id',
               gtf_subfeature='exon', force_gff=False,
@@ -837,7 +837,7 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=True,
     kwargs.update(**add_kwargs)
     kwargs['dialect'] = dialect
     c = cls(dbfn=dbfn, id_spec=id_spec, force=force, verbose=verbose,
-            merge_strategy=merge_strategy, **kwargs)
+            merge_strategy=merge_strategy, text_factory=text_factory, **kwargs)
 
     c.create()
     if dbfn == ':memory:':
