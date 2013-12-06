@@ -105,17 +105,20 @@ def test_attribute_order():
         """
         chr1	.	mRNA	1	100	.	+	.	%s
         """ % attributes, strict=False)
+    a.strict = True
     assert str(a) == 'chr1	.	mRNA	1	100	.	+	.	transcript_id "mRNA1"; gene_id "gene1";', str(a)
 
     # ensure that using the default dialect uses the default order (and
     # indidentally converts to GFF3 format)
     orig_dialect = a.dialect
     a.dialect = constants.dialect
+    a.keep_order = True
     assert str(a) == 'chr1	.	mRNA	1	100	.	+	.	gene_id=gene1;transcript_id=mRNA1', str(a)
 
     # adding an attribute shoud always result in that attribute coming last (as
     # long as that attribute is not in the dialect order)
     a['dummy'] = ['asdf']
+    a.strict = True
     assert str(a) == 'chr1	.	mRNA	1	100	.	+	.	gene_id=gene1;transcript_id=mRNA1;dummy=asdf', str(a)
 
 

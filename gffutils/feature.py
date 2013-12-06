@@ -74,7 +74,7 @@ class Feature(object):
     def __init__(self, seqid=".", source=".", featuretype=".",
                  start=".", end=".", score=".", strand=".", frame=".",
                  attributes=None, extra=None, bin=None, id=None, dialect=None,
-                 file_order=None):
+                 file_order=None, keep_order=False):
         """
         Represents a feature from the database.
 
@@ -154,6 +154,11 @@ class Feature(object):
             This is the `rowid` special field used in a sqlite3 database; this
             is provided by FeatureDB.
 
+        keep_order : bool
+            If True, then the attributes in the printed string will be in the
+            order specified in the dialect.  Disabled by default, since this
+            sorting step is time-consuming over many features.
+
         """
         # start/end can be provided as int-like, ".", or None, but will be
         # converted to int or None
@@ -166,7 +171,6 @@ class Feature(object):
         elif end is not None:
             end = int(end)
 
-        self._orig_attribute_str = None
 
         # Flexible handling of attributes:
         # If dict, then use that; otherwise assume JSON and convert to a dict;
@@ -183,8 +187,6 @@ class Feature(object):
 
             # it's a string but not JSON: assume original attributes string.
             except simplejson.JSONDecodeError:
-                # Saved for later printing
-                self._orig_attribute_str = attributes
 
                 # But Feature.attributes is still a dict
                 attributes, _dialect = parser._split_keyvals(attributes)
@@ -222,6 +224,7 @@ class Feature(object):
         self.id = id
         self.dialect = dialect or constants.dialect
         self.file_order = file_order
+        self.keep_order = keep_order
 
     def __repr__(self):
         memory_loc = hex(id(self))
@@ -261,33 +264,29 @@ class Feature(object):
     def __str__(self):
         # All fields but attributes (and extra).
         items = [getattr(self, k) for k in constants._gffkeys[:-1]]
+
+        # Handle start/stop, which are either None or int
         if items[3] is None:
             items[3] = "."
+        else:
+            items[3] = str(items[3])
+
         if items[4] is None:
             items[4] = "."
-
-        # Reconstruct from dict and dialect (only if original attributes
-        # weren't provided)
-        if self._orig_attribute_str:
-            reconstructed_attributes = self._orig_attribute_str
         else:
-            reconstructed_attributes = parser._reconstruct(
-                self.attributes, self.dialect)
+            items[4] = str(items[4])
+
+        # Reconstruct from dict and dialect
+        reconstructed_attributes = parser._reconstruct(
+            self.attributes, self.dialect, keep_order=self.keep_order)
 
         # Final line includes reconstructed as well as any previously-added
         # "extra" fields
         items.append(reconstructed_attributes)
         if self.extra:
             items.append('\t'.join(self.extra))
-        encoded_items = []
-        for i in items:
-            try:
-                encoded_items.append(str(i))
-            except UnicodeEncodeError:
-                # assume already in unicode
-                encoded_items.append(i.encode('utf-8'))
 
-        return '\t'.join(encoded_items)
+        return '\t'.join(items)
 
     def __hash__(self):
         return hash(str(self))
@@ -316,20 +315,32 @@ class Feature(object):
     def stop(self, value):
         self.end = value
 
-    def astuple(self):
+    def astuple(self, encoding=None):
         """
         Return a tuple suitable for import into a database, with attributes
         field and extra field jsonified into strings
+
+        If `encoding` is not None, then convert string fields to unicode using
+        the provided encoding.
         """
+        if not encoding:
+            return (
+                self.id, self.seqid, self.source, self.featuretype, self.start, self.end, self.score,
+                self.strand, self.frame, helpers._jsonify(self.attributes), helpers._jsonify(self.extra),
+                self.bin
+            )
         return (
-            self.id, self.seqid, self.source, self.featuretype, self.start, self.end, self.score,
-            self.strand, self.frame, helpers._jsonify(self.attributes), helpers._jsonify(self.extra),
-            self.bin
+            self.id.decode(encoding), self.seqid.decode(encoding),
+            self.source.decode(encoding), self.featuretype.decode(encoding),
+            self.start, self.end, self.score.decode(encoding),
+            self.strand.decode(encoding), self.frame.decode(encoding),
+            helpers._jsonify(self.attributes).decode(encoding),
+            helpers._jsonify(self.extra).decode(encoding), self.bin
         )
 
 
 
-def feature_from_line(line, dialect=None, strict=True):
+def feature_from_line(line, dialect=None, strict=True, keep_order=False):
     """
     Given a line from a GFF file, return a Feature object
 
@@ -373,6 +384,7 @@ def feature_from_line(line, dialect=None, strict=True):
     d = dict(zip(constants._gffkeys, fields))
     d['attributes'] = attrs
     d['extra'] = fields[9:]
+    d['keep_order'] = keep_order
     if dialect is None:
         dialect = _dialect
     return Feature(dialect=dialect, **d)

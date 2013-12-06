@@ -1,4 +1,3 @@
-from simplejson import JSONEncoder
 import copy
 import sys
 import os
@@ -261,11 +260,6 @@ class AttributeStringError(Exception):
     pass
 
 
-class AttributesEncoder(JSONEncoder):
-    def default(self, obj):
-        return obj._d
-
-
 def _jsonify(x):
     """Use most compact form of JSON"""
     if isinstance(x, feature.dict_class):
@@ -431,6 +425,12 @@ def is_gff_db(db_fname):
     if db_fname.endswith(".db"):
         return True
     return False
+
+def to_unicode(obj, encoding='utf-8'):
+    if isinstance(obj, basestring):
+        if not isinstance(obj, unicode):
+            obj = unicode(obj, encoding)
+    return obj
 
 
 ##

@@ -39,21 +39,39 @@ class FeatureDB(object):
             within `limit`. Only relevant when `limit` is not None.
     """
 
-    def __init__(self, dbfn, text_factory=str):
+    def __init__(self, dbfn, text_factory=None, encoding='utf-8', keep_order=False):
         """
         Connect to a database created by :func:`gffutils.create_db`.
 
         Parameters
         ----------
 
-        `dbfn` : str
+        dbfn : str
 
             Path to a database created by :func:`gffutils.create_db`.
 
-        `text_factory` : callable
+        text_factory : callable
 
-            Optionally set the way sqlite3 handle strings.  Besides the default
-            `str`, another option might be sqlite3.OptimizedUnicode.
+            Optionally set the way sqlite3 handle strings.  The default is to
+            return unicode; other options might be str (to always return ascii)
+            or sqlite3.OptimizedUnicode (returns ascii when possible, unicode
+            otherwise)
+
+        encoding : str
+
+            When non-ASCII characters are encountered, assume they are in this
+            encoding.
+
+        keep_order : bool
+
+            If True, all features returned from this instance will have the
+            order of their attributes maintained.  This can be turned on or off
+            database-wide by setting the `keep_order` attribute or with this
+            kwarg, or on a feature-by-feature basis by setting the `keep_order`
+            attribute of an individual feature.
+
+            Default is False, since this includes a sorting step that can get
+            time-consuming for many features.
 
         .. note::
 
@@ -64,29 +82,28 @@ class FeatureDB(object):
         """
         # Since specifying the string ":memory:" will actually try to connect
         # to a new, separate (and empty) db in memory, we can alternatively
-        # pass in a _DBCreator instance to use its existing, in-memory db.
+        # pass in a sqlite connection instance to use its existing, in-memory
+        # db.
         if isinstance(dbfn, create._DBCreator):
-            # Save a reference to it, so that if we call the update() methood
-            # below, it will update this db.  TODO: is this needed?
-            self._DBCreator_instance = dbfn
+            self.conn = dbfn.conn
+            self.dbfn = dbfn.dbfn
 
-            # If in-memory, then use it's connection
-            if dbfn.dbfn == ':memory:':
-                self.conn = dbfn.conn
-
-            # otherwise make a new connection to the file
-            else:
-                self.dbfn = dbfn.dbfn
-                self.conn = sqlite3.connect(self.dbfn)
+        elif isinstance(dbfn, sqlite3.Connection):
+            self.conn = dbfn
+            self.dbfn = dbfn
         # otherwise assume dbfn is a string.
+        elif dbfn == ':memory:':
+            raise ValueError("cannot connect to memory db; please provide the connection")
         else:
             self.dbfn = dbfn
             self.conn = sqlite3.connect(self.dbfn)
-            self._DBCreator_instance = None
 
-        self.conn.text_factory = text_factory
+        if text_factory is not None:
+            self.conn.text_factory = text_factory
         self.conn.row_factory = sqlite3.Row
 
+        self.encoding = encoding
+        self.keep_order = keep_order
         c = self.conn.cursor()
 
         # Load some meta info
@@ -116,6 +133,16 @@ class FeatureDB(object):
             ''')
         self._autoincrements = dict(c)
 
+
+    def _feature_returner(self, **kwargs):
+        """
+        Returns a feature, adding additional database-specific defaults
+        """
+        kwargs.setdefault('dialect', self.dialect)
+        kwargs.setdefault('keep_order', self.keep_order)
+        return Feature(**kwargs)
+
+
     def schema(self):
         """
         Returns the database schema as a string.
@@ -135,12 +162,15 @@ class FeatureDB(object):
         if isinstance(key, Feature):
             key = key.id
         c = self.conn.cursor()
-        c.execute(constants._SELECT + ' WHERE id = ?', (key,))
+        try:
+            c.execute(constants._SELECT + ' WHERE id = ?', (key,))
+        except sqlite3.ProgrammingError:
+            c.execute(constants._SELECT + ' WHERE id = ?', (key.decode(self.encoding),))
         results = c.fetchone()
         # TODO: raise error if more than one key is found
         if results is None:
             raise helpers.FeatureNotFoundError(key)
-        return Feature(dialect=self.dialect, **results)
+        return self._feature_returner(**results)
 
     def count_features_of_type(self, featuretype):
         """
@@ -193,7 +223,7 @@ class FeatureDB(object):
         )
 
         for i in self._execute(query, args):
-            yield Feature(dialect=self.dialect, **i)
+            yield self._feature_returner(**i)
 
     # TODO: convert this to a syntax similar to itertools.groupby
     def iter_by_parent_childs(self, featuretype="gene", level=None,
@@ -234,7 +264,7 @@ class FeatureDB(object):
             completely_within=completely_within
         )
         for i in self._execute(query, args):
-            yield Feature(dialect=self.dialect, **i)
+            yield self._feature_returner(**i)
 
     def featuretypes(self):
         """
@@ -258,9 +288,9 @@ class FeatureDB(object):
         Parameters
         ----------
 
-        `id` : string or a Feature object
+        id : string or a Feature object
 
-        `level` : None or int
+        level : None or int
 
             If `level=None` (default), then return all children regardless
             of level.  If `level` is an integer, then constrain to just that
@@ -296,7 +326,7 @@ class FeatureDB(object):
         # modify _SELECT so that only unique results are returned
         query = query.replace("SELECT", "SELECT DISTINCT")
         for i in self._execute(query, args):
-            yield Feature(dialect=self.dialect, **i)
+            yield self._feature_returner(**i)
 
     def children(self, id, level=None, featuretype=None, order_by=None,
                  reverse=False, completely_within=False):
@@ -355,17 +385,17 @@ class FeatureDB(object):
 
         Parameters
         ----------
-        `region` : string, tuple, or Feature instance
+        region : string, tuple, or Feature instance
             If string, then of the form "seqid:start-end".  If tuple, then
             (seqid, start, end).  If :class:`Feature`, then use the features
             seqid, start, and end values.
 
-        `featuretype` : None, string, or iterable
+        featuretype : None, string, or iterable
             If not None, then restrict output.  If string, then only report
             that feature type.  If iterable, then report all featuretypes in
             the iterable.
 
-        `completely_within` : bool
+        completely_within : bool
             If False (default), returns features that overlap `region`, even
             partially.  If True, only return features that are completely
             within `region`.
@@ -425,7 +455,7 @@ class FeatureDB(object):
         c = self.conn.cursor()
         c.execute(query, tuple(args))
         for i in c:
-            yield Feature(dialect=self.dialect, **i)
+            yield self._feature_returner(**i)
 
     @classmethod
     def interfeatures(self, features, new_featuretype=None,
@@ -448,15 +478,15 @@ class FeatureDB(object):
 
         Parameters
         ----------
-        `features` : iterable of :class:`feature.Feature` instances
+        features : iterable of :class:`feature.Feature` instances
             Sorted, merged iterable
 
-        `new_featuretype` : string or None
+        new_featuretype : string or None
             The new features will all be of this type, or, if None (default)
             then the featuretypes will be constructed from the neighboring
             features, e.g., `inter_exon_exon`.
 
-        `attribute_func` : callable or None
+        attribute_func : callable or None
             If None, then nothing special is done to the attributes.  If
             callable, then the callable accepts two attribute dictionaries and
             returns a single attribute dictionary.  If `merge_attributes` is
@@ -523,7 +553,7 @@ class FeatureDB(object):
                     dialect = self.dialect
                 except AttributeError:
                     dialect = None
-            yield Feature(dialect=dialect, **fields)
+            yield self._feature_returner(**fields)
             interfeature_start = f.stop
 
     def update(self, features, make_backup=True, **kwargs):
@@ -544,7 +574,7 @@ class FeatureDB(object):
         Remaining kwargs are passed to create_db.
         """
         if make_backup:
-            if hasattr(self, 'dbfn'):
+            if isinstance(self.dbfn, basestring):
                 shutil.copy2(self.dbfn, self.dbfn + '.bak')
 
         # No matter what `features` came in as, convert to gffutils.Feature
@@ -559,24 +589,15 @@ class FeatureDB(object):
         if isinstance(features, FeatureDB):
             features = features.all_features()
 
-        # We need a _DBCreator instance, which has the populate_from_lines and
-        # update_relations methods.  If this FeatureDB was created in memory,
-        # the originating _DBCreator should be still accessible:
-        if self._DBCreator_instance is not None:
-            db = self._DBCreator_instance
-
-        # Otherwise, figure out what kind of new _DBCreator subclass to make
-        # based on the dialect.  This is sort of just re-connecings to the
-        # database in "creation mode" Note that simply creating a DBCreator
-        # doesn't do anything.
-        elif self.dialect['fmt'] == 'gtf':
+        if self.dialect['fmt'] == 'gtf':
             if 'id_spec' not in kwargs:
                 kwargs['id_spec'] =  {'gene': 'gene_id', 'transcript': 'transcript_id'}
-            db = create._GTFCreator(data=features, dbfn=self.dbfn, dialect=self.dialect, **kwargs)
+            db = create._GTFDBCreator(data=features, dbfn=self.dbfn, dialect=self.dialect, **kwargs)
         elif self.dialect['fmt'] == 'gff3':
             if 'id_spec' not in kwargs:
                 kwargs['id_spec'] = 'ID'
             db = create._GFFDBCreator(data=features, dbfn=self.dbfn, dialect=self.dialect, **kwargs)
+
         else:
             raise ValueError
 
@@ -702,7 +723,7 @@ class FeatureDB(object):
             else:
                 # The start position is outside the merged feature, so we're
                 # done with the current merged feature.  Prepare for output...
-                merged_feature = Feature(chrom=feature.chrom,
+                merged_feature = dict(chrom=feature.chrom,
                                          source='.',
                                          featuretype=featuretype,
                                          start=current_merged_start,
@@ -711,7 +732,7 @@ class FeatureDB(object):
                                          strand=strand,
                                          frame='.',
                                          attributes='')
-                yield merged_feature
+                yield self._feature_returner(**merged_feature)
 
                 # and we start a new one, initializing with this feature's
                 # start and stop.
@@ -721,7 +742,7 @@ class FeatureDB(object):
         # need to yield the last one.
         if len(features) == 1:
             feature = features[0]
-        merged_feature = Feature(chrom=feature.chrom,
+        merged_feature = dict(chrom=feature.chrom,
                                  source='.',
                                  featuretype=featuretype,
                                  start=current_merged_start,
@@ -730,7 +751,7 @@ class FeatureDB(object):
                                  strand=strand,
                                  frame='.',
                                  attributes='')
-        yield merged_feature
+        yield self._feature_returner(**merged_feature)
 
     def children_bp(self, feature, child_featuretype='exon', merge=False):
         """

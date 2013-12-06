@@ -25,23 +25,24 @@ logger.addHandler(ch)
 class _DBCreator(object):
     def __init__(self, data, dbfn, force=False, verbose=False, id_spec=None,
                  merge_strategy='merge', checklines=10, transform=None,
-                 force_dialect_check=False, from_string=False, dialect=None):
+                 force_dialect_check=False, from_string=False, dialect=None, default_encoding='utf-8'):
         """
         Base class for _GFFDBCreator and _GTFDBCreator; see create_db()
         function for docs
         """
         self.merge_strategy = merge_strategy
-
+        self.default_encoding = default_encoding
         self._autoincrements = collections.defaultdict(int)
         if force:
             if os.path.exists(dbfn):
                 os.unlink(dbfn)
         self.dbfn = dbfn
         self.id_spec = id_spec
-        conn = sqlite3.connect(dbfn)
+        if isinstance(dbfn, basestring):
+            conn = sqlite3.connect(dbfn)
+        else:
+            conn = dbfn
         self.conn = conn
-        #self.conn.text_factory = sqlite3.OptimizedUnicode
-        self.conn.text_factory = str
         self.conn.row_factory = sqlite3.Row
         self._data = data
 
@@ -162,9 +163,6 @@ class _DBCreator(object):
 
             # does everything besides attributes and extra match?
             for k in constants._gffkeys[:-1]:
-                # Note str() here: `existing_d` came from the db (so start/end
-                # are integers) but `d` came from the file, so they are still
-                # strings.
                 assert getattr(existing_feature, k) == getattr(f, k), (
                     "Same ID, but differing info for %s field. "
                     "Line %s: \n%s" % (
@@ -172,13 +170,21 @@ class _DBCreator(object):
                         self.iterator.current_item_number,
                         self.iterator.current_item))
 
-            attributes = existing_feature.attributes
+            old_attributes = existing_feature.attributes
+            new_attributes = f.attributes
 
             # update the attributes (using sets for de-duping)
-            for k, v in f.attributes.items():
-                attributes[k] = list(set(attributes[k]).union(v))
-            existing_feature.attributes = attributes
+            #
+            # It's possible that the new feature has a new attribute key, so
+            # only use the keys that are shared and already exist.
+            old_keys = set(old_attributes.keys())
+            new_keys = set(new_attributes.keys())
+            common_keys = old_keys.intersection(new_keys)
+            for k in common_keys:
+                new_attributes[k] = list(set(old_attributes[k]).union(new_attributes[k]))
+            existing_feature.attributes = new_attributes
             return existing_feature
+
         elif self.merge_strategy == 'create_unique':
             f.id = self._increment_featuretype_autoid(f.id)
             return f
@@ -276,6 +282,13 @@ class _DBCreator(object):
         for i in cursor:
             yield i
 
+    def _insert(self, feature, cursor):
+        try:
+            cursor.execute(constants._INSERT, feature.astuple())
+        except sqlite3.ProgrammingError:
+            curso.execute(constants._INSERT, feature.astuple(self.default_encoding))
+
+
 
 class _GFFDBCreator(_DBCreator):
     def __init__(self, *args, **kwargs):
@@ -326,7 +339,10 @@ class _GFFDBCreator(_DBCreator):
                 # executemany, which probably means writing to file first.
 
                 try:
-                    c.execute(constants._INSERT, f.astuple())
+                    try:
+                        c.execute(constants._INSERT, f.astuple())
+                    except sqlite3.ProgrammingError:
+                        c.execute(constants._INSERT, f.astuple('utf-8'))
                 except sqlite3.IntegrityError:
                     fixed = self._do_merge(f)
                     if self.merge_strategy in ['merge', 'replace']:
@@ -667,13 +683,13 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=True,
               checklines=10, merge_strategy='error', transform=None,
               gtf_transcript_key='transcript_id', gtf_gene_key='gene_id',
               gtf_subfeature='exon', force_gff=False,
-              force_dialect_check=False, from_string=False):
+              force_dialect_check=False, from_string=False, keep_order=False):
     """
     Create a database from a GFF or GTF file.
 
     Parameters
     ----------
-    `data` : string or iterable
+    data : string or iterable
 
         If a string (and `from_string` is False), then `data` is the path to
         the original GFF or GTF file.
@@ -683,12 +699,12 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=True,
 
         Otherwise, it's an iterable of Feature objects.
 
-    `dbfn` : string
+    dbfn : string
 
         Path to the database that will be created.  Can be the special string
         ":memory:" to create an in-memory database.
 
-    `id_spec` : string, list, dict, callable, or None
+    id_spec : string, list, dict, callable, or None
 
         This parameter guides what will be used as the primary key for the
         database, which in turn determines how you will access individual
@@ -724,12 +740,12 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=True,
               if "autoincrement:chr10", then the first feature will be
               "chr10_1", the second "chr10_2", and so on.
 
-    `force` : bool
+    force : bool
 
         If `False` (default), then raise an exception if `dbfn` already exists.
         Use `force=True` to overwrite any existing databases.
 
-    `verbose` : bool
+    verbose : bool
 
         Report percent complete and other feedback on how the db creation is
         progressing.
@@ -738,11 +754,11 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=True,
         once to see how many items there are; for large files you may want to
         use `verbose=False` to avoid this.
 
-    `checklines` : int
+    checklines : int
 
         Number of lines to check the dialect.
 
-    `merge_strategy` : { "merge", "create_unique", "error", "warning" }
+    merge_strategy : { "merge", "create_unique", "error", "warning" }
 
         This parameter specifies the behavior when two items have an identical
         primary key.
@@ -762,34 +778,47 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=True,
         Using `merge_strategy="warning"`, a warning will be printed to the
         logger, and the duplicate feature will be skipped.
 
-    `transform` : callable
+    transform : callable
 
         Function (or other callable object) that accepts a dictionary and
         returns a dictionary.
 
-    `gtf_transcript_key`, `gtf_gene_key` : string
+    gtf_transcript_key, gtf_gene_key : string
 
         Which attribute to use as the transcript ID and gene ID respectively
         for GTF files.  Default is `transcript_id` and `gene_id` according to
         the GTF spec.
 
-    `gtf_subfeature` : string
+    gtf_subfeature : string
 
         Feature type to use as a "gene component" when inferring gene and
         transcript extents for GTF files.  Default is `exon` according to the
         GTF spec.
 
-    `force_gff` : bool
+    force_gff : bool
         If True, do not do automatic format detection -- only use GFF.
 
-    `force_dialect_check`: bool
+    force_dialect_check : bool
         If True, the dialect will be checkef for every feature (instead of just
         `checklines` features).  This can be slow, but may be necessary for
         inconsistently-formatted input files.
 
-    `from_string`: bool
+    from_string : bool
         If True, then treat `data` as actual data (rather than the path to
         a file).
+
+
+    keep_order : bool
+
+        If True, all features returned from this instance will have the
+        order of their attributes maintained.  This can be turned on or off
+        database-wide by setting the `keep_order` attribute or with this
+        kwarg, or on a feature-by-feature basis by setting the `keep_order`
+        attribute of an individual feature.
+
+        Default is False, since this includes a sorting step that can get
+        time-consuming for many features.
+
     """
     kwargs = dict(
         data=data, checklines=checklines, transform=transform,
@@ -834,6 +863,9 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=True,
             merge_strategy=merge_strategy, **kwargs)
 
     c.create()
-    db = interface.FeatureDB(c)
+    if dbfn == ':memory:':
+        db = interface.FeatureDB(c.conn, keep_order=keep_order)
+    else:
+        db = interface.FeatureDB(c, keep_order=keep_order)
 
     return db
