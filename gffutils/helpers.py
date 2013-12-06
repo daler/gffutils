@@ -426,6 +426,7 @@ def is_gff_db(db_fname):
         return True
     return False
 
+
 def to_unicode(obj, encoding='utf-8'):
     if isinstance(obj, basestring):
         if not isinstance(obj, unicode):

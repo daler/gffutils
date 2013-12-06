@@ -170,7 +170,6 @@ class Feature(object):
         elif end is not None:
             end = int(end)
 
-
         # Flexible handling of attributes:
         # If dict, then use that; otherwise assume JSON and convert to a dict;
         # otherwise assume original string and convert to a dict.
@@ -324,9 +323,10 @@ class Feature(object):
         """
         if not encoding:
             return (
-                self.id, self.seqid, self.source, self.featuretype, self.start, self.end, self.score,
-                self.strand, self.frame, helpers._jsonify(self.attributes), helpers._jsonify(self.extra),
-                self.bin
+                self.id, self.seqid, self.source, self.featuretype, self.start,
+                self.end, self.score, self.strand, self.frame,
+                helpers._jsonify(self.attributes),
+                helpers._jsonify(self.extra), self.bin
             )
         return (
             self.id.decode(encoding), self.seqid.decode(encoding),
@@ -336,7 +336,6 @@ class Feature(object):
             helpers._jsonify(self.attributes).decode(encoding),
             helpers._jsonify(self.extra).decode(encoding), self.bin
         )
-
 
 
 def feature_from_line(line, dialect=None, strict=True, keep_order=False):

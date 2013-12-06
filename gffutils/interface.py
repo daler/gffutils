@@ -39,7 +39,8 @@ class FeatureDB(object):
             within `limit`. Only relevant when `limit` is not None.
     """
 
-    def __init__(self, dbfn, text_factory=None, default_encoding='utf-8', keep_order=False):
+    def __init__(self, dbfn, text_factory=None, default_encoding='utf-8',
+                 keep_order=False):
         """
         Connect to a database created by :func:`gffutils.create_db`.
 
@@ -92,7 +93,8 @@ class FeatureDB(object):
             self.dbfn = dbfn
         # otherwise assume dbfn is a string.
         elif dbfn == ':memory:':
-            raise ValueError("cannot connect to memory db; please provide the connection")
+            raise ValueError(
+                "cannot connect to memory db; please provide the connection")
         else:
             self.dbfn = dbfn
             self.conn = sqlite3.connect(self.dbfn)
@@ -162,7 +164,9 @@ class FeatureDB(object):
         try:
             c.execute(constants._SELECT + ' WHERE id = ?', (key,))
         except sqlite3.ProgrammingError:
-            c.execute(constants._SELECT + ' WHERE id = ?', (key.decode(self.default_encoding),))
+            c.execute(
+                constants._SELECT + ' WHERE id = ?',
+                (key.decode(self.default_encoding),))
         results = c.fetchone()
         # TODO: raise error if more than one key is found
         if results is None:
@@ -574,12 +578,15 @@ class FeatureDB(object):
 
         if self.dialect['fmt'] == 'gtf':
             if 'id_spec' not in kwargs:
-                kwargs['id_spec'] =  {'gene': 'gene_id', 'transcript': 'transcript_id'}
-            db = create._GTFDBCreator(data=features, dbfn=self.dbfn, dialect=self.dialect, **kwargs)
+                kwargs['id_spec'] = {
+                    'gene': 'gene_id', 'transcript': 'transcript_id'}
+            db = create._GTFDBCreator(
+                data=features, dbfn=self.dbfn, dialect=self.dialect, **kwargs)
         elif self.dialect['fmt'] == 'gff3':
             if 'id_spec' not in kwargs:
                 kwargs['id_spec'] = 'ID'
-            db = create._GFFDBCreator(data=features, dbfn=self.dbfn, dialect=self.dialect, **kwargs)
+            db = create._GFFDBCreator(
+                data=features, dbfn=self.dbfn, dialect=self.dialect, **kwargs)
 
         else:
             raise ValueError
@@ -668,7 +675,6 @@ class FeatureDB(object):
         if len(features) == 0:
             raise StopIteration
 
-
         # Either set all strands to '+' or check for strand-consistency.
         if ignore_strand:
             strand = '.'
@@ -706,15 +712,16 @@ class FeatureDB(object):
             else:
                 # The start position is outside the merged feature, so we're
                 # done with the current merged feature.  Prepare for output...
-                merged_feature = dict(chrom=feature.chrom,
-                                         source='.',
-                                         featuretype=featuretype,
-                                         start=current_merged_start,
-                                         stop=current_merged_stop,
-                                         score='.',
-                                         strand=strand,
-                                         frame='.',
-                                         attributes='')
+                merged_feature = dict(
+                    chrom=feature.chrom,
+                    source='.',
+                    featuretype=featuretype,
+                    start=current_merged_start,
+                    stop=current_merged_stop,
+                    score='.',
+                    strand=strand,
+                    frame='.',
+                    attributes='')
                 yield self._feature_returner(**merged_feature)
 
                 # and we start a new one, initializing with this feature's
@@ -725,15 +732,16 @@ class FeatureDB(object):
         # need to yield the last one.
         if len(features) == 1:
             feature = features[0]
-        merged_feature = dict(chrom=feature.chrom,
-                                 source='.',
-                                 featuretype=featuretype,
-                                 start=current_merged_start,
-                                 stop=current_merged_stop,
-                                 score='.',
-                                 strand=strand,
-                                 frame='.',
-                                 attributes='')
+        merged_feature = dict(
+            chrom=feature.chrom,
+            source='.',
+            featuretype=featuretype,
+            start=current_merged_start,
+            stop=current_merged_stop,
+            score='.',
+            strand=strand,
+            frame='.',
+            attributes='')
         yield self._feature_returner(**merged_feature)
 
     def children_bp(self, feature, child_featuretype='exon', merge=False):
