@@ -1,3 +1,5 @@
+import copy
+from textwrap import dedent
 import collections
 import tempfile
 import sys
@@ -134,7 +136,7 @@ class _DBCreator(object):
             constants._SELECT + ' WHERE id = ?', (ID,)).fetchone()
         return feature.Feature(dialect=self.iterator.dialect, **results)
 
-    def _do_merge(self, f, merge_strategy):
+    def _do_merge(self, f, merge_strategy, add_duplicate=False):
         """
         Different merge strategies upon name conflicts.
 
@@ -156,50 +158,90 @@ class _DBCreator(object):
         """
         if merge_strategy == 'error':
             raise ValueError("Duplicate ID {0.id}".format(f))
+
         if merge_strategy == 'warning':
             logger.warning(
                 "Duplicate lines in file for id '{0.id}'; "
                 "ignoring all but the first".format(f))
-            return None
+            return None, merge_strategy
+
         elif merge_strategy == 'replace':
-            return f
+            return f, merge_strategy
+
+        # This is by far the most complicated strategy.
         elif merge_strategy == 'merge':
-            # retrieve the existing row
-            existing_feature = self._get_feature(f.id)
 
-            # does everything besides attributes and extra match?
-            other_attributes_same = True
-            for k in constants._gffkeys[:-1]:
-                if getattr(existing_feature, k) != getattr(f, k):
-                    other_attributes_same = False
+            # Recall that if we made it to this method, there was at least one
+            # ID collision.
 
-            if not other_attributes_same:
-                return self._do_merge(f, merge_strategy='create_unique')
+            # This will eventually contain the features that match ID AND that
+            # match non-attribute fields like start, stop, strand, etc.
+            features_to_merge = []
 
-                    #"Same ID, but differing info for %s field. "
-                    #"Line %s: \n%s" % (
-                    #    f.id,
-                    #    self.iterator.current_item_number,
-                    #    self.iterator.current_item))
+            # Iterate through all features that have the same ID according to
+            # the id_spec provided.
+            logger.debug('candidates with same idspec: %s'
+                         % ([i.id for i in self._candidate_merges(f)]))
+            for existing_feature in self._candidate_merges(f):
+                # does everything besides attributes and extra match?
+                other_attributes_same = True
+                for k in constants._gffkeys[:-1]:
+                    if getattr(existing_feature, k) != getattr(f, k):
+                        other_attributes_same = False
+                        break
 
-            old_attributes = existing_feature.attributes
-            new_attributes = f.attributes
+                if other_attributes_same:
+                    # All the other GFF fields match.  So this existing feature
+                    # should be merged.
+                    features_to_merge.append(existing_feature)
+                    logger.debug(
+                        'same attributes between:\nexisting: %s\nthis    : %s'
+                        % (existing_feature, f))
+                else:
+                    # The existing feature's GFF fields don't match, so don't
+                    # append anything.
+                    logger.debug(
+                        'different attributes between:\nexisting: %s\n'
+                        'this    : %s'
+                        % (existing_feature, f))
 
-            # update the attributes (using sets for de-duping)
-            #
-            # It's possible that the new feature has a new attribute key, so
-            # only use the keys that are shared and already exist.
-            old_keys = set(old_attributes.keys())
-            new_keys = set(new_attributes.keys())
-            common_keys = old_keys.intersection(new_keys)
-            for k in common_keys:
-                new_attributes[k] = list(set(old_attributes[k]).union(new_attributes[k]))
-            existing_feature.attributes = new_attributes
-            return existing_feature
+            if (len(features_to_merge) == 0):
+                # No merge candidates found, so we should make a new ID for
+                # this feature. Call this method again, but using the
+                # "create_unique" strategy, and then record the newly-created
+                # ID in the duplicates table.
+                orig_id = f.id
+                uniqued_feature, merge_strategy = self._do_merge(
+                    f, merge_strategy='create_unique')
+                self._add_duplicate(orig_id, uniqued_feature.id)
+                return uniqued_feature, merge_strategy
+
+            # Whoo! Found some candidates to merge.
+            else:
+                logger.debug('num candidates: %s' % len(features_to_merge))
+
+                # This is the attributes dictionary we'll be modifying.
+                merged_attributes = copy.deepcopy(f.attributes)
+
+                # Update the attributes
+                for existing_feature in features_to_merge:
+                    logger.debug(
+                        '\nmerging\n\n%s\n%s\n' % (f, existing_feature))
+                    for k in existing_feature.attributes.keys():
+                        v = merged_attributes.setdefault(k, [])
+                        v.extend(existing_feature[k])
+                        merged_attributes[k] = v
+
+                for k, v in merged_attributes.items():
+                    merged_attributes[k] = list(set(v))
+
+                existing_feature.attributes = merged_attributes
+                logger.debug('\nMERGED:\n%s' % existing_feature)
+                return existing_feature, merge_strategy
 
         elif merge_strategy == 'create_unique':
             f.id = self._increment_featuretype_autoid(f.id)
-            return f
+            return f, merge_strategy
         else:
             raise ValueError("Invalid merge strategy '%s'"
                              % (merge_strategy))
@@ -282,7 +324,6 @@ class _DBCreator(object):
                 PRAGMA synchronous=NORMAL;
                 PRAGMA journal_mode=WAL;
                 ''')
-
 
         c.executescript(
             '''
@@ -393,12 +434,12 @@ class _GFFDBCreator(_DBCreator):
             # re-try with a new ID).  However, is this doable with an
             # execute-many?
             f.id = self._id_handler(f)
-
+            logger.debug('\n\n%s\nworking on:\n%s\n' % ('-' * 50,  f))
             try:
                 self._insert(f, c)
             except sqlite3.IntegrityError:
-                fixed = self._do_merge(f, self.merge_strategy)
-                if self.merge_strategy in ['merge', 'replace']:
+                fixed, final_strategy = self._do_merge(f, self.merge_strategy)
+                if final_strategy in ['merge', 'replace']:
                     c.execute(
                         '''
                         UPDATE features SET attributes = ?
@@ -406,8 +447,8 @@ class _GFFDBCreator(_DBCreator):
                         ''', (helpers._jsonify(fixed.attributes),
                               fixed.id))
 
-                elif self.merge_strategy == 'create_unique':
-                    c.execute(constants._INSERT, f.astuple())
+                elif final_strategy == 'create_unique':
+                    self._insert(f, c)
 
             if 'Parent' in f.attributes:
                 for parent in f.attributes['Parent']:
@@ -506,8 +547,8 @@ class _GTFDBCreator(_DBCreator):
             try:
                 self._insert(f, c)
             except sqlite3.IntegrityError:
-                fixed = self._do_merge(f, self.merge_strategy)
-                if self.merge_strategy in ['merge', 'replace']:
+                fixed, final_strategy = self._do_merge(f, self.merge_strategy)
+                if final_strategy in ['merge', 'replace']:
                     c.execute(
                         '''
                         UPDATE features SET attributes = ?
@@ -515,8 +556,8 @@ class _GTFDBCreator(_DBCreator):
                         ''', (helpers._jsonify(fixed.attributes),
                               fixed.id))
 
-                elif self.merge_strategy == 'create_unique':
-                    c.execute(constants._INSERT, f.astuple())
+                elif final_strategy == 'create_unique':
+                    self._insert(f, c)
 
             # For an on-spec GTF file,
             # self.transcript_key = "transcript_id"
@@ -695,7 +736,7 @@ class _GTFDBCreator(_DBCreator):
             try:
                 self._insert(f, c)
             except sqlite3.IntegrityError:
-                fixed = self._do_merge(f, self.merge_strategy)
+                fixed, final_strategy = self._do_merge(f, self.merge_strategy)
                 c.execute(
                     '''
                     UPDATE features SET attributes = ?
