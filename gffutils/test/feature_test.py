@@ -1,7 +1,4 @@
-from .. import parser
-from .. import feature
-from .. import helpers
-from .. import constants
+from gffutils import parser, feature, helpers, constants
 
 def test_feature_from_line():
     # spaces and tabs should give identical results

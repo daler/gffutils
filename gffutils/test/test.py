@@ -1,9 +1,5 @@
 import expected
-from .. import create
-from .. import interface
-from .. import parser
-from .. import feature
-from ..__init__ import example_filename
+from gffutils import example_filename, create, parser, feature
 import gffutils
 import gffutils.helpers as helpers
 import gffutils.gffwriter as gffwriter

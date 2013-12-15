@@ -1,12 +1,7 @@
 import tempfile
 from nose.tools import assert_raises
-from .. import parser
-from .. import create
-from .. import feature
-from .. import iterators
-from .. import constants
-from .. import helpers
-from ..__init__ import example_filename, create_db
+from gffutils import parser, create, feature, iterators, constants, helpers
+from gffutils import example_filename, create_db
 import attr_test_cases
 from textwrap import dedent
 
