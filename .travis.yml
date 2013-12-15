@@ -4,6 +4,9 @@ python:
 
 install:
     - "pip install -r requirements.txt"
+    - "pip install sphinx"
     - "pip install ."
 
-script: nosetests
+script: 
+    - nosetests
+    - cd doc && make doctest
