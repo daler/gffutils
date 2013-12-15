@@ -48,14 +48,15 @@ class _DBCreator(object):
             conn = dbfn
         self.conn = conn
         self.conn.row_factory = sqlite3.Row
+        self.set_verbose(verbose)
+
         if text_factory is not None:
-            logger.debug('setting text factory to %s' % text_factory)
+            if self.verbose == 'debug':
+                logger.debug('setting text factory to %s' % text_factory)
             self.conn.text_factory = text_factory
         self._data = data
 
         self._orig_logger_level = logger.level
-
-        self.set_verbose(verbose)
 
         self.iterator = iterators.DataIterator(
             data=data, checklines=checklines, transform=transform,
@@ -180,8 +181,9 @@ class _DBCreator(object):
 
             # Iterate through all features that have the same ID according to
             # the id_spec provided.
-            logger.debug('candidates with same idspec: %s'
-                         % ([i.id for i in self._candidate_merges(f)]))
+            if self.verbose == "debug":
+                logger.debug('candidates with same idspec: %s'
+                             % ([i.id for i in self._candidate_merges(f)]))
             for existing_feature in self._candidate_merges(f):
                 # does everything besides attributes and extra match?
                 other_attributes_same = True
@@ -194,16 +196,19 @@ class _DBCreator(object):
                     # All the other GFF fields match.  So this existing feature
                     # should be merged.
                     features_to_merge.append(existing_feature)
-                    logger.debug(
-                        'same attributes between:\nexisting: %s\nthis    : %s'
-                        % (existing_feature, f))
+                    if self.verbose == 'debug':
+                        logger.debug(
+                            'same attributes between:\nexisting: %s'
+                            '\nthis    : %s'
+                            % (existing_feature, f))
                 else:
                     # The existing feature's GFF fields don't match, so don't
                     # append anything.
-                    logger.debug(
-                        'different attributes between:\nexisting: %s\n'
-                        'this    : %s'
-                        % (existing_feature, f))
+                    if self.verbose == 'debug':
+                        logger.debug(
+                            'different attributes between:\nexisting: %s\n'
+                            'this    : %s'
+                            % (existing_feature, f))
 
             if (len(features_to_merge) == 0):
                 # No merge candidates found, so we should make a new ID for
@@ -218,15 +223,17 @@ class _DBCreator(object):
 
             # Whoo! Found some candidates to merge.
             else:
-                logger.debug('num candidates: %s' % len(features_to_merge))
+                if self.verbose == 'debug':
+                    logger.debug('num candidates: %s' % len(features_to_merge))
 
                 # This is the attributes dictionary we'll be modifying.
                 merged_attributes = copy.deepcopy(f.attributes)
 
                 # Update the attributes
                 for existing_feature in features_to_merge:
-                    logger.debug(
-                        '\nmerging\n\n%s\n%s\n' % (f, existing_feature))
+                    if self.verbose == 'debug':
+                        logger.debug(
+                            '\nmerging\n\n%s\n%s\n' % (f, existing_feature))
                     for k in existing_feature.attributes.keys():
                         v = merged_attributes.setdefault(k, [])
                         v.extend(existing_feature[k])
@@ -236,7 +243,8 @@ class _DBCreator(object):
                     merged_attributes[k] = list(set(v))
 
                 existing_feature.attributes = merged_attributes
-                logger.debug('\nMERGED:\n%s' % existing_feature)
+                if self.verbose == 'debug':
+                    logger.debug('\nMERGED:\n%s' % existing_feature)
                 return existing_feature, merge_strategy
 
         elif merge_strategy == 'create_unique':
@@ -276,7 +284,8 @@ class _DBCreator(object):
                 (idspecid.decode(self.default_encoding),
                  newid.decode(self.default_encoding))
             )
-        logger.debug('added id=%s; new=%s' % (idspecid, newid))
+        if self.verbose == 'debug':
+            logger.debug('added id=%s; new=%s' % (idspecid, newid))
         self.conn.commit()
 
     def _candidate_merges(self, f):
@@ -434,7 +443,6 @@ class _GFFDBCreator(_DBCreator):
             # re-try with a new ID).  However, is this doable with an
             # execute-many?
             f.id = self._id_handler(f)
-            logger.debug('\n\n%s\nworking on:\n%s\n' % ('-' * 50,  f))
             try:
                 self._insert(f, c)
             except sqlite3.IntegrityError:
