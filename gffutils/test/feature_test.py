@@ -68,6 +68,10 @@ def test_string_representation():
 
 
 def test_pbt_interval_conversion():
+    try:
+        import pybedtools
+    except ImportError:
+        return
     line = "chr2L FlyBase exon 7529 8116 . + . Name=CG11023:1;Parent=FBtr0300689,FBtr0300690"
     f = feature.feature_from_line(line, strict=False)
     pbt = helpers.asinterval(f)
