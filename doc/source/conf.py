@@ -12,7 +12,7 @@
 # serve to show the default.
 
 import sys, os
-import cloud_sptheme as csp
+#import cloud_sptheme as csp
 import sphinx_rtd_theme
 
 # If extensions (or modules to document with autodoc) are in another directory,
