@@ -387,10 +387,18 @@ def test_region():
 
 
 def test_nonascii():
-    # smoke test (prev. version returned UnicodeD
+    # smoke test (prev. version returned Unicode)
+    #
     db = gffutils.create_db(gffutils.example_filename('nonascii'), ":memory:")
     for i in db.all_features():
-        print i
+        # this works in IPython, or using nosetests --with-doctest...
+        try:
+            print i
+
+        # ...but fails using plain nosetests or when using regular Python
+        # interpreter
+        except UnicodeEncodeError:
+            print unicode(i)
 
 
 
@@ -398,5 +406,6 @@ def test_nonascii():
 if __name__ == "__main__":
     # this test case fails
     #test_attributes_modify()
-    test_sanitize_gff()
-    test_random_chr()
+    #test_sanitize_gff()
+    #test_random_chr()
+    test_nonascii()
