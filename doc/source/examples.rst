@@ -80,18 +80,18 @@ It's not very convenient to access the CDSs by their newly created ids
 CDS "5"?) But we can access those CDSs as children of the mRNA:
 
 >>> [f.id for f in db.children('XM_001475631.1', featuretype='CDS')]
-['CDS_1', 'CDS_2', 'CDS_3', 'CDS_4', 'CDS_5']
+[u'CDS_1', u'CDS_2', u'CDS_3', u'CDS_4', u'CDS_5']
 
 Or as "grandchildren" of the gene:
 
 >>> [f.id for f in db.children('NC_000083.5:LOC100040603', featuretype='CDS', level=2)]
-['CDS_1', 'CDS_2', 'CDS_3', 'CDS_4', 'CDS_5']
+[u'CDS_1', u'CDS_2', u'CDS_3', u'CDS_4', u'CDS_5']
 
 Note that the database id values are all unique for the CDSs, but their
 `"Name"` attributes are still all the same, as expected:
 
 >>> set([f['Name'][0] for f in db.children('XM_001475631.1', featuretype='CDS')])
-set(['CDS:NC_000083.5:LOC100040603'])
+set([u'CDS:NC_000083.5:LOC100040603'])
 
 
 
@@ -162,7 +162,7 @@ will add an underscore and an integer to each duplicate value used as a primary
 key:
 
 >>> fn = gffutils.example_filename('c_elegans_WS199_shortened_gff.txt')
->>> db = gffutils.create_db(fn, ":memory:", merge_strategy='create_unique')
+>>> db = gffutils.create_db(fn, ":memory:", merge_strategy='create_unique', keep_order=True)
 
 Access
 ``````
@@ -238,7 +238,8 @@ Now we can supply this tranform function to :func:`create_db`:
 >>> db = gffutils.create_db(fn, ":memory:",
 ... id_spec={'gene': 'gene_id', 'transcript': "transcript_id"},
 ... merge_strategy="create_unique",
-... transform=transform_func)
+... transform=transform_func,
+... keep_order=True)
 
 Access
 ``````
@@ -299,7 +300,7 @@ database, so we use `id_spec=":seqid:"`.
 >>> db = gffutils.create_db(fn, ':memory:', id_spec=[':seqid:'])
 
 >>> db.directives[0]
-'solid-gff-version 0.2'
+u'solid-gff-version 0.2'
 
 Now we can access the features by their sequence name:
 
@@ -371,8 +372,8 @@ presence of the key "Complete".
 >>> for k, v in sorted(db['GL0000007'].attributes.items()):
 ...     print k, '=', v
 Complete = []
-ID = ['GL0000007']
-Name = ['GL0000007']
+ID = [u'GL0000007']
+Name = [u'GL0000007']
 
 This illustrates that the CDS finds the proper transcript parent.
 
@@ -414,10 +415,10 @@ Print out the attributes:
 
 >>> for k, v in sorted(db['A00469'].attributes.items()):
 ...     print k, '=', v
-Alias = ['GH1']
-Dbxref = ['AFFX-U133:205840_x_at', 'Locuslink:2688', 'Genbank-mRNA:A00469', 'Swissprot:P01241', 'PFAM:PF00103', 'AFFX-U95:1332_f_at', 'Swissprot:SOMA_HUMAN']
-ID = ['A00469']
-Note = ['growth%20hormone%201']
+Alias = [u'GH1']
+Dbxref = [u'AFFX-U133:205840_x_at', u'Locuslink:2688', u'Genbank-mRNA:A00469', u'Swissprot:P01241', u'PFAM:PF00103', u'AFFX-U95:1332_f_at', u'Swissprot:SOMA_HUMAN']
+ID = [u'A00469']
+Note = [u'growth%20hormone%201']
 
 .. _jgi_gff2.txt:
 
@@ -618,7 +619,13 @@ Transform function to create appropriate "Parent" attributes:
 >>> fn = gffutils.example_filename('wormbase_gff2.txt')
 
 
->>> db = gffutils.create_db(fn, ":memory:", transform=transform, id_spec={'Transcript': "Transcript"}, force_gff=True, force_dialect_check=True)
+>>> db = gffutils.create_db(fn,
+... ":memory:",
+... transform=transform,
+... id_spec={'Transcript': "Transcript"},
+... force_gff=True,
+... force_dialect_check=True,
+... keep_order=True)
 
 The dialect for the database will be None:
 
@@ -650,7 +657,7 @@ I	Coding_transcript	Transcript	12759582	12764949	.	-	.	Transcript "B0019.1" ; Wo
 15
 
 >>> db['SAGE_tag_1'].attributes['Transcript']
-['B0019.1']
+[u'B0019.1']
 
 
 >>> len(list(db.children(t, featuretype='SAGE_tag')))

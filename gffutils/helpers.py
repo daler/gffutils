@@ -426,6 +426,7 @@ def is_gff_db(db_fname):
         return True
     return False
 
+
 def to_unicode(obj, encoding='utf-8'):
     if isinstance(obj, basestring):
         if not isinstance(obj, unicode):
@@ -470,7 +471,3 @@ def get_gff_db(gff_fname,
     t2 = time.time()
     print "  - Took %.2f seconds" % (t2 - t1)
     return db
-
-
-if __name__ == "__main__":
-    d = DefaultListOrderedDict([('a', 1), ('b', 2)])

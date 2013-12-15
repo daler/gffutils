@@ -39,7 +39,8 @@ class FeatureDB(object):
             within `limit`. Only relevant when `limit` is not None.
     """
 
-    def __init__(self, dbfn, text_factory=None, encoding='utf-8', keep_order=False):
+    def __init__(self, dbfn, text_factory=None, default_encoding='utf-8',
+                 keep_order=False):
         """
         Connect to a database created by :func:`gffutils.create_db`.
 
@@ -52,10 +53,9 @@ class FeatureDB(object):
 
         text_factory : callable
 
-            Optionally set the way sqlite3 handle strings.  The default is to
-            return unicode; other options might be str (to always return ascii)
-            or sqlite3.OptimizedUnicode (returns ascii when possible, unicode
-            otherwise)
+            Optionally set the way sqlite3 handles strings.  Default is
+            sqlite3.OptimizedUnicode, which returns ascii when possible,
+            unicode otherwise
 
         encoding : str
 
@@ -93,7 +93,8 @@ class FeatureDB(object):
             self.dbfn = dbfn
         # otherwise assume dbfn is a string.
         elif dbfn == ':memory:':
-            raise ValueError("cannot connect to memory db; please provide the connection")
+            raise ValueError(
+                "cannot connect to memory db; please provide the connection")
         else:
             self.dbfn = dbfn
             self.conn = sqlite3.connect(self.dbfn)
@@ -102,7 +103,7 @@ class FeatureDB(object):
             self.conn.text_factory = text_factory
         self.conn.row_factory = sqlite3.Row
 
-        self.encoding = encoding
+        self.default_encoding = default_encoding
         self.keep_order = keep_order
         c = self.conn.cursor()
 
@@ -133,7 +134,6 @@ class FeatureDB(object):
             ''')
         self._autoincrements = dict(c)
 
-
     def _feature_returner(self, **kwargs):
         """
         Returns a feature, adding additional database-specific defaults
@@ -141,7 +141,6 @@ class FeatureDB(object):
         kwargs.setdefault('dialect', self.dialect)
         kwargs.setdefault('keep_order', self.keep_order)
         return Feature(**kwargs)
-
 
     def schema(self):
         """
@@ -165,7 +164,9 @@ class FeatureDB(object):
         try:
             c.execute(constants._SELECT + ' WHERE id = ?', (key,))
         except sqlite3.ProgrammingError:
-            c.execute(constants._SELECT + ' WHERE id = ?', (key.decode(self.encoding),))
+            c.execute(
+                constants._SELECT + ' WHERE id = ?',
+                (key.decode(self.default_encoding),))
         results = c.fetchone()
         # TODO: raise error if more than one key is found
         if results is None:
@@ -457,7 +458,6 @@ class FeatureDB(object):
         for i in c:
             yield self._feature_returner(**i)
 
-    @classmethod
     def interfeatures(self, features, new_featuretype=None,
                       merge_attributes=True, dialect=None):
         """
@@ -493,19 +493,6 @@ class FeatureDB(object):
             True, then `attribute_func` is called before `merge_attributes`.
             This could be useful for manually managing IDs for the new
             features.
-
-        >>> features = [
-        ... "chr1 . exon 1   100 . + . ID=exon1; Parent=mRNA1",
-        ... "chr1 . exon 200 250 . + . ID=exon2; Parent=mRNA1",
-        ... "chr1 . exon 500 600 . + . ID=exon3; Parent=mRNA1",
-        ... ]
-        >>> features = [feature_from_line(i, strict=False) for i in features]
-        >>> for i in FeatureDB.interfeatures(
-        ... features, new_featuretype="intron"):
-        ...     print i  # doctest: +NORMALIZE_WHITESPACE
-        chr1 gffutils_derived intron 101 199 . + . ID=exon1,exon2;Parent=mRNA1
-        chr1 gffutils_derived intron 251 499 . + . ID=exon1,exon3;Parent=mRNA1
-
         """
         for i, f in enumerate(features):
             # no inter-feature for the first one
@@ -591,12 +578,15 @@ class FeatureDB(object):
 
         if self.dialect['fmt'] == 'gtf':
             if 'id_spec' not in kwargs:
-                kwargs['id_spec'] =  {'gene': 'gene_id', 'transcript': 'transcript_id'}
-            db = create._GTFDBCreator(data=features, dbfn=self.dbfn, dialect=self.dialect, **kwargs)
+                kwargs['id_spec'] = {
+                    'gene': 'gene_id', 'transcript': 'transcript_id'}
+            db = create._GTFDBCreator(
+                data=features, dbfn=self.dbfn, dialect=self.dialect, **kwargs)
         elif self.dialect['fmt'] == 'gff3':
             if 'id_spec' not in kwargs:
                 kwargs['id_spec'] = 'ID'
-            db = create._GFFDBCreator(data=features, dbfn=self.dbfn, dialect=self.dialect, **kwargs)
+            db = create._GFFDBCreator(
+                data=features, dbfn=self.dbfn, dialect=self.dialect, **kwargs)
 
         else:
             raise ValueError
@@ -685,7 +675,6 @@ class FeatureDB(object):
         if len(features) == 0:
             raise StopIteration
 
-
         # Either set all strands to '+' or check for strand-consistency.
         if ignore_strand:
             strand = '.'
@@ -723,15 +712,16 @@ class FeatureDB(object):
             else:
                 # The start position is outside the merged feature, so we're
                 # done with the current merged feature.  Prepare for output...
-                merged_feature = dict(chrom=feature.chrom,
-                                         source='.',
-                                         featuretype=featuretype,
-                                         start=current_merged_start,
-                                         stop=current_merged_stop,
-                                         score='.',
-                                         strand=strand,
-                                         frame='.',
-                                         attributes='')
+                merged_feature = dict(
+                    chrom=feature.chrom,
+                    source='.',
+                    featuretype=featuretype,
+                    start=current_merged_start,
+                    stop=current_merged_stop,
+                    score='.',
+                    strand=strand,
+                    frame='.',
+                    attributes='')
                 yield self._feature_returner(**merged_feature)
 
                 # and we start a new one, initializing with this feature's
@@ -742,15 +732,16 @@ class FeatureDB(object):
         # need to yield the last one.
         if len(features) == 1:
             feature = features[0]
-        merged_feature = dict(chrom=feature.chrom,
-                                 source='.',
-                                 featuretype=featuretype,
-                                 start=current_merged_start,
-                                 stop=current_merged_stop,
-                                 score='.',
-                                 strand=strand,
-                                 frame='.',
-                                 attributes='')
+        merged_feature = dict(
+            chrom=feature.chrom,
+            source='.',
+            featuretype=featuretype,
+            start=current_merged_start,
+            stop=current_merged_stop,
+            score='.',
+            strand=strand,
+            frame='.',
+            attributes='')
         yield self._feature_returner(**merged_feature)
 
     def children_bp(self, feature, child_featuretype='exon', merge=False):

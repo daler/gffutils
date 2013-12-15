@@ -1,9 +1,5 @@
 import expected
-from .. import create
-from .. import interface
-from .. import parser
-from .. import feature
-from ..__init__ import example_filename
+from gffutils import example_filename, create, parser, feature
 import gffutils
 import gffutils.helpers as helpers
 import gffutils.gffwriter as gffwriter
@@ -161,7 +157,7 @@ class BaseDB(object):
         self.dialect = self.db.dialect
 
     def table_test(self):
-        expected_tables = ['features', 'relations', 'meta', 'directives', 'autoincrements']
+        expected_tables = ['features', 'relations', 'meta', 'directives', 'autoincrements', 'duplicates']
         self.c.execute('select name from sqlite_master where type="table"')
         observed_tables = [i[0] for i in self.c.execute('select name from sqlite_master where type="table"')]
         assert set(expected_tables) == set(observed_tables), observed_tables
@@ -312,8 +308,8 @@ def test_gffwriter():
     assert new_line.startswith("#GFF3"), \
            "GFFWriter could not write to a new GFF file."
     print "  - Wrote to new file successfully."
-    
-    
+
+
 
 # def test_attributes_modify():
 #     """
@@ -337,7 +333,7 @@ def test_gffwriter():
 #     ### change leaves "dangling" children; i.e. children
 #     ### GFF nodes that point to Parent that does not exist.
 #     ###
-    
+
 
 def test_create_db_from_iter():
     """
@@ -345,7 +341,7 @@ def test_create_db_from_iter():
     """
     print "Testing creation of DB from iterator"
     db_fname = gffutils.example_filename("gff_example1.gff3")
-    db = gffutils.create_db(db_fname, ":memory:")    
+    db = gffutils.create_db(db_fname, ":memory:")
     def my_iterator():
         for rec in db.all_features():
             yield rec
@@ -353,8 +349,8 @@ def test_create_db_from_iter():
     print list(new_db.all_features())
     gene_feats = new_db.all_features(featuretype="gene")
     assert (len(list(gene_feats)) != 0), "Could not load genes from GFF."
-    
-    
+
+
 def test_sanitize_gff():
     """
     Test sanitization of GFF. Should be merged with GFF cleaning
@@ -390,9 +386,26 @@ def test_region():
     assert len(out_of_range) == 0
 
 
+def test_nonascii():
+    # smoke test (prev. version returned Unicode)
+    #
+    db = gffutils.create_db(gffutils.example_filename('nonascii'), ":memory:")
+    for i in db.all_features():
+        # this works in IPython, or using nosetests --with-doctest...
+        try:
+            print i
+
+        # ...but fails using plain nosetests or when using regular Python
+        # interpreter
+        except UnicodeEncodeError:
+            print unicode(i)
+
+
+
 
 if __name__ == "__main__":
     # this test case fails
     #test_attributes_modify()
-    test_sanitize_gff()
-    test_random_chr()
+    #test_sanitize_gff()
+    #test_random_chr()
+    test_nonascii()

@@ -39,6 +39,13 @@ CREATE TABLE autoincrements (
     primary key (base)
     );
 
+CREATE TABLE duplicates (
+    idspecid text,
+    newid text,
+    primary key (newid)
+    );
+
+
 """
 
 _keys = ['id', 'seqid', 'source', 'featuretype', 'start', 'end', 'score',
