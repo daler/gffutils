@@ -2,7 +2,6 @@ import copy
 import sys
 import os
 import simplejson
-from collections import OrderedDict
 import constants
 import bins
 import gzip
@@ -318,9 +317,6 @@ def merge_attributes(attr1, attr2):
     Parameters
     ----------
     `attr1`, `attr2` : dict
-        Attribute dictionaries, assumed to be at least DefaultDict of lists,
-        possibly DefaultOrderedDict.  If ordered, the first dictionary's key
-        order takes precedence.
     """
     new_d = copy.deepcopy(attr1)
     for k in attr1.keys():
