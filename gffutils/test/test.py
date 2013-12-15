@@ -308,8 +308,8 @@ def test_gffwriter():
     assert new_line.startswith("#GFF3"), \
            "GFFWriter could not write to a new GFF file."
     print "  - Wrote to new file successfully."
-    
-    
+
+
 
 # def test_attributes_modify():
 #     """
@@ -333,7 +333,7 @@ def test_gffwriter():
 #     ### change leaves "dangling" children; i.e. children
 #     ### GFF nodes that point to Parent that does not exist.
 #     ###
-    
+
 
 def test_create_db_from_iter():
     """
@@ -341,7 +341,7 @@ def test_create_db_from_iter():
     """
     print "Testing creation of DB from iterator"
     db_fname = gffutils.example_filename("gff_example1.gff3")
-    db = gffutils.create_db(db_fname, ":memory:")    
+    db = gffutils.create_db(db_fname, ":memory:")
     def my_iterator():
         for rec in db.all_features():
             yield rec
@@ -349,8 +349,8 @@ def test_create_db_from_iter():
     print list(new_db.all_features())
     gene_feats = new_db.all_features(featuretype="gene")
     assert (len(list(gene_feats)) != 0), "Could not load genes from GFF."
-    
-    
+
+
 def test_sanitize_gff():
     """
     Test sanitization of GFF. Should be merged with GFF cleaning
