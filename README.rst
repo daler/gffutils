@@ -1,3 +1,6 @@
+.. |build| image::  https://travis-ci.org/daler/gffutils.png
+
+
 See docs at http://pythonhosted.org/gffutils/.
 
 `gffutils` is for working with and manipulating the GFF and GTF format files
@@ -6,3 +9,4 @@ database, allowing much more complex manipulation of hierarchical features
 (e.g., genes, transcripts, and exons) than is possible with plain-text methods
 alone.
 
+Build status: |build|
