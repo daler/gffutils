@@ -376,10 +376,13 @@ class _DBCreator(object):
         #           genes.append(k.id)
         #
         logger.info("Creating relations(parent) index")
+        c.execute('DROP INDEX IF EXISTS relationsparent')
         c.execute('CREATE INDEX relationsparent ON relations (parent)')
         logger.info("Creating relations(child) index")
+        c.execute('DROP INDEX IF EXISTS relationschild')
         c.execute('CREATE INDEX relationschild ON relations (child)')
         logger.info("Creating features(featuretype) index")
+        c.execute('DROP INDEX IF EXISTS featuretype')
         c.execute('CREATE INDEX featuretype ON features (featuretype)')
 
         self.conn.commit()
