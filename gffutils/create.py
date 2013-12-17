@@ -367,6 +367,21 @@ class _DBCreator(object):
             INSERT OR REPLACE INTO autoincrements VALUES (?, ?)
             ''', self._autoincrements.items())
 
+        # These indexes are *well* worth the effort and extra storage: over
+        # 500x speedup on code like this:
+        #
+        #   genes = []
+        #   for i in db.features_of_type('snoRNA'):
+        #       for k in db.parents(i, level=1, featuretype='gene'):
+        #           genes.append(k.id)
+        #
+        logger.info("Creating relations(parent) index")
+        c.execute('CREATE INDEX relationsparent ON relations (parent)')
+        logger.info("Creating relations(child) index")
+        c.execute('CREATE INDEX relationschild ON relations (child)')
+        logger.info("Creating features(featuretype) index")
+        c.execute('CREATE INDEX featuretype ON features (featuretype)')
+
         self.conn.commit()
 
         self.warnings = self.iterator.warnings
