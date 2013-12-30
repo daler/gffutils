@@ -947,6 +947,12 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
         Default is False, since this includes a sorting step that can get
         time-consuming for many features.
 
+    infer_gene_extent : bool
+        Only used for GTF files, set this to False in order to disable the
+        inference of gene and transcript extents.  Use this if you don't care
+        about having gene and transcript features in the database, or if the
+        input GTF file already has "gene" and "transcript" featuretypes.
+
     """
     kwargs = dict(
         data=data, checklines=checklines, transform=transform,
