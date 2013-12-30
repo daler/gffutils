@@ -292,6 +292,9 @@ class Feature(object):
     def __eq__(self, other):
         return str(self) == str(other)
 
+    def __ne__(self, other):
+        return str(self) != str(other)
+
     def __len__(self):
         return self.stop - self.start + 1
 
