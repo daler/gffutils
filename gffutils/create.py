@@ -642,10 +642,10 @@ class _GTFDBCreator(_DBCreator):
         #
         # First, the nested subquery gets the level-1 parents of
         # self.subfeature featuretypes.  For an on-spec GTF file,
-        # self.subfeature = "exon", so this translates to getting the distinct
-        # level-1 parents of exons . . . which are transcripts.
+        # self.subfeature = "exon". So this subquery translates to getting the
+        # distinct level-1 parents of exons -- which are transcripts.
         #
-        # OK, so this subquery is now a list of transcripts; call it
+        # OK, so this first subquery is now a list of transcripts; call it
         # "firstlevel".
         #
         # Then join firstlevel on relations, but the trick is to now consider
@@ -768,13 +768,12 @@ class _GTFDBCreator(_DBCreator):
                 f.id = self._id_handler(f)
                 yield f
 
-        # Insert the just-inferred transcripts and genes.  We should always do
-        # assume merge_strategy="merge", since these derived features take into
-        # account the current state of the db.
-        for f in derived_feature_generator():
         # Drop the indexes so the inserts are faster
         c.execute('DROP INDEX IF EXISTS relationsparent')
         c.execute('DROP INDEX IF EXISTS relationschild')
+
+        # Insert the just-inferred transcripts and genes.  TODO: should we
+        # *always* use "merge" here for the merge_strategy?
         logger.info("Importing inferred features into db")
         last_perc = None
         for i, f in enumerate(derived_feature_generator()):
