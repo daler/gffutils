@@ -785,7 +785,7 @@ class _GTFDBCreator(_DBCreator):
             try:
                 self._insert(f, c)
             except sqlite3.IntegrityError:
-                fixed, final_strategy = self._do_merge(f, self.merge_strategy)
+                fixed, final_strategy = self._do_merge(f, 'merge')
                 c.execute(
                     '''
                     UPDATE features SET attributes = ?
