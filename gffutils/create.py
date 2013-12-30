@@ -613,6 +613,7 @@ class _GTFDBCreator(_DBCreator):
                 ''', relations
             )
 
+        logger.info('Committing changes')
         self.conn.commit()
         if self.verbose:
             sys.stderr.write((msg % i) + '\n')
@@ -682,6 +683,7 @@ class _GTFDBCreator(_DBCreator):
         # the extent of transcripts and genes.
 
         last_gene_id = None
+        n_features = 0
         for transcript_id, gene_id in c:
             # transcript extent
             c2.execute(
@@ -716,6 +718,8 @@ class _GTFDBCreator(_DBCreator):
                 helpers._jsonify(transcript_attributes)
             ])) + '\n')
 
+            n_features += 1
+
             # Infer gene extent, but only if we haven't done so already.
             if gene_id != last_gene_id:
                 c2.execute(
@@ -742,6 +746,7 @@ class _GTFDBCreator(_DBCreator):
                 ])) + '\n')
 
             last_gene_id = gene_id
+            n_features += 1
 
         fout.close()
 
@@ -770,6 +775,14 @@ class _GTFDBCreator(_DBCreator):
         # Drop the indexes so the inserts are faster
         c.execute('DROP INDEX IF EXISTS relationsparent')
         c.execute('DROP INDEX IF EXISTS relationschild')
+        logger.info("Importing inferred features into db")
+        last_perc = None
+        for i, f in enumerate(derived_feature_generator()):
+            perc = int(i / float(n_features) * 100)
+            if perc != last_perc:
+                sys.stderr.write('%s of %s (%s%%)\r' % (i, n_features, perc))
+                sys.stderr.flush()
+            last_perc = perc
             try:
                 self._insert(f, c)
             except sqlite3.IntegrityError:
@@ -781,6 +794,7 @@ class _GTFDBCreator(_DBCreator):
                     ''', (helpers._jsonify(fixed.attributes),
                           fixed.id))
 
+        logger.info("Committing changes")
         self.conn.commit()
         os.unlink(fout.name)
 
