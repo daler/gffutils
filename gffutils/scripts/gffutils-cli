@@ -159,17 +159,23 @@ def common(db):
 @arg('--quiet', help='''Suppress the reporting of timing information when
      creating the database''')
 @arg('--merge', help='''Merge strategy to be used if if duplicate IDs are found.''')
-def create(filename, output=None, force=False, quiet=False, merge="merge"):
+@arg('--disable-infer', help='''Disable inferring of gene and transcript
+     extents for GTF files. Use this if your GTF file already has "gene" or
+     "transcript" featuretypes''')
+def create(filename, output=None, force=False, quiet=False, merge="merge",
+           disable_infer=False):
     """
     Create a database.
     """
     verbose = not quiet
     if output is None:
         output = filename + '.db'
+    infer_gene_extent = not disable_infer
     gffutils.create_db(filename, output,
                        force=force,
                        verbose=verbose,
-                       merge_strategy=merge)
+                       merge_strategy=merge,
+                       infer_gene_extent=infer_gene_extent)
 
 
 # clean subcommand ------------------------------------------------------------

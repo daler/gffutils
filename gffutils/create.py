@@ -29,6 +29,7 @@ class _DBCreator(object):
                  merge_strategy='merge', checklines=10, transform=None,
                  force_dialect_check=False, from_string=False, dialect=None,
                  default_encoding='utf-8',
+                 infer_gene_extent=True,
                  text_factory=None):
         """
         Base class for _GFFDBCreator and _GTFDBCreator; see create_db()
@@ -36,6 +37,7 @@ class _DBCreator(object):
         """
         self.merge_strategy = merge_strategy
         self.default_encoding = default_encoding
+        self.infer_gene_extent = infer_gene_extent
         self._autoincrements = collections.defaultdict(int)
         if force:
             if os.path.exists(dbfn):
@@ -619,6 +621,10 @@ class _GTFDBCreator(_DBCreator):
             sys.stderr.write((msg % i) + '\n')
 
     def _update_relations(self):
+
+        if not self.infer_gene_extent:
+            return
+
         # TODO: do any indexes speed this up?
         c = self.conn.cursor()
         c2 = self.conn.cursor()
@@ -805,7 +811,7 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
               gtf_transcript_key='transcript_id', gtf_gene_key='gene_id',
               gtf_subfeature='exon', force_gff=False,
               force_dialect_check=False, from_string=False, keep_order=False,
-              text_factory=None):
+              text_factory=None, infer_gene_extent=True):
     """
     Create a database from a GFF or GTF file.
 
@@ -982,7 +988,8 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
     kwargs.update(**add_kwargs)
     kwargs['dialect'] = dialect
     c = cls(dbfn=dbfn, id_spec=id_spec, force=force, verbose=verbose,
-            merge_strategy=merge_strategy, text_factory=text_factory, **kwargs)
+            merge_strategy=merge_strategy, text_factory=text_factory,
+            infer_gene_extent=infer_gene_extent, **kwargs)
 
     c.create()
     if dbfn == ':memory:':
