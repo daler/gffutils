@@ -629,9 +629,9 @@ Transform function to create appropriate "Parent" attributes:
 
 The dialect for the database will be None:
 
->>> assert db.dialect is None
+>>> assert db.dialect is None, db.dialect
 
-For cases like this, we should probably construct our own dialog to force all
+For cases like this, we should probably construct our own dialect to force all
 attributes to have the same format.  To help with this, we can use the
 :func:`helpers.infer_dialect` function by providing attributes:
 
@@ -662,3 +662,47 @@ I	Coding_transcript	Transcript	12759582	12764949	.	-	.	Transcript "B0019.1" ; Wo
 
 >>> len(list(db.children(t, featuretype='SAGE_tag')))
 4
+
+
+gencode-v19.gtf
+~~~~~~~~~~~~~~~
+This example file contains the first gene from the Gencode v19 annotations.
+It's in GTF format, but in contrast to an on-spec GTF file, which only has
+exon, CDS, UTRs, and start/stop codon features, this file already has genes and
+transcripts on separate lines.  This means we can avoid the gene and transcript
+inference, which saves time.
+
+.. literalinclude:: ../../gffutils/test/data/gencode-v19.gtf
+
+Import
+``````
+We can use `infer_gene_extent=False` to disable the gene and transcript
+inference.  This will dramatically speed up import, but will result in
+identical results:
+
+>>> fn = gffutils.example_filename('gencode-v19.gtf')
+>>> db = gffutils.create_db(fn,
+... ":memory:",
+... keep_order=True,
+... infer_gene_extent=False)
+
+
+
+Access
+``````
+Access is the same as other files:
+
+>>> db['ENSG00000223972.4']
+<Feature gene (chr1:11869-14412[+]) at 0x...>
+
+
+Ensure that inferring gene extent results in the same database -- it just takes
+longer to import:
+
+>>> db2 = gffutils.create_db(fn,
+... ":memory:",
+... keep_order=True,
+... infer_gene_extent=False)
+
+>>> for i, j in zip(db.all_features(), db2.all_features()):
+...     assert i == j
