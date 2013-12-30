@@ -619,10 +619,18 @@ class _GTFDBCreator(_DBCreator):
 
     def _update_relations(self):
         # TODO: do any indexes speed this up?
-
         c = self.conn.cursor()
         c2 = self.conn.cursor()
 
+        logger.info("Creating relations(parent) index")
+        c.execute('DROP INDEX IF EXISTS relationsparent')
+        c.execute('CREATE INDEX relationsparent ON relations (parent)')
+        logger.info("Creating relations(child) index")
+        c.execute('DROP INDEX IF EXISTS relationschild')
+        c.execute('CREATE INDEX relationschild ON relations (child)')
+
+        logger.info('Inferring gene and transcript extents, '
+                    'and writing to tempfile')
         tmp = tempfile.NamedTemporaryFile(delete=False).name
         tmp = '/tmp/gffutils'
         fout = open(tmp, 'w')
@@ -759,6 +767,9 @@ class _GTFDBCreator(_DBCreator):
         # assume merge_strategy="merge", since these derived features take into
         # account the current state of the db.
         for f in derived_feature_generator():
+        # Drop the indexes so the inserts are faster
+        c.execute('DROP INDEX IF EXISTS relationsparent')
+        c.execute('DROP INDEX IF EXISTS relationschild')
             try:
                 self._insert(f, c)
             except sqlite3.IntegrityError:
