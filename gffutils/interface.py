@@ -713,11 +713,11 @@ class FeatureDB(object):
                 # The start position is outside the merged feature, so we're
                 # done with the current merged feature.  Prepare for output...
                 merged_feature = dict(
-                    chrom=feature.chrom,
+                    seqid=feature.chrom,
                     source='.',
-                    featuretype=featuretype,
+                    featuretype=feature.featuretype,
                     start=current_merged_start,
-                    stop=current_merged_stop,
+                    end=current_merged_stop,
                     score='.',
                     strand=strand,
                     frame='.',
@@ -733,11 +733,11 @@ class FeatureDB(object):
         if len(features) == 1:
             feature = features[0]
         merged_feature = dict(
-            chrom=feature.chrom,
+            seqid=feature.chrom,
             source='.',
-            featuretype=featuretype,
+            featuretype=feature.featuretype,
             start=current_merged_start,
-            stop=current_merged_stop,
+            end=current_merged_stop,
             score='.',
             strand=strand,
             frame='.',
