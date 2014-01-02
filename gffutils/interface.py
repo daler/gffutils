@@ -603,6 +603,74 @@ class FeatureDB(object):
         db._update_relations()
         db._finalize()
 
+    def add_relation(self, parent, child, level, parent_func=None, child_func=None):
+        """
+        Manually add relations to the database.
+
+        Parameters
+        ----------
+        parent : str or Feature instance
+             Parent feature to add.
+
+        child : str or Feature instance
+            Child feature to add
+
+        level : int
+            Level of the relation.  For example, if parent is a gene and child
+            is an mRNA, then you might want level to be 1.  But if child is an
+            exon, then level would be 2.
+
+        parent_func, child_func : callable
+            These optional functions control how attributes are updated in the
+            database.  They both have the signature `func(parent, child)` and
+            must return a [possibly modified] Feature instance.  For example,
+            we could add the child's database id as the "child" attribute in
+            the parent::
+
+                def parent_func(parent, child):
+                    parent.attributes['child'] = child.id
+
+            and add the parent's "gene_id" as the child's "Parent" attribute::
+
+                def child_func(parent, child):
+                    child.attributes['Parent'] = parent['gene_id']
+        """
+        if isinstance(parent, basestring):
+            parent = self[parent]
+        if isinstance(child, basestring):
+            child = self[child]
+
+        c = self.conn.cursor()
+        c.execute('''
+                  INSERT INTO relations (parent, child, level)
+                  VALUES (?, ?, ?)''', (parent.id, child.id, level))
+
+        if parent_func is not None:
+            parent = parent_func(parent, child)
+            self._update(parent, c)
+        if child_func is not None:
+            child = child_func(parent, child)
+            self._update(child, c)
+
+        self.conn.commit()
+
+
+    def _update(self, feature, cursor):
+        values = [list(feature.astuple()) + [feature.id]]
+        cursor.execute(
+            constants._UPDATE, *tuple(values))
+
+    def _insert(self, feature, cursor):
+        """
+        Insert a feature into the database.
+        """
+        try:
+            cursor.execute(constants._INSERT, feature.astuple())
+        except sqlite3.ProgrammingError:
+            cursor.execute(
+                constants._INSERT, feature.astuple(self.default_encoding))
+
+
     def create_introns(self, exon_featuretype='exon',
                        grandparent_featuretype='gene', parent_featuretype=None,
                        new_featuretype='intron', merge_attributes=True):

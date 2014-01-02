@@ -62,6 +62,10 @@ _INSERT = "INSERT INTO features (" \
     + ', '.join(_keys) + ") VALUES (" + ','.join(list('?' * len(_keys))) + ")"
 
 
+_update_clause = ','.join(['%s = ?' % i for i in _keys])
+_UPDATE = "UPDATE features SET " + _update_clause + " WHERE id = ?"
+
+
 # TODO: create indexes once profiling figures out which ones work best....
 INDEXES = []
 

@@ -456,6 +456,25 @@ def test_feature_merge():
         assert str(x) == 'chr1	a	testing	1	10	.	+,-	1,.	gene_id="fake"; n="1,2";', str(x)
         assert len(w) == 2
 
+def test_add_relation():
+    db = gffutils.create_db(gffutils.example_filename('FBgn0031208.gff'), ':memory:')
+    L = len(list(db.children('FBgn0031208:3')))
+    assert L == 0, L
+
+
+    def func(parent, child):
+        child['Parent'] = child['Parent'] + [parent.id]
+        child['exon_parent'] = [parent.id]
+        return child
+
+    db.add_relation('FBgn0031208:3', 'CDS_FBgn0031208:1_737', 1, child_func=func)
+    L = len(list(db.children('FBgn0031208:3')))
+    assert L == 1, L
+
+    L = list(db.children('FBgn0031208:3'))
+    x = L[0]
+    assert 'FBgn0031208:3' in x['Parent']
+    assert x['exon_parent'] == ['FBgn0031208:3']
 
 
 
