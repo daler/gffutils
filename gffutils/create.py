@@ -1,4 +1,5 @@
 import copy
+import warnings
 from textwrap import dedent
 import collections
 import tempfile
@@ -30,11 +31,26 @@ class _DBCreator(object):
                  force_dialect_check=False, from_string=False, dialect=None,
                  default_encoding='utf-8',
                  infer_gene_extent=True,
+                 force_merge_fields=None,
                  text_factory=None):
         """
         Base class for _GFFDBCreator and _GTFDBCreator; see create_db()
         function for docs
         """
+        if force_merge_fields is None:
+            force_merge_fields = []
+        if merge_strategy == 'merge':
+            if set(['start', 'end']).intersection(force_merge_fields):
+                raise ValueError("Can't merge start/end fields since "
+                                 "they must be integers")
+            warn = set(force_merge_fields)\
+                .intersection(['start', 'end', 'frame', 'strand'])
+            for w in warn:
+                warnings.warn(
+                    "%s field will be merged for features with the same ID; "
+                    "this may result in unusable features." % w)
+
+        self.force_merge_fields = force_merge_fields
         self.merge_strategy = merge_strategy
         self.default_encoding = default_encoding
         self.infer_gene_extent = infer_gene_extent
@@ -186,10 +202,19 @@ class _DBCreator(object):
             if self.verbose == "debug":
                 logger.debug('candidates with same idspec: %s'
                              % ([i.id for i in self._candidate_merges(f)]))
+
+            # If force_merge_fields was provided, don't pay attention to these
+            # fields if they're different.  We are assuming attributes will be
+            # different, hence the [:-1]
+            _gffkeys_to_check = list(
+                set(constants._gffkeys[:-1])
+                .difference(self.force_merge_fields))
+
             for existing_feature in self._candidate_merges(f):
-                # does everything besides attributes and extra match?
+                # Check other GFF fields (if not specified in
+                # self.force_merge_fields) to make sure they match.
                 other_attributes_same = True
-                for k in constants._gffkeys[:-1]:
+                for k in _gffkeys_to_check:
                     if getattr(existing_feature, k) != getattr(f, k):
                         other_attributes_same = False
                         break
@@ -214,9 +239,10 @@ class _DBCreator(object):
 
             if (len(features_to_merge) == 0):
                 # No merge candidates found, so we should make a new ID for
-                # this feature. Call this method again, but using the
-                # "create_unique" strategy, and then record the newly-created
-                # ID in the duplicates table.
+                # this feature. This can happen when idspecs match, but other
+                # fields (like start/stop) are different.  Call this method
+                # again, but using the "create_unique" strategy, and then
+                # record the newly-created ID in the duplicates table.
                 orig_id = f.id
                 uniqued_feature, merge_strategy = self._do_merge(
                     f, merge_strategy='create_unique')
@@ -231,6 +257,12 @@ class _DBCreator(object):
                 # This is the attributes dictionary we'll be modifying.
                 merged_attributes = copy.deepcopy(f.attributes)
 
+                # Keep track of non-attribute fields (this will be an empty
+                # dict if no force_merge_fields)
+                final_fields = dict(
+                    [(field, set([getattr(f, field)]))
+                     for field in self.force_merge_fields])
+
                 # Update the attributes
                 for existing_feature in features_to_merge:
                     if self.verbose == 'debug':
@@ -241,10 +273,20 @@ class _DBCreator(object):
                         v.extend(existing_feature[k])
                         merged_attributes[k] = v
 
+                    # Update the set of non-attribute fields found so far
+                    for field in self.force_merge_fields:
+                        final_fields[field].update(
+                            [getattr(existing_feature, field)])
+
+                # Set the merged attributes
                 for k, v in merged_attributes.items():
                     merged_attributes[k] = list(set(v))
-
                 existing_feature.attributes = merged_attributes
+
+                # Set the final merged non-attributes
+                for k, v in final_fields.items():
+                    setattr(existing_feature, k, ','.join(map(str, v)))
+
                 if self.verbose == 'debug':
                     logger.debug('\nMERGED:\n%s' % existing_feature)
                 return existing_feature, merge_strategy
@@ -475,6 +517,21 @@ class _GFFDBCreator(_DBCreator):
                         ''', (helpers._jsonify(fixed.attributes),
                               fixed.id))
 
+                    # For any additional fields we're merging, update those as
+                    # well.
+                    if self.force_merge_fields:
+                        _set_clause = ', '.join(
+                            ['%s = ?' % field
+                             for field in self.force_merge_fields])
+                        values = [
+                            getattr(fixed, field)
+                            for field in self.force_merge_fields] + [fixed.id]
+                        c.execute(
+                            '''
+                            UPDATE features SET %s
+                            WHERE id = ?
+                            ''' % _set_clause, tuple(values))
+
                 elif final_strategy == 'create_unique':
                     self._insert(f, c)
 
@@ -583,6 +640,20 @@ class _GTFDBCreator(_DBCreator):
                         WHERE id = ?
                         ''', (helpers._jsonify(fixed.attributes),
                               fixed.id))
+                    # For any additional fields we're merging, update those as
+                    # well.
+                    if self.force_merge_fields:
+                        _set_clause = ', '.join(
+                            ['%s = ?' % field
+                             for field in self.force_merge_fields])
+                        values = [getattr(fixed, field)
+                                  for field in self.force_merge_fields]\
+                            + [fixed.id]
+                        c.execute(
+                            '''
+                            UPDATE features SET %s
+                            WHERE id = ?
+                            ''' % _set_clause, values)
 
                 elif final_strategy == 'create_unique':
                     self._insert(f, c)
@@ -811,7 +882,8 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
               gtf_transcript_key='transcript_id', gtf_gene_key='gene_id',
               gtf_subfeature='exon', force_gff=False,
               force_dialect_check=False, from_string=False, keep_order=False,
-              text_factory=None, infer_gene_extent=True):
+              text_factory=None, infer_gene_extent=True,
+              force_merge_fields=None):
     """
     Create a database from a GFF or GTF file.
 
@@ -953,6 +1025,16 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
         about having gene and transcript features in the database, or if the
         input GTF file already has "gene" and "transcript" featuretypes.
 
+    force_merge_fields : list
+        If merge_strategy="merge", then features will only be merged if their
+        non-attribute values are identical (same chrom, source, start, stop,
+        score, strand, phase).  Using `force_merge_fields`, you can override
+        this behavior to allow merges even when fields are different.  This
+        list can contain one or more of ['seqid', 'source', 'featuretype',
+        'score', 'strand', 'frame'].  The resulting merged fields will be
+        strings of comma-separated values.  Note that 'start' and 'end' are not
+        available, since these fields need to be integers.
+
     """
     kwargs = dict(
         data=data, checklines=checklines, transform=transform,
@@ -995,7 +1077,8 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
     kwargs['dialect'] = dialect
     c = cls(dbfn=dbfn, id_spec=id_spec, force=force, verbose=verbose,
             merge_strategy=merge_strategy, text_factory=text_factory,
-            infer_gene_extent=infer_gene_extent, **kwargs)
+            infer_gene_extent=infer_gene_extent,
+            force_merge_fields=force_merge_fields, **kwargs)
 
     c.create()
     if dbfn == ':memory:':

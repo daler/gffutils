@@ -1,3 +1,4 @@
+import warnings
 import expected
 from gffutils import example_filename, create, parser, feature
 import gffutils
@@ -12,6 +13,8 @@ import difflib
 import pprint
 import copy
 import tempfile
+from textwrap import dedent
+from nose.tools import assert_raises
 
 
 testdbfn_gtf = ':memory:'
@@ -399,6 +402,59 @@ def test_nonascii():
         # interpreter
         except UnicodeEncodeError:
             print unicode(i)
+
+
+def test_feature_merge():
+    # both "n" attribute and "source" field should be merged, since
+    # force_merge_fields=['source'].
+    gtfdata = dedent("""
+    chr1	a	testing	1	10	.	+	.	gene_id "fake"; n "2";
+    chr1	b	testing	1	10	.	+	.	gene_id "fake"; n "1";
+    """)
+    db = gffutils.create_db(gtfdata, ":memory:", from_string=True, merge_strategy='merge', id_spec='gene_id', force_merge_fields=['source'])
+    assert db.dialect['fmt'] == 'gtf'
+    assert len(list(db.all_features())) == 1
+    x = db['fake']
+    assert str(x) == 'chr1	a,b	testing	1	10	.	+	.	gene_id "fake"; n "1,2";', str(x)
+
+    gffdata = dedent("""
+    chr1	a	testing	1	10	.	+	.	gene_id="fake"; n="2";
+    chr1	b	testing	1	10	.	+	.	gene_id="fake"; n="1";
+    """)
+    db = gffutils.create_db(gffdata, ":memory:", from_string=True, merge_strategy='merge', id_spec='gene_id', force_merge_fields=['source'])
+    assert db.dialect['fmt'] == 'gff3'
+    assert len(list(db.all_features())) == 1
+    x = db['fake']
+    assert str(x) == 'chr1	a,b	testing	1	10	.	+	.	gene_id="fake"; n="1,2";', str(x)
+
+
+    # But when not using force_merge_fields, there should be separate entries;
+    # accessing fake and fake_1 should not give FeatureNotFound errors.
+    db = gffutils.create_db(gtfdata, ':memory:', from_string=True, merge_strategy='merge', id_spec='gene_id')
+    assert len(list(db.all_features())) == 2
+    x = db['fake']
+    y = db['fake_1']
+
+    db = gffutils.create_db(gffdata, ':memory:', from_string=True, merge_strategy='merge', id_spec='gene_id')
+    assert len(list(db.all_features())) == 2
+    x = db['fake']
+    y = db['fake_1']
+
+
+    assert_raises(ValueError, gffutils.create_db, gtfdata, ":memory:", from_string=True, merge_strategy='merge', id_spec='gene_id', force_merge_fields=['start'])
+
+    # test that warnings are raised because of strand and frame
+    with warnings.catch_warnings(True) as w:
+        gffdata = dedent("""
+        chr1	a	testing	1	10	.	+	.	gene_id="fake"; n="2";
+        chr1	a	testing	1	10	.	-	1	gene_id="fake"; n="1";
+        """)
+        db = gffutils.create_db(gffdata, ":memory:", from_string=True, merge_strategy='merge', id_spec='gene_id', force_merge_fields=['strand', 'frame'])
+        assert db.dialect['fmt'] == 'gff3'
+        assert len(list(db.all_features())) == 1
+        x = db['fake']
+        assert str(x) == 'chr1	a	testing	1	10	.	+,-	1,.	gene_id="fake"; n="1,2";', str(x)
+        assert len(w) == 2
 
 
 
