@@ -173,7 +173,7 @@ class FeatureDB(object):
             raise helpers.FeatureNotFoundError(key)
         return self._feature_returner(**results)
 
-    def count_features_of_type(self, featuretype):
+    def count_features_of_type(self, featuretype=None):
         """
         Simple count of features.
 
