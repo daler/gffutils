@@ -44,7 +44,7 @@ class _DBCreator(object):
                 raise ValueError("Can't merge start/end fields since "
                                  "they must be integers")
             warn = set(force_merge_fields)\
-                .intersection(['start', 'end', 'frame', 'strand'])
+                .intersection(['frame', 'strand'])
             for w in warn:
                 warnings.warn(
                     "%s field will be merged for features with the same ID; "
