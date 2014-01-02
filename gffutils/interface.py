@@ -185,7 +185,8 @@ class FeatureDB(object):
 
         `featuretype` : string
 
-            Feature type (e.g., "gene") to count.
+            Feature type (e.g., "gene") to count.  If None, then count *all*
+            features in the database.
 
         Returns
         -------
@@ -193,11 +194,18 @@ class FeatureDB(object):
 
         """
         c = self.conn.cursor()
-        c.execute(
-            '''
-            SELECT count() FROM features
-            WHERE featuretype = ?
-            ''', (featuretype,))
+        if featuretype is not None:
+            c.execute(
+                '''
+                SELECT count() FROM features
+                WHERE featuretype = ?
+                ''', (featuretype,))
+        else:
+            c.execute(
+                '''
+                SELECT count() FROM features
+                ''')
+
         results = c.fetchone()
         if results is not None:
             results = results[0]
