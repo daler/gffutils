@@ -12,10 +12,12 @@ setup(
     name='gffutils',
     version=version,
     install_requires=['argh', 'argcomplete', 'simplejson'],
-    packages=['gffutils', 'gffutils.scripts'],
+    packages=['gffutils', 'gffutils.scripts', 'gffutils.test',
+              'gffutils.test.data'],
     scripts=['gffutils/scripts/gffutils-cli'],
     author='Ryan Dale',
     package_dir={'gffutils': 'gffutils'},
+    package_data = {'gffutils': ['test/data/*']},
     description="Work with GFF and GTF files in a flexible "
     "database framework",
     author_email='dalerr@niddk.nih.gov',
