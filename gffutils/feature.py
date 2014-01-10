@@ -260,6 +260,9 @@ class Feature(object):
             self.attributes[key] = value
 
     def __str__(self):
+        return unicode(self).encode('utf-8')
+
+    def __unicode__(self):
         # All fields but attributes (and extra).
         items = [getattr(self, k) for k in constants._gffkeys[:-1]]
 
