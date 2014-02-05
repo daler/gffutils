@@ -12,6 +12,9 @@ import nose.tools as nt
 import difflib
 import pprint
 import copy
+import SimpleHTTPServer
+import SocketServer
+import threading
 import tempfile
 from textwrap import dedent
 from nose.tools import assert_raises
@@ -476,6 +479,41 @@ def test_add_relation():
     assert 'FBgn0031208:3' in x['Parent']
     assert x['exon_parent'] == ['FBgn0031208:3']
 
+
+def test_create_db_from_url():
+    """
+    Test creation of FeatureDB from URL iterator.
+    """
+    print "Testing creation of DB from URL iterator"
+    # initially run SimpleHTTPServer at port 0 and os will take first available
+    Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
+    httpd = SocketServer.TCPServer(("", 0), Handler)
+    port = str(httpd.socket.getsockname()[1])
+    print "serving at port", port
+
+    # Serving test/data folder
+    served_folder = gffutils.example_filename('')
+    os.chdir(served_folder)
+
+    print("Starting SimpleHTTPServer in thread")
+    server_thread = threading.Thread(target=httpd.serve_forever)
+    server_thread.deamon = True
+    server_thread.start()
+    try:
+        url = ''.join(['http://localhost:', port, '/gff_example1.gff3'])
+        db = gffutils.create_db(url, ":memory:")
+        def my_iterator():
+            for rec in db.all_features():
+                yield rec
+        new_db = gffutils.create_db(my_iterator(), ":memory:")
+
+        print list(new_db.all_features())
+        gene_feats = new_db.all_features(featuretype="gene")
+        assert (len(list(gene_feats)) != 0), "Could not load genes from GFF."
+    finally:
+        print 'Server shutdown.'
+        httpd.shutdown()
+        server_thread.join()
 
 
 if __name__ == "__main__":
