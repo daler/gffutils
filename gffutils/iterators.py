@@ -9,6 +9,8 @@ important for figuring out how to construct the database.
 
 """
 import os
+import urllib2
+import urlparse
 import tempfile
 import itertools
 from feature import Feature, feature_from_line
@@ -79,9 +81,12 @@ class BaseIterator(object):
 
 
 class FileIterator(BaseIterator):
+    def open_function(self, data):
+        return open(data)
+
     def _custom_iter(self):
         valid_lines = 0
-        for i, line in enumerate(open(self.data)):
+        for i, line in enumerate(self.open_function(self.data)):
 
             line = line.rstrip('\n\r')
             self.current_item = line
@@ -100,6 +105,11 @@ class FileIterator(BaseIterator):
             # (If we got here it should be a valid line)
             valid_lines += 1
             yield feature_from_line(line, dialect=self.dialect)
+
+
+class UrlIterator(FileIterator):
+    def open_function(self, data):
+        return urllib2.urlopen(data)
 
 
 class FeatureIterator(BaseIterator):
@@ -121,6 +131,22 @@ class StringIterator(FileIterator):
         os.unlink(self.tmp.name)
 
 
+def is_url(url):
+    """Check to see if a URL has a valid protocol.
+    Parameters
+    ----------
+    url : str or unicode
+
+    Returns
+    -------
+    True if `url` has a valid protocol False otherwise.
+    """
+    try:
+        return urlparse.urlparse(url).scheme in urlparse.uses_netloc
+    except:
+        return False
+
+
 def DataIterator(data, checklines=10, transform=None,
                  force_dialect_check=False, from_string=False, **kwargs):
     _kwargs = dict(data=data, checklines=checklines, transform=transform,
@@ -129,6 +155,9 @@ def DataIterator(data, checklines=10, transform=None,
         if from_string:
             return StringIterator(**_kwargs)
         else:
-            return FileIterator(**_kwargs)
+            if os.path.exists(data):
+                return FileIterator(**_kwargs)
+            elif is_url(data):
+                return UrlIterator(**_kwargs)
     else:
         return FeatureIterator(**_kwargs)
