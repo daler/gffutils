@@ -4,7 +4,10 @@ from gffutils import helpers
 class Test(unittest.TestCase):
     
     def test_merge_attributes(self):
-        print "bar"
+        """
+        Tests all possible cases of merging two dictionaries together
+        """
+        
         x = {'foo' : [1], "baz" : 1, "buz" : [1], "biz" : 1, "boo" : [1]}
         y = {'bar' : [2], "baz" : 2, "buz" : [2], "biz" : 1, "boo" : [1]}
         test = helpers.merge_attributes(x,y)
