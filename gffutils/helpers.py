@@ -309,7 +309,6 @@ def asinterval(feature):
     import pybedtools
     return pybedtools.create_interval_from_list(str(feature).split('\t'))
 
-
 def merge_attributes(attr1, attr2):
     """
     Merges two attribute dictionaries into a single dictionary.
@@ -318,18 +317,25 @@ def merge_attributes(attr1, attr2):
     ----------
     `attr1`, `attr2` : dict
     """
+    
     new_d = copy.deepcopy(attr1)
+    new_d.update(attr2)
+    
+    #all of attr2 key : values just overwrote attr1, fix it
+    for k, v in new_d.items():
+        if type(v) is not list:
+            new_d[k] = [v]
+            
     for k in attr1.keys():
         if k in attr2:
-            new_d[k].extend(attr2[k])
-    for k in attr2.keys():
-        if k not in attr1:
-            new_d[k].extend(attr2[k])
+            if type(attr1[k]) is not list:
+                v = [attr1[k]]
+            new_d[k].extend(v)
 
     for k, v in new_d.items():
         new_d[k] = list(set(v))
-    return new_d
 
+    return new_d
 
 def dialect_compare(dialect1, dialect2):
     """
