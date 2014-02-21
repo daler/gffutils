@@ -48,7 +48,7 @@ class Gene(object):
         self.kwargs = kwargs
         self._transcripts = []
         for transcript in db.children(gene_id, level=1):
-            if transcript.featuretype in transcripts:
+            if transcripts is None or transcript.featuretype in transcripts:
                 d = {}
                 d['transcript'] = [transcript]
                 d['utrs'] = []
