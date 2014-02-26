@@ -130,3 +130,5 @@ dialect = {
     'order': ['ID', 'Name', 'gene_id', 'transcript_id'],
 
 }
+
+always_return_list = True

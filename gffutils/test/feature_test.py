@@ -132,3 +132,24 @@ def test_unjsonify():
 
     d = helpers._unjsonify(s, isattributes=True)
     assert d == attributes
+
+class IsolatedTestCase(object):
+    """
+    Isolated test case for checking that the module-level
+    constants.always_return_list works.
+
+    This was needed because having this test as a function caused other tests
+    to fail even though constants.always_return_list was put back to its
+    original setting.  Apparently nose runs tests concurrently in the same
+    namespace or something?  Anyway, these setup/teardowns do the trick.
+    """
+    def setup(self):
+        constants.always_return_list = False
+
+    def teardown(self):
+        constants.always_return_list = True
+
+    def test_feature_single_item(self):
+        line = "chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690	some	more	stuff"
+        f = feature.feature_from_line(line)
+        assert f['Name'] == ['CG11023:1']

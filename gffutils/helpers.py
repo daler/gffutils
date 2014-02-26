@@ -262,7 +262,7 @@ class AttributeStringError(Exception):
 def _jsonify(x):
     """Use most compact form of JSON"""
     if isinstance(x, feature.dict_class):
-        return simplejson.dumps(x, separators=(',', ':'))
+        return simplejson.dumps(x._d, separators=(',', ':'))
     return simplejson.dumps(x, separators=(',', ':'))
 
 
