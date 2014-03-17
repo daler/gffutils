@@ -1,19 +1,18 @@
 import copy
 import warnings
-from textwrap import dedent
 import collections
 import tempfile
 import sys
 import os
 import sqlite3
-import constants
-import version
-import parser
-import bins
-import helpers
-import feature
-import interface
-import iterators
+import six
+from gffutils import constants
+from gffutils import version
+from gffutils import bins
+from gffutils import helpers
+from gffutils import feature
+from gffutils import interface
+from gffutils import iterators
 
 import logging
 
@@ -60,7 +59,7 @@ class _DBCreator(object):
                 os.unlink(dbfn)
         self.dbfn = dbfn
         self.id_spec = id_spec
-        if isinstance(dbfn, basestring):
+        if isinstance(dbfn, six.string_types):
             conn = sqlite3.connect(dbfn)
         else:
             conn = dbfn
@@ -103,7 +102,7 @@ class _DBCreator(object):
         """
 
         # If id_spec is a string, convert to iterable for later
-        if isinstance(self.id_spec, basestring):
+        if isinstance(self.id_spec, six.string_types):
             id_key = [self.id_spec]
 
         elif hasattr(self.id_spec, '__call__'):
@@ -114,7 +113,7 @@ class _DBCreator(object):
         elif isinstance(self.id_spec, dict):
             try:
                 id_key = self.id_spec[f.featuretype]
-                if isinstance(id_key, basestring):
+                if isinstance(id_key, six.string_types):
                     id_key = [id_key]
 
             # Otherwise, use default auto-increment.
@@ -409,7 +408,7 @@ class _DBCreator(object):
         c.executemany(
             '''
             INSERT OR REPLACE INTO autoincrements VALUES (?, ?)
-            ''', self._autoincrements.items())
+            ''', list(self._autoincrements.items()))
 
         # These indexes are *well* worth the effort and extra storage: over
         # 500x speedup on code like this:
@@ -454,8 +453,8 @@ class _DBCreator(object):
         Execute a query directly on the database.
         """
         c = self.conn.cursor()
-        c.execute(query)
-        for i in cursor:
+        result = c.execute(query)
+        for i in result:
             yield i
 
     def _insert(self, feature, cursor):
@@ -834,7 +833,7 @@ class _GTFDBCreator(_DBCreator):
             keys = ['parent', 'seqid', 'start', 'end', 'strand',
                     'featuretype', 'bin', 'attributes']
             for line in open(fout.name):
-                d = dict(zip(keys, line.strip().split('\t')))
+                d = dict(list(zip(keys, line.strip().split('\t'))))
                 d.pop('parent')
                 d['score'] = '.'
                 d['source'] = 'gffutils_derived'

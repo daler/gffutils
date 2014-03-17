@@ -1,12 +1,11 @@
+import six
 import sqlite3
 import shutil
-import tempfile
-
-import create
-import bins
-import helpers
-import constants
-from feature import Feature, feature_from_line
+from gffutils import bins
+from gffutils import helpers
+from gffutils import constants
+from gffutils.feature import Feature
+from gffutils.exceptions import FeatureNotFoundError
 
 
 class FeatureDB(object):
@@ -84,6 +83,7 @@ class FeatureDB(object):
         # to a new, separate (and empty) db in memory, we can alternatively
         # pass in a sqlite connection instance to use its existing, in-memory
         # db.
+        from gffutils import create
         if isinstance(dbfn, create._DBCreator):
             self.conn = dbfn.conn
             self.dbfn = dbfn.dbfn
@@ -170,7 +170,7 @@ class FeatureDB(object):
         results = c.fetchone()
         # TODO: raise error if more than one key is found
         if results is None:
-            raise helpers.FeatureNotFoundError(key)
+            raise FeatureNotFoundError(key)
         return self._feature_returner(**results)
 
     def count_features_of_type(self, featuretype=None):
@@ -410,7 +410,7 @@ class FeatureDB(object):
             within `region`.
         """
         strand = None
-        if isinstance(region, basestring):
+        if isinstance(region, six.string_types):
             toks = region.split(':')
             seqid, coords = toks[:2]
             if len(toks) == 3:
@@ -449,7 +449,7 @@ class FeatureDB(object):
 
         # Add the featuretype clause
         if featuretype is not None:
-            if isinstance(featuretype, basestring):
+            if isinstance(featuretype, six.string_types):
                 featuretype = [featuretype]
             feature_clause = ' or '.join(
                 ['featuretype = ?' for _ in featuretype])
@@ -568,8 +568,9 @@ class FeatureDB(object):
 
         Remaining kwargs are passed to create_db.
         """
+        from gffutils import create
         if make_backup:
-            if isinstance(self.dbfn, basestring):
+            if isinstance(self.dbfn, six.string_types):
                 shutil.copy2(self.dbfn, self.dbfn + '.bak')
 
         # No matter what `features` came in as, convert to gffutils.Feature
@@ -577,7 +578,7 @@ class FeatureDB(object):
         # parsed into dicts in a Feature, we no longer have to worry about
         # that.  This also allows GTF features to be used to update a GFF
         # database, or vice versa.
-        if isinstance(features, basestring):
+        if isinstance(features, six.string_types):
             indb = create.create_db(features, intermediate, **kwargs)
             features = indb.all_features()
 
@@ -635,9 +636,9 @@ class FeatureDB(object):
                 def child_func(parent, child):
                     child.attributes['Parent'] = parent['gene_id']
         """
-        if isinstance(parent, basestring):
+        if isinstance(parent, six.string_types):
             parent = self[parent]
-        if isinstance(child, basestring):
+        if isinstance(child, six.string_types):
             child = self[child]
 
         c = self.conn.cursor()

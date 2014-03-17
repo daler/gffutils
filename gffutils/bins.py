@@ -92,7 +92,7 @@ def bins(start, stop, fmt='gff', one=True):
                 return offset + start
 
         # See the Fig 7 reproduction above to see why range().
-        bins.update(range(offset + start, offset + stop + 1))
+        bins.update(list(range(offset + start, offset + stop + 1)))
 
         # Move to the next level (8x larger bin size; i.e., 2**NEXT_SHIFT
         # larger bin size)
@@ -124,8 +124,8 @@ def print_bin_sizes():
         size = '(%s %s)' % (bin_size, suffix)
         actual_size = '%s bp' % (actual_size)
 
-        print 'level: {i:1};  bins {binstart:<4} to {binstop:<4}; '\
-              'size: {actual_size:<12} {size:<6}'.format(**locals())
+        print('level: {i:1};  bins {binstart:<4} to {binstop:<4}; '
+              'size: {actual_size:<12} {size:<6}'.format(**locals()))
 
 
 def test():

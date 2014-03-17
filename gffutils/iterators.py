@@ -9,20 +9,24 @@ important for figuring out how to construct the database.
 
 """
 import os
-import urllib2
-import urlparse
 import tempfile
 import itertools
-from feature import Feature, feature_from_line
-import helpers
+from gffutils.feature import feature_from_line
+from gffutils import helpers
 from textwrap import dedent
+import six
+from six.moves.urllib.request import urlopen
+if six.PY3:
+    from urllib import parse as urlparse
+else:
+    import urlparse
 
 
 def peek(it, n):
     _peek = []
     for _ in range(n):
         try:
-            _peek.append(it.next())
+            _peek.append(six.next(it))
         except StopIteration:
             break
     return _peek, itertools.chain(_peek, it)
@@ -87,7 +91,8 @@ class FileIterator(BaseIterator):
     def _custom_iter(self):
         valid_lines = 0
         for i, line in enumerate(self.open_function(self.data)):
-
+            if isinstance(line, six.binary_type):
+                line = line.decode('utf-8')
             line = line.rstrip('\n\r')
             self.current_item = line
             self.current_item_number = i
@@ -109,7 +114,7 @@ class FileIterator(BaseIterator):
 
 class UrlIterator(FileIterator):
     def open_function(self, data):
-        return urllib2.urlopen(data)
+        return urlopen(data)
 
 
 class FeatureIterator(BaseIterator):
@@ -123,7 +128,10 @@ class FeatureIterator(BaseIterator):
 class StringIterator(FileIterator):
     def _custom_iter(self):
         self.tmp = tempfile.NamedTemporaryFile(delete=False)
-        self.tmp.write(dedent(self.data))
+        data = dedent(self.data)
+        if isinstance(data, six.text_type):
+            data = data.encode('utf-8')
+        self.tmp.write(data)
         self.tmp.close()
         self.data = self.tmp.name
         for feature in super(StringIterator, self)._custom_iter():
@@ -151,7 +159,7 @@ def DataIterator(data, checklines=10, transform=None,
                  force_dialect_check=False, from_string=False, **kwargs):
     _kwargs = dict(data=data, checklines=checklines, transform=transform,
                    force_dialect_check=force_dialect_check, **kwargs)
-    if isinstance(data, basestring):
+    if isinstance(data, six.string_types):
         if from_string:
             return StringIterator(**_kwargs)
         else:

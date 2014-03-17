@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+from __future__ import print_function
+
 """
 Command line interface for gffutils.
 
@@ -17,6 +19,7 @@ you'll get the cli for free.
 import os
 import gffutils
 import gffutils.helpers as helpers
+from gffutils.exceptions import FeatureNotFoundError
 import gffutils.gffwriter as gffwriter
 import argh
 from argcomplete.completers import EnvironCompleter
@@ -60,8 +63,8 @@ def fetch(db, ids):
     for i in ids.split(','):
         try:
             yield gff_db[i]
-        except helpers.FeatureNotFoundError:
-            print >> sys.stderr, "%s not found" %(i)
+        except FeatureNotFoundError:
+            print ("%s not found" % i, file=sys.stderr)
 
 
 # children subcommand ---------------------------------------------------------
@@ -205,12 +208,12 @@ def sanitize(filename,
 
     Outputs result to stdout unless asked to sanitize in place.
     """
-    print >> sys.stderr, "Sanitizing GFF %s" %(filename)
+    print("Sanitizing GFF %s" % filename, file=sys.stderr)
     if in_memory:
-        print >> sys.stderr, "  - Loading GFF in memory"
+        print("  - Loading GFF in memory", file=sys.stderr)
     if in_place:
-        print >> sys.stderr, "  - Sanitizing file in place " \
-                             "(overwriting current file)"
+        print("  - Sanitizing file in place (overwriting current file)",
+              file=sys.stderr)
     helpers.sanitize_gff_file(filename,
                               in_memory=in_memory,
                               in_place=in_place)
@@ -222,7 +225,7 @@ def rmdups(filename, in_place=False):
     """
     Remove duplicates from a GFF file. 
     """
-    print "Removing duplicates from: %s" %(filename)
+    print("Removing duplicates from: %s" % filename)
     merge_strategy = "merge"
     if not in_place:
         # Write to stdout

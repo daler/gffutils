@@ -1,13 +1,9 @@
 # Portions copied over from BCBio.GFF.GFFParser
 
 import re
-import urllib
 import copy
-import constants
-from helpers import example_filename
-import helpers
-import bins
-import feature
+from gffutils import constants
+from gffutils.exceptions import AttributeStringError
 
 import logging
 
@@ -40,7 +36,7 @@ def _reconstruct(keyvals, dialect, keep_order=False):
         False, which saves time especially on large data sets.
     """
     if not dialect:
-        raise helpers.AttributeStringError
+        raise AttributeStringError()
     if not keyvals:
         return ""
     parts = []
@@ -55,7 +51,7 @@ def _reconstruct(keyvals, dialect, keep_order=False):
             else:
                 items.append((key, val))
     else:
-        items = keyvals.items()
+        items = list(keyvals.items())
 
     def sort_key(x):
         # sort keys by their order in the dialect; anything not in there will
@@ -117,7 +113,7 @@ def _split_keyvals(keyval_str, dialect=None):
         # Make a copy of default dialect so it can be modified as needed
         dialect = copy.copy(constants.dialect)
         infer_dialect = True
-
+    from gffutils import feature
     quals = feature.dict_class()
     if not keyval_str:
         return quals, dialect
@@ -237,7 +233,7 @@ def _split_keyvals(keyval_str, dialect=None):
             quals[key] = []
 
         # Remove quotes in GFF2
-        if (len(val) > 0 and val[0] == '"' and val[-1] == '"'):
+        if len(val) > 0 and val[0] == '"' and val[-1] == '"':
             val = val[1:-1]
             dialect['quoted GFF2 values'] = True
         if val:
@@ -246,7 +242,7 @@ def _split_keyvals(keyval_str, dialect=None):
             # quals[key].extend([v for v in val.split(',') if v])
             vals = val.split(',')
             if (len(vals) > 1) and dialect['repeated keys']:
-                raise helpers.AttributeStringError(
+                raise AttributeStringError(
                     "Internally inconsistent attributes formatting: "
                     "some have repeated keys, some do not.")
             quals[key].extend(vals)

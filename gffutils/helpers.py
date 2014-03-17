@@ -2,15 +2,15 @@ import copy
 import sys
 import os
 import simplejson
-import constants
-import bins
-import gzip
 import time
 import tempfile
+import six
+from gffutils import constants
+from gffutils import bins
 import gffutils
-import gffutils.gffwriter as gffwriter
-import feature
-import parser
+from gffutils import gffwriter
+from gffutils import parser
+from gffutils.attributes import dict_class
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -29,7 +29,7 @@ def infer_dialect(attributes):
         A single attributes string from a GTF or GFF line, or an iterable of
         such strings.
     """
-    if isinstance(attributes, basestring):
+    if isinstance(attributes, six.string_types):
         attributes = [attributes]
     dialects = [parser._split_keyvals(i)[1] for i in attributes]
     return _choose_dialect(dialects)
@@ -131,7 +131,7 @@ def make_query(args, other=None, limit=None, strand=None, featuretype=None,
         # e.g., "featuretype = 'exon'"
         #
         # or, "featuretype IN ('exon', 'CDS')"
-        if isinstance(featuretype, basestring):
+        if isinstance(featuretype, six.string_types):
             d['FEATURETYPE'] = "features.featuretype = ?"
             args.append(featuretype)
         else:
@@ -148,7 +148,7 @@ def make_query(args, other=None, limit=None, strand=None, featuretype=None,
         # `limit` is a string or a tuple of (chrom, start, stop)
         #
         # e.g., "seqid = 'chr2L' AND start > 1000 AND end < 5000"
-        if isinstance(limit, basestring):
+        if isinstance(limit, six.string_types):
             seqid, startstop = limit.split(':')
             start, end = startstop.split('-')
         else:
@@ -188,7 +188,7 @@ def make_query(args, other=None, limit=None, strand=None, featuretype=None,
         # Default is essentially random order.
         #
         # e.g. "ORDER BY seqid, start DESC"
-        if isinstance(order_by, basestring):
+        if isinstance(order_by, six.string_types):
             _order_by.append(order_by)
 
         else:
@@ -239,29 +239,9 @@ def _bin_from_dict(d):
         return None
 
 
-class FeatureNotFoundError(Exception):
-    """
-    Error to be raised when an ID is not in the database.
-    """
-    def __init__(self, feature_id):
-        Exception.__init__(self)
-        self.feature_id = feature_id
-
-    def __str__(self):
-        return self.feature_id
-
-
-class DuplicateIDError(Exception):
-    pass
-
-
-class AttributeStringError(Exception):
-    pass
-
-
 def _jsonify(x):
     """Use most compact form of JSON"""
-    if isinstance(x, feature.dict_class):
+    if isinstance(x, dict_class):
         return simplejson.dumps(x._d, separators=(',', ':'))
     return simplejson.dumps(x, separators=(',', ':'))
 
@@ -270,7 +250,7 @@ def _unjsonify(x, isattributes=False):
     """Convert JSON string to an ordered defaultdict."""
     if isattributes:
         obj = simplejson.loads(x)
-        return feature.dict_class(obj)
+        return dict_class(obj)
     return simplejson.loads(x)
 
 
@@ -309,6 +289,7 @@ def asinterval(feature):
     import pybedtools
     return pybedtools.create_interval_from_list(str(feature).split('\t'))
 
+
 def merge_attributes(attr1, attr2):
     """
     Merges two attribute dictionaries into a single dictionary.
@@ -317,25 +298,22 @@ def merge_attributes(attr1, attr2):
     ----------
     `attr1`, `attr2` : dict
     """
-    
+
     new_d = copy.deepcopy(attr1)
     new_d.update(attr2)
     
     #all of attr2 key : values just overwrote attr1, fix it
     for k, v in new_d.items():
-        if type(v) is not list:
+        if not isinstance(v, list):
             new_d[k] = [v]
             
-    for k in attr1.keys():
+    for k, v in six.iteritems(attr1):
         if k in attr2:
-            if type(attr1[k]) is not list:
-                v = [attr1[k]]
+            if not isinstance(v, list):
+                v = [v]
             new_d[k].extend(v)
+    return dict((k, list(set(v))) for k, v in new_d.items())
 
-    for k, v in new_d.items():
-        new_d[k] = list(set(v))
-
-    return new_d
 
 def dialect_compare(dialect1, dialect2):
     """
@@ -430,9 +408,9 @@ def is_gff_db(db_fname):
 
 
 def to_unicode(obj, encoding='utf-8'):
-    if isinstance(obj, basestring):
-        if not isinstance(obj, unicode):
-            obj = unicode(obj, encoding)
+    if isinstance(obj, six.string_types):
+        if not isinstance(obj, six.text_type):
+            obj = six.text_type(obj, encoding)
     return obj
 
 
@@ -465,11 +443,11 @@ def get_gff_db(gff_fname,
     db_fname = tempfile.NamedTemporaryFile(delete=False)
     # Create the database for the gff file (suppress output
     # when using function internally)
-    print "Creating db for %s" % (gff_fname)
+    print("Creating db for %s" % (gff_fname))
     t1 = time.time()
     db = gffutils.create_db(gff_fname, db_fname.name,
                             merge_strategy="merge",
                             verbose=False)
     t2 = time.time()
-    print "  - Took %.2f seconds" % (t2 - t1)
+    print("  - Took %.2f seconds" % (t2 - t1))
     return db

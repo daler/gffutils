@@ -1,8 +1,9 @@
 import tempfile
 from nose.tools import assert_raises
-from gffutils import parser, create, feature, iterators, constants, helpers
+from gffutils import (parser, create, feature, iterators, constants, helpers,
+                      exceptions)
 from gffutils import example_filename, create_db
-import attr_test_cases
+from . import attr_test_cases
 from textwrap import dedent
 
 TEST_FILENAMES = [example_filename(i) for i in [
@@ -78,8 +79,8 @@ def test_empty_recontruct():
     reconstructing attributes with incomplete information returns empty string
     """
     assert parser._reconstruct(None, constants.dialect) == ""
-    assert_raises(helpers.AttributeStringError, parser._reconstruct, dict(ID='asdf'), None)
-    assert_raises(helpers.AttributeStringError, parser._reconstruct, None, None)
+    assert_raises(exceptions.AttributeStringError, parser._reconstruct, dict(ID='asdf'), None)
+    assert_raises(exceptions.AttributeStringError, parser._reconstruct, None, None)
 
 def test_empty_split_keyvals():
     attrs, dialect = parser._split_keyvals(keyval_str=None)
@@ -97,13 +98,13 @@ def test_repeated_keys_conflict():
     #
     #dialect = constants.dialect.copy()
     #dialect['repeated keys'] = True
-    #assert_raises(helpers.AttributeStringError, parser._split_keyvals, "Parent=1,2,3", dialect)
+    #assert_raises(exceptions.AttributeStringError, parser._split_keyvals, "Parent=1,2,3", dialect)
 
 def test_parser_from_string():
     """
     make sure from string and from file return identical results
     """
-    line = "chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690"
+    line = b"chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690"
     tmp = tempfile.NamedTemporaryFile()
     tmp.write(line)
     tmp.seek(0)
@@ -112,7 +113,7 @@ def test_parser_from_string():
         "chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690"
     )
     p2 = iterators.FileIterator(tmp.name)
-    lines = zip(p1, p2)
+    lines = list(zip(p1, p2))
     assert len(lines) == 1
     assert p1.current_item_number == p2.current_item_number == 0
     assert lines[0][0] == lines[0][1]
@@ -140,7 +141,7 @@ def test_inconsistent_dialect():
     chr1	.	mRNA	1	100	.	+	.	transcript_id "mRNA1"
     """, ':memory:', from_string=True)
     items = list(db.all_features())
-    print items[0]
+    print(items[0])
     # before, was ['"mRNA1'] -- note extra "
     assert items[1].attributes['transcript_id'] == ['mRNA1'], items[1].attributes['transcript_id']
 

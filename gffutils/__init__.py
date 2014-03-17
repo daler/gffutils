@@ -1,6 +1,8 @@
-from create import create_db
-from interface import FeatureDB
-from feature import Feature
-from iterators import FileIterator, UrlIterator, StringIterator, FeatureIterator
-from helpers import example_filename, FeatureNotFoundError, DuplicateIDError
-from version import version as __version__
+from gffutils.create import create_db
+from gffutils.interface import FeatureDB
+from gffutils.feature import Feature
+from gffutils.iterators import (FileIterator, UrlIterator, StringIterator,
+                                FeatureIterator)
+from gffutils.helpers import example_filename
+from gffutils.exceptions import FeatureNotFoundError, DuplicateIDError
+from gffutils.version import version as __version__
