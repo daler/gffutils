@@ -96,6 +96,8 @@ class FeatureDB(object):
             raise ValueError(
                 "cannot connect to memory db; please provide the connection")
         else:
+            if not os.path.exists(dbfn):
+                raise ValueError("Database file %s does not exist" % dbfn)
             self.dbfn = dbfn
             self.conn = sqlite3.connect(self.dbfn)
 
