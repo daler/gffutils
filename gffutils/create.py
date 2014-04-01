@@ -375,7 +375,7 @@ class _DBCreator(object):
             c.executescript(
                 '''
                 PRAGMA synchronous=NORMAL;
-                PRAGMA journal_mode=WAL;
+                PRAGMA journal_mode=MEMORY;
                 ''')
 
         c.executescript(
