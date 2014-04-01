@@ -48,6 +48,15 @@ class Attributes(collections.MutableMapping):
             >>> constants.always_return_list = True
             >>> assert attr['Name'] == ['gene1']
 
+        In contrast, if lists have more than one item, then a list is always
+        returned, regardless of what `constants.always_return_list` is set to:
+
+            >>> attr['Items'] = ['a', 'b', 'c']
+            >>> assert attr['Items'] == ['a', 'b', 'c']
+            >>> constants.always_return_list = False
+            >>> assert attr['Items'] == ['a', 'b', 'c']
+            >>> constants.always_return_list = True
+
         """
         self._d = dict()
         self.update(*args, **kwargs)
