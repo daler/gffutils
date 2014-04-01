@@ -32,7 +32,7 @@ class _DBCreator(object):
                  default_encoding='utf-8',
                  infer_gene_extent=True,
                  force_merge_fields=None,
-                 text_factory=None):
+                 text_factory=None, pragmas=constants.default_pragmas):
         """
         Base class for _GFFDBCreator and _GTFDBCreator; see create_db()
         function for docs
@@ -51,6 +51,7 @@ class _DBCreator(object):
                     "this may result in unusable features." % w)
 
         self.force_merge_fields = force_merge_fields
+        self.pragmas = pragmas
         self.merge_strategy = merge_strategy
         self.default_encoding = default_encoding
         self.infer_gene_extent = infer_gene_extent
@@ -370,20 +371,11 @@ class _DBCreator(object):
         c = self.conn.cursor()
         v = sqlite3.sqlite_version_info
 
-        # WAL is in sqlite 3.7+.
-        if v[0] >= 3 and v[1] >= 7:
-            c.executescript(
-                '''
-                PRAGMA synchronous=NORMAL;
-                PRAGMA journal_mode=MEMORY;
-                ''')
-
         c.executescript(
-            '''
-            PRAGMA main.page_size=4096;
-            PRAGMA main.cache_size=10000;
-            ''')
-
+            ';\n'.join(
+                ['PRAGMA %s=%s' % i for i in self.pragmas.items()]
+            )
+        )
         c.executescript(constants.SCHEMA)
         self.conn.commit()
 
@@ -883,7 +875,7 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
               gtf_subfeature='exon', force_gff=False,
               force_dialect_check=False, from_string=False, keep_order=False,
               text_factory=None, infer_gene_extent=True,
-              force_merge_fields=None):
+              force_merge_fields=None, pragmas=constants.default_pragmas):
     """
     Create a database from a GFF or GTF file.
 
@@ -1035,6 +1027,11 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
         strings of comma-separated values.  Note that 'start' and 'end' are not
         available, since these fields need to be integers.
 
+    pragmas : dict
+        Dictionary of pragmas used when creating the sqlite3 database. See
+        http://www.sqlite.org/pragma.html for a list of available pragmas.  The
+        defaults are stored in constants.default_pragmas, which can be used as
+        a template for supplying a custom dictionary.
     """
     kwargs = dict(
         data=data, checklines=checklines, transform=transform,
@@ -1078,7 +1075,7 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
     c = cls(dbfn=dbfn, id_spec=id_spec, force=force, verbose=verbose,
             merge_strategy=merge_strategy, text_factory=text_factory,
             infer_gene_extent=infer_gene_extent,
-            force_merge_fields=force_merge_fields, **kwargs)
+            force_merge_fields=force_merge_fields, pragmas=pragmas, **kwargs)
 
     c.create()
     if dbfn == ':memory:':
