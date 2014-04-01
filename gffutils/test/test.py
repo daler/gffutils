@@ -1,24 +1,22 @@
 import warnings
-import expected
+from . import expected
 from gffutils import example_filename, create, parser, feature
 import gffutils
 import gffutils.helpers as helpers
 import gffutils.gffwriter as gffwriter
 import sys
 import os
+import six
 import shutil
-import sqlite3
-import nose.tools as nt
-import difflib
-import pprint
-import copy
-import SimpleHTTPServer
-import SocketServer
 import threading
 import tempfile
 from textwrap import dedent
 from nose.tools import assert_raises
-
+from six.moves import SimpleHTTPServer
+if sys.version_info.major == 3:
+    import socketserver as SocketServer
+else:
+    import SocketServer
 
 testdbfn_gtf = ':memory:'
 testdbfn_gff = ':memory:'
@@ -77,9 +75,9 @@ def test_update():
                 child.attributes['ID'] = [child.id]
             db.update([child], merge_strategy='replace')
 
-    print "\n\nafter\n\n"
+    print("\n\nafter\n\n")
     for child in db.children(gene):
-        print child.id
+        print(child.id)
         assert child.attributes['gene_id'] == ['FBgn0031208'], (child, child.attributes)
 
     num_entries = 0
@@ -89,7 +87,7 @@ def test_update():
         rec.attributes["new"] = ["new_value"]
         db.update([rec])
         num_entries += 1
-    print list(db.all_features())
+    print(list(db.all_features()))
 
 
     assert (num_entries > 1), "Only %d left after update" % (num_entries)
@@ -172,7 +170,7 @@ class BaseDB(object):
         """Count using SQL"""
         self.c.execute('select count() from features where featuretype = ?',(featuretype,))
         results = self.c.fetchone()[0]
-        print 'count1("%s") says: %s' % (featuretype,results)
+        print('count1("%s") says: %s' % (featuretype,results))
         return results
 
     def _count2(self,featuretype):
@@ -188,13 +186,13 @@ class BaseDB(object):
 
             if L[2] == featuretype:
                 cnt += 1
-        print 'count2("%s") says: %s' % (featuretype, cnt)
+        print('count2("%s") says: %s' % (featuretype, cnt))
         return cnt
 
     def _count3(self,featuretype):
         """Count with the count_features_of_type method"""
         results = self.db.count_features_of_type(featuretype)
-        print 'count3("%s") says: %s' % (featuretype, results)
+        print('count3("%s") says: %s' % (featuretype, results))
         return results
 
     def _count4(self,featuretype):
@@ -202,20 +200,20 @@ class BaseDB(object):
         cnt = 0
         for i in self.db.features_of_type(featuretype):
             cnt += 1
-        print 'count4("%s") says: %s' % (featuretype,cnt)
+        print('count4("%s") says: %s' % (featuretype,cnt))
         return cnt
 
     def featurecount_test(self):
         #  Right number of each featuretype, using multiple different ways of
         #  counting?
-        print 'format:', self.dialect['fmt']
+        print('format:', self.dialect['fmt'])
         expected_feature_counts = expected.expected_feature_counts[self.dialect['fmt']]
         for featuretype, expected_count in expected_feature_counts.items():
             rawsql_cnt = self._count1(featuretype)
             fileparsed_cnt = self._count2(featuretype)
             count_feature_of_type_cnt = self._count3(featuretype)
             iterator_cnt = self._count4(featuretype)
-            print "expected count:", expected_count
+            print("expected count:", expected_count)
             assert rawsql_cnt == count_feature_of_type_cnt == iterator_cnt == fileparsed_cnt == expected_count
 
     def _expected_parents(self):
@@ -231,8 +229,8 @@ class BaseDB(object):
         parents1, parents2 = self._expected_parents()
         for child, expected_parents in parents1.items():
             observed_parents = [i.id for i in self.db.parents(child, level=1)]
-            print 'observed parents for %s:' % child, set(observed_parents)
-            print 'expected parents for %s:' % child, set(expected_parents)
+            print('observed parents for %s:' % child, set(observed_parents))
+            print('expected parents for %s:' % child, set(expected_parents))
             assert set(observed_parents) == set(expected_parents)
 
 
@@ -240,9 +238,9 @@ class BaseDB(object):
         parents1, parents2 = self._expected_parents()
         for child, expected_parents in parents2.items():
             observed_parents = [i.id for i in self.db.parents(child, level=2)]
-            print self.db[child]
-            print 'observed parents for %s:' % child, set(observed_parents)
-            print 'expected parents for %s:' % child, set(expected_parents)
+            print(self.db[child])
+            print('observed parents for %s:' % child, set(observed_parents))
+            print('expected parents for %s:' % child, set(expected_parents))
             assert set(observed_parents) == set(expected_parents)
 
 
@@ -267,14 +265,14 @@ def test_random_chr():
         assert (mRNA_entry.featuretype == "mRNA"), \
                "Not all entries are of type mRNA! %s" \
                %(",".join([entry.featuretype for entry in mRNAs]))
-    print "Parsed random chromosome successfully."
+    print("Parsed random chromosome successfully.")
 
 
 def test_gffwriter():
     """
     Test GFFWriter.
     """
-    print "Testing GFF writer.."
+    print("Testing GFF writer..")
     fn = gffutils.example_filename("unsanitized.gff")
     # Make a copy of it as temporary named file
     temp_f = tempfile.NamedTemporaryFile(delete=False)
@@ -286,11 +284,11 @@ def test_gffwriter():
            "unsanitized.gff should not have a gffutils-style header."
     db_in = gffutils.create_db(fn, ":memory:")
     # Fetch first record
-    rec = db_in.all_features().next()
+    rec = next(db_in.all_features())
     ##
     ## Write GFF file in-place test
     ##
-    print "Testing in-place writing"
+    print("Testing in-place writing")
     gff_out = gffwriter.GFFWriter(temp_fname_source,
                                   in_place=True,
                                   with_header=True)
@@ -301,11 +299,11 @@ def test_gffwriter():
     new_header = rewritten.readline().strip()
     assert new_header.startswith("#GFF3"), \
            "GFFWriter serialized files should have a #GFF3 header."
-    print "  - Wrote GFF file in-place successfully."
+    print("  - Wrote GFF file in-place successfully.")
     ##
     ## Write GFF file to new file test
     ##
-    print "Testing writing to new file"
+    print("Testing writing to new file")
     new_file = tempfile.NamedTemporaryFile(delete=False)
     gff_out = gffwriter.GFFWriter(new_file.name)
     gff_out.write_rec(rec)
@@ -313,7 +311,7 @@ def test_gffwriter():
     new_line = open(new_file.name, "r").readline().strip()
     assert new_line.startswith("#GFF3"), \
            "GFFWriter could not write to a new GFF file."
-    print "  - Wrote to new file successfully."
+    print("  - Wrote to new file successfully.")
 
 
 
@@ -329,8 +327,8 @@ def test_gffwriter():
 #                             force=True)
 #     gene_id = "FBgn0031208"
 #     gene_childs = list(db.children(gene_id))
-#     print "First child is not an mRNA"
-#     print gene_childs[0].featuretype
+#     print("First child is not an mRNA")
+#     print(gene_childs[0].featuretype)
 #     assert str(gene_childs[0].attributes) == 'ID=FBtr0300689;Name=CG11023-RB;Parent=FBgn0031208;Dbxref=FlyBase_Annotation_IDs:CG11023-RB;score_text=Strongly Supported;score=11'
 #     gene_childs[0].attributes["ID"] = "Modified"
 #     assert str(gene_childs[0].attributes) == 'ID=Modified;Name=CG11023-RB;Parent=FBgn0031208;Dbxref=FlyBase_Annotation_IDs:CG11023-RB;score_text=Strongly Supported;score=11;ID=Modified'
@@ -345,14 +343,14 @@ def test_create_db_from_iter():
     """
     Test creation of FeatureDB from iterator.
     """
-    print "Testing creation of DB from iterator"
+    print("Testing creation of DB from iterator")
     db_fname = gffutils.example_filename("gff_example1.gff3")
     db = gffutils.create_db(db_fname, ":memory:")
     def my_iterator():
         for rec in db.all_features():
             yield rec
     new_db = gffutils.create_db(my_iterator(), ":memory:")
-    print list(new_db.all_features())
+    print(list(new_db.all_features()))
     gene_feats = new_db.all_features(featuretype="gene")
     assert (len(list(gene_feats)) != 0), "Could not load genes from GFF."
 
@@ -372,7 +370,7 @@ def test_sanitize_gff():
     # starts must be less than or equal to stops
     for rec in sanitized_recs.all_features():
         assert (rec.start <= rec.stop), "Sanitization failed."
-    print "Sanitized GFF successfully."
+    print("Sanitized GFF successfully.")
 
 
 def test_region():
@@ -399,12 +397,12 @@ def test_nonascii():
     for i in db.all_features():
         # this works in IPython, or using nosetests --with-doctest...
         try:
-            print i
+            print(i)
 
         # ...but fails using plain nosetests or when using regular Python
         # interpreter
         except UnicodeEncodeError:
-            print unicode(i)
+            print(six.text_type(i))
 
 
 def test_feature_merge():
@@ -447,7 +445,7 @@ def test_feature_merge():
     assert_raises(ValueError, gffutils.create_db, gtfdata, ":memory:", from_string=True, merge_strategy='merge', id_spec='gene_id', force_merge_fields=['start'])
 
     # test that warnings are raised because of strand and frame
-    with warnings.catch_warnings(True) as w:
+    with warnings.catch_warnings(record=True) as w:
         gffdata = dedent("""
         chr1	a	testing	1	10	.	+	.	gene_id="fake"; n="2";
         chr1	a	testing	1	10	.	-	1	gene_id="fake"; n="1";
@@ -484,12 +482,12 @@ def test_create_db_from_url():
     """
     Test creation of FeatureDB from URL iterator.
     """
-    print "Testing creation of DB from URL iterator"
+    print("Testing creation of DB from URL iterator")
     # initially run SimpleHTTPServer at port 0 and os will take first available
     Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
     httpd = SocketServer.TCPServer(("", 0), Handler)
     port = str(httpd.socket.getsockname()[1])
-    print "serving at port", port
+    print("serving at port", port)
 
     # Serving test/data folder
     served_folder = gffutils.example_filename('')
@@ -507,11 +505,11 @@ def test_create_db_from_url():
                 yield rec
         new_db = gffutils.create_db(my_iterator(), ":memory:")
 
-        print list(new_db.all_features())
+        print(list(new_db.all_features()))
         gene_feats = new_db.all_features(featuretype="gene")
         assert (len(list(gene_feats)) != 0), "Could not load genes from GFF."
     finally:
-        print 'Server shutdown.'
+        print('Server shutdown.')
         httpd.shutdown()
         server_thread.join()
 

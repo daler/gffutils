@@ -2,6 +2,7 @@
 *gfffeature.so
 *.swp
 *.pyc
+.idea
 gffutils.egg-info/
 .coverage
 doc/build/*

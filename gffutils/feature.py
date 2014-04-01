@@ -1,112 +1,11 @@
-import collections
+import six
 import simplejson
-import helpers
-import constants
-import parser
-import bins
+from gffutils import constants
+from gffutils import helpers
+from gffutils import parser
+from gffutils import bins
+from gffutils.attributes import dict_class
 
-
-# collections.MutableMapping is apparently the best way to provide dict-like
-# interface (http://stackoverflow.com/a/3387975)
-class Attributes(collections.MutableMapping):
-    def __init__(self, *args, **kwargs):
-        """
-        An Attributes object acts much like a dictionary.  However, values are
-        always stored internally as lists, even if a single value is provided.
-
-        Whether or not you get a list back depends on the
-        `constants.always_return_list` setting, which can be set on-the-fly.
-        If True, then one-item lists are returned.  This is best shown with an
-        example:
-
-        Set up an Attributes object:
-
-            >>> attr = Attributes()
-
-        Set the "Name" attribute with a string:
-
-            >>> attr['Name'] = 'gene1'
-
-        This is stored internally as a list, and by default, we'll get a list
-        back:
-
-            >>> assert attr['Name'] == ['gene1']
-
-        The same thing happens if we set it with a list in the first place:
-
-            >>> attr['Name'] = ['gene1']
-            >>> assert attr['Name'] == ['gene1']
-
-        Now, change the setting so that upon access, single-value lists are
-        returned as the first item.
-
-            >>> constants.always_return_list = False
-            >>> assert attr['Name'] == 'gene1'
-
-        Change it back again:
-
-            >>> constants.always_return_list = True
-            >>> assert attr['Name'] == ['gene1']
-
-        """
-        self._d = dict()
-        self.update(*args, **kwargs)
-
-    def __setitem__(self, k, v):
-        if not isinstance(v, (list, tuple)):
-            v = [v]
-        self._d[k] = v
-
-    def __getitem__(self, k):
-        v = self._d[k]
-        if constants.always_return_list:
-            return v
-        if isinstance(v, list) and len(v) == 1:
-            v = v[0]
-        return v
-
-    def __delitem__(self, key):
-        del self._d[key]
-
-    def __iter__(self):
-        return iter(self.keys)
-
-    def __len__(self):
-        return len(self._d)
-
-    def keys(self):
-        return self._d.keys()
-
-    def values(self):
-        return [self.__getitem__(k) for k in self.keys()]
-
-    def items(self):
-        r = []
-        for k in self.keys():
-            r.append((k, self.__getitem__(k)))
-        return r
-
-    def __str__(self):
-        s = []
-        for i in self.items():
-            s.append("%s: %s" % i)
-        return '\n'.join(s)
-
-    def update(self, *args, **kwargs):
-        for k, v in dict(*args, **kwargs).iteritems():
-            self[k] = v
-
-
-
-# Useful for profiling: which dictionary-like class to store attributes in.
-# This is used in Feature below and in parser.py
-
-dict_class = Attributes
-#dict_class = dict
-#dict_class = helper_classes.DefaultOrderedDict
-#dict_class = collections.defaultdict
-#dict_class = collections.OrderedDict
-#dict_class = helper_classes.DefaultListOrderedDict
 
 _position_lookup = dict(enumerate(['seqid', 'source', 'featuretype', 'start',
                                    'end', 'score', 'strand', 'frame',
@@ -223,7 +122,7 @@ class Feature(object):
         # for testing.
         attributes = attributes or dict_class()
 
-        if isinstance(attributes, basestring):
+        if isinstance(attributes, six.string_types):
             try:
                 attributes = helpers._unjsonify(attributes, isattributes=True)
 
@@ -239,7 +138,7 @@ class Feature(object):
         # If string, then try un-JSONifying it into a list; if that doesn't
         # work then assume it's tab-delimited and convert to a list.
         extra = extra or []
-        if isinstance(extra, basestring):
+        if isinstance(extra, six.string_types):
             try:
                 extra = helpers._unjsonify(extra)
             except simplejson.JSONDecodeError:
@@ -304,7 +203,10 @@ class Feature(object):
             self.attributes[key] = value
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        if six.PY3:
+            return self.__unicode__()
+        else:
+            return unicode(self).encode('utf-8')
 
     def __unicode__(self):
         # All fields but attributes (and extra).
@@ -429,7 +331,7 @@ def feature_from_line(line, dialect=None, strict=True, keep_order=False):
     except IndexError:
         attr_string = ""
     attrs, _dialect = parser._split_keyvals(attr_string, dialect=dialect)
-    d = dict(zip(constants._gffkeys, fields))
+    d = dict(list(zip(constants._gffkeys, fields)))
     d['attributes'] = attrs
     d['extra'] = fields[9:]
     d['keep_order'] = keep_order
