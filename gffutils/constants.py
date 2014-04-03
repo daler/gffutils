@@ -48,6 +48,13 @@ CREATE TABLE duplicates (
 
 """
 
+default_pragmas = {
+    'synchronous': 'NORMAL',
+    'journal_mode': 'MEMORY',
+    'main.page_size': 4096,
+    'main.cache_size': 10000,
+}
+
 _keys = ['id', 'seqid', 'source', 'featuretype', 'start', 'end', 'score',
          'strand', 'frame', 'attributes', 'extra', 'bin']
 _gffkeys = ['seqid', 'source', 'featuretype', 'start', 'end', 'score',

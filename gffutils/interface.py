@@ -39,7 +39,7 @@ class FeatureDB(object):
     """
 
     def __init__(self, dbfn, text_factory=None, default_encoding='utf-8',
-                 keep_order=False):
+                 keep_order=False, pragmas=constants.default_pragmas):
         """
         Connect to a database created by :func:`gffutils.create_db`.
 
@@ -72,6 +72,13 @@ class FeatureDB(object):
             Default is False, since this includes a sorting step that can get
             time-consuming for many features.
 
+        pragmas : dict
+            Dictionary of pragmas to use when connecting to the database.  See
+            http://www.sqlite.org/pragma.html for the full list of
+            possibilities, and constants.default_pragmas for the defaults.
+            These can be changed later using the :meth:`FeatureDB.set_pragmas`
+            method.
+
         .. note::
 
             `dbfn` can also be a subclass of :class:`_DBCreator`, useful for
@@ -96,6 +103,8 @@ class FeatureDB(object):
             raise ValueError(
                 "cannot connect to memory db; please provide the connection")
         else:
+            if not os.path.exists(dbfn):
+                raise ValueError("Database file %s does not exist" % dbfn)
             self.dbfn = dbfn
             self.conn = sqlite3.connect(self.dbfn)
 
@@ -133,6 +142,28 @@ class FeatureDB(object):
             SELECT base, n FROM autoincrements
             ''')
         self._autoincrements = dict(c)
+
+        self.set_pragmas(pragmas)
+
+
+    def set_pragmas(self, pragmas):
+        """
+        Set pragmas for the current database connection.
+
+        Parameters
+        ----------
+        pragmas : dict
+            Dictionary of pragmas; see constants.default_pragmas for a template
+            and http://www.sqlite.org/pragma.html for a full list.
+        """
+        self.pragmas = pragmas
+        c = self.conn.cursor()
+        c.executescript(
+            ';\n'.join(
+                ['PRAGMA %s=%s' % i for i in self.pragmas.items()]
+            )
+        )
+
 
     def _feature_returner(self, **kwargs):
         """
