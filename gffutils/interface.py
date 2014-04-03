@@ -164,6 +164,7 @@ class FeatureDB(object):
                 ['PRAGMA %s=%s' % i for i in self.pragmas.items()]
             )
         )
+        self.conn.commit()
 
 
     def _feature_returner(self, **kwargs):

@@ -364,18 +364,32 @@ class _DBCreator(object):
             c.execute("DROP INDEX IF EXISTS ?", (index,))
         self.conn.commit()
 
+    def set_pragmas(self, pragmas):
+        """
+        Set pragmas for the current database connection.
+
+        Parameters
+        ----------
+        pragmas : dict
+            Dictionary of pragmas; see constants.default_pragmas for a template
+            and http://www.sqlite.org/pragma.html for a full list.
+        """
+        self.pragmas = pragmas
+        c = self.conn.cursor()
+        c.executescript(
+            ';\n'.join(
+                ['PRAGMA %s=%s' % i for i in self.pragmas.items()]
+            )
+        )
+        self.conn.commit()
+
     def _init_tables(self):
         """
         Table creation
         """
         c = self.conn.cursor()
         v = sqlite3.sqlite_version_info
-
-        c.executescript(
-            ';\n'.join(
-                ['PRAGMA %s=%s' % i for i in self.pragmas.items()]
-            )
-        )
+        self.set_pragmas(self.pragmas)
         c.executescript(constants.SCHEMA)
         self.conn.commit()
 
@@ -1079,8 +1093,8 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
 
     c.create()
     if dbfn == ':memory:':
-        db = interface.FeatureDB(c.conn, keep_order=keep_order)
+        db = interface.FeatureDB(c.conn, keep_order=keep_order, pragmas=pragmas)
     else:
-        db = interface.FeatureDB(c, keep_order=keep_order)
+        db = interface.FeatureDB(c, keep_order=keep_order, pragmas=pragmas)
 
     return db
