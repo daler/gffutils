@@ -20,7 +20,7 @@ line:
 The :class:`attributes.Attributes` object is accessed like this:
 
 >>> f.attributes
-<gffutils.feature.Attributes object at ...>
+<gffutils.attributes.Attributes object at ...>
 
 It behaves like a dictionary of lists:
 
@@ -61,3 +61,8 @@ Now the single values are returned as strings rather than 1-item lists:
 ID: exon1
 Parent: ['FBtr0300689', 'FBtr0300690']
 parent_type: mRNA
+
+Reset back to the original behavior:
+
+>>> gffutils.constants.always_return_list = True
+
