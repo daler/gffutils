@@ -19,6 +19,9 @@ class Attributes(collections.MutableMapping):
         If True, then one-item lists are returned.  This is best shown with an
         example:
 
+        args and kwargs are just like the args and kwargs accepted by
+        a dictionary.
+
         Set up an Attributes object:
 
             >>> attr = Attributes()
