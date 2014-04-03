@@ -47,4 +47,3 @@
 3R	FlyBase	point_mutation	25869948	25869948	.	+	.	ID=Sry-delta[SF1]-2_point_mutation;Name=Sry-δ[SF1]-2;related_allele=FBal0016088;evidence=experimental;na_change=G25869948A;pr_change=E250K|Sry-delta-PA;reported_na_change=G751A;reported_pr_change=E251K
 
 X	FlyBase	rescue_fragment	15753067	15756919	.	+	.	ID=Gβ13F[+tSa]_rescue_fragment;Name=Gbeta13F[+tSa];related_allele=FBal0128191;evidence=experimental
-
