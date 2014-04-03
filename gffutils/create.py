@@ -31,7 +31,7 @@ class _DBCreator(object):
                  default_encoding='utf-8',
                  infer_gene_extent=True,
                  force_merge_fields=None,
-                 text_factory=None, pragmas=constants.default_pragmas):
+                 text_factory=sqlite3.OptimizedUnicode, pragmas=constants.default_pragmas):
         """
         Base class for _GFFDBCreator and _GTFDBCreator; see create_db()
         function for docs
@@ -363,18 +363,32 @@ class _DBCreator(object):
             c.execute("DROP INDEX IF EXISTS ?", (index,))
         self.conn.commit()
 
+    def set_pragmas(self, pragmas):
+        """
+        Set pragmas for the current database connection.
+
+        Parameters
+        ----------
+        pragmas : dict
+            Dictionary of pragmas; see constants.default_pragmas for a template
+            and http://www.sqlite.org/pragma.html for a full list.
+        """
+        self.pragmas = pragmas
+        c = self.conn.cursor()
+        c.executescript(
+            ';\n'.join(
+                ['PRAGMA %s=%s' % i for i in self.pragmas.items()]
+            )
+        )
+        self.conn.commit()
+
     def _init_tables(self):
         """
         Table creation
         """
         c = self.conn.cursor()
         v = sqlite3.sqlite_version_info
-
-        c.executescript(
-            ';\n'.join(
-                ['PRAGMA %s=%s' % i for i in self.pragmas.items()]
-            )
-        )
+        self.set_pragmas(self.pragmas)
         c.executescript(constants.SCHEMA)
         self.conn.commit()
 
@@ -873,7 +887,7 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
               gtf_transcript_key='transcript_id', gtf_gene_key='gene_id',
               gtf_subfeature='exon', force_gff=False,
               force_dialect_check=False, from_string=False, keep_order=False,
-              text_factory=None, infer_gene_extent=True,
+              text_factory=sqlite3.OptimizedUnicode, infer_gene_extent=True,
               force_merge_fields=None, pragmas=constants.default_pragmas):
     """
     Create a database from a GFF or GTF file.
@@ -1026,6 +1040,12 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
         strings of comma-separated values.  Note that 'start' and 'end' are not
         available, since these fields need to be integers.
 
+    text_factory : callable
+        Text factory to use for the sqlite3 database.  See
+        https://docs.python.org/2/library/sqlite3.html#sqlite3.Connection.text_factory
+        for details. The default sqlite3.OptimizedUnicode will return Unicode
+        objects only for non-ASCII data, and bytestrings otherwise.
+
     pragmas : dict
         Dictionary of pragmas used when creating the sqlite3 database. See
         http://www.sqlite.org/pragma.html for a list of available pragmas.  The
@@ -1078,8 +1098,8 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
 
     c.create()
     if dbfn == ':memory:':
-        db = interface.FeatureDB(c.conn, keep_order=keep_order)
+        db = interface.FeatureDB(c.conn, keep_order=keep_order, pragmas=pragmas)
     else:
-        db = interface.FeatureDB(c, keep_order=keep_order)
+        db = interface.FeatureDB(c, keep_order=keep_order, pragmas=pragmas)
 
     return db

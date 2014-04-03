@@ -6,20 +6,58 @@ we can.  Once the attributes have been parsed, they can be accessed via
 :attr:`Feature.attributes` or using getitem syntax on the :class:`Feature`
 itself.
 
-*All* attribute values are lists of unicode objects.
-As an example, the attribute string::
+An :class:`attributes.Attributes` object behaves much like a dictionary, except
+that all of its values are stored internally as a list. By default, all
+attribute values are returned as lists, even 1-item lists.  However, this can
+be changed using the `constants.always_return_list` setting.
 
-    ID="gene1"; biotype="protein_coding", Aliases="g1, examplegene";
+Let's get an example :class:`Attributes` object to work with, by parsing a GFF
+line:
 
-becomes the dictionary::
+>>> f = gffutils.feature.feature_from_line(
+... 'chr2L\tFlyBase\texon\t8193\t8589\t.\t+\t.\tID=exon1; Parent=FBtr0300689,FBtr0300690')
 
-    'ID': [u'gene1'],
-    'biotype': [u'protein_coding']
-    'Aliases': [u'g1', u'examplegene']
+The :class:`attributes.Attributes` object is accessed like this:
 
-We could access the biotype of the feature by::
+>>> f.attributes
+<gffutils.feature.Attributes object at ...>
 
-    feature['biotype'][0]
+It behaves like a dictionary of lists:
+
+>>> for i in sorted(f.attributes.items()):
+...     print('{i[0]}: {i[1]}'.format(i=i))
+ID: ['exon1']
+Parent: ['FBtr0300689', 'FBtr0300690']
+
+>>> f.attributes['ID']
+['exon1']
+
+Usually it's more convenient to access thee attributes directly from the
+feature, like this:
+
+>>> f['ID']
+['exon1']
 
 
+We can add attibutes, again directly from the feature:
 
+>>> f['parent_type'] = 'mRNA'
+
+.. _always_return_list:
+
+By default, a list is always returned, even for 1-item lists:
+
+>>> f['parent_type'] == f.attributes['parent_type'] == ['mRNA']
+True
+
+However, we can change this behavior like so:
+
+>>> gffutils.constants.always_return_list = False
+
+Now the single values are returned as strings rather than 1-item lists:
+
+>>> for i in sorted(f.attributes.items()):
+...     print('{i[0]}: {i[1]}'.format(i=i))
+ID: exon1
+Parent: ['FBtr0300689', 'FBtr0300690']
+parent_type: mRNA
