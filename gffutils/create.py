@@ -32,7 +32,7 @@ class _DBCreator(object):
                  default_encoding='utf-8',
                  infer_gene_extent=True,
                  force_merge_fields=None,
-                 text_factory=None, pragmas=constants.default_pragmas):
+                 text_factory=sqlite3.OptimizedUnicode, pragmas=constants.default_pragmas):
         """
         Base class for _GFFDBCreator and _GTFDBCreator; see create_db()
         function for docs
@@ -888,7 +888,7 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
               gtf_transcript_key='transcript_id', gtf_gene_key='gene_id',
               gtf_subfeature='exon', force_gff=False,
               force_dialect_check=False, from_string=False, keep_order=False,
-              text_factory=None, infer_gene_extent=True,
+              text_factory=sqlite3.OptimizedUnicode, infer_gene_extent=True,
               force_merge_fields=None, pragmas=constants.default_pragmas):
     """
     Create a database from a GFF or GTF file.
@@ -1040,6 +1040,12 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
         'score', 'strand', 'frame'].  The resulting merged fields will be
         strings of comma-separated values.  Note that 'start' and 'end' are not
         available, since these fields need to be integers.
+
+    text_factory : callable
+        Text factory to use for the sqlite3 database.  See
+        https://docs.python.org/2/library/sqlite3.html#sqlite3.Connection.text_factory
+        for details. The default sqlite3.OptimizedUnicode will return Unicode
+        objects only for non-ASCII data, and bytestrings otherwise.
 
     pragmas : dict
         Dictionary of pragmas used when creating the sqlite3 database. See
