@@ -285,7 +285,7 @@ class _DBCreator(object):
 
                 # Set the final merged non-attributes
                 for k, v in final_fields.items():
-                    setattr(existing_feature, k, ','.join(map(str, v)))
+                    setattr(existing_feature, k, ','.join(sorted(map(str, v))))
 
                 if self.verbose == 'debug':
                     logger.debug('\nMERGED:\n%s' % existing_feature)
