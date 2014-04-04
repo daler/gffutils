@@ -25,6 +25,7 @@ def test_update():
     # check both in-memory and file-based dbs
     db = create.create_db(
         example_filename('FBgn0031208.gff'), ':memory:', verbose=False,
+        keep_order=True,
         force=True)
 
     orig_num_features = len(list(db.all_features()))
@@ -37,7 +38,9 @@ def test_update():
     db.update([f])
     x = list(db.features_of_type('testing'))
     assert len(x) == 1
-    assert str(x[0]) == "chr2L	.	testing	1	10	.	+	.	ID=testing_feature;n=1", str(x[0])
+    x = x[0]
+    x.keep_order = True
+    assert str(x) == "chr2L	.	testing	1	10	.	+	.	ID=testing_feature;n=1", str(x)
 
     # ought to be one more now . . .
     num_features = len(list(db.all_features()))
@@ -48,11 +51,18 @@ def test_update():
     f = feature.feature_from_line(
         'chr2L . testing 1 10 . + . ID=testing_feature;n=1',
         dialect=db.dialect, strict=False)
+    f.keep_order = True
     f.attributes['n'] = ['2']
     db.update([f], merge_strategy='merge')
     x = list(db.features_of_type('testing'))
     assert len(x) == 1
-    assert str(x[0]) == "chr2L	.	testing	1	10	.	+	.	ID=testing_feature;n=1,2"
+
+    # Merging does a list(set()) operation, so the order is not guaranteed.
+    # Fix it here for testing...
+    x = x[0]
+    x.attributes['n'].sort()
+
+    assert str(x) == "chr2L	.	testing	1	10	.	+	.	ID=testing_feature;n=1,2", str(x)
 
     # still should have the same number of features as before (still 2)
     num_features = len(list(db.all_features()))
@@ -62,7 +72,7 @@ def test_update():
     # Merging while iterating.  e.g., if you're updating children with gene
     # IDs.
     db = create.create_db(example_filename('FBgn0031208.gff'), ':memory:',
-                          verbose=False, force=True)
+                          verbose=False, force=True, keep_order=True)
     for gene in db.features_of_type('gene'):
         for child in list(db.children(gene)):
             # important: the FBgn0031208.gff file was designed to have some
@@ -97,11 +107,14 @@ def test_update():
     f = feature.feature_from_line(
         'chr2L . testing 1 10 . + . ID=testing_feature;n=1',
         dialect=db.dialect, strict=False)
+
+    f.keep_order = True
+
     f.attributes['n'] = ['3']
     db.update([f], merge_strategy='replace')
     x = list(db.features_of_type('testing'))
     assert len(x) == 1
-    assert str(x[0]) == "chr2L	.	testing	1	10	.	+	.	ID=testing_feature;n=3"
+    assert str(x[0]) == "chr2L	.	testing	1	10	.	+	.	ID=testing_feature;n=3", str(x[0])
     # still should have the same number of features as before (still 2)
     num_features = len(list(db.all_features()))
     assert num_features == orig_num_features + 1, num_features
@@ -110,12 +123,14 @@ def test_update():
     # Same thing, but GTF instead of GFF.
     db = create.create_db(
         example_filename('FBgn0031208.gtf'), ':memory:', verbose=False,
-        force=True)
+        force=True, keep_order=True)
     f = feature.feature_from_line('chr2L . testing 1 10 . + . gene_id "fake"; n "1"', strict=False)
+    f.keep_order = True
     db.update([f], merge_strategy='merge')
     x = list(db.features_of_type('testing'))
     assert len(x) == 1
     x = x[0]
+    x.keep_order = True
 
     # note the trailing semicolon.  That's because the db's dialect has
     # ['trailing semicolon'] = True.
@@ -155,7 +170,8 @@ class BaseDB(object):
             ':memory:',
             id_spec=id_func,
             merge_strategy='create_unique',
-            verbose=False
+            verbose=False,
+            keep_order=True
         )
         self.c = self.db.conn.cursor()
         self.dialect = self.db.dialect
@@ -282,7 +298,7 @@ def test_gffwriter():
     source_first_line = open(temp_fname_source, "r").readline().strip()
     assert (not source_first_line.startswith("#GFF3")), \
            "unsanitized.gff should not have a gffutils-style header."
-    db_in = gffutils.create_db(fn, ":memory:")
+    db_in = gffutils.create_db(fn, ":memory:", keep_order=True)
     # Fetch first record
     rec = next(db_in.all_features())
     ##
@@ -345,11 +361,11 @@ def test_create_db_from_iter():
     """
     print("Testing creation of DB from iterator")
     db_fname = gffutils.example_filename("gff_example1.gff3")
-    db = gffutils.create_db(db_fname, ":memory:")
+    db = gffutils.create_db(db_fname, ":memory:", keep_order=True)
     def my_iterator():
         for rec in db.all_features():
             yield rec
-    new_db = gffutils.create_db(my_iterator(), ":memory:")
+    new_db = gffutils.create_db(my_iterator(), ":memory:", keep_order=True)
     print(list(new_db.all_features()))
     gene_feats = new_db.all_features(featuretype="gene")
     assert (len(list(gene_feats)) != 0), "Could not load genes from GFF."
@@ -375,7 +391,7 @@ def test_sanitize_gff():
 
 def test_region():
     db_fname = gffutils.example_filename("gff_example1.gff3")
-    db = gffutils.create_db(db_fname, ":memory:")
+    db = gffutils.create_db(db_fname, ":memory:", keep_order=True)
     all_in_region = list(db.region("chr1:4000000-5000000"))
     all_minus = list(db.region("chr1:4000000-5000000:-"))
     all_plus = list(db.region("chr1:4000000-5000000:+"))
@@ -393,7 +409,8 @@ def test_region():
 def test_nonascii():
     # smoke test (prev. version returned Unicode)
     #
-    db = gffutils.create_db(gffutils.example_filename('nonascii'), ":memory:")
+    db = gffutils.create_db(gffutils.example_filename('nonascii'), ":memory:",
+                            keep_order=True)
     for i in db.all_features():
         # this works in IPython, or using nosetests --with-doctest...
         try:
@@ -412,37 +429,52 @@ def test_feature_merge():
     chr1	a	testing	1	10	.	+	.	gene_id "fake"; n "2";
     chr1	b	testing	1	10	.	+	.	gene_id "fake"; n "1";
     """)
-    db = gffutils.create_db(gtfdata, ":memory:", from_string=True, merge_strategy='merge', id_spec='gene_id', force_merge_fields=['source'])
+    db = gffutils.create_db(gtfdata, ":memory:", from_string=True,
+                            merge_strategy='merge', id_spec='gene_id',
+                            force_merge_fields=['source'], keep_order=True,
+                            sort_attribute_values=True)
     assert db.dialect['fmt'] == 'gtf'
     assert len(list(db.all_features())) == 1
     x = db['fake']
+    x.keep_order = True
+    x.attributes['n'].sort()
     assert str(x) == 'chr1	a,b	testing	1	10	.	+	.	gene_id "fake"; n "1,2";', str(x)
 
     gffdata = dedent("""
     chr1	a	testing	1	10	.	+	.	gene_id="fake"; n="2";
     chr1	b	testing	1	10	.	+	.	gene_id="fake"; n="1";
     """)
-    db = gffutils.create_db(gffdata, ":memory:", from_string=True, merge_strategy='merge', id_spec='gene_id', force_merge_fields=['source'])
+    db = gffutils.create_db(gffdata, ":memory:", from_string=True,
+                            merge_strategy='merge', id_spec='gene_id',
+                            force_merge_fields=['source'], keep_order=True)
     assert db.dialect['fmt'] == 'gff3'
     assert len(list(db.all_features())) == 1
     x = db['fake']
+    x.attributes['n'].sort()
+    x.keep_order = True
     assert str(x) == 'chr1	a,b	testing	1	10	.	+	.	gene_id="fake"; n="1,2";', str(x)
 
 
     # But when not using force_merge_fields, there should be separate entries;
     # accessing fake and fake_1 should not give FeatureNotFound errors.
-    db = gffutils.create_db(gtfdata, ':memory:', from_string=True, merge_strategy='merge', id_spec='gene_id')
+    db = gffutils.create_db(gtfdata, ':memory:', from_string=True,
+                            merge_strategy='merge', id_spec='gene_id',
+                            keep_order=True)
     assert len(list(db.all_features())) == 2
     x = db['fake']
     y = db['fake_1']
 
-    db = gffutils.create_db(gffdata, ':memory:', from_string=True, merge_strategy='merge', id_spec='gene_id')
+    db = gffutils.create_db(gffdata, ':memory:', from_string=True,
+                            merge_strategy='merge', id_spec='gene_id',
+                            keep_order=True)
     assert len(list(db.all_features())) == 2
     x = db['fake']
     y = db['fake_1']
 
 
-    assert_raises(ValueError, gffutils.create_db, gtfdata, ":memory:", from_string=True, merge_strategy='merge', id_spec='gene_id', force_merge_fields=['start'])
+    assert_raises(ValueError, gffutils.create_db, gtfdata, ":memory:",
+                  from_string=True, merge_strategy='merge', id_spec='gene_id',
+                  force_merge_fields=['start'], keep_order=True)
 
     # test that warnings are raised because of strand and frame
     with warnings.catch_warnings(record=True) as w:
@@ -450,15 +482,20 @@ def test_feature_merge():
         chr1	a	testing	1	10	.	+	.	gene_id="fake"; n="2";
         chr1	a	testing	1	10	.	-	1	gene_id="fake"; n="1";
         """)
-        db = gffutils.create_db(gffdata, ":memory:", from_string=True, merge_strategy='merge', id_spec='gene_id', force_merge_fields=['strand', 'frame'])
+        db = gffutils.create_db(gffdata, ":memory:", from_string=True,
+                                merge_strategy='merge', id_spec='gene_id',
+                                force_merge_fields=['strand', 'frame'],
+                                keep_order=True, sort_attribute_values=True)
         assert db.dialect['fmt'] == 'gff3'
         assert len(list(db.all_features())) == 1
         x = db['fake']
-        assert str(x) == 'chr1	a	testing	1	10	.	+,-	1,.	gene_id="fake"; n="1,2";', str(x)
+        x.keep_order = True
+        x.attributes['n'].sort()
+        assert str(x) == 'chr1	a	testing	1	10	.	+,-	.,1	gene_id="fake"; n="1,2";', str(x)
         assert len(w) == 2
 
 def test_add_relation():
-    db = gffutils.create_db(gffutils.example_filename('FBgn0031208.gff'), ':memory:')
+    db = gffutils.create_db(gffutils.example_filename('FBgn0031208.gff'), ':memory:', keep_order=True)
     L = len(list(db.children('FBgn0031208:3')))
     assert L == 0, L
 
@@ -499,11 +536,11 @@ def test_create_db_from_url():
     server_thread.start()
     try:
         url = ''.join(['http://localhost:', port, '/gff_example1.gff3'])
-        db = gffutils.create_db(url, ":memory:")
+        db = gffutils.create_db(url, ":memory:", keep_order=True)
         def my_iterator():
             for rec in db.all_features():
                 yield rec
-        new_db = gffutils.create_db(my_iterator(), ":memory:")
+        new_db = gffutils.create_db(my_iterator(), ":memory:", keep_order=True)
 
         print(list(new_db.all_features()))
         gene_feats = new_db.all_features(featuretype="gene")

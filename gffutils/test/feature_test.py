@@ -4,8 +4,8 @@ def test_feature_from_line():
     # spaces and tabs should give identical results
     line1 = "chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690"
     line2 = "chr2L FlyBase exon 7529 8116 . + . Name=CG11023:1;Parent=FBtr0300689,FBtr0300690"
-    assert feature.feature_from_line(line1, strict=False) == \
-            feature.feature_from_line(line2, strict=False)
+    assert feature.feature_from_line(line1, strict=False, keep_order=True) == \
+            feature.feature_from_line(line2, strict=False, keep_order=True)
 
 
 def test_default_feature():
@@ -47,7 +47,7 @@ def test_default_start_stop():
 
 def test_aliases():
     line = "chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690"
-    f = feature.feature_from_line(line)
+    f = feature.feature_from_line(line, keep_order=True)
     assert f.chrom == 'chr2L' == f.seqid
     assert f.end == 8116 == f.stop
 
@@ -59,11 +59,11 @@ def test_aliases():
 
 def test_string_representation():
     line = "chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690"
-    f = feature.feature_from_line(line)
+    f = feature.feature_from_line(line, keep_order=True)
     assert line == str(f), str(f)
 
     line = "chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690	some	more	stuff"
-    f = feature.feature_from_line(line)
+    f = feature.feature_from_line(line, keep_order=True)
     assert line == str(f)
 
 
@@ -73,7 +73,7 @@ def test_pbt_interval_conversion():
     except ImportError:
         return
     line = "chr2L FlyBase exon 7529 8116 . + . Name=CG11023:1;Parent=FBtr0300689,FBtr0300690"
-    f = feature.feature_from_line(line, strict=False)
+    f = feature.feature_from_line(line, strict=False, keep_order=True)
     pbt = helpers.asinterval(f)
     assert pbt.chrom == f.chrom == f.seqid
     assert pbt.start == f.start -1
@@ -85,13 +85,13 @@ def test_pbt_interval_conversion():
 
 def test_hash():
     line = "chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690	some	more	stuff"
-    f = feature.feature_from_line(line)
+    f = feature.feature_from_line(line, keep_order=True)
     assert hash(f) == hash(line)
 
 
 def test_repr():
     line = "chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690	some	more	stuff"
-    f = feature.feature_from_line(line)
+    f = feature.feature_from_line(line, keep_order=True)
     print(repr(f))
     print(hex(id(f)))
     assert repr(f) == ("<Feature exon (chr2L:7529-8116[+]) at %s>" % hex(id(f)))
@@ -105,8 +105,9 @@ def test_attribute_order():
     a = feature.feature_from_line(
         """
         chr1	.	mRNA	1	100	.	+	.	%s
-        """ % attributes, strict=False)
+        """ % attributes, strict=False, keep_order=True)
     a.strict = True
+    a.keep_order = True
     assert str(a) == 'chr1	.	mRNA	1	100	.	+	.	transcript_id "mRNA1"; gene_id "gene1";', str(a)
 
     # ensure that using the default dialect uses the default order (and
@@ -151,5 +152,5 @@ class IsolatedTestCase(object):
 
     def test_feature_single_item(self):
         line = "chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690	some	more	stuff"
-        f = feature.feature_from_line(line)
+        f = feature.feature_from_line(line, keep_order=True)
         assert f['Name'] == ['CG11023:1']

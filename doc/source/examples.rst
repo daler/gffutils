@@ -96,8 +96,8 @@ Or as "grandchildren" of the gene:
 Note that the database id values are all unique for the CDSs, but their
 `"Name"` attributes are still all the same, as expected:
 
->>> set([f['Name'][0] for f in db.children('XM_001475631.1', featuretype='CDS')])
-set(['CDS:NC_000083.5:LOC100040603'])
+>>> list(set([f['Name'][0] for f in db.children('XM_001475631.1', featuretype='CDS')]))
+['CDS:NC_000083.5:LOC100040603']
 
 
 

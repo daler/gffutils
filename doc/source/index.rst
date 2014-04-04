@@ -117,13 +117,23 @@ a local sqlite3 file-based database.  The :func:`gffutils.create_db` function
 is used for this, and it takes many optional arguments for configuring how to
 interpret your GFF or GTF file.
 
->>> db = gffutils.create_db(fn, dbfn='test.db', force=True, keep_order=True, merge_strategy='merge')
+.. doctest::
+    :hide:
 
-Here, `force=True` will overwrite any existing database, and `keep_order=True`
-will maintain the order of the attributes (ID, Name, Parent, and so on).  This
-is necessary here for this documentation (which undergoes automated testing) to
-have predictable output, but in general you can gain a speedup by using the
-default `keep_order=False`.
+    from __future__ import print_function
+
+
+>>> db = gffutils.create_db(fn, dbfn='test.db', force=True, keep_order=True,
+... merge_strategy='merge', sort_attribute_values=True)
+
+
+Here, `force=True` will overwrite any existing database, `keep_order=True`
+will maintain the order of the attributes (ID, Name, Parent, and so on), and
+`sort_attribute_values=True` will ensure the values of each attribute are
+always sorted.  These latter two settings are necessary here for this
+documentation (which undergoes automated testing) to have predictable output,
+but in general you can gain a speedup by using the default `keep_order=False`
+and `sort_attributes_order=False`.
 
 If your input file follows the GFF or GTF file format specifications, this is
 all you need to create a database.  But real-world files don't always
@@ -159,27 +169,27 @@ Attributes are stored in the `attributes` dictionary.  Values are always in
 a list, even if there's only one item:
 
 >>> gene.attributes['Name']
-[u'CG11023']
+['CG11023']
 
 Attributes can also be accessed from the :class:`Feature` object itself, to
 save some typing:
 
 >>> gene['Name']
-[u'CG11023']
+['CG11023']
 
 
 Printing a :class:`Feature` reproduces the original GFF line as faithfully as
 possible.  See the :ref:`dialects` section for more details on how this is
 handled and configured.
 
->>> print gene  #doctest:+NORMALIZE_WHITESPACE
+>>> print(gene)  #doctest:+NORMALIZE_WHITESPACE
 2L	FlyBase	gene	7529	9484	.	+	.	ID=FBgn0031208;Name=CG11023;Ontology_term=SO:0000010,SO:0000087,GO:0016929,GO:0016926,GO:0006508;Dbxref=FlyBase:FBan0011023,FlyBase_Annotation_IDs:CG11023,GB_protein:ACZ94128,GB_protein:AAO41164,GB:AI944728,GB:AJ564667,GB_protein:CAD92822,GB:BF495604,UniProt/TrEMBL:Q86BM6,INTERPRO:IPR003653,GB_protein:AGB92323,UniProt/TrEMBL:M9PAY1,OrthoDB7_Drosophila:EOG796K1P,OrthoDB7_Diptera:EOG7X1604,EntrezGene:33155,UniProt/TrEMBL:E1JHP8,UniProt/TrEMBL:Q6KEV3,OrthoDB7_Insecta:EOG7Q8QM7,OrthoDB7_Arthropoda:EOG7R5K68,OrthoDB7_Metazoa:EOG7D59MP,InterologFinder:33155,BIOGRID:59420,FlyAtlas:CG11023-RA,GenomeRNAi:33155;gbunit=AE014134;derived_computed_cyto=21A5-21A5
 
 
 Get all the mRNAs for a gene:
 
 >>> for i in db.children(gene, featuretype='mRNA', order_by='start'):
-...     print i #doctest:+NORMALIZE_WHITESPACE
+...     print(i) #doctest:+NORMALIZE_WHITESPACE
 2L	FlyBase	mRNA	7529	9484	.	+	.	ID=FBtr0300689;Name=CG11023-RB;Dbxref=REFSEQ:NM_001169365,FlyBase_Annotation_IDs:CG11023-RB;Parent=FBgn0031208;score_text=Strongly Supported;score=11
 2L	FlyBase	mRNA	7529	9484	.	+	.	ID=FBtr0300690;Name=CG11023-RC;Dbxref=REFSEQ:NM_175941,FlyBase_Annotation_IDs:CG11023-RC;Parent=FBgn0031208;score_text=Strongly Supported;score=15
 2L	FlyBase	mRNA	7529	9484	.	+	.	ID=FBtr0330654;Name=CG11023-RD;Dbxref=FlyBase_Annotation_IDs:CG11023-RD,REFSEQ:NM_001272857;Parent=FBgn0031208;score_text=Strongly Supported;score=11
@@ -187,7 +197,7 @@ Get all the mRNAs for a gene:
 Get all the exons for a gene:
 
 >>> for i in db.children(gene, featuretype='exon', order_by='start'):
-...     print i #doctest:+NORMALIZE_WHITESPACE
+...     print(i) #doctest:+NORMALIZE_WHITESPACE
 2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690,FBtr0330654;parent_type=mRNA
 2L	FlyBase	exon	8193	9484	.	+	.	Name=CG11023:3;Parent=FBtr0300689;parent_type=mRNA
 2L	FlyBase	exon	8193	8589	.	+	.	Name=CG11023:2;Parent=FBtr0300690;parent_type=mRNA
@@ -206,7 +216,7 @@ of the :mod:`gffutils`:
 ...     parents = db.parents(exon, featuretype='mRNA')
 ...     if len(list(parents)) == mRNA_count:
 ...         constitutive_exons.append(exon)
->>> print constitutive_exons
+>>> print(constitutive_exons)
 [<Feature exon (2L:7529-8116[+]) at 0x...>]
 
 Retrieve entries by genomic coordinates, which uses the `UCSC binning strategy
@@ -219,7 +229,7 @@ Retrieve UTRs that overlap the gene (note that a feature can be provided as the
 coordinates):
 
 >>> for UTR in db.region(gene, featuretype=['three_prime_UTR', 'five_prime_UTR']):
-...     print UTR #doctest:+NORMALIZE_WHITESPACE
+...     print(UTR) #doctest:+NORMALIZE_WHITESPACE
 2L	FlyBase	five_prime_UTR	7529	7679	.	+	.	Name=CG11023-u5;Parent=FBtr0300689,FBtr0300690;parent_type=mRNA
 2L	FlyBase	five_prime_UTR	7529	7679	.	+	.	Name=CG11023-u5;Parent=FBtr0330654;parent_type=mRNA
 2L	FlyBase	three_prime_UTR	8611	9484	.	+	.	Name=CG11023-u3;Parent=FBtr0300689;parent_type=mRNA
@@ -236,7 +246,7 @@ exons above:
 ...     parents = db.parents(utr, featuretype='mRNA')
 ...     if len(list(parents)) == mRNA_count:
 ...         constitutive_5UTRs.append(utr)
->>> print constitutive_5UTRs
+>>> print(constitutive_5UTRs)
 []
 
 Yikes!  What happened?  This is because by default, each line in the GFF file
@@ -272,6 +282,7 @@ read more about exactly what these arguments do, and other ways of tweaking the
 import, at :ref:`database-ids`.  But for now, let's see what happens:
 
 >>> db2 = gffutils.create_db(fn, dbfn='test.db', force=True, keep_order=True,
+... sort_attribute_values=True,
 ... merge_strategy='merge',
 ... id_spec=['ID', 'Name'])
 
@@ -279,26 +290,27 @@ import, at :ref:`database-ids`.  But for now, let's see what happens:
 ...     parents = db2.parents(utr, featuretype='mRNA')
 ...     if len(list(parents)) == mRNA_count:
 ...         constitutive_5UTRs.append(utr)
->>> print constitutive_5UTRs
+>>> print(constitutive_5UTRs)
 [<Feature five_prime_UTR (2L:7529-7679[+]) at 0x...>]
 
 Let's look at all the 5'UTRs in the database to see how the merge strategy
 affected them:
 
 >>> for i in db2.features_of_type('five_prime_UTR'):
-...     print i #doctest:+NORMALIZE_WHITESPACE
+...
+...     print(i) #doctest:+NORMALIZE_WHITESPACE
 2L	FlyBase	five_prime_UTR	7529	7679	.	+	.	Name=CG11023-u5;Parent=FBtr0300689,FBtr0300690,FBtr0330654;parent_type=mRNA
 
 Aha! A single 5'UTR.  What about 3'UTRs?
 
 >>> for i in db2.features_of_type('three_prime_UTR'):
-...     print i #doctest:+NORMALIZE_WHITESPACE
+...     print(i) #doctest:+NORMALIZE_WHITESPACE
 2L	FlyBase	three_prime_UTR	8611	9484	.	+	.	Name=CG11023-u3;Parent=FBtr0300689,FBtr0330654;parent_type=mRNA
 2L	FlyBase	three_prime_UTR	9277	9484	.	+	.	Name=CG11023-u3;Parent=FBtr0300690;parent_type=mRNA
 
 
 >>> for i in db2.features_of_type('intron'):
-...     print i #doctest:+NORMALIZE_WHITESPACE
+...     print(i) #doctest:+NORMALIZE_WHITESPACE
 2L	FlyBase	intron	8117	8228	.	+	.	Name=CG11023-in;Parent=FBtr0330654;parent_type=mRNA
 2L	FlyBase	intron	8117	8192	.	+	.	Name=CG11023-in;Parent=FBtr0300689,FBtr0300690;parent_type=mRNA
 2L	FlyBase	intron	8590	8667	.	+	.	Name=CG11023-in;Parent=FBtr0300690;parent_type=mRNA
