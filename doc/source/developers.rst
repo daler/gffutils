@@ -47,14 +47,14 @@ what format `data` is (filename, iterable of features, or a string with GFF
 lines), the following will print the lines correctly::
 
     >>> for feature in DataIterator(data):
-    ...     print feature
+    ...     print(feature)
 
 A dialect can be optionally provided, which will disable the automatic dialect
 inference.  This makes it straightforward to sanitize input, or convert to
 a new dialect.  For example, to convert from GTF to GFF dialects::
 
     >>> for feature in DataIterator(GTF_data, dialect=GFF_dialect):
-    ...     print feature
+    ...     print(feature)
 
 If `dialect` is not None, then that dialect will be used; otherwise, it will be
 auto-detected.

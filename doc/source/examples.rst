@@ -34,6 +34,12 @@ successfully import into a database and retrieve features.
     vs the 9th field of a GFF line, which is called the "attributes" field
     according to the spec. Confusing?  Yes!
 
+
+This documentation undergoes automated testing, and in order to support both
+Python 2 and 3 in the same test suite, we need to do this:
+
+>>> from __future__ import print_function
+
 .. _mouse_extra_comma.gff3:
 
 .. rst-class:: html-toggle
@@ -136,7 +142,7 @@ This shows that the internal representation of null values is None:
 
 But the string representation shows "`.`" placeholders:
 
->>> print f #doctest: +NORMALIZE_WHITESPACE
+>>> print(f) #doctest: +NORMALIZE_WHITESPACE
 I	Expr_profile	experimental_result_region	.	.	.	+	.	expr_profile=B0019.1
 
 c_elegans_WS199_shortened_gff.txt
@@ -180,7 +186,7 @@ Get all "non-historical" CDSs for this gene.  This illustrates that:
 
 >>> for i in db.children(g, featuretype='CDS', order_by='start'):
 ...     if i.source != 'history':
-...         print i  # doctest:+NORMALIZE_WHITESPACE
+...         print(i)  # doctest:+NORMALIZE_WHITESPACE
 I	Coding_transcript	CDS	4580993	4581241	.	-	0	ID=CDS:D1007.5a;Parent=Transcript:D1007.5a;status=Confirmed;wormpep=CE:CE29034
 I	Coding_transcript	CDS	4581214	4581237	.	-	0	ID=CDS:D1007.5b;Parent=Transcript:D1007.5b.2,Transcript:D1007.5b.1;status=Confirmed;wormpep=WP:CE33577
 I	Coding_transcript	CDS	4581664	4582026	.	-	0	ID=CDS:D1007.5a;Parent=Transcript:D1007.5a;status=Confirmed;wormpep=CE:CE29034
@@ -250,7 +256,7 @@ exist in the GTF file):
 >>> g
 <Feature gene (I:12759579-12764949[-]) at 0x...>
 
->>> print g  # doctest:+NORMALIZE_WHITESPACE
+>>> print(g)  # doctest:+NORMALIZE_WHITESPACE
 I	gffutils_derived	gene	12759579	12764949	.	-	.	gene_id "B0019.1";
 
 And the derived "transcript" by its ID -- which now has "_transcript" on the
@@ -260,7 +266,7 @@ end because of that transform function:
 >>> t
 <Feature transcript (I:12759579-12764949[-]) at 0x...>
 
->>> print t  #doctest:+NORMALIZE_WHITESPACE
+>>> print(t)  #doctest:+NORMALIZE_WHITESPACE
 I	gffutils_derived	transcript	12759579	12764949	.	-	.	gene_id "B0019.1"; transcript_id "B0019.1_transcript";
 
 
@@ -368,17 +374,17 @@ This shows that keys with missing values are assigned an empty list.  It's up
 to the calling code to decide how to handle this (say, by checking for the
 presence of the key "Complete".
 
-
 >>> for k, v in sorted(db['GL0000007'].attributes.items()):
-...     print k, '=', v
+...     print(k, '=', v)
 Complete = []
 ID = ['GL0000007']
 Name = ['GL0000007']
 
 This illustrates that the CDS finds the proper transcript parent.
 
+
 >>> for f in db.parents(db['CDS_1'], level=1):
-...     print f.id
+...     print(f.id)
 GL0000006_transcript
 
 .. _hybrid1.gff3:
@@ -414,7 +420,7 @@ Access
 Print out the attributes:
 
 >>> for k, v in sorted(db['A00469'].attributes.items()):
-...     print k, '=', v
+...     print(k, '=', v)
 Alias = ['GH1']
 Dbxref = ['AFFX-U133:205840_x_at', 'Locuslink:2688', 'Genbank-mRNA:A00469', 'Swissprot:P01241', 'PFAM:PF00103', 'AFFX-U95:1332_f_at', 'Swissprot:SOMA_HUMAN']
 ID = ['A00469']
@@ -478,7 +484,7 @@ the "873" transcript:
 Here we can see that all children of the gene are accounted for:
 
 >>> for f in db.children("fgenesh1_pg.C_chr_1000007", order_by='featuretype'):
-...     print '{0.featuretype:>10}: {0.id}'.format(f)
+...     print('{0.featuretype:>10}: {0.id}'.format(f))
        CDS: CDS_1
        CDS: CDS_2
        CDS: CDS_3
@@ -556,14 +562,14 @@ Access
 ``````
 Note that the inferred genes have a source of "gffutils_derived": 
 
->>> print db["cr01.sctg102.wum.2.1"]  #doctest:+NORMALIZE_WHITESPACE
+>>> print(db["cr01.sctg102.wum.2.1"])  #doctest:+NORMALIZE_WHITESPACE
 Contig102	gffutils_derived	gene	1629	3377	.	-	.	gene_id "cr01.sctg102.wum.2.1";
 
 
 Get a report of the childrent of the gene:
 
 >>> for f in db.children("cr01.sctg102.wum.2.1", order_by='featuretype'):
-...     print '{0.featuretype:>12}: {0.id}'.format(f)
+...     print('{0.featuretype:>12}: {0.id}'.format(f))
  coding_exon: coding_exon_1
  coding_exon: coding_exon_2
  coding_exon: coding_exon_3
@@ -650,7 +656,7 @@ Access
 Since we've set the dialect for the database, any features returned from the
 database should follow that dialect:
 
->>> print t  #doctest:+NORMALIZE_WHITESPACE
+>>> print(t)  #doctest:+NORMALIZE_WHITESPACE
 I	Coding_transcript	Transcript	12759582	12764949	.	-	.	Transcript "B0019.1" ; WormPep "WP:CE40797" ; WormPep "WP:CE40797" ; Note "amx-2" ; Note "amx-2" ; Prediction_status "Partially_confirmed" ; Prediction_status "Partially_confirmed" ; Gene "WBGene00000138" ; Gene "WBGene00000138" ; CDS "B0019.1" ; Parent "WBGene00000138" ; Parent "WBGene00000138"
 
 >>> len(list(db.children(t, featuretype='exon')))

@@ -7,7 +7,7 @@ Schema
 The following is the schema used for :mod:`gffutils`. Explanation of each table
 can be found below.
 
->>> print gffutils.constants.SCHEMA  #doctest:+NORMALIZE_WHITESPACE
+>>> print(gffutils.constants.SCHEMA)  #doctest:+NORMALIZE_WHITESPACE
 <BLANKLINE>
 <BLANKLINE>
 CREATE TABLE features (
