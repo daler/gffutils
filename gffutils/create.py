@@ -888,7 +888,8 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
               gtf_subfeature='exon', force_gff=False,
               force_dialect_check=False, from_string=False, keep_order=False,
               text_factory=sqlite3.OptimizedUnicode, infer_gene_extent=True,
-              force_merge_fields=None, pragmas=constants.default_pragmas):
+              force_merge_fields=None, pragmas=constants.default_pragmas,
+              sort_attribute_values=False):
     """
     Create a database from a GFF or GTF file.
 
@@ -1051,6 +1052,11 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
         http://www.sqlite.org/pragma.html for a list of available pragmas.  The
         defaults are stored in constants.default_pragmas, which can be used as
         a template for supplying a custom dictionary.
+
+    sort_attribute_values : bool
+        All features returned from the database will have their attribute
+        values sorted.  Typically this is only useful for testing, since this
+        can get time-consuming for large numbers of features.
     """
     kwargs = dict(
         data=data, checklines=checklines, transform=transform,
@@ -1098,8 +1104,13 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
 
     c.create()
     if dbfn == ':memory:':
-        db = interface.FeatureDB(c.conn, keep_order=keep_order, pragmas=pragmas)
+        db = interface.FeatureDB(c.conn, keep_order=keep_order,
+                                 pragmas=pragmas,
+                                 sort_attribute_values=sort_attribute_values,
+                                 text_factory=text_factory)
     else:
-        db = interface.FeatureDB(c, keep_order=keep_order, pragmas=pragmas)
+        db = interface.FeatureDB(c, keep_order=keep_order, pragmas=pragmas,
+                                 sort_attribute_values=sort_attribute_values,
+                                 text_factory=text_factory)
 
     return db

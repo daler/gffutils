@@ -17,7 +17,7 @@ logger.addHandler(ch)
 gff3_kw_pat = re.compile('\w+=')
 
 
-def _reconstruct(keyvals, dialect, keep_order=False):
+def _reconstruct(keyvals, dialect, keep_order=False, sort_attribute_values=False):
     """
     Reconstructs the original attributes string according to the dialect.
 
@@ -34,6 +34,10 @@ def _reconstruct(keyvals, dialect, keep_order=False):
         If True, then perform sorting of attribute keys to ensure they are in
         the same order as those provided in the original file.  Default is
         False, which saves time especially on large data sets.
+
+    sort_attribute_values : bool
+        If True, then sort values to ensure they will always be in the same
+        order.  Mostly only useful for testing; default is False.
     """
     if not dialect:
         raise AttributeStringError()
@@ -68,6 +72,9 @@ def _reconstruct(keyvals, dialect, keep_order=False):
 
         # Multival sep is usually a comma:
         if val:
+            if sort_attribute_values:
+                val = sorted(val)
+
             val_str = dialect['multival separator'].join(val)
 
             if val_str:

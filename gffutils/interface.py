@@ -1,3 +1,4 @@
+import os
 import six
 import sqlite3
 import shutil
@@ -38,8 +39,10 @@ class FeatureDB(object):
             within `limit`. Only relevant when `limit` is not None.
     """
 
-    def __init__(self, dbfn, text_factory=None, default_encoding='utf-8',
-                 keep_order=False, pragmas=constants.default_pragmas):
+    def __init__(self, dbfn, default_encoding='utf-8', keep_order=False,
+                 pragmas=constants.default_pragmas,
+                 sort_attribute_values=False,
+                 text_factory=sqlite3.OptimizedUnicode):
         """
         Connect to a database created by :func:`gffutils.create_db`.
 
@@ -114,6 +117,7 @@ class FeatureDB(object):
 
         self.default_encoding = default_encoding
         self.keep_order = keep_order
+        self.sort_attribute_values = sort_attribute_values
         c = self.conn.cursor()
 
         # Load some meta info
@@ -172,6 +176,7 @@ class FeatureDB(object):
         """
         kwargs.setdefault('dialect', self.dialect)
         kwargs.setdefault('keep_order', self.keep_order)
+        kwargs.setdefault('sort_attribute_values', self.sort_attribute_values)
         return Feature(**kwargs)
 
     def schema(self):
