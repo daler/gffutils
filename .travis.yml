@@ -7,9 +7,9 @@ install:
     - "pip install -r requirements.txt"
     - "pip install sphinx"
     - "pip install sphinx_rtd_theme"
-    - "pip install numpydoc"
+    - "pip install -e git+https://github.com/numpy/numpydoc.git"
     - "pip install ."
 
-script: 
+script:
     - nosetests
     - cd doc && make doctest

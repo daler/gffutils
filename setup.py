@@ -9,7 +9,7 @@ version = open(version_py).read().strip().split('=')[-1].replace('"', '')
 setup(
     name='gffutils',
     version=version,
-    install_requires=['argh', 'argcomplete', 'simplejson'],
+    install_requires=['six', 'argh', 'argcomplete', 'simplejson'],
     packages=['gffutils', 'gffutils.scripts', 'gffutils.test',
               'gffutils.test.data'],
     scripts=['gffutils/scripts/gffutils-cli'],
