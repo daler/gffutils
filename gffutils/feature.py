@@ -16,7 +16,7 @@ class Feature(object):
     def __init__(self, seqid=".", source=".", featuretype=".",
                  start=".", end=".", score=".", strand=".", frame=".",
                  attributes=None, extra=None, bin=None, id=None, dialect=None,
-                 file_order=None, keep_order=False):
+                 file_order=None, keep_order=False, sort_attribute_values=False):
         """
         Represents a feature from the database.
 
@@ -101,6 +101,12 @@ class Feature(object):
             order specified in the dialect.  Disabled by default, since this
             sorting step is time-consuming over many features.
 
+        sort_attribute_values : bool
+            If True, then the values of each attribute will be sorted when the
+            feature is printed.  Mostly useful for testing, where the order is
+            important for checking against expected values. Disabled by
+            default, since it can be time-consuming over many features.
+
         """
         # start/end can be provided as int-like, ".", or None, but will be
         # converted to int or None
@@ -166,6 +172,7 @@ class Feature(object):
         self.dialect = dialect or constants.dialect
         self.file_order = file_order
         self.keep_order = keep_order
+        self.sort_attribute_values = sort_attribute_values
 
     def __repr__(self):
         memory_loc = hex(id(self))
@@ -225,7 +232,8 @@ class Feature(object):
 
         # Reconstruct from dict and dialect
         reconstructed_attributes = parser._reconstruct(
-            self.attributes, self.dialect, keep_order=self.keep_order)
+            self.attributes, self.dialect, keep_order=self.keep_order,
+            sort_attribute_values=self.sort_attribute_values)
 
         # Final line includes reconstructed as well as any previously-added
         # "extra" fields
