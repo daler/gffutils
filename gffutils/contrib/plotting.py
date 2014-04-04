@@ -3,7 +3,8 @@ from gffutils.helpers import asinterval
 try:
     from pybedtools.contrib.plotting import Track
 except ImportError:
-    raise ImportError("Please install pybedtools for plotting.")
+    import warnings
+    warnings.warn("Please install pybedtools for plotting.")
 
 
 class Gene(object):
