@@ -60,7 +60,7 @@ class Gene(object):
                         d['utrs'].append(child)
                     if child.featuretype in cds:
                         d['cds'].append(child)
-            self._transcripts.append(d)
+                self._transcripts.append(d)
 
         self.tracks = []
 
