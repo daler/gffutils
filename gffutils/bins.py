@@ -74,6 +74,22 @@ def bins(start, stop, fmt='gff', one=True):
     """
     # Jump to highest resolution bin that will fit these coords (depending on
     # whether we have a BED or GFF-style coordinate).
+    #
+    # Some GFF files include negative coords, which will throw off this
+    # calculation.  If negative coords, then set the bin to the largest
+    # possible.
+    if start < 0:
+        if one:
+            return 1
+        else:
+            return set([1])
+
+    if stop < 0:
+        if one:
+            return 1
+        else:
+            return set([1])
+
     start = (start - COORD_OFFSETS[fmt]) >> FIRST_SHIFT
     stop = (stop) >> FIRST_SHIFT
 
@@ -188,6 +204,16 @@ def test():
         2 ** FIRST_SHIFT - 1,
         2 ** (FIRST_SHIFT + NEXT_SHIFT),
         fmt='bed') == OFFSETS[2]
+
+
+    # When start or stop or both are negative, bin should be the largest
+    # possible.
+    assert bins(-1, 1000, one=True) == 1
+    assert bins(-1, 1000, one=False) == set([1])
+    assert bins(-1, -1000, one=True) == 1
+    assert bins(-1, -1000, one=False) == set([1])
+    assert bins(1, -1000, one=True) == 1
+    assert bins(1, -1000, one=False) == set([1])
 
 if __name__ == "__main__":
     print_bin_sizes()
