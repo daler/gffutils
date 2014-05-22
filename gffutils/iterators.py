@@ -86,6 +86,9 @@ class BaseIterator(object):
 
 class FileIterator(BaseIterator):
     def open_function(self, data):
+        if data.endswith('.gz'):
+            import gzip
+            return gzip.open(data)
         return open(data)
 
     def _custom_iter(self):
