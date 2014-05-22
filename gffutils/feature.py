@@ -150,13 +150,6 @@ class Feature(object):
             except simplejson.JSONDecodeError:
                 extra = extra.split('\t')
 
-        # Calculate bin if not provided
-        if bin is None:
-            try:
-                bin = bins.bins(start, end, one=True)
-            except TypeError:
-                bin = None
-
         self.seqid = seqid
         self.source = source
         self.featuretype = featuretype
@@ -167,12 +160,20 @@ class Feature(object):
         self.frame = frame
         self.attributes = attributes
         self.extra = extra
-        self.bin = bin
+        self.bin = self.calc_bin(bin)
         self.id = id
         self.dialect = dialect or constants.dialect
         self.file_order = file_order
         self.keep_order = keep_order
         self.sort_attribute_values = sort_attribute_values
+
+    def calc_bin(self, _bin=None):
+        if _bin is None:
+            try:
+                _bin = bins.bins(self.start, self.end, one=True)
+            except TypeError:
+                _bin = None
+        return _bin
 
     def __repr__(self):
         memory_loc = hex(id(self))
@@ -286,7 +287,7 @@ class Feature(object):
                 self.id, self.seqid, self.source, self.featuretype, self.start,
                 self.end, self.score, self.strand, self.frame,
                 helpers._jsonify(self.attributes),
-                helpers._jsonify(self.extra), self.bin
+                helpers._jsonify(self.extra), self.calc_bin()
             )
         return (
             self.id.decode(encoding), self.seqid.decode(encoding),
@@ -294,7 +295,7 @@ class Feature(object):
             self.start, self.end, self.score.decode(encoding),
             self.strand.decode(encoding), self.frame.decode(encoding),
             helpers._jsonify(self.attributes).decode(encoding),
-            helpers._jsonify(self.extra).decode(encoding), self.bin
+            helpers._jsonify(self.extra).decode(encoding), self.calc_bin()
         )
 
 
