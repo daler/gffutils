@@ -887,6 +887,134 @@ class FeatureDB(object):
             total += len(child)
         return total
 
+    def bed12(self, feature, block_featuretype=['exon'],
+              thick_featuretype=['CDS'], thin_featuretype=None,
+              name_field='ID', color=None):
+        """
+        Converts `feature` into a BED12 format.
+
+        GFF and GTF files do not necessarily define genes consistently, so this
+        method provides flexible methods.
+
+        Parameters
+        ----------
+        feature : str or Feature instance
+            In most cases, this feature should be a transcript rather than
+            a gene.
+
+        block_featuretype : str or list
+            Which featuretype to use as the exons. These are represented as
+            blocks in the BED12 format.  Typically 'exon'.
+
+            Note that the features for `thick` or `thin` are *not* included in
+            the blocks; if you do want them included, then those featuretypes
+            should be added to this `block_features` list.
+
+        thick_featuretype : str or list
+            Child featuretype(s) to use in order to determine the boundaries of
+            the "thick" blocks. In BED12 format, these represent coding
+            sequences; typically this would be set to "CDS".  This argument is
+            mutually exclusive with `thin_featuretype`.
+
+            Specifically, the BED12 thickStart will be the start coord of the
+            first `thick` item and the thickEnd will be the stop coord of the
+            last `thick` item.
+
+        thin_featuretype : str or list
+            Child featuretype(s) to use in order to determine the boundaries of
+            the "thin" blocks.  In BED12 format, these represent untranslated
+            regions.  Typically "utr" or ['three_prime_UTR', 'five_prime_UTR'].
+            Mutually exclusive with `thick_featuretype`.
+
+            Specifically, the BED12 thickStart field will be the stop coord of
+            the first `thin` item and the thickEnd field will be the start
+            coord of the last `thin` item.
+
+        name_field : str
+            Which attribute of `feature` to use as the feature's name.  If this
+            field is not present, a "." placeholder will be used instead.
+
+        color : None or str
+            If None, then use black (0,0,0) as the RGB color; otherwise this
+            should be a comma-separated string of R,G,B values each of which
+            are integers in the range 0-255.
+        """
+        if thick_featuretype and thin_featuretype:
+            raise ValueError("Can only specify one of `thick_featuertype` or "
+                             "`thin_featuretype`")
+
+        exons = list(self.children(feature, featuretype=block_featuretype,
+                                   order_by='start'))
+        feature = self[feature]
+        first = exons[0].start
+        last = exons[-1].stop
+
+        if first != feature.start:
+            raise ValueError(
+                "Start of first exon (%s) does not match start of feature (%s)"
+                % (first, feature.start))
+        if last != feature.stop:
+            raise ValueError(
+                "End of last exon (%s) does not match end of feature (%s)"
+                % (last, feature.stop))
+
+        if color is None:
+            color = '0,0,0'
+        color = color.replace(' ', '').strip()
+
+        # Use field names as defined at
+        # http://genome.ucsc.edu/FAQ/FAQformat.html#format1
+        chrom = feature.chrom
+        chromStart = feature.start - 1
+        chromEnd = feature.stop
+        orig = constants.always_return_list
+        constants.always_return_list = True
+        try:
+            name = feature[name_field][0]
+        except KeyError:
+            name = "."
+
+        constants.always_return_list = orig
+
+        score = feature.score
+        if score == '.':
+            score = '0'
+        strand = feature.strand
+        itemRgb = color
+        blockCount = len(exons)
+        blockSizes = [len(i) for i in exons]
+        blockStarts = [i.start - 1 - chromStart for i in exons]
+
+        if thick_featuretype:
+            thick = list(self.children(feature, featuretype=thick_featuretype,
+                                       order_by='start'))
+            thickStart = thick[0].start - 1  # BED 0-based coords
+            thickEnd = thick[-1].stop
+
+        if thin_featuretype:
+            thin = list(self.children(feature, featuretype=thin_featuretype,
+                                      order_by='start'))
+            thickStart = thin[0].stop
+            thickEnd = thin[-1].start - 1  # BED 0-based coords
+
+        tst = chromStart + blockStarts[-1] + blockSizes[-1]
+        assert tst == chromEnd, "tst=%s; chromEnd=%s" % (tst, chromEnd)
+
+        fields = [
+            chrom,
+            chromStart,
+            chromEnd,
+            name,
+            score,
+            strand,
+            thickStart,
+            thickEnd,
+            itemRgb,
+            blockCount,
+            ','.join(map(str, blockSizes)),
+            ','.join(map(str, blockStarts))]
+        return '\t'.join(map(str, fields))
+
     # Recycle the docs for _relation so they stay consistent between parents()
     # and children()
     children.__doc__ = children.__doc__.format(
