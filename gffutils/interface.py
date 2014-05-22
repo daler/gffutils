@@ -906,9 +906,18 @@ class FeatureDB(object):
             Which featuretype to use as the exons. These are represented as
             blocks in the BED12 format.  Typically 'exon'.
 
-            Note that the features for `thick` or `thin` are *not* included in
-            the blocks; if you do want them included, then those featuretypes
-            should be added to this `block_features` list.
+            Use the `thick_featuretype` and `thin_featuretype` arguments to
+            control the display of CDS as thicker blocks and UTRs as thinner
+            blocks.
+
+            Note that the features for `thick` or `thin` are *not*
+            automatically included in the blocks; if you do want them included,
+            then those featuretypes should be added to this `block_features`
+            list.
+
+            If no child features of type `block_featuretype` are found, then
+            the full `feature` is returned in BED12 format as if it had
+            a single exon.
 
         thick_featuretype : str or list
             Child featuretype(s) to use in order to determine the boundaries of
@@ -945,6 +954,8 @@ class FeatureDB(object):
 
         exons = list(self.children(feature, featuretype=block_featuretype,
                                    order_by='start'))
+        if len(exons) == 0:
+            exons = [feature]
         feature = self[feature]
         first = exons[0].start
         last = exons[-1].stop
@@ -988,14 +999,22 @@ class FeatureDB(object):
         if thick_featuretype:
             thick = list(self.children(feature, featuretype=thick_featuretype,
                                        order_by='start'))
-            thickStart = thick[0].start - 1  # BED 0-based coords
-            thickEnd = thick[-1].stop
+            if len(thick) == 0:
+                thickStart = feature.start
+                thickEnd = feature.stop
+            else:
+                thickStart = thick[0].start - 1  # BED 0-based coords
+                thickEnd = thick[-1].stop
 
         if thin_featuretype:
             thin = list(self.children(feature, featuretype=thin_featuretype,
                                       order_by='start'))
-            thickStart = thin[0].stop
-            thickEnd = thin[-1].start - 1  # BED 0-based coords
+            if len(thin) == 0:
+                thickStart = feature.start
+                thickEnd = feature.stop
+            else:
+                thickStart = thin[0].stop
+                thickEnd = thin[-1].start - 1  # BED 0-based coords
 
         tst = chromStart + blockStarts[-1] + blockSizes[-1]
         assert tst == chromEnd, "tst=%s; chromEnd=%s" % (tst, chromEnd)
