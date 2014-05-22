@@ -267,15 +267,11 @@ class BaseDB(object):
             kwargs = dict(block_featuretype='exon', thick_featuretype='CDS', name_field='transcript_id')
         obs = self.db.bed12('FBtr0300689', **kwargs)
         exp = "chr2L	7528	9484	FBtr0300689	0	+	7679	8610	0,0,0	2	588,1292	0,664"
-        print 'obs:', obs
-        print 'exp:', exp
         assert obs == exp
 
 
         obs = self.db.bed12('FBtr0300690', **kwargs)
         exp = "chr2L	7528	9484	FBtr0300690	0	+	7679	9276	0,0,0	3	588,397,817	0,664,1139"
-        print 'obs:', obs
-        print 'exp:', exp
         assert obs == exp
 
 
