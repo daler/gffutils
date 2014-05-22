@@ -205,7 +205,6 @@ def test():
         2 ** (FIRST_SHIFT + NEXT_SHIFT),
         fmt='bed') == OFFSETS[2]
 
-
     # When start or stop or both are negative, bin should be the largest
     # possible.
     assert bins(-1, 1000, one=True) == 1

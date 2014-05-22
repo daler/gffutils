@@ -2,6 +2,7 @@ import six
 import collections
 from gffutils import constants
 
+
 # collections.MutableMapping is apparently the best way to provide dict-like
 # interface (http://stackoverflow.com/a/3387975)
 class Attributes(collections.MutableMapping):
@@ -91,7 +92,6 @@ class Attributes(collections.MutableMapping):
     def update(self, *args, **kwargs):
         for k, v in six.iteritems(dict(*args, **kwargs)):
             self[k] = v
-
 
 
 # Useful for profiling: which dictionary-like class to store attributes in.

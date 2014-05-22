@@ -31,7 +31,8 @@ class _DBCreator(object):
                  default_encoding='utf-8',
                  infer_gene_extent=True,
                  force_merge_fields=None,
-                 text_factory=sqlite3.OptimizedUnicode, pragmas=constants.default_pragmas):
+                 text_factory=sqlite3.OptimizedUnicode,
+                 pragmas=constants.default_pragmas):
         """
         Base class for _GFFDBCreator and _GTFDBCreator; see create_db()
         function for docs
@@ -1043,7 +1044,8 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
 
     text_factory : callable
         Text factory to use for the sqlite3 database.  See
-        https://docs.python.org/2/library/sqlite3.html#sqlite3.Connection.text_factory
+        https://docs.python.org/2/library/\
+                sqlite3.html#sqlite3.Connection.text_factory
         for details. The default sqlite3.OptimizedUnicode will return Unicode
         objects only for non-ASCII data, and bytestrings otherwise.
 

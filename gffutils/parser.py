@@ -17,7 +17,8 @@ logger.addHandler(ch)
 gff3_kw_pat = re.compile('\w+=')
 
 
-def _reconstruct(keyvals, dialect, keep_order=False, sort_attribute_values=False):
+def _reconstruct(keyvals, dialect, keep_order=False,
+                 sort_attribute_values=False):
     """
     Reconstructs the original attributes string according to the dialect.
 

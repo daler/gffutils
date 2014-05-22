@@ -149,7 +149,6 @@ class FeatureDB(object):
 
         self.set_pragmas(pragmas)
 
-
     def set_pragmas(self, pragmas):
         """
         Set pragmas for the current database connection.
@@ -168,7 +167,6 @@ class FeatureDB(object):
             )
         )
         self.conn.commit()
-
 
     def _feature_returner(self, **kwargs):
         """
@@ -641,7 +639,8 @@ class FeatureDB(object):
         db._update_relations()
         db._finalize()
 
-    def add_relation(self, parent, child, level, parent_func=None, child_func=None):
+    def add_relation(self, parent, child, level, parent_func=None,
+                     child_func=None):
         """
         Manually add relations to the database.
 
@@ -692,7 +691,6 @@ class FeatureDB(object):
 
         self.conn.commit()
 
-
     def _update(self, feature, cursor):
         values = [list(feature.astuple()) + [feature.id]]
         cursor.execute(
@@ -707,7 +705,6 @@ class FeatureDB(object):
         except sqlite3.ProgrammingError:
             cursor.execute(
                 constants._INSERT, feature.astuple(self.default_encoding))
-
 
     def create_introns(self, exon_featuretype='exon',
                        grandparent_featuretype='gene', parent_featuretype=None,
@@ -774,6 +771,9 @@ class FeatureDB(object):
     def merge(self, features, ignore_strand=False):
         """
         Merge overlapping features together.
+
+        Parameters
+        ----------
 
         features : iterator of Feature instances
 
@@ -860,9 +860,22 @@ class FeatureDB(object):
 
     def children_bp(self, feature, child_featuretype='exon', merge=False):
         """
-        Returns the total bp of all children of a featuretype
+        Returns the total bp of all children of a featuretype.
 
         Useful for getting the exonic bp of an mRNA.
+
+        Parameters
+        ----------
+
+        feature : str or Feature instance
+
+        child_featuretype : str
+            Which featuretype to consider.  For example, to get exonic bp of an
+            mRNA, use `child_featuretype='exon'`.
+
+        merge : bool
+            Whether or not to merge child features together before summing
+            them.
         """
         children = self.children(feature, featuretype=child_featuretype,
                                  order_by='start')

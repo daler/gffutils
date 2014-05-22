@@ -16,7 +16,8 @@ class Feature(object):
     def __init__(self, seqid=".", source=".", featuretype=".",
                  start=".", end=".", score=".", strand=".", frame=".",
                  attributes=None, extra=None, bin=None, id=None, dialect=None,
-                 file_order=None, keep_order=False, sort_attribute_values=False):
+                 file_order=None, keep_order=False,
+                 sort_attribute_values=False):
         """
         Represents a feature from the database.
 

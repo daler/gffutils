@@ -19,7 +19,8 @@ def to_bed12(f, db, child_type='exon', name_field='ID'):
         This is need to get the children for the feature
 
     child_type : str
-        Featuretypes that will be represented by the BED12 "blocks".  Typically "exon".
+        Featuretypes that will be represented by the BED12 "blocks".  Typically
+        "exon".
 
     name_field : str
         Attribute to be used in the "name" field of the BED12 entry.  Usually
@@ -45,4 +46,3 @@ def to_bed12(f, db, child_type='exon', name_field='ID'):
         ','.join(map(str, starts))
     ]
     return '\t'.join(map(str, fields)) + '\n'
-

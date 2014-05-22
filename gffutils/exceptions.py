@@ -16,4 +16,3 @@ class DuplicateIDError(Exception):
 
 class AttributeStringError(Exception):
     pass
-
