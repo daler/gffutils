@@ -502,9 +502,12 @@ class _GFFDBCreator(_DBCreator):
         for i, f in enumerate(lines):
 
             # Percent complete
+
             if self.verbose:
                 if i % 1000 == 0:
-                    logger.info(msg % i)
+                    sys.stderr.write(msg % i)
+                    sys.stderr.flush()
+
 
             # TODO: handle ID creation here...should be combined with the
             # INSERT below (that is, don't IGNORE below but catch the error and
@@ -695,7 +698,7 @@ class _GTFDBCreator(_DBCreator):
         logger.info('Committing changes')
         self.conn.commit()
         if self.verbose:
-            sys.stderr.write((msg % i) + '\n')
+            logger.info(msg % i)
 
     def _update_relations(self):
 
