@@ -566,6 +566,13 @@ def test_create_db_from_url():
         server_thread.join()
 
 
+def test_empty_files():
+    fn = tempfile.NamedTemporaryFile(delete=False).name
+    a = open(fn, 'w')
+    a.close()
+    assert_raises(ValueError, gffutils.create_db, fn, fn + '.db')
+
+
 if __name__ == "__main__":
     # this test case fails
     #test_attributes_modify()

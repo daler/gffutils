@@ -497,14 +497,17 @@ class _GFFDBCreator(_DBCreator):
         # Compared to a benchmark of doing each insert separately:
         # executemany using a list of dicts to iterate over is ~15% slower
         # executemany using a list of tuples to iterate over is ~8% faster
-
+        features_seen = None
         _features, _relations = [], []
         for i, f in enumerate(lines):
+            features_seen = i
 
             # Percent complete
+
             if self.verbose:
                 if i % 1000 == 0:
-                    logger.info(msg % i)
+                    sys.stderr.write(msg % i)
+                    sys.stderr.flush()
 
             # TODO: handle ID creation here...should be combined with the
             # INSERT below (that is, don't IGNORE below but catch the error and
@@ -548,6 +551,8 @@ class _GFFDBCreator(_DBCreator):
                         INSERT OR IGNORE INTO relations VALUES
                         (?, ?, 1)
                         ''', (parent, f.id))
+        if features_seen is None:
+            raise ValueError("No lines parsed -- was an empty file provided?")
 
         self.conn.commit()
         if self.verbose:
@@ -623,7 +628,9 @@ class _GTFDBCreator(_DBCreator):
         c = self.conn.cursor()
 
         last_perc = 0
+        lines_seen = None
         for i, f in enumerate(lines):
+            lines_seen = i
 
             # Percent complete
             if self.verbose:
@@ -692,10 +699,12 @@ class _GTFDBCreator(_DBCreator):
                 ''', relations
             )
 
+        if lines_seen is None:
+            raise ValueError("No lines parsed -- was an empty file provided?")
         logger.info('Committing changes')
         self.conn.commit()
         if self.verbose:
-            sys.stderr.write((msg % i) + '\n')
+            logger.info(msg % i)
 
     def _update_relations(self):
 
