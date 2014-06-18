@@ -858,7 +858,8 @@ class FeatureDB(object):
             attributes='')
         yield self._feature_returner(**merged_feature)
 
-    def children_bp(self, feature, child_featuretype='exon', merge=False):
+    def children_bp(self, feature, child_featuretype='exon', merge=False,
+                    ignore_strand=False):
         """
         Returns the total bp of all children of a featuretype.
 
@@ -876,11 +877,17 @@ class FeatureDB(object):
         merge : bool
             Whether or not to merge child features together before summing
             them.
+
+        ignore_strand : bool
+            If True, then overlapping features on different strands will be
+            merged together; otherwise, merging features with different strands
+            will result in a ValueError.
         """
+
         children = self.children(feature, featuretype=child_featuretype,
                                  order_by='start')
         if merge:
-            children = self.merge(children)
+            children = self.merge(children, ignore_strand=ignore_strand)
 
         total = 0
         for child in children:
