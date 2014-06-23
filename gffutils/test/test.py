@@ -573,6 +573,18 @@ def test_empty_files():
     assert_raises(ValueError, gffutils.create_db, fn, fn + '.db')
 
 
+def test_false_function():
+    # smoke test: before commit ce4b7671f, this would raise "TypeError: object
+    # of type 'function' has no len()"
+    db = gffutils.create_db(
+        gffutils.example_filename('FBgn0031208.gff'),
+        ':memory:',
+        keep_order=True,
+        id_spec=lambda x: False,
+        merge_strategy='create_unique'
+    )
+
+
 if __name__ == "__main__":
     # this test case fails
     #test_attributes_modify()
