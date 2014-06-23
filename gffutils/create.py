@@ -135,18 +135,18 @@ class _DBCreator(object):
                     if _id.startswith('autoincrement:'):
                         return self._increment_featuretype_autoid(_id[14:])
                     return _id
-
+            else:
             # use GFF fields rather than attributes for cases like :seqid: or
             # :strand:
-            if (len(k) > 3) and (k[0] == ':') and (k[-1] == ':'):
-                # No [0] here -- only attributes key/vals are forced into
-                # lists, not standard GFF fields.
-                return getattr(f, k[1:-1])
-            else:
-                try:
-                    return f.attributes[k][0]
-                except (KeyError, IndexError):
-                    pass
+                if (len(k) > 3) and (k[0] == ':') and (k[-1] == ':'):
+                    # No [0] here -- only attributes key/vals are forced into
+                    # lists, not standard GFF fields.
+                    return getattr(f, k[1:-1])
+                else:
+                    try:
+                        return f.attributes[k][0]
+                    except (KeyError, IndexError):
+                        pass
         # If we get here, then default autoincrement
         return self._increment_featuretype_autoid(f.featuretype)
 
