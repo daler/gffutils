@@ -1,8 +1,13 @@
-.. |build| image::  https://travis-ci.org/daler/gffutils.png
-
 
 .. image:: https://travis-ci.org/daler/gffutils.png?branch=master
     :target: https://travis-ci.org/daler/gffutils
+
+.. image:: https://badge.fury.io/py/gffutils.svg
+    :target: http://badge.fury.io/py/gffutils
+
+.. image:: https://pypip.in/d/gffutils/badge.png
+    :target: https://pypi.python.org/pypi/gffutils
+
 
 See docs at http://pythonhosted.org/gffutils/.
 
