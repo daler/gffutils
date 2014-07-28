@@ -137,7 +137,7 @@ class _StringIterator(_FileIterator):
         self.tmp.write(data)
         self.tmp.close()
         self.data = self.tmp.name
-        for feature in super(StringIterator, self)._custom_iter():
+        for feature in super(_StringIterator, self)._custom_iter():
             yield feature
         os.unlink(self.tmp.name)
 
@@ -170,5 +170,9 @@ def DataIterator(data, checklines=10, transform=None,
                 return _FileIterator(**_kwargs)
             elif is_url(data):
                 return _UrlIterator(**_kwargs)
+    elif isinstance(data, FeatureDB):
+        _kwargs['data'] = data.all_features()
+        return _FeatureIterator(**_kwargs)
+
     else:
         return _FeatureIterator(**_kwargs)
