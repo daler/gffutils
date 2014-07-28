@@ -4,6 +4,8 @@ from gffutils import example_filename, create, parser, feature
 import gffutils
 import gffutils.helpers as helpers
 import gffutils.gffwriter as gffwriter
+import gffutils.inspect as inspect
+import gffutils.iterators as iterators
 import sys
 import os
 import six
@@ -583,6 +585,109 @@ def test_false_function():
         id_spec=lambda x: False,
         merge_strategy='create_unique'
     )
+
+
+def test_inspect():
+    file_results = inspect.inspect(gffutils.example_filename('FBgn0031208.gff'), verbose=False)
+    db_results = inspect.inspect(
+        gffutils.create_db(
+            gffutils.example_filename('FBgn0031208.gff'),
+            ':memory:'),
+        verbose=False
+    )
+    expected =  {
+
+        'featuretype': {
+            'intron': 3,
+            'five_prime_UTR': 1,
+            'exon': 6,
+            'mRNA': 4,
+            'CDS': 5,
+            'pcr_product': 1,
+            'three_prime_UTR': 2,
+            'protein': 2,
+            'gene': 3,
+        },
+
+        'feature_count': 27,
+
+        'chrom': {
+            'chr2L': 27,
+        },
+
+        'attribute_keys': {
+            u'': 3,
+            'Dbxref': 6,
+            'Name': 19,
+            'Parent': 20,
+            ' Parent': 1,
+            'score_text': 2,
+            'gbunit': 1,
+            'derived_computed_cyto': 1,
+            'Derives_from': 2,
+            'derived_molecular_weight': 2,
+            'score': 2,
+            'ID': 25,
+            'derived_isoelectric_point': 2,
+            'Ontology_term': 1,
+        }
+    }
+    assert file_results == db_results == expected
+
+
+    # file and db work because db is created from
+
+    kwargs = dict(
+        look_for=['chrom', 'strand', 'attribute_keys', 'featuretype'],
+        verbose=False,
+        limit=10,
+    )
+
+    file_results = inspect.inspect(
+        gffutils.example_filename('FBgn0031208.gff'),
+        **kwargs
+    )
+    iter_results = inspect.inspect(
+        iter(iterators._FileIterator(gffutils.example_filename('FBgn0031208.gff'))),
+        **kwargs
+    )
+    db_results = inspect.inspect(
+        gffutils.create_db(
+            gffutils.example_filename('FBgn0031208.gff'),
+            ':memory:'),
+        **kwargs
+    )
+
+    expected = {
+        'attribute_keys': {
+            u'Name': 9,
+            u'Parent': 9,
+            u'score_text': 2,
+            u'gbunit': 1,
+            u'derived_computed_cyto': 1,
+            u'score': 2,
+            u'Dbxref': 3,
+            u'ID': 8,
+            u'Ontology_term': 1,
+        },
+
+        'feature_count': 10,
+
+        'chrom': {u'chr2L': 10},
+
+        'strand': {u'+': 10},
+
+        'featuretype': {
+            u'five_prime_UTR': 1,
+            u'exon': 3,
+            u'mRNA': 2,
+            u'CDS': 1,
+            'intron': 2,
+            u'gene': 1}
+    }
+    assert file_results == db_results == iter_results == expected
+
+
 
 
 if __name__ == "__main__":
