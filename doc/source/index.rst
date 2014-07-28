@@ -94,7 +94,7 @@ In no particular order, some comments about this annotation:
 
   Then, we could use `htseq-count` like this::
 
-    htseq-count --type=exon --idattr=ID reads.sam fixed_annotation.gff
+    htseq-count --type=exon --idattr=gene_id reads.sam fixed_annotation.gff
 
 
 - UTRs, exons, CDSs, and introns have the same name for different features.
