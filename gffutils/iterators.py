@@ -12,6 +12,7 @@ import os
 import tempfile
 import itertools
 from gffutils.feature import feature_from_line
+from gffutils.interface import FeatureDB
 from gffutils import helpers
 from textwrap import dedent
 import six
@@ -40,6 +41,28 @@ class Directive(object):
 class _BaseIterator(object):
     def __init__(self, data, checklines=10, transform=None,
                  force_dialect_check=False, dialect=None):
+        """
+        Base class for iterating over features.  In general, you should use
+        DataIterator -- so see the docstring of class for argument descriptions.
+
+
+        All subclasses -- _FileIterator, _URLIterator, _FeatureIterator,
+        _StringIterator -- gain the following behavior:
+
+            - self.current_item and self.current_item_number are set on every
+              iteration.  This is very useful for debugging, or reporting to
+              the user exactly what item or line number caused the issue.
+
+            - transform a Feature before it gets yielded, filter out a Feature
+
+            - auto-detect dialect by peeking `checklines` items into the
+              iterator, and then re-reading those, applying the detected
+              dialect.  If multiple dialects are found, use
+              helpers._choose_dialect to figure out the best one.
+
+            - keep track of directives
+
+        """
         self.data = data
         self.checklines = checklines
         self.current_item = None
@@ -85,6 +108,9 @@ class _BaseIterator(object):
 
 
 class _FileIterator(_BaseIterator):
+    """
+    Subclass for iterating over features provided as a filename
+    """
     def open_function(self, data):
         if data.endswith('.gz'):
             import gzip
@@ -116,11 +142,17 @@ class _FileIterator(_BaseIterator):
 
 
 class _UrlIterator(_FileIterator):
+    """
+    Subclass for iterating over features provided as a URL
+    """
     def open_function(self, data):
         return urlopen(data)
 
 
 class _FeatureIterator(_BaseIterator):
+    """
+    Subclass for iterating over features that are already in an iterator
+    """
     def _custom_iter(self):
         for i, feature in enumerate(self.data):
             self.current_item = feature
@@ -129,6 +161,10 @@ class _FeatureIterator(_BaseIterator):
 
 
 class _StringIterator(_FileIterator):
+    """
+    Subclass for iterating over features provided as a string (e.g., from
+    file.read())
+    """
     def _custom_iter(self):
         self.tmp = tempfile.NamedTemporaryFile(delete=False)
         data = dedent(self.data)
@@ -143,7 +179,9 @@ class _StringIterator(_FileIterator):
 
 
 def is_url(url):
-    """Check to see if a URL has a valid protocol.
+    """
+    Check to see if a URL has a valid protocol.
+
     Parameters
     ----------
     url : str or unicode
@@ -160,6 +198,39 @@ def is_url(url):
 
 def DataIterator(data, checklines=10, transform=None,
                  force_dialect_check=False, from_string=False, **kwargs):
+    """
+    Iterate over features, no matter how they are provided.
+
+    Parameters
+    ----------
+    data : str, iterable of Feature objs, FeatureDB
+        `data` can be a string (filename, URL, or contents of a file, if
+        from_string=True), any arbitrary iterable of features, or a FeatureDB
+        (in which case its all_features() method will be called).
+
+    checklines : int
+        Number of lines to check in order to infer a dialect.
+
+    transform : None or callable
+        If not None, `transform` should accept a Feature object as its only
+        argument and return either a (possibly modified) Feature object or
+        a value that evaluates to False.  If the return value is False, the
+        feature will be skipped.
+
+    force_dialect_check : bool
+        If True, check the dialect of every feature.  Thorough, but can be
+        slow.
+
+    from_string : bool
+        If True, `data` should be interpreted as the contents of a file rather
+        than the filename itself.
+
+    dialect : None or dict
+        Provide the dialect, which will override auto-detected dialects.  If
+        provided, you should probably also use `force_dialect_check=False` and
+        `checklines=0` but this is not enforced.
+    """
+
     _kwargs = dict(data=data, checklines=checklines, transform=transform,
                    force_dialect_check=force_dialect_check, **kwargs)
     if isinstance(data, six.string_types):
