@@ -30,7 +30,7 @@ def test_directives():
     .	.	.	.	.	.	.	.
     """)
 
-    it = iterators.StringIterator(data)
+    it = iterators._StringIterator(data)
     db = create_db(data, dbfn=':memory:', from_string=True, verbose=False)
     assert it.directives == db.directives == ['directive1 example'], (it.directives, db.directives)
 
@@ -70,7 +70,7 @@ def parser_smoke_test():
     import logging
     parser.logger.setLevel(logging.CRITICAL)
     for filename in TEST_FILENAMES:
-        p = iterators.FileIterator(filename)
+        p = iterators._FileIterator(filename)
         for i in p:
             continue
 
@@ -109,10 +109,10 @@ def test_parser_from_string():
     tmp.write(line)
     tmp.seek(0)
 
-    p1 = iterators.StringIterator(
+    p1 = iterators._StringIterator(
         "chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690"
     )
-    p2 = iterators.FileIterator(tmp.name)
+    p2 = iterators._FileIterator(tmp.name)
     lines = list(zip(p1, p2))
     assert len(lines) == 1
     assert p1.current_item_number == p2.current_item_number == 0
@@ -120,13 +120,13 @@ def test_parser_from_string():
 
 
 def test_valid_line_count():
-    p = iterators.FileIterator(example_filename('ncbi_gff3.txt'))
+    p = iterators._FileIterator(example_filename('ncbi_gff3.txt'))
     assert len(list(p)) == 17
 
-    p = iterators.FileIterator(example_filename('hybrid1.gff3'))
+    p = iterators._FileIterator(example_filename('hybrid1.gff3'))
     assert len(list(p)) == 6
 
-    p = iterators.FileIterator(example_filename('FBgn0031208.gff'))
+    p = iterators._FileIterator(example_filename('FBgn0031208.gff'))
     assert len(list(p)) == 27
 
 def test_inconsistent_dialect():

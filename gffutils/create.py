@@ -1080,7 +1080,7 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
     iterator = iterators.DataIterator(**kwargs)
     dialect = iterator.dialect
 
-    if isinstance(iterator, iterators.FeatureIterator):
+    if isinstance(iterator, iterators._FeatureIterator):
         # However, a side-effect of this is that  if `data` was a generator,
         # then we've just consumed `checklines` items (see
         # iterators.BaseIterator.__init__, which calls iterators.peek).

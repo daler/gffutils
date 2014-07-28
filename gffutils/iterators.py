@@ -37,7 +37,7 @@ class Directive(object):
         self.info = line
 
 
-class BaseIterator(object):
+class _BaseIterator(object):
     def __init__(self, data, checklines=10, transform=None,
                  force_dialect_check=False, dialect=None):
         self.data = data
@@ -84,7 +84,7 @@ class BaseIterator(object):
         self.directives.append(directive[2:])
 
 
-class FileIterator(BaseIterator):
+class _FileIterator(_BaseIterator):
     def open_function(self, data):
         if data.endswith('.gz'):
             import gzip
@@ -115,12 +115,12 @@ class FileIterator(BaseIterator):
             yield feature_from_line(line, dialect=self.dialect)
 
 
-class UrlIterator(FileIterator):
+class _UrlIterator(_FileIterator):
     def open_function(self, data):
         return urlopen(data)
 
 
-class FeatureIterator(BaseIterator):
+class _FeatureIterator(_BaseIterator):
     def _custom_iter(self):
         for i, feature in enumerate(self.data):
             self.current_item = feature
@@ -128,7 +128,7 @@ class FeatureIterator(BaseIterator):
             yield feature
 
 
-class StringIterator(FileIterator):
+class _StringIterator(_FileIterator):
     def _custom_iter(self):
         self.tmp = tempfile.NamedTemporaryFile(delete=False)
         data = dedent(self.data)
@@ -164,11 +164,11 @@ def DataIterator(data, checklines=10, transform=None,
                    force_dialect_check=force_dialect_check, **kwargs)
     if isinstance(data, six.string_types):
         if from_string:
-            return StringIterator(**_kwargs)
+            return _StringIterator(**_kwargs)
         else:
             if os.path.exists(data):
-                return FileIterator(**_kwargs)
+                return _FileIterator(**_kwargs)
             elif is_url(data):
-                return UrlIterator(**_kwargs)
+                return _UrlIterator(**_kwargs)
     else:
-        return FeatureIterator(**_kwargs)
+        return _FeatureIterator(**_kwargs)
