@@ -1,3 +1,4 @@
+from pyfaidx import Fasta
 import six
 import simplejson
 from gffutils import constants
@@ -298,6 +299,30 @@ class Feature(object):
             helpers._jsonify(self.attributes).decode(encoding),
             helpers._jsonify(self.extra).decode(encoding), self.calc_bin()
         )
+
+    def sequence(self, fasta, use_strand=True):
+        """
+        Retrieves the sequence of this feature as a string.
+
+        Uses the pyfaidx package.
+
+        Parameters
+        ----------
+
+        fasta : str
+            If str, then it's a FASTA-format filename; otherwise assume it's
+            a pyfaidx.Fasta object.
+
+        use_strand : bool
+            If True (default), the sequence returned will be
+            reverse-complemented for minus-strand features.
+        """
+        if isinstance(fasta, six.string_types):
+            fasta = Fasta(fasta_filename, as_raw=True)
+
+        # recall GTF/GFF is 1-based closed;  pyfaidx uses Python slice notation
+        # and is therefore 0-based half-open.
+        return fasta[self.chrom][self.start-1:self.stop]
 
 
 def feature_from_line(line, dialect=None, strict=True, keep_order=False):
