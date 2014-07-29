@@ -99,7 +99,9 @@ class _BaseIterator(object):
         for i in self._iter:
             i.dialect = self.dialect
             if self.transform:
-                yield self.transform(i)
+                i = self.transform(i)
+                if i:
+                    yield i
             else:
                 yield i
 
