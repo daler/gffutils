@@ -23,8 +23,8 @@ has `transcript_id` to indicate its parent feature and `gene_id` to indicate
 its "grandparent" feature.  To accommodate this, :mod:`gffutils` provides some
 extra options for the :func:`gffutils.create_db` function:
 
-`transript_key` and `gene_key`
-------------------------------
+`transcript_key` and `gene_key`
+-------------------------------
 These kwargs are used to extract the parent and grandparent feature
 respectively.
 
