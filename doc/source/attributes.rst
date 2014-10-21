@@ -32,14 +32,14 @@ Parent: ['FBtr0300689', 'FBtr0300690']
 >>> f.attributes['ID']
 ['exon1']
 
-Usually it's more convenient to access thee attributes directly from the
+Usually it's more convenient to access the attributes directly from the
 feature, like this:
 
 >>> f['ID']
 ['exon1']
 
 
-We can add attibutes, again directly from the feature:
+We can add attributes, again directly from the feature:
 
 >>> f['parent_type'] = 'mRNA'
 
