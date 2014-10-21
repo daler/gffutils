@@ -558,10 +558,22 @@ def test_create_db_from_url():
             for rec in db.all_features():
                 yield rec
         new_db = gffutils.create_db(my_iterator(), ":memory:", keep_order=True)
-
         print(list(new_db.all_features()))
         gene_feats = new_db.all_features(featuretype="gene")
         assert (len(list(gene_feats)) != 0), "Could not load genes from GFF."
+
+        url = ''.join(['http://localhost:', port, '/gff_example1.gff3.gz'])
+        db = gffutils.create_db(url, ":memory:", keep_order=True)
+        def my_iterator():
+            for rec in db.all_features():
+                yield rec
+        new_db = gffutils.create_db(my_iterator(), ":memory:", keep_order=True)
+        print(list(new_db.all_features()))
+        gene_feats = new_db.all_features(featuretype="gene")
+        assert (len(list(gene_feats)) != 0), "Could not load genes from GFF."
+
+
+
     finally:
         print('Server shutdown.')
         httpd.shutdown()

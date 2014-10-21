@@ -43,7 +43,8 @@ class _BaseIterator(object):
                  force_dialect_check=False, dialect=None):
         """
         Base class for iterating over features.  In general, you should use
-        DataIterator -- so see the docstring of class for argument descriptions.
+        DataIterator -- so see the docstring of class for argument
+        descriptions.
 
 
         All subclasses -- _FileIterator, _URLIterator, _FeatureIterator,
@@ -148,7 +149,33 @@ class _UrlIterator(_FileIterator):
     Subclass for iterating over features provided as a URL
     """
     def open_function(self, data):
-        return urlopen(data)
+        response = urlopen(data)
+
+        # ideas from
+        # http://stackoverflow.com/a/17537107
+        # https://rationalpie.wordpress.com/2010/06/02/\
+        #               python-streaming-gzip-decompression/
+        if data.endswith('.gz'):
+            import zlib
+            d = zlib.decompressobj(16 + zlib.MAX_WBITS)
+            READ_BLOCK_SIZE = 1024
+
+            def _iter():
+                last_line = ""
+                while True:
+                    data = response.read(READ_BLOCK_SIZE)
+                    if not data:
+                        break
+                    data = "".join((last_line, d.decompress(data)))
+                    lines = data.split('\n')
+                    last_line = lines.pop()
+                    for line in lines:
+                        yield line + '\n'
+                yield last_line
+            return _iter()
+
+        else:
+            return response
 
 
 class _FeatureIterator(_BaseIterator):
