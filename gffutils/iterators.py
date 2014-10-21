@@ -166,7 +166,7 @@ class _UrlIterator(_FileIterator):
                     data = response.read(READ_BLOCK_SIZE)
                     if not data:
                         break
-                    data = "".join((last_line, d.decompress(data)))
+                    data = "".join((last_line, d.decompress(data).decode()))
                     lines = data.split('\n')
                     last_line = lines.pop()
                     for line in lines:
