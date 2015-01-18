@@ -586,6 +586,47 @@ class FeatureDB(object):
             yield self._feature_returner(**fields)
             interfeature_start = f.stop
 
+    def delete(self, features, make_backup=True, **kwargs):
+        """
+        Delete features from database.
+
+        features : str, iterable, FeatureDB instance
+            If FeatureDB, all features will be used. If string, assume it's the
+            ID of the feature to remove. Otherwise, assume it's an iterable of
+            Feature objects. The classes in gffutils.iterators may be helpful
+            in this case.
+
+        make_backup : bool
+            If True, and the database you're about to update is a file on disk,
+            makes a copy of the existing database and saves it with a .bak
+            extension.
+        """
+        if make_backup:
+            if isinstance(self.dbfn, six.string_types):
+                shutil.copy2(self.dbfn, self.dbfn + '.bak')
+
+        c = self.conn.cursor()
+        query1 = """
+        DELETE FROM features WHERE id = ?
+        """
+        query2 = """
+        DELETE FROM relations WHERE parent = ? OR child = ?
+        """
+        if isinstance(features, FeatureDB):
+            features = features.all_features()
+        if isinstance(features, six.string_types):
+            features = [features]
+        if isinstance(features, Feature):
+            features = [features]
+        for feature in features:
+            if isinstance(feature, six.string_types):
+                _id = feature
+            else:
+                _id = feature.id
+            c.execute(query1, (_id,))
+            c.execute(query2, (_id, _id))
+        self.conn.commit()
+
     def update(self, features, make_backup=True, **kwargs):
         """
         Update database with features.

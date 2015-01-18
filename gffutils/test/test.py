@@ -700,7 +700,41 @@ def test_inspect():
     assert file_results == db_results == iter_results == expected
 
 
+def test_delete():
+    db_fname = gffutils.example_filename("gff_example1.gff3")
 
+    # incrementally delete all features
+    db = gffutils.create_db(db_fname, ':memory:')
+    ids = [i.id for i in db.all_features()]
+    current = set(ids)
+    for _id in ids:
+        db.delete(_id)
+        expected = current.difference([_id])
+        current = set([i.id for i in db.all_features()])
+        assert current == expected, (current, expected)
+    assert len(current) == 0
+
+    # same thing, but as a list of Feature objects rather than string IDs
+    db = gffutils.create_db(db_fname, ':memory:')
+    features = list(db.all_features())
+    current = set(features)
+    for feature in features:
+        db.delete(feature)
+        expected = current.difference([feature])
+        current = set(list(db.all_features()))
+        assert current == expected, (current, expected)
+    assert len(current) == 0, current
+
+    # same thing, but use a FeatureDB.
+    db1 = gffutils.create_db(db_fname, ':memory:')
+    db2 = gffutils.create_db(db_fname, ':memory:')
+    db1.delete(db2)
+    assert len(list(db1.all_features())) == 0
+
+
+    db = gffutils.create_db(db_fname, ':memory:')
+    db.delete('nonexistent')
+    
 
 if __name__ == "__main__":
     # this test case fails
