@@ -1,4 +1,4 @@
-from gffutils import example_filename, create, parser, feature
+from gffutils import example_filename
 import gffutils
 import gffutils.biopython_integration as bp
 
@@ -12,5 +12,7 @@ def test_roundtrip():
     feature.keep_order = True
     dialect = feature.dialect
     s = bp.to_seqfeature(feature)
+    assert s.location.start.position == feature.start - 1
+    assert s.location.end.position == feature.stop
     f = bp.from_seqfeature(s, dialect=dialect, keep_order=True)
     assert feature == f
