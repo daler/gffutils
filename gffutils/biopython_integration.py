@@ -4,6 +4,7 @@ objects.
 """
 try:
     from Bio.SeqFeature import SeqFeature, FeatureLocation
+    from Bio import SeqIO
 except ImportError:
     raise ImportError(
         "BioPython must be installed to use this module")
@@ -32,7 +33,9 @@ def to_seqfeature(f):
     }
     qualifiers.update(f.attributes)
     return SeqFeature(
-        FeatureLocation(f.start, f.stop),
+        # Convert from GFF 1-based to standard Python 0-based indexing used by
+        # BioPython
+        FeatureLocation(f.start - 1, f.stop),
         id=f.id,
         type=f.featuretype,
         strand=_biopython_strand[f.strand],
@@ -53,7 +56,10 @@ def from_seqfeature(s, **kwargs):
     seqid = s.qualifiers.get('seqid', '.')[0]
     frame = s.qualifiers.get('frame', '.')[0]
     strand = _feature_strand[s.strand]
-    start = s.location.start.position
+
+    # BioPython parses 1-based GenBank positions into 0-based for use within
+    # Python.  We need to convert back to 1-based GFF format here.
+    start = s.location.start.position + 1
     stop = s.location.end.position
     featuretype = s.type
     id = s.id
