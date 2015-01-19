@@ -58,9 +58,9 @@ def from_seqfeature(s, **kwargs):
     featuretype = s.type
     id = s.id
     attributes = dict(s.qualifiers)
-    attributes.pop('source')
-    attributes.pop('score')
-    attributes.pop('seqid')
-    attributes.pop('frame')
+    attributes.pop('source', '.')
+    attributes.pop('score', '.')
+    attributes.pop('seqid', '.')
+    attributes.pop('frame', '.')
     return Feature(seqid, source, featuretype, start, stop, score, strand,
                    frame, attributes, **kwargs)
