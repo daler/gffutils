@@ -414,6 +414,41 @@ def to_unicode(obj, encoding='utf-8'):
     return obj
 
 
+def canonical_transcripts(db, fasta_filename):
+    import pyfaidx
+    fasta = pyfaidx.Fasta(fasta_filename, as_raw=True)
+    for gene in db.features_of_type('gene'):
+
+        # exons_list will contain (CDS_length, total_length, transcript, [exons]) tuples.
+        exon_list = []
+        for ti, transcript in enumerate(db.children(gene, level=1)):
+            cds_len = 0
+            total_len = 0
+            exons = list(db.children(transcript, level=1))
+            for exon in exons:
+                exon_length = len(exon)
+                if exon.featuretype == 'CDS':
+                    cds_len += exon_length
+                total_len += exon_length
+
+            exon_list.append((cds_len, total_len, transcript, exons))
+
+        # If we have CDS, then use the longest coding transcript
+        if max(i[0] for i in exon_list) > 0:
+            best = sorted(exon_list)[0]
+        # Otherwise, just choose the longest
+        else:
+            best = sorted(exon_list, lambda x: x[1])[0]
+
+        print(best)
+
+        canonical_exons = best[-1]
+        transcript = best[-2]
+        seqs = [i.sequence(fasta) for i in canonical_exons]
+        yield transcript, ''.join(seqs)
+
+
+
 ##
 ## Helpers for gffutils-cli
 ##
