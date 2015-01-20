@@ -323,7 +323,8 @@ class FeatureDB(object):
             yield i
 
     def _relation(self, id, join_on, join_to, level=None, featuretype=None,
-                  order_by=None, reverse=False, completely_within=False):
+                  order_by=None, reverse=False, completely_within=False,
+                  limit=None):
 
         # The following docstring will be included in the parents() and
         # children() docstrings to maintain consistency, since they both
@@ -364,6 +365,7 @@ class FeatureDB(object):
             featuretype=featuretype,
             order_by=order_by,
             reverse=reverse,
+            limit=limit,
             completely_within=completely_within,
         )
 
@@ -373,7 +375,7 @@ class FeatureDB(object):
             yield self._feature_returner(**i)
 
     def children(self, id, level=None, featuretype=None, order_by=None,
-                 reverse=False, completely_within=False):
+                 reverse=False, limit=None, completely_within=False):
         """
         Return children of feature `id`, subject to various optional
         constraints.
@@ -382,10 +384,10 @@ class FeatureDB(object):
         return self._relation(
             id, join_on='child', join_to='parent', level=level,
             featuretype=featuretype, order_by=order_by, reverse=reverse,
-            completely_within=completely_within)
+            limit=limit, completely_within=completely_within)
 
     def parents(self, id, level=None, featuretype=None, order_by=None,
-                reverse=False, completely_within=False):
+                reverse=False, completely_within=False, limit=None):
         """
         Return parents of feature `id`, subject to various optional
         constraints.
@@ -394,7 +396,7 @@ class FeatureDB(object):
         return self._relation(
             id, join_on='parent', join_to='child', level=level,
             featuretype=featuretype, order_by=order_by, reverse=reverse,
-            completely_within=completely_within)
+            limit=limit, completely_within=completely_within)
 
     def _execute(self, query, args):
         self._last_query = query
