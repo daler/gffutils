@@ -504,7 +504,8 @@ class FeatureDB(object):
             yield self._feature_returner(**i)
 
     def interfeatures(self, features, new_featuretype=None,
-                      merge_attributes=True, dialect=None):
+                      merge_attributes=True, dialect=None,
+                      attribute_func=None, update_attributes=None):
         """
         Construct new features representing the space between features.
 
@@ -538,6 +539,10 @@ class FeatureDB(object):
             True, then `attribute_func` is called before `merge_attributes`.
             This could be useful for manually managing IDs for the new
             features.
+
+        update_attributes : dict
+            After attributes have been modified and merged, this dictionary can
+            be used to replace parts of the attributes dictionary.
         """
         for i, f in enumerate(features):
             # no inter-feature for the first one
@@ -559,8 +564,14 @@ class FeatureDB(object):
             interfeature_start += 1
             interfeature_stop -= 1
 
-            new_attributes = helpers.merge_attributes(
-                last_feature.attributes, f.attributes)
+            if merge_attributes:
+                new_attributes = helpers.merge_attributes(
+                    last_feature.attributes, f.attributes)
+            else:
+                new_attributes = {}
+
+            if update_attributes:
+                new_attributes.update(update_attributes)
 
             new_bin = bins.bins(
                 interfeature_start, interfeature_stop, one=True)
