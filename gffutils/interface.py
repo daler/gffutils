@@ -425,7 +425,7 @@ class FeatureDB(object):
         c = self.conn.cursor()
         return c.execute(query)
 
-    def region(self, region, featuretype=None, completely_within=False):
+    def region(self, region, start=None, end=None, seqid=None, featuretype=None, completely_within=False):
         """
         Return features with any part overlapping `region`.
 
@@ -449,10 +449,14 @@ class FeatureDB(object):
         strand = None
         if isinstance(region, six.string_types):
             toks = region.split(':')
-            seqid, coords = toks[:2]
-            if len(toks) == 3:
-                strand = toks[2]
-            start, end = coords.split('-')
+            if len(toks) == 1:
+                seqid = toks[0]
+                start, end = None, None
+            else:
+                seqid, coords = toks[:2]
+                if len(toks) == 3:
+                    strand = toks[2]
+                start, end = coords.split('-')
 
         elif isinstance(region, Feature):
             seqid = region.seqid
@@ -464,25 +468,54 @@ class FeatureDB(object):
             if len(region) == 4:
                 strand = region[3]
 
-        # Get a list of all possible bins for this region
-        _bins = list(bins.bins(int(start), int(end), one=False))
 
         if completely_within:
-            position_clause = 'start >= ? AND end <= ?'
-            args = [seqid, start, end]
+            start_op = '>='
+            end_op = '<='
+            # e.g.,
+            # start >= {start} AND end <= {end}
         else:
-            position_clause = 'start < ? AND end > ?'
-            # note start/end swap
-            args = [seqid, end, start]
+            start_op = '<'
+            end_op = '>'
 
-        args += _bins
+            # Note start/end swap.
+            # e.g.
+            #
+            # start < {end} AND end > {start}
+            #
+            end, start = start, end
 
-        _bin_clause = ' or ' .join(['bin = ?' for _ in _bins])
+        args = [seqid]
+        position_clause = ['seqid = ?']
+        if start is not None:
+            start = int(start)
+            position_clause.append('start %s ?' % start_op)
+            args.append(start)
+        if end is not None:
+            end = int(end)
+            position_clause.append('end %s ?' % end_op)
+            args.append(end)
+
+        if (start is not None) and (end is not None):
+            # Get a list of all possible bins for this region
+            _bins = list(bins.bins(start, end, one=False))
+        else:
+            # Otherwise, use the largest bin
+            _bins = []
+
+        position_clause = ' AND '.join(position_clause)
+
+
+        if len(_bins) > 0:
+            _bin_clause = ' or ' .join(['bin = ?' for _ in _bins])
+            _bin_clause = 'AND ( %s )' % _bin_clause
+            args += _bins
+        else:
+            _bin_clause = ''
 
         query = ' '.join([
             constants._SELECT,
-            'WHERE seqid = ? AND', position_clause,
-            'AND', '(', _bin_clause, ')'])
+            'WHERE ', position_clause, _bin_clause])
 
         # Add the featuretype clause
         if featuretype is not None:
@@ -499,6 +532,14 @@ class FeatureDB(object):
             args.append(strand)
 
         c = self.conn.cursor()
+        self._last_query = query
+        self._last_args = args
+        self._context = {
+            'start': start,
+            'end': end,
+            'seqid': seqid,
+            'region': region,
+        }
         c.execute(query, tuple(args))
         for i in c:
             yield self._feature_returner(**i)

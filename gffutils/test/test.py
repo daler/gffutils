@@ -409,18 +409,24 @@ def test_sanitize_gff():
 def test_region():
     db_fname = gffutils.example_filename("gff_example1.gff3")
     db = gffutils.create_db(db_fname, ":memory:", keep_order=True)
-    all_in_region = list(db.region("chr1:4000000-5000000"))
     all_minus = list(db.region("chr1:4000000-5000000:-"))
     all_plus = list(db.region("chr1:4000000-5000000:+"))
     all_unstranded = list(db.region("chr1:4000000-5000000:."))
 
     out_of_range = list(db.region("nowhere:1-100"))
 
+
+    all_in_region = list(db.region("chr1:4000000-5000000"))
     assert len(all_in_region) == 12
     assert len(all_minus) == 12
     assert len(all_plus) == 0
     assert len(all_unstranded) == 0
     assert len(out_of_range) == 0
+
+    just_chr1 = list(db.region("chr1"))
+    assert len(just_chr1) == 0, len(just_chr1)
+
+
 
 
 def test_nonascii():

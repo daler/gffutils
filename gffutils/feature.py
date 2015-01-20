@@ -318,7 +318,7 @@ class Feature(object):
             reverse-complemented for minus-strand features.
         """
         if isinstance(fasta, six.string_types):
-            fasta = Fasta(fasta_filename, as_raw=True)
+            fasta = Fasta(fasta, as_raw=True)
 
         # recall GTF/GFF is 1-based closed;  pyfaidx uses Python slice notation
         # and is therefore 0-based half-open.
