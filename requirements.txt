@@ -1,3 +1,4 @@
+pyfaidx
 six
 argh
 argcomplete

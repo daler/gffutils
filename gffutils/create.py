@@ -136,8 +136,8 @@ class _DBCreator(object):
                         return self._increment_featuretype_autoid(_id[14:])
                     return _id
             else:
-            # use GFF fields rather than attributes for cases like :seqid: or
-            # :strand:
+                # use GFF fields rather than attributes for cases like :seqid:
+                # or :strand:
                 if (len(k) > 3) and (k[0] == ':') and (k[-1] == ':'):
                     # No [0] here -- only attributes key/vals are forced into
                     # lists, not standard GFF fields.
@@ -565,10 +565,10 @@ class _GFFDBCreator(_DBCreator):
         c3 = self.conn.cursor()
 
         # TODO: pre-compute indexes?
-        #c.execute('CREATE INDEX ids ON features (id)')
-        #c.execute('CREATE INDEX parentindex ON relations (parent)')
-        #c.execute('CREATE INDEX childindex ON relations (child)')
-        #self.conn.commit()
+        # c.execute('CREATE INDEX ids ON features (id)')
+        # c.execute('CREATE INDEX parentindex ON relations (parent)')
+        # c.execute('CREATE INDEX childindex ON relations (child)')
+        # self.conn.commit()
 
         tmp = tempfile.NamedTemporaryFile(delete=False).name
         fout = open(tmp, 'w')
@@ -974,7 +974,8 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
 
         Number of lines to check the dialect.
 
-    merge_strategy : { "merge", "create_unique", "error", "warning" }
+    merge_strategy : str
+        One of {merge, create_unique, error, warning, replace}.
 
         This parameter specifies the behavior when two items have an identical
         primary key.
@@ -993,6 +994,9 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
 
         Using `merge_strategy="warning"`, a warning will be printed to the
         logger, and the duplicate feature will be skipped.
+
+        Using `merge_strategy="replace" will replace the entire existing
+        feature with the new feature.
 
     transform : callable
 
