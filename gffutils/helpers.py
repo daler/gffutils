@@ -173,8 +173,9 @@ def make_query(args, other=None, limit=None, strand=None, featuretype=None,
             # Note order (end, start)
             args.extend([seqid, end, start])
 
-        # Add bin clause
-        d['LIMIT'] += " AND features.bin IN (%s)" % (','.join(map(str, _bins)))
+        # Add bin clause. See issue #45.
+        if len(_bins) < 900:
+            d['LIMIT'] += " AND features.bin IN (%s)" % (','.join(map(str, _bins)))
 
     if strand:
         # e.g., "strand = '+'"
