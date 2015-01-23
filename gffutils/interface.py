@@ -425,9 +425,12 @@ class FeatureDB(object):
         c = self.conn.cursor()
         return c.execute(query)
 
-    def region(self, region, start=None, end=None, seqid=None, featuretype=None, completely_within=False):
+    def region(self, region=None, seqid=None, start=None, end=None,
+               strand=None, featuretype=None, completely_within=False):
         """
-        Return features with any part overlapping `region`.
+        Return features within specified genomic coordinates.
+
+        Specifying genomic coordinates can be done in a flexible manner
 
         Parameters
         ----------
@@ -436,57 +439,111 @@ class FeatureDB(object):
             (seqid, start, end).  If :class:`Feature`, then use the features
             seqid, start, and end values.
 
+            This argument is mutually exclusive with start/end/seqid.
+
+            *Note*: By design, even if a feature is provided, its strand will
+            be ignored.  If you want to restrict the output by strand, use the
+            separate `strand` kwarg.
+
+        strand : + | - | . | None
+            If `strand` is provided, then only those features exactly matching
+            `strand` will be returned. So `strand='.'` will only return
+            unstranded features. Default is `strand=None` which does not
+            restrict by strand.
+
+        seqid, start, end, strand
+            Mutually exclusive with `region`.  These kwargs can be used to
+            approximate slice notation; see "Details" section below.
+
         featuretype : None, string, or iterable
             If not None, then restrict output.  If string, then only report
             that feature type.  If iterable, then report all featuretypes in
             the iterable.
 
         completely_within : bool
-            If False (default), returns features that overlap `region`, even
-            partially.  If True, only return features that are completely
-            within `region`.
+            By default (`completely_within=False`), returns features that
+            partially or completely overlap `region`.  If
+            `completely_within=True`, features that are completely within
+            `region` will be returned.
+
+        Details
+        -------
+        The meaning of `seqid`, `start`, and `end` is interpreted as follows:
+
+        ====== ====== ===== ======================================
+        seqid  start  end   meaning
+        ====== ====== ===== ======================================
+        str    int    int   equivalent to `region` kwarg
+        None   int    int   features from all chroms within coords
+        str    None   int   equivalent to [:end] slice notation
+        str    int    None  equivalent to [start:] slice notation
+        None   None   None  equivalent to FeatureDB.all_features()
+        ====== ====== ===== ======================================
+
+        Examples
+        --------
+
+        - `region(seqid="chr1", start=1000)` returns all features on chr1 that
+          start or extend past position 1000
+
+        - `region(seqid="chr1", start=1000, completely_within=True)` returns
+          all features on chr1 that start past position 1000.
+
+        - `region("chr1:1-100", strand="+", completely_within=True)` returns
+          only plus-strand features that completely fall within positions 1 to
+          100 on chr1.
+
+        Notes
+        -----
+        If performance is a concern, use `completely_within=True`. This allows
+        the query to be optimized by only looking for features that fall in the
+        precise genomic bin (same strategy as UCSC Genome Browser and
+        BEDTools). Otherwise all features' start/stop coords need to be
+        searched to see if they partially overlap the region of interest.
         """
-        strand = None
-        if isinstance(region, six.string_types):
-            toks = region.split(':')
-            if len(toks) == 1:
-                seqid = toks[0]
-                start, end = None, None
+        # Argument handling.
+        if region is not None:
+            if (seqid is not None) or (start is not None) or (end is not None):
+                raise ValueError(
+                    "If region is supplied, do not supply seqid, "
+                    "start, or end as separate kwargs")
+            if isinstance(region, six.string_types):
+                toks = region.split(':')
+                if len(toks) == 1:
+                    seqid = toks[0]
+                    start, end = None, None
+                else:
+                    seqid, coords = toks[:2]
+                    if len(toks) == 3:
+                        strand = toks[2]
+                    start, end = coords.split('-')
+
+            elif isinstance(region, Feature):
+                seqid = region.seqid
+                start = region.start
+                end = region.end
+                strand = region.strand
+
+            # otherwise assume it's a tuple
             else:
-                seqid, coords = toks[:2]
-                if len(toks) == 3:
-                    strand = toks[2]
-                start, end = coords.split('-')
+                seqid, start, end = region[:3]
 
-        elif isinstance(region, Feature):
-            seqid = region.seqid
-            start = region.start
-            end = region.end
-            strand = region.strand
-        else:
-            seqid, start, end = region[:3]
-            if len(region) == 4:
-                strand = region[3]
-
-
+        # e.g.,
+        #   completely_within=True..... start >= {start} AND end <= {end}
+        #   completely_within=False.... start <  {end}   AND end >  {start}
         if completely_within:
             start_op = '>='
             end_op = '<='
-            # e.g.,
-            # start >= {start} AND end <= {end}
         else:
             start_op = '<'
             end_op = '>'
-
-            # Note start/end swap.
-            # e.g.
-            #
-            # start < {end} AND end > {start}
-            #
             end, start = start, end
 
-        args = [seqid]
-        position_clause = ['seqid = ?']
+        args = []
+        position_clause = []
+        if seqid is not None:
+            position_clause.append('seqid = ?')
+            args.append(seqid)
         if start is not None:
             start = int(start)
             position_clause.append('start %s ?' % start_op)
@@ -496,26 +553,28 @@ class FeatureDB(object):
             position_clause.append('end %s ?' % end_op)
             args.append(end)
 
-        if (start is not None) and (end is not None):
-            # Get a list of all possible bins for this region
-            _bins = list(bins.bins(start, end, one=False))
-        else:
-            # Otherwise, use the largest bin
-            _bins = []
-
         position_clause = ' AND '.join(position_clause)
 
-
-        if len(_bins) > 0:
-            _bin_clause = ' or ' .join(['bin = ?' for _ in _bins])
-            _bin_clause = 'AND ( %s )' % _bin_clause
-            args += _bins
+        # Only use bins if we have defined boundaries and completely_within is
+        # True. Otherwise you can't know how far away a feature stretches
+        # (which means bins are not computable ahead of time)
+        if (start is not None) and (end is not None) and completely_within:
+            _bins = list(bins.bins(start, end, one=False))
+            # See issue #45
+            if len(_bins) < 900:
+                _bin_clause = ' or ' .join(['bin = ?' for _ in _bins])
+                _bin_clause = 'AND ( %s )' % _bin_clause
+                args += _bins
+            else:
+                _bin_clause = ''
         else:
             _bin_clause = ''
 
         query = ' '.join([
             constants._SELECT,
-            'WHERE ', position_clause, _bin_clause])
+            'WHERE ',
+            position_clause,
+            _bin_clause])
 
         # Add the featuretype clause
         if featuretype is not None:
