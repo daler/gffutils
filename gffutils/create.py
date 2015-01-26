@@ -1044,7 +1044,6 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
         If True, then treat `data` as actual data (rather than the path to
         a file).
 
-
     keep_order : bool
 
         If True, all features returned from this instance will have the
@@ -1090,16 +1089,21 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
         values sorted.  Typically this is only useful for testing, since this
         can get time-consuming for large numbers of features.
     """
-    kwargs = dict(
-        data=data, checklines=checklines, transform=transform,
-        force_dialect_check=force_dialect_check, from_string=from_string)
+
+    _locals = locals()
+    kwargs = dict((i, _locals[i]) for i in constants._iterator_kwargs)
+    #kwargs = dict(
+    #    data=data, checklines=checklines, transform=transform,
+    #    force_dialect_check=force_dialect_check, from_string=from_string)
 
     # First construct an iterator so that we can identify the file format.
     # DataIterator figures out what kind of data was provided (string of lines,
     # filename, or iterable of Features) and checks `checklines` lines to
     # identify the dialect.
     iterator = iterators.DataIterator(**kwargs)
-    dialect = iterator.dialect
+
+    if dialect is None:
+        dialect = iterator.dialect
 
     if isinstance(iterator, iterators._FeatureIterator):
         # However, a side-effect of this is that  if `data` was a generator,
@@ -1119,6 +1123,7 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
         cls = _GFFDBCreator
         id_spec = id_spec or 'ID'
         add_kwargs = {}
+
     elif dialect['fmt'] == 'gtf':
         cls = _GTFDBCreator
         id_spec = id_spec or {'gene': 'gene_id', 'transcript': 'transcript_id'}
@@ -1136,12 +1141,15 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
 
     c.create()
     if dbfn == ':memory:':
-        db = interface.FeatureDB(c.conn, keep_order=keep_order,
+        db = interface.FeatureDB(c.conn,
+                                 keep_order=keep_order,
                                  pragmas=pragmas,
                                  sort_attribute_values=sort_attribute_values,
                                  text_factory=text_factory)
     else:
-        db = interface.FeatureDB(c, keep_order=keep_order, pragmas=pragmas,
+        db = interface.FeatureDB(c,
+                                 keep_order=keep_order,
+                                 pragmas=pragmas,
                                  sort_attribute_values=sort_attribute_values,
                                  text_factory=text_factory)
 
