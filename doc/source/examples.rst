@@ -99,7 +99,7 @@ Note that the database id values are all unique for the CDSs, but their
 >>> list(set([f['Name'][0] for f in db.children('XM_001475631.1', featuretype='CDS')]))
 ['CDS:NC_000083.5:LOC100040603']
 
-
+.. _c_elegans_WS199_ann_gff.txt:
 
 c_elegans_WS199_ann_gff.txt
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -144,6 +144,9 @@ But the string representation shows "`.`" placeholders:
 
 >>> print(f) #doctest: +NORMALIZE_WHITESPACE
 I	Expr_profile	experimental_result_region	.	.	.	+	.	expr_profile=B0019.1
+
+
+.. _c_elegans_WS199_shortened_gff.txt:
 
 c_elegans_WS199_shortened_gff.txt
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -669,6 +672,7 @@ I	Coding_transcript	Transcript	12759582	12764949	.	-	.	Transcript "B0019.1" ; Wo
 >>> len(list(db.children(t, featuretype='SAGE_tag')))
 4
 
+.. _gencode-v190.gtf:
 
 gencode-v19.gtf
 ~~~~~~~~~~~~~~~

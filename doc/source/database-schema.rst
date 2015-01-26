@@ -4,8 +4,8 @@ Database schema
 
 Schema
 ------
-The following is the schema used for :mod:`gffutils`. Explanation of each table
-can be found below.
+The following is the schema used for :mod:`gffutils`. Feel free to skip this if
+you're not familiar with SQL. An explanation of each table can be found below.
 
 >>> print(gffutils.constants.SCHEMA)  #doctest:+NORMALIZE_WHITESPACE
 <BLANKLINE>

@@ -13,7 +13,7 @@ the example file has a line like this::
 
     chr2L   FlyBase gene    7529    9484    .       +       .       ID=FBgn0031208;Name=CG11023;
 
-By default the primary key GFF3 features (like this one) is the "ID" field of
+By default, the primary key GFF3 features (like this one) is the "ID" field of
 the attributes.  So the unique key used for the database for this feature is
 `FBgn0031208`.  This means we can access the gene from the database like this::
 
@@ -35,6 +35,10 @@ IDs like this::
 
     utrs = db.children('FBgn0031208', featuretype='five_prime_UTR')
 
+This works because 1) we have a unique ID for the gene, 2) we have unique IDs
+for each 5'UTR, and 3) the relationships in the database are constructed using
+these unique IDs.
+
 If your input GFF or GTF file is formatted in the canonical way, the default
 settings should work fine.  The rest of this section details strategies for
 instructing :mod:`gffutils` to use the most meaningful primary key for your
@@ -45,6 +49,17 @@ particular input file.
 
 `id_spec`
 ---------
+
+
+.. seealso::
+
+    Examples that show the use of `id_spec`:
+
+    * :ref:`F3-unique-3.v2.gff` (uses `id_spec=:seqid:`)
+    * :ref:`jgi_gff2.txt`
+    * :ref:`ncbi_gff3.txt`
+    * :ref:`wormbase_gff2.txt`
+
 The `id_spec` (ID specification) kwarg determines how to extract information
 from each line in order to construct a primary key for the feature.  It can
 have several different forms -- None, string, list, dictionary, or callable.
@@ -121,17 +136,20 @@ in the original file, :mod:`gffutils` infers the gene and transcript boundaries
 regions.
 
 
-.. seealso::
-
-    * The example :ref:`F3-unique-3.v2.gff` illustrates the use of
-      `id_spec=:seqid:`.
-    * The examples :ref:`jgi_gff2.txt` and :ref:`ncbi_gff3.txt` illustrate the use of custom `id_spec`
-      dictionaries.
-
 .. _transform:
 
 `transform`
 -----------
+
+.. seealso::
+
+    Examples that show the use of `transform`:
+
+    * :ref:`ensembl_gtf.txt`
+    * :ref:`glimmer_nokeyval.gff3`
+    * :ref:`wormbase_gff2_alt.txt`
+    * :ref:`wormbase_gff2.txt`
+
 The `transform` kwarg is a function that accepts single
 :class:`gffutils.Feature` object and that returns a (possibly modified)
 :class:`gffutils.Feature` object.  It is used to modify, on-the-fly, items as
@@ -146,15 +164,17 @@ imported into the database, then we could use the following function::
         d['seqid'] = "chr" + d['seqid']
         return d
 
-.. seealso::
-
-    The examples :ref:`ensembl_gtf.txt`, :ref:`glimmer_nokeyval.gff3`,
-    :ref:`wormbase_gff2_alt.txt`, and :ref:`wormbase_gff2.txt` illustrate the
-    use of custom transform functions.
 
 
 `merge_strategy`
 ----------------
+
+.. seealso::
+
+    Examples that show the use of `merge_strategy`:
+
+    * :ref:`c_elegans_WS199_shortened_gff.txt`
+    * :ref:`mouse_extra_comma.gff3`
 
 This parameter specifies the behavior when two items have an identical
 primary key.
@@ -189,6 +209,3 @@ yourself to fix the duplicated IDs.
 Using `merge_strategy="warning"`, a warning will be printed to the
 logger, and the feature will be skipped.
 
-.. seealso::
-
-    See :issue:`8` for initial discussion on the merge strategy
