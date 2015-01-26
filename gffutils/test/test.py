@@ -789,9 +789,54 @@ def test_delete():
     db.delete('nonexistent')
 
 
+def test_iterator_update():
+    db_fname = gffutils.example_filename("gff_example1.gff3")
+    db = gffutils.create_db(db_fname, ':memory:')
+    assert len(list(db.all_features())) == 12
+    orig_exon_coords = set([(i.start, i.stop) for i in db.features_of_type('exon')])
+
+
+    # reset all features to have the same coords of start=1, stop=100
+    def gen():
+        for i in db.features_of_type('gene'):
+            i.start = 1
+            i.stop = 100
+            yield i
+
+    db.update(gen(), merge_strategy='replace')
+    assert len(list(db.all_features())) == 12
+    assert len(list(db.features_of_type('gene'))) == 1
+    g = db.features_of_type('gene').next()
+    assert g.start == 1, g.start
+    assert g.stop == 100, g.stop
+
+    # exons should have remained unchanged.
+    assert orig_exon_coords == set([(i.start, i.stop) for i in db.features_of_type('exon')])
+
+
+    def _transform(f):
+        f.start = 1
+        f.stop = 100
+        return f
+
+    db_fname = gffutils.example_filename("gff_example1.gff3")
+    db = gffutils.create_db(db_fname, ':memory:')
+    db.update(db.features_of_type('gene'), merge_strategy='replace', transform=_transform)
+    assert len(list(db.all_features())) == 12
+    assert len(list(db.features_of_type('gene'))) == 1
+    g = db.features_of_type('gene').next()
+    assert g.start == 1, g.start
+    assert g.stop == 100, g.stop
+
+    # exons should have remained unchanged.
+    assert orig_exon_coords == set([(i.start, i.stop) for i in db.features_of_type('exon')])
+
+
+
 if __name__ == "__main__":
     # this test case fails
     #test_attributes_modify()
     #test_sanitize_gff()
     #test_random_chr()
-    test_nonascii()
+    #test_nonascii()
+    test_iterator_update()
