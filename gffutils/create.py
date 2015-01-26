@@ -474,6 +474,19 @@ class _DBCreator(object):
             cursor.execute(
                 constants._INSERT, feature.astuple(self.default_encoding))
 
+    def _replace(self, feature, cursor):
+        """
+        Insert a feature into the database.
+        """
+        try:
+            cursor.execute(
+                constants._UPDATE,
+                list(feature.astuple()) + [feature.id])
+        except sqlite3.ProgrammingError:
+            cursor.execute(
+                constants._INSERT,
+                list(feature.astuple(self.default_encoding)) + [feature.id])
+
 
 class _GFFDBCreator(_DBCreator):
     def __init__(self, *args, **kwargs):
@@ -518,7 +531,7 @@ class _GFFDBCreator(_DBCreator):
                 self._insert(f, c)
             except sqlite3.IntegrityError:
                 fixed, final_strategy = self._do_merge(f, self.merge_strategy)
-                if final_strategy in ['merge', 'replace']:
+                if final_strategy == 'merge':
                     c.execute(
                         '''
                         UPDATE features SET attributes = ?
@@ -540,6 +553,9 @@ class _GFFDBCreator(_DBCreator):
                             UPDATE features SET %s
                             WHERE id = ?
                             ''' % _set_clause, tuple(values))
+
+                elif final_strategy == 'replace':
+                    self._replace(f, c)
 
                 elif final_strategy == 'create_unique':
                     self._insert(f, c)
@@ -646,7 +662,7 @@ class _GTFDBCreator(_DBCreator):
                 self._insert(f, c)
             except sqlite3.IntegrityError:
                 fixed, final_strategy = self._do_merge(f, self.merge_strategy)
-                if final_strategy in ['merge', 'replace']:
+                if final_strategy == 'merge':
                     c.execute(
                         '''
                         UPDATE features SET attributes = ?
@@ -667,7 +683,8 @@ class _GTFDBCreator(_DBCreator):
                             UPDATE features SET %s
                             WHERE id = ?
                             ''' % _set_clause, values)
-
+                elif final_strategy == 'replace':
+                    self._replace(f, c)
                 elif final_strategy == 'create_unique':
                     self._insert(f, c)
 
@@ -899,7 +916,7 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
               force_dialect_check=False, from_string=False, keep_order=False,
               text_factory=sqlite3.OptimizedUnicode, infer_gene_extent=True,
               force_merge_fields=None, pragmas=constants.default_pragmas,
-              sort_attribute_values=False):
+              sort_attribute_values=False, dialect=None):
     """
     Create a database from a GFF or GTF file.
 
