@@ -142,5 +142,5 @@ always_return_list = True
 
 # these keyword args are used by iterators.
 _iterator_kwargs = (
-    'data', 
+    'data',
     'checklines', 'transform', 'force_dialect_check', 'dialect', 'from_string')

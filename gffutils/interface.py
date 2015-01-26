@@ -13,27 +13,27 @@ class FeatureDB(object):
     # docstring to be filled in for methods that call out to
     # helpers.make_query()
     _method_doc = """
-        `limit`: string or tuple
+        limit : string or tuple
             Limit the results to a genomic region.  If string, then of the form
             "seqid:start-end"; if tuple, then (seqid, start, end).
 
-        `strand`: "-" | "+" | "."
+        strand : "-" | "+" | "."
             Limit the results to one strand
 
-        `featuretype`: string or tuple
+        featuretype : string or tuple
             Limit the results to one or several featuretypes.
 
-        `order_by`: string or tuple
+        order_by : string or tuple
             Order results by one or many fields; the string or tuple items must
             be in: 'seqid', 'source', 'featuretype', 'start', 'end', 'score',
             'strand', 'frame', 'attributes', 'extra'.
 
-        `reverse`: bool
+        reverse : bool
             Change sort order; only relevant if `order_by` is not None.  By
             default, results will be in ascending order, so use `reverse=True`
             for descending.
 
-        `completely_within': bool
+        completely_within : bool
             If False (default), a single bp overlap with `limit` is sufficient
             to return a feature; if True, then the feature must be completely
             within `limit`. Only relevant when `limit` is not None.
@@ -82,7 +82,8 @@ class FeatureDB(object):
             These can be changed later using the :meth:`FeatureDB.set_pragmas`
             method.
 
-        .. note::
+        Notes
+        -----
 
             `dbfn` can also be a subclass of :class:`_DBCreator`, useful for
             when :func:`gffutils.create_db` is provided the ``dbfn=":memory:"``
@@ -218,7 +219,7 @@ class FeatureDB(object):
         Parameters
         ----------
 
-        `featuretype` : string
+        featuretype : string
 
             Feature type (e.g., "gene") to count.  If None, then count *all*
             features in the database.
@@ -275,7 +276,10 @@ class FeatureDB(object):
                               completely_within=False):
         """
         For each parent of type `featuretype`, yield a list L of that parent
-        and all of its children. The parent will always be L[0].
+        and all of its children (`[parent] + list(children)`). The parent will
+        always be L[0].
+
+        This is useful for "sanitizing" a GFF file for downstream tools.
 
         Additional kwargs are passed to :meth:`FeatureDB.children`, and will
         therefore only affect items L[1:] in each yielded list.
@@ -292,7 +296,11 @@ class FeatureDB(object):
     def all_features(self, limit=None, strand=None, featuretype=None,
                      order_by=None, reverse=False, completely_within=False):
         """
-        Returns an iterator of all :class:`Feature` objects in the database.
+        Iterate through the entire database.
+
+        Returns
+        -------
+        A generator object that yields :class:`Feature` objects.
 
         Parameters
         ----------
@@ -312,7 +320,11 @@ class FeatureDB(object):
 
     def featuretypes(self):
         """
-        Iterator of feature types found in the database.
+        Iterate over feature types found in the database.
+
+        Returns
+        -------
+        A generator object that yields featuretypes (as strings)
         """
         c = self.conn.cursor()
         c.execute(
@@ -341,6 +353,10 @@ class FeatureDB(object):
             of level.  If `level` is an integer, then constrain to just that
             level.
         {_method_doc}
+
+        Returns
+        -------
+        A generator object that yields :class:`Feature` objects.
         """
 
         if isinstance(id, Feature):
@@ -377,8 +393,7 @@ class FeatureDB(object):
     def children(self, id, level=None, featuretype=None, order_by=None,
                  reverse=False, limit=None, completely_within=False):
         """
-        Return children of feature `id`, subject to various optional
-        constraints.
+        Return children of feature `id`.
         {_relation_docstring}
         """
         return self._relation(
@@ -389,8 +404,7 @@ class FeatureDB(object):
     def parents(self, id, level=None, featuretype=None, order_by=None,
                 reverse=False, completely_within=False, limit=None):
         """
-        Return parents of feature `id`, subject to various optional
-        constraints.
+        Return parents of feature `id`.
         {_relation_docstring}
         """
         return self._relation(
@@ -417,10 +431,13 @@ class FeatureDB(object):
         Parameters
         ----------
 
-        `query` : str
+        query : str
 
             Query to execute -- trailing ";" optional.
 
+        Returns
+        -------
+        A sqlite3.Cursor object that can be iterated over.
         """
         c = self.conn.cursor()
         return c.execute(query)
@@ -500,7 +517,9 @@ class FeatureDB(object):
           only plus-strand features that completely fall within positions 1 to
           100 on chr1.
 
-
+        Returns
+        -------
+        A generator object that yields :class:`Feature` objects.
         """
         # Argument handling.
         if region is not None:
@@ -644,6 +663,10 @@ class FeatureDB(object):
         update_attributes : dict
             After attributes have been modified and merged, this dictionary can
             be used to replace parts of the attributes dictionary.
+
+        Returns
+        -------
+        A generator that yields :class:`Feature` objects
         """
         for i, f in enumerate(features):
             # no inter-feature for the first one
@@ -714,6 +737,10 @@ class FeatureDB(object):
             If True, and the database you're about to update is a file on disk,
             makes a copy of the existing database and saves it with a .bak
             extension.
+
+        Returns
+        -------
+        FeatureDB object, with features deleted.
         """
         if make_backup:
             if isinstance(self.dbfn, six.string_types):
@@ -740,6 +767,7 @@ class FeatureDB(object):
             c.execute(query1, (_id,))
             c.execute(query2, (_id, _id))
         self.conn.commit()
+        return self
 
     def update(self, data, make_backup=True, **kwargs):
         """
@@ -760,6 +788,10 @@ class FeatureDB(object):
         -----
         Other kwargs are used in the same way as in gffutils.create_db; see the
         help for that function for details.
+
+        Returns
+        -------
+        FeatureDB with updated features.
         """
         from gffutils import create
         from gffutils import iterators
@@ -794,6 +826,7 @@ class FeatureDB(object):
         db._populate_from_lines(data)
         db._update_relations()
         db._finalize()
+        return db
 
     def add_relation(self, parent, child, level, parent_func=None,
                      child_func=None):
@@ -827,6 +860,10 @@ class FeatureDB(object):
 
                 def child_func(parent, child):
                     child.attributes['Parent'] = parent['gene_id']
+
+        Returns
+        -------
+        FeatureDB object with new relations added.
         """
         if isinstance(parent, six.string_types):
             parent = self[parent]
@@ -846,6 +883,7 @@ class FeatureDB(object):
             self._update(child, c)
 
         self.conn.commit()
+        return self
 
     def _update(self, feature, cursor):
         values = [list(feature.astuple()) + [feature.id]]
@@ -868,15 +906,13 @@ class FeatureDB(object):
         """
         Create introns from existing annotations.
 
-        Returns an iterator of new introns that can then be passed to the
-        `update` method to permanently add to the database.
 
         Parameters
         ----------
-        `exon_featuretype`: string
+        exon_featuretype : string
             Feature type to use in order to infer introns.  Typically `"exon"`.
 
-        `grandparent_featuretype` : string
+        grandparent_featuretype : string
             If `grandparent_featuretype` is not None, then group exons by
             children of this featuretype.  If `granparent_featuretype` is
             "gene" (default), then introns will be created for all first-level
@@ -885,19 +921,33 @@ class FeatureDB(object):
             (e.g., mRNA), then use the `parent_featuretype` kwarg which is
             mutually exclusive with `grandparent_featuretype`.
 
-        `parent_featuretype` : string
+        parent_featuretype : string
             If `parent_featuretype` is not None, then only use this featuretype
             to infer introns.  Use this if you only want a subset of
             featuretypes to have introns (e.g., "mRNA" only, and not ncRNA or
             rRNA). Mutually exclusive with `grandparent_featuretype`.
 
-        `new_featuretype`: string
+        new_featuretype : string
             Feature type to use for the inferred introns; default is
             `"intron"`.
 
-        `merge_attributes`: bool
+        merge_attributes : bool
             Whether or not to merge attributes from all exons. If False then no
             attributes will be created for the introns.
+
+        Returns
+        -------
+        A generator object that yields :class:`Feature` objects representing
+        new introns
+
+        Notes
+        -----
+        The returned generator can be passed directly to the
+        :meth:`FeatureDB.update` method to permanently add them to the
+        database, e.g., ::
+
+            db.update(db.create_introns())
+
         """
         if (grandparent_featuretype and parent_featuretype) or (
             grandparent_featuretype is None and parent_featuretype is None
@@ -937,6 +987,11 @@ class FeatureDB(object):
             If True, features on multiple strands will be merged, and the final
             strand will be set to '.'.  Otherwise, ValueError will be raised if
             trying to merge features on differnt strands.
+
+        Returns
+        -------
+        A generator object that yields :class:`Feature` objects representing
+        the newly merged features.
         """
 
         # Consume iterator up front...
@@ -1017,7 +1072,7 @@ class FeatureDB(object):
     def children_bp(self, feature, child_featuretype='exon', merge=False,
                     ignore_strand=False):
         """
-        Returns the total bp of all children of a featuretype.
+        Total bp of all children of a featuretype.
 
         Useful for getting the exonic bp of an mRNA.
 
@@ -1038,6 +1093,10 @@ class FeatureDB(object):
             If True, then overlapping features on different strands will be
             merged together; otherwise, merging features with different strands
             will result in a ValueError.
+
+        Returns
+        -------
+        Integer representing the total number of bp.
         """
 
         children = self.children(feature, featuretype=child_featuretype,
@@ -1057,7 +1116,7 @@ class FeatureDB(object):
         Converts `feature` into a BED12 format.
 
         GFF and GTF files do not necessarily define genes consistently, so this
-        method provides flexible methods.
+        method provides flexiblity in specifying what to call a "transcript".
 
         Parameters
         ----------

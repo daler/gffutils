@@ -36,15 +36,54 @@ Then, use the methods of :class:`FeatureDB` to interact:
     gffutils.FeatureDB.execute
     gffutils.FeatureDB.featuretypes
     gffutils.FeatureDB.region
+    gffutils.FeatureDB.iter_by_parent_childs
+
+Modify a :class:`FeatureDB`:
+
+.. autosummary::
+    :toctree: autodocs
+
+    gffutils.FeatureDB.update
+    gffutils.FeatureDB.delete
+    gffutils.FeatureDB.add_relation
+    gffutils.FeatureDB.set_pragmas
+
+Operate on features:
+
+.. autosummary::
+    :toctree: autodocs
+
+    gffutils.FeatureDB.interfeatures
+    gffutils.FeatureDB.children_bp
+    gffutils.FeatureDB.merge
+    gffutils.FeatureDB.create_introns
+    gffutils.FeatureDB.bed12
 
 
-Many :class:`FeatureDB` methods return :class:`Feature` objects:
+
+
+Feature objects
+---------------
+Most :class:`FeatureDB` methods return :class:`Feature` objects:
 
 .. autosummary::
     :toctree: autodocs
 
     gffutils.Feature
 
+You can extract the sequence for a feature:
+
+.. autosummary::
+    :toctree: autodocs
+
+    gffutils.Feature.sequence
+
+Creating a :class:`Feature` object:
+
+.. autosummary::
+    :toctree: autodocs
+
+    gffutils.feature.feature_from_line
 
 Utilities
 ---------
@@ -58,4 +97,4 @@ Utilities
     gffutils.helpers.annotate_gff_db
     gffutils.helpers.infer_dialect
     gffutils.helpers.example_filename
-
+    gffutils.inspect.inspect

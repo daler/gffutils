@@ -22,12 +22,14 @@ class Feature(object):
         """
         Represents a feature from the database.
 
+        Usually you won't want to use this directly, since it has various
+        implementation details needed for operating in the context of FeatureDB
+        objects.  Instead, try the :func:`gffutils.feature.feature_from_line`
+        function.
+
         When printed, reproduces the original line from the file as faithfully
         as possible using `dialect`.
 
-        Usually you won't want to use this directly, since it has various
-        implementation details needed for operating in the context of FeatureDB
-        objects.  Instead, try the :func:`feature_from_line` function.
 
         Parameters
         ----------
@@ -170,6 +172,9 @@ class Feature(object):
         self.sort_attribute_values = sort_attribute_values
 
     def calc_bin(self, _bin=None):
+        """
+        Calculate the smallest UCSC genomic bin that will contain this feature.
+        """
         if _bin is None:
             try:
                 _bin = bins.bins(self.start, self.end, one=True)
@@ -278,11 +283,18 @@ class Feature(object):
 
     def astuple(self, encoding=None):
         """
-        Return a tuple suitable for import into a database, with attributes
-        field and extra field jsonified into strings
+        Return a tuple suitable for import into a database.
+
+        Attributes field and extra field jsonified into strings. The order of
+        fields is such that they can be supplied as arguments for the query
+        defined in :attr:`gffutils.constants._INSERT`.
 
         If `encoding` is not None, then convert string fields to unicode using
         the provided encoding.
+
+        Returns
+        -------
+        Tuple
         """
         if not encoding:
             return (
@@ -316,6 +328,10 @@ class Feature(object):
         use_strand : bool
             If True (default), the sequence returned will be
             reverse-complemented for minus-strand features.
+
+        Returns
+        -------
+        string
         """
         if isinstance(fasta, six.string_types):
             fasta = Fasta(fasta, as_raw=True)
@@ -343,6 +359,14 @@ def feature_from_line(line, dialect=None, strict=True, keep_order=False):
         line), and, as long as there are only 9 fields (standard GFF/GTF), then
         it's OK to use spaces instead of tabs to separate fields in `line`.
         But if >9 fields are to be used, then tabs must be used.
+
+    keep_order, dialect
+        Passed directly to :class:`Feature`; see docstring for that class for
+        description
+
+    Returns
+    -------
+    A new :class:`Feature` object.
     """
     if not strict:
         lines = line.splitlines(False)

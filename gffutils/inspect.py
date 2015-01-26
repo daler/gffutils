@@ -66,7 +66,11 @@ def inspect(data, look_for=['featuretype', 'chrom', 'attribute_keys',
     verbose : bool
         Report how many features have been processed.
 
+    Returns
+    -------
+    dict
     """
+
     results = {}
     obj_attrs = []
     for i in look_for:

@@ -14,6 +14,7 @@ Table of Contents
     attributes
     examples
     api
+    changelog
     developers
     meta
 

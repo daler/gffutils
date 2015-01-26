@@ -920,6 +920,9 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
     """
     Create a database from a GFF or GTF file.
 
+    For more details on when and how to use the kwargs below, see the examples
+    in the online documentation (:ref:`examples`).
+
     Parameters
     ----------
     data : string or iterable
@@ -1088,6 +1091,11 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
         All features returned from the database will have their attribute
         values sorted.  Typically this is only useful for testing, since this
         can get time-consuming for large numbers of features.
+
+
+    Returns
+    -------
+    New :class:`FeatureDB` object.
     """
 
     _locals = locals()

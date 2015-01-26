@@ -2,13 +2,14 @@
 Module for integration with BioPython, specifically SeqRecords and SeqFeature
 objects.
 """
+import six
 try:
     from Bio.SeqFeature import SeqFeature, FeatureLocation
     from Bio import SeqIO
 except ImportError:
     raise ImportError(
         "BioPython must be installed to use this module")
-from . import Feature
+from .feature import Feature, feature_from_line
 
 _biopython_strand = {
     '+':  1,
@@ -18,27 +19,36 @@ _biopython_strand = {
 _feature_strand = dict((v, k) for k, v in _biopython_strand.items())
 
 
-def to_seqfeature(f):
+def to_seqfeature(feature):
     """
     Converts a gffutils.Feature object to a Bio.SeqFeature object.
 
     The GFF fields `source`, `score`, `seqid`, and `frame` are stored as
     qualifiers.  GFF `attributes` are also stored as qualifiers.
+
+    Parameters
+    ----------
+    feature : Feature object, or string
+        If string, assume it is a GFF or GTF-format line; otherwise just use
+        the provided feature directly.
     """
+    if isinstance(feature, six.string_types):
+        feature = feature_from_line(feature)
+
     qualifiers = {
-        'source': [f.source],
-        'score': [f.score],
-        'seqid': [f.seqid],
-        'frame': [f.frame],
+        'source': [feature.source],
+        'score': [feature.score],
+        'seqid': [feature.seqid],
+        'frame': [feature.frame],
     }
-    qualifiers.update(f.attributes)
+    qualifiers.update(feature.attributes)
     return SeqFeature(
         # Convert from GFF 1-based to standard Python 0-based indexing used by
         # BioPython
-        FeatureLocation(f.start - 1, f.stop),
-        id=f.id,
-        type=f.featuretype,
-        strand=_biopython_strand[f.strand],
+        FeatureLocation(feature.start - 1, feature.stop),
+        id=feature.id,
+        type=feature.featuretype,
+        strand=_biopython_strand[feature.strand],
         qualifiers=qualifiers
     )
 

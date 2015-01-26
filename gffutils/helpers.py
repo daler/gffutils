@@ -16,6 +16,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 
 
 def example_filename(fn):
+    """
+    Return the full path of a data file that ships with gffutils.
+    """
     return os.path.join(HERE, 'test', 'data', fn)
 
 
@@ -28,6 +31,10 @@ def infer_dialect(attributes):
     attributes : str or iterable
         A single attributes string from a GTF or GFF line, or an iterable of
         such strings.
+
+    Returns
+    -------
+    Dictionary representing the inferred dialect
     """
     if isinstance(attributes, six.string_types):
         attributes = [attributes]
@@ -45,6 +52,10 @@ def _choose_dialect(dialects):
     ----------
     dialects : iterable
         iterable of dialect dictionaries
+
+    Returns
+    -------
+    dict
     """
     # NOTE: can use helpers.dialect_compare if you need to make this more
     # complex....
@@ -68,6 +79,8 @@ def make_query(args, other=None, limit=None, strand=None, featuretype=None,
                extra=None, order_by=None, reverse=False,
                completely_within=False):
     """
+    Multi-purpose, bare-bones ORM function.
+
     This function composes queries given some commonly-used kwargs that can be
     passed to FeatureDB methods (like .parents(), .children(), .all_features(),
     .features_of_type()).  It handles, in one place, things like restricting to
@@ -298,6 +311,10 @@ def merge_attributes(attr1, attr2):
     Parameters
     ----------
     `attr1`, `attr2` : dict
+
+    Returns
+    -------
+    dict
     """
 
     new_d = copy.deepcopy(attr1)
