@@ -1092,9 +1092,6 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
 
     _locals = locals()
     kwargs = dict((i, _locals[i]) for i in constants._iterator_kwargs)
-    #kwargs = dict(
-    #    data=data, checklines=checklines, transform=transform,
-    #    force_dialect_check=force_dialect_check, from_string=from_string)
 
     # First construct an iterator so that we can identify the file format.
     # DataIterator figures out what kind of data was provided (string of lines,

@@ -763,17 +763,14 @@ class FeatureDB(object):
             if isinstance(self.dbfn, six.string_types):
                 shutil.copy2(self.dbfn, self.dbfn + '.bak')
 
-        # No matter what `features` came in as, convert to gffutils.Feature
-        # instances.  Since the tricky part -- attribute strings -- have been
-        # parsed into dicts in a Feature, we no longer have to worry about
-        # that.  This also allows GTF features to be used to update a GFF
-        # database, or vice versa.
-        if isinstance(features, six.string_types):
-            indb = create.create_db(features, intermediate, **kwargs)
-            features = indb.all_features()
+        # get iterator-specific kwargs
+        _iterator_kwargs = {}
+        for k, v in kwargs.items():
+            if k in constants._iterator_kwargs:
+                _iterator_kwargs[k] = v
 
-        if isinstance(features, FeatureDB):
-            features = features.all_features()
+        # Handle all sorts of input
+        data = iterators.DataIterator(data, **_iterator_kwargs)
 
         if self.dialect['fmt'] == 'gtf':
             if 'id_spec' not in kwargs:
