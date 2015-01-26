@@ -741,12 +741,12 @@ class FeatureDB(object):
             c.execute(query2, (_id, _id))
         self.conn.commit()
 
-    def update(self, features, make_backup=True, **kwargs):
+    def update(self, data, make_backup=True, **kwargs):
         """
-        Update database with features.
+        Update database with features in `data`.
 
-        features : str, iterable, FeatureDB instance
-            If FeatureDB, all features will be used. If string, assume it's
+        data : str, iterable, FeatureDB instance
+            If FeatureDB, all data will be used. If string, assume it's
             a filename of a GFF or GTF file.  Otherwise, assume it's an
             iterable of Feature objects.  The classes in gffutils.iterators may
             be helpful in this case.
@@ -756,9 +756,13 @@ class FeatureDB(object):
             makes a copy of the existing database and saves it with a .bak
             extension.
 
-        Remaining kwargs are passed to create_db.
+        Notes
+        -----
+        Other kwargs are used in the same way as in gffutils.create_db; see the
+        help for that function for details.
         """
         from gffutils import create
+        from gffutils import iterators
         if make_backup:
             if isinstance(self.dbfn, six.string_types):
                 shutil.copy2(self.dbfn, self.dbfn + '.bak')
@@ -777,17 +781,17 @@ class FeatureDB(object):
                 kwargs['id_spec'] = {
                     'gene': 'gene_id', 'transcript': 'transcript_id'}
             db = create._GTFDBCreator(
-                data=features, dbfn=self.dbfn, dialect=self.dialect, **kwargs)
+                data=data, dbfn=self.dbfn, dialect=self.dialect, **kwargs)
         elif self.dialect['fmt'] == 'gff3':
             if 'id_spec' not in kwargs:
                 kwargs['id_spec'] = 'ID'
             db = create._GFFDBCreator(
-                data=features, dbfn=self.dbfn, dialect=self.dialect, **kwargs)
+                data=data, dbfn=self.dbfn, dialect=self.dialect, **kwargs)
 
         else:
             raise ValueError
 
-        db._populate_from_lines(features)
+        db._populate_from_lines(data)
         db._update_relations()
         db._finalize()
 
