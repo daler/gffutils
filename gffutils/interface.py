@@ -466,8 +466,9 @@ class FeatureDB(object):
             `completely_within=True`, features that are completely within
             `region` will be returned.
 
-        Details
+        Notes
         -------
+
         The meaning of `seqid`, `start`, and `end` is interpreted as follows:
 
         ====== ====== ===== ======================================
@@ -479,6 +480,12 @@ class FeatureDB(object):
         str    int    None  equivalent to [start:] slice notation
         None   None   None  equivalent to FeatureDB.all_features()
         ====== ====== ===== ======================================
+
+        If performance is a concern, use `completely_within=True`. This allows
+        the query to be optimized by only looking for features that fall in the
+        precise genomic bin (same strategy as UCSC Genome Browser and
+        BEDTools). Otherwise all features' start/stop coords need to be
+        searched to see if they partially overlap the region of interest.
 
         Examples
         --------
@@ -493,13 +500,7 @@ class FeatureDB(object):
           only plus-strand features that completely fall within positions 1 to
           100 on chr1.
 
-        Notes
-        -----
-        If performance is a concern, use `completely_within=True`. This allows
-        the query to be optimized by only looking for features that fall in the
-        precise genomic bin (same strategy as UCSC Genome Browser and
-        BEDTools). Otherwise all features' start/stop coords need to be
-        searched to see if they partially overlap the region of interest.
+
         """
         # Argument handling.
         if region is not None:

@@ -1017,8 +1017,8 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
 
     transform : callable
 
-        Function (or other callable object) that accepts a dictionary and
-        returns a dictionary.
+        Function (or other callable object) that accepts a `Feature` object and
+        returns a (possibly modified) `Feature` object.
 
     gtf_transcript_key, gtf_gene_key : string
 
