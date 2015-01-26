@@ -317,7 +317,7 @@ def test_gffwriter():
            "unsanitized.gff should not have a gffutils-style header."
     db_in = gffutils.create_db(fn, ":memory:", keep_order=True)
     # Fetch first record
-    rec = next(db_in.all_features())
+    rec = six.next(db_in.all_features())
     ##
     ## Write GFF file in-place test
     ##
@@ -806,7 +806,7 @@ def test_iterator_update():
     db.update(gen(), merge_strategy='replace')
     assert len(list(db.all_features())) == 12
     assert len(list(db.features_of_type('gene'))) == 1
-    g = db.features_of_type('gene').next()
+    g = six.next(db.features_of_type('gene'))
     assert g.start == 1, g.start
     assert g.stop == 100, g.stop
 
@@ -824,7 +824,7 @@ def test_iterator_update():
     db.update(db.features_of_type('gene'), merge_strategy='replace', transform=_transform)
     assert len(list(db.all_features())) == 12
     assert len(list(db.features_of_type('gene'))) == 1
-    g = db.features_of_type('gene').next()
+    g = six.next(db.features_of_type('gene'))
     assert g.start == 1, g.start
     assert g.stop == 100, g.stop
 
