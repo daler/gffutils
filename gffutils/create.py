@@ -1055,6 +1055,11 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
         kwarg, or on a feature-by-feature basis by setting the `keep_order`
         attribute of an individual feature.
 
+        Note that a single order of attributes will be used for all features.
+        Specifically, the order will be determined by the order of attribute
+        keys in the first `checklines` of the input data. See
+        helpers._choose_dialect for more information on this.
+
         Default is False, since this includes a sorting step that can get
         time-consuming for many features.
 
