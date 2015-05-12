@@ -917,7 +917,7 @@ def test_tempfiles():
     filelist = os.listdir(tempdir)
     assert len(filelist) == n, len(filelist)
 
-    contents = dedent("""\
+    expected = dedent("""\
         FBtr0300689	chr2L	7529	9484	+	transcript	4681	{"transcript_id":["FBtr0300689"],"gene_id":["FBgn0031208"]}
         FBgn0031208	chr2L	7529	9484	+	gene	4681	{"gene_id":["FBgn0031208"]}
         FBtr0300690	chr2L	7529	9484	+	transcript	4681	{"transcript_id":["FBtr0300690"],"gene_id":["FBgn0031208"]}
@@ -927,14 +927,31 @@ def test_tempfiles():
         Fk_gene_2	chr2L	11500	12500	-	gene	4681	{"gene_id":["Fk_gene_2"]}
         """)
 
-    # ensures that 
+
+    def matches_expected(fn):
+        """
+        Python 3 has unpredictable dictionary ordering. This function checks
+        the *semantic* similarity of lines by parsing the attributes into
+        a dictonary.
+        """
+        exp_features = expected.splitlines(True)
+        new_features = list(open(fn))
+        assert len(exp_features) == len(new_features)
+        for expline, newline in zip(exp_features, new_features):
+            exp_toks = expline.split()
+            new_toks = newline.split()
+            assert exp_toks[:-1] == new_toks[:-1]
+            assert json.loads(exp_toks[-1]) == json.loads(new_toks[-1])
+
+
+    # make sure that each of the `n` files matches the expected output.
     for fn in filelist:
         fn = os.path.join(tempdir, fn)
-        this = open(fn).read()
-        if this != contents:
-            print(''.join(difflib.ndiff(contents.splitlines(True), this.splitlines(True))))
+        try:
+            matches_expected(fn)
+        except AssertionError:
+            print(''.join(difflib.ndiff(expected.splitlines(True), this.splitlines(True))))
             raise
-        assert this == contents
 
     clean_tempdir()
 
