@@ -23,6 +23,14 @@ else:
 testdbfn_gtf = ':memory:'
 testdbfn_gff = ':memory:'
 
+
+
+fn = gffutils.example_filename('FBgn0031208.gtf')
+def make_db(i):
+    gffutils.create_db(fn, ':memory:', _keep_tempfiles='.%s' % i)
+    return i
+
+
 def test_update():
     # check both in-memory and file-based dbs
     db = create.create_db(
@@ -830,6 +838,103 @@ def test_iterator_update():
 
     # exons should have remained unchanged.
     assert orig_exon_coords == set([(i.start, i.stop) for i in db.features_of_type('exon')])
+
+
+def test_tempfiles():
+
+    # specifiy a writeable temp dir for testing
+    import tempfile
+    import shutil
+    import glob
+    import difflib
+    tempdir = '/tmp/gffutils-test'
+
+    def clean_tempdir():
+        tempfile.tempdir = tempdir
+        if os.path.exists(tempdir):
+            shutil.rmtree(tempdir)
+        os.makedirs(tempdir)
+
+    clean_tempdir()
+
+    # default keep_tempfiles=False should give us nothing.
+    db = gffutils.create_db(
+        gffutils.example_filename('FBgn0031208.gtf'), ':memory:')
+    assert len(os.listdir(tempdir)) == 0
+
+    # adding keep_tempfiles=True should give us 1 tempfile for gtf...
+    db = gffutils.create_db(
+        gffutils.example_filename('FBgn0031208.gtf'), ':memory:', _keep_tempfiles=True)
+    filelist = os.listdir(tempdir)
+    assert len(filelist) == 1, filelist
+    assert filelist[0].endswith('.gffutils')
+
+    #...and another one for gff. This time, make sure the suffix 
+    db = gffutils.create_db(
+        gffutils.example_filename('FBgn0031208.gff'), ':memory:', _keep_tempfiles=True)
+    filelist = os.listdir(tempdir)
+    assert len(filelist) == 2, filelist
+    for i in filelist:
+        assert i.endswith('.gffutils')
+
+    # OK, now delete what we have so far...
+    clean_tempdir()
+
+    # Make sure that works for custom suffixes
+    db = gffutils.create_db(
+        gffutils.example_filename('FBgn0031208.gtf'), ':memory:', _keep_tempfiles='.GTFtmp')
+    filelist = os.listdir(tempdir)
+    assert len(filelist) == 1, filelist
+    assert filelist[0].endswith('.GTFtmp')
+
+    clean_tempdir()
+    db = gffutils.create_db(
+        gffutils.example_filename('FBgn0031208.gtf'), ':memory:', _keep_tempfiles='.GFFtmp')
+    filelist = os.listdir(tempdir)
+    assert len(filelist) == 1, filelist
+    assert filelist[0].endswith('.GFFtmp')
+
+    # Test n parallel instances of gffutils across PROCESSES processes.
+    #
+    # Note that travis-ci doesn't like it when you use multiple cores, so the
+    # .travis.yml file sets this to 1.  This also means that
+    #   1) `n` shouldn't be too large because travis-ci will run one at a time,
+    #      but more importantly,
+    #   2) this will only truly test parallel processes on a local machine with
+    #      multiple cpus.
+    clean_tempdir()
+
+    import multiprocessing
+
+    # .travis.yml sets the PROCESSES env var; otherwise use all available.
+    PROCESSES = int(os.environ.get("PROCESSES", multiprocessing.cpu_count()))
+    pool = multiprocessing.Pool(PROCESSES)
+    n = 100
+    res = pool.map(make_db, range(n))
+    assert sorted(list(res)) == range(n)
+    filelist = os.listdir(tempdir)
+    assert len(filelist) == n, len(filelist)
+
+    contents = dedent("""\
+        FBtr0300689	chr2L	7529	9484	+	transcript	4681	{"transcript_id":["FBtr0300689"],"gene_id":["FBgn0031208"]}
+        FBgn0031208	chr2L	7529	9484	+	gene	4681	{"gene_id":["FBgn0031208"]}
+        FBtr0300690	chr2L	7529	9484	+	transcript	4681	{"transcript_id":["FBtr0300690"],"gene_id":["FBgn0031208"]}
+        transcript_Fk_gene_1	chr2L	10000	11000	-	transcript	4681	{"transcript_id":["transcript_Fk_gene_1"],"gene_id":["Fk_gene_1"]}
+        Fk_gene_1	chr2L	10000	11000	-	gene	4681	{"gene_id":["Fk_gene_1"]}
+        transcript_Fk_gene_2	chr2L	11500	12500	-	transcript	4681	{"transcript_id":["transcript_Fk_gene_2"],"gene_id":["Fk_gene_2"]}
+        Fk_gene_2	chr2L	11500	12500	-	gene	4681	{"gene_id":["Fk_gene_2"]}
+        """)
+
+    # ensures that 
+    for fn in filelist:
+        fn = os.path.join(tempdir, fn)
+        this = open(fn).read()
+        if this != contents:
+            print(''.join(difflib.ndiff(contents.splitlines(True), this.splitlines(True))))
+            raise
+        assert this == contents
+
+    clean_tempdir()
 
 
 

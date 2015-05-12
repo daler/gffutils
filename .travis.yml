@@ -3,6 +3,8 @@ python:
     - "2.7"
     - "3.3"
 
+env: PROCESSES=1
+
 install:
     - "pip install -r requirements.txt"
     - "pip install sphinx"
@@ -12,5 +14,6 @@ install:
     - "pip install ."
 
 script:
+
     - nosetests -x --with-doctest
     - (cd doc && make clean && make doctest)

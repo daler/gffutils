@@ -32,11 +32,12 @@ class _DBCreator(object):
                  infer_gene_extent=True,
                  force_merge_fields=None,
                  text_factory=sqlite3.OptimizedUnicode,
-                 pragmas=constants.default_pragmas):
+                 pragmas=constants.default_pragmas, _keep_tempfiles=False):
         """
         Base class for _GFFDBCreator and _GTFDBCreator; see create_db()
         function for docs
         """
+        self._keep_tempfiles = _keep_tempfiles
         if force_merge_fields is None:
             force_merge_fields = []
         if merge_strategy == 'merge':
@@ -586,7 +587,11 @@ class _GFFDBCreator(_DBCreator):
         # c.execute('CREATE INDEX childindex ON relations (child)')
         # self.conn.commit()
 
-        tmp = tempfile.NamedTemporaryFile(delete=False).name
+        if isinstance(self._keep_tempfiles, six.string_types):
+            suffix = self._keep_tempfiles
+        else:
+            suffix = '.gffutils'
+        tmp = tempfile.NamedTemporaryFile(delete=False, suffix=suffix).name
         fout = open(tmp, 'w')
 
         # Here we look for "grandchildren" -- for each ID, get the child
@@ -622,7 +627,9 @@ class _GFFDBCreator(_DBCreator):
         c.execute("CREATE INDEX binindex ON features (bin)")
 
         self.conn.commit()
-        os.unlink(fout.name)
+
+        if not self._keep_tempfiles:
+            os.unlink(fout.name)
 
 
 class _GTFDBCreator(_DBCreator):
@@ -741,7 +748,11 @@ class _GTFDBCreator(_DBCreator):
 
         logger.info('Inferring gene and transcript extents, '
                     'and writing to tempfile')
-        tmp = tempfile.NamedTemporaryFile(delete=False).name
+        if isinstance(self._keep_tempfiles, six.string_types):
+            suffix = self._keep_tempfiles
+        else:
+            suffix = '.gffutils'
+        tmp = tempfile.NamedTemporaryFile(delete=False, suffix=suffix).name
         fout = open(tmp, 'w')
 
         self._tmpfile = tmp
@@ -903,7 +914,8 @@ class _GTFDBCreator(_DBCreator):
 
         logger.info("Committing changes")
         self.conn.commit()
-        os.unlink(fout.name)
+        if not self._keep_tempfiles:
+            os.unlink(fout.name)
 
         # TODO: recreate indexes?
 
@@ -915,7 +927,7 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
               force_dialect_check=False, from_string=False, keep_order=False,
               text_factory=sqlite3.OptimizedUnicode, infer_gene_extent=True,
               force_merge_fields=None, pragmas=constants.default_pragmas,
-              sort_attribute_values=False, dialect=None):
+              sort_attribute_values=False, dialect=None, _keep_tempfiles=False):
     """
     Create a database from a GFF or GTF file.
 
@@ -1096,6 +1108,12 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
         values sorted.  Typically this is only useful for testing, since this
         can get time-consuming for large numbers of features.
 
+    _keep_tempfiles : bool or string
+        False by default to clean up intermediate tempfiles created during GTF
+        import.  If True, then keep these tempfile for testing or debugging.
+        If string, then keep the tempfile for testing, but also use the string
+        as the suffix fo the tempfile. This can be useful for testing in
+        parallel environments.
 
     Returns
     -------
@@ -1146,7 +1164,8 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
     c = cls(dbfn=dbfn, id_spec=id_spec, force=force, verbose=verbose,
             merge_strategy=merge_strategy, text_factory=text_factory,
             infer_gene_extent=infer_gene_extent,
-            force_merge_fields=force_merge_fields, pragmas=pragmas, **kwargs)
+            force_merge_fields=force_merge_fields, pragmas=pragmas,
+            _keep_tempfiles=_keep_tempfiles, **kwargs)
 
     c.create()
     if dbfn == ':memory:':
