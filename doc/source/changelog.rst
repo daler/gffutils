@@ -2,6 +2,12 @@
 
 Change log
 ==========
+Changes in v0.8.3.1
+-------------------
+Thanks to Sven-Eric Schelhorn (@schellhorn on github), this version fixes a bug
+where, if multiple gffutils processes try to create databases from GTF files
+simultaneously, the resulting databases would be incomplete and incorrect.
+
 
 Changes in v0.8.3
 -----------------
