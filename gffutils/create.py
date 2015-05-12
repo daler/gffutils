@@ -742,7 +742,6 @@ class _GTFDBCreator(_DBCreator):
         logger.info('Inferring gene and transcript extents, '
                     'and writing to tempfile')
         tmp = tempfile.NamedTemporaryFile(delete=False).name
-        tmp = '/tmp/gffutils'
         fout = open(tmp, 'w')
 
         self._tmpfile = tmp
