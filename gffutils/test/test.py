@@ -20,6 +20,13 @@ if sys.version_info.major == 3:
 else:
     import SocketServer
 
+import multiprocessing
+import json
+import tempfile
+import shutil
+import glob
+import difflib
+
 testdbfn_gtf = ':memory:'
 testdbfn_gff = ':memory:'
 
@@ -843,10 +850,6 @@ def test_iterator_update():
 def test_tempfiles():
 
     # specifiy a writeable temp dir for testing
-    import tempfile
-    import shutil
-    import glob
-    import difflib
     tempdir = '/tmp/gffutils-test'
 
     def clean_tempdir():
@@ -904,7 +907,6 @@ def test_tempfiles():
     #      multiple cpus.
     clean_tempdir()
 
-    import multiprocessing
 
     # .travis.yml sets the PROCESSES env var; otherwise use all available.
     PROCESSES = int(os.environ.get("PROCESSES", multiprocessing.cpu_count()))
