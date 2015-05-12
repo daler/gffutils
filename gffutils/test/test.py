@@ -911,7 +911,7 @@ def test_tempfiles():
     pool = multiprocessing.Pool(PROCESSES)
     n = 100
     res = pool.map(make_db, range(n))
-    assert sorted(list(res)) == range(n)
+    assert sorted(list(res)) == list(range(n))
     filelist = os.listdir(tempdir)
     assert len(filelist) == n, len(filelist)
 
