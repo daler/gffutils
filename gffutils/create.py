@@ -672,9 +672,35 @@ class _GTFDBCreator(_DBCreator):
 
         c = self.conn.cursor()
 
+        # Only check this many features to see if it's a gene or transcript and
+        # issue the appropriate warning.
+        gene_and_transcript_check_limit = 1000
+
         last_perc = 0
         lines_seen = None
         for i, f in enumerate(lines):
+
+            # See issues #48 and #20.
+            if lines_seen < gene_and_transcript_check_limit:
+                if (
+                    f.featuretype == 'transcript' and
+                    not self.disable_infer_transcripts
+                ):
+                    warnings.warn(
+                        "It appears you have a transcript feature in your GTF "
+                        "file. You may want to use the "
+                        "`disable_infer_transcripts` "
+                        "option to speed up database creation")
+                elif (
+                    f.featuretype == 'gene' and
+                    not self.disable_infer_genes
+                ):
+                    warnings.warn(
+                        "It appears you have a gene feature in your GTF "
+                        "file. You may want to use the "
+                        "`disable_infer_genes` "
+                        "option to speed up database creation")
+
             lines_seen = i
 
             # Percent complete
