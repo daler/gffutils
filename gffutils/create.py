@@ -6,6 +6,7 @@ import sys
 import os
 import sqlite3
 import six
+from textwrap import dedent
 from gffutils import constants
 from gffutils import version
 from gffutils import bins
@@ -24,19 +25,38 @@ ch.setFormatter(formatter)
 logger.addHandler(ch)
 
 
+def deprecation_handler(kwargs):
+    """
+    As things change from version to version, deal with them here.
+    """
+
+    if 'infer_gene_extent' in kwargs:
+        raise ValueError(
+            "'infer_gene_extent' is deprecated as of version 0.8.4 in favor "
+            "of more granular control over inferring genes and/or transcripts."
+            " The previous default was 'infer_gene_extent=True`, which "
+            "corresponds to the new defaults 'disable_infer_genes=False' and "
+            "'disable_infer_transcripts=False'. Please see the docstring for "
+            "gffutils.create_db for details.")
+
+
 class _DBCreator(object):
     def __init__(self, data, dbfn, force=False, verbose=False, id_spec=None,
                  merge_strategy='merge', checklines=10, transform=None,
                  force_dialect_check=False, from_string=False, dialect=None,
                  default_encoding='utf-8',
-                 infer_gene_extent=True,
+                 disable_infer_genes=False,
+                 disable_infer_transcripts=False,
                  force_merge_fields=None,
                  text_factory=sqlite3.OptimizedUnicode,
-                 pragmas=constants.default_pragmas, _keep_tempfiles=False):
+                 pragmas=constants.default_pragmas, _keep_tempfiles=False,
+                 **kwargs):
         """
         Base class for _GFFDBCreator and _GTFDBCreator; see create_db()
         function for docs
         """
+        deprecation_handler(kwargs)
+
         self._keep_tempfiles = _keep_tempfiles
         if force_merge_fields is None:
             force_merge_fields = []
@@ -55,7 +75,10 @@ class _DBCreator(object):
         self.pragmas = pragmas
         self.merge_strategy = merge_strategy
         self.default_encoding = default_encoding
-        self.infer_gene_extent = infer_gene_extent
+
+        self.disable_infer_genes = disable_infer_genes
+        self.disable_infer_transcripts = disable_infer_transcripts
+
         self._autoincrements = collections.defaultdict(int)
         if force:
             if os.path.exists(dbfn):
@@ -732,7 +755,7 @@ class _GTFDBCreator(_DBCreator):
 
     def _update_relations(self):
 
-        if not self.infer_gene_extent:
+        if self.disable_infer_genes and self.disable_infer_transcripts:
             return
 
         # TODO: do any indexes speed this up?
@@ -746,8 +769,15 @@ class _GTFDBCreator(_DBCreator):
         c.execute('DROP INDEX IF EXISTS relationschild')
         c.execute('CREATE INDEX relationschild ON relations (child)')
 
-        logger.info('Inferring gene and transcript extents, '
-                    'and writing to tempfile')
+        if not (self.disable_infer_genes or self.disable_infer_transcripts):
+            msg = 'gene and transcript'
+        elif self.disable_infer_transcripts:
+            msg = 'gene'
+        elif self.disable_infer_genes:
+            msg = 'transcript'
+        logger.info('Inferring %s extents '
+                    'and writing to tempfile' % msg)
+
         if isinstance(self._keep_tempfiles, six.string_types):
             suffix = self._keep_tempfiles
         else:
@@ -781,6 +811,9 @@ class _GTFDBCreator(_DBCreator):
         #
         # Note that genes are repeated; below we need to ensure that only one
         # is added.  To ensure this, the results are ordered by the gene ID.
+        #
+        # By the way, we do this even if we're only looking for transcripts or
+        # only looking for genes.
 
         c.execute(
             '''
@@ -799,48 +832,14 @@ class _GTFDBCreator(_DBCreator):
             ''', (self.subfeature,))
 
         # Now we iterate through those results (using a new cursor) to infer
-        # the extent of transcripts and genes.
+        # the extent of transcripts and/or genes.
 
         last_gene_id = None
         n_features = 0
         for transcript_id, gene_id in c:
-            # transcript extent
-            c2.execute(
-                '''
-                SELECT MIN(start), MAX(end), strand, seqid
-                FROM features
-                JOIN relations ON
-                features.id = relations.child
-                WHERE parent = ? AND featuretype == ?
-                ''', (transcript_id, self.subfeature))
-            transcript_start, transcript_end, strand, seqid = c2.fetchone()
-            transcript_attributes = {
-                self.transcript_key: [transcript_id],
-                self.gene_key: [gene_id]
-            }
-            transcript_bin = bins.bins(
-                transcript_start, transcript_end, one=True)
 
-            # Write out to file; we'll be reading it back in shortly.  Omit
-            # score, frame, source, and extra since they will always have the
-            # same default values (".", ".", "gffutils_derived", and []
-            # respectively)
-
-            fout.write('\t'.join(map(str, [
-                transcript_id,
-                seqid,
-                transcript_start,
-                transcript_end,
-                strand,
-                'transcript',
-                transcript_bin,
-                helpers._jsonify(transcript_attributes)
-            ])) + '\n')
-
-            n_features += 1
-
-            # Infer gene extent, but only if we haven't done so already.
-            if gene_id != last_gene_id:
+            if not self.disable_infer_transcripts:
+                # transcript extent
                 c2.execute(
                     '''
                     SELECT MIN(start), MAX(end), strand, seqid
@@ -848,24 +847,61 @@ class _GTFDBCreator(_DBCreator):
                     JOIN relations ON
                     features.id = relations.child
                     WHERE parent = ? AND featuretype == ?
-                    ''', (gene_id, self.subfeature))
-                gene_start, gene_end, strand, seqid = c2.fetchone()
-                gene_attributes = {self.gene_key: [gene_id]}
-                gene_bin = bins.bins(gene_start, gene_end, one=True)
+                    ''', (transcript_id, self.subfeature))
+                transcript_start, transcript_end, strand, seqid = c2.fetchone()
+                transcript_attributes = {
+                    self.transcript_key: [transcript_id],
+                    self.gene_key: [gene_id]
+                }
+                transcript_bin = bins.bins(
+                    transcript_start, transcript_end, one=True)
+
+                # Write out to file; we'll be reading it back in shortly.  Omit
+                # score, frame, source, and extra since they will always have
+                # the same default values (".", ".", "gffutils_derived", and []
+                # respectively)
 
                 fout.write('\t'.join(map(str, [
-                    gene_id,
+                    transcript_id,
                     seqid,
-                    gene_start,
-                    gene_end,
+                    transcript_start,
+                    transcript_end,
                     strand,
-                    'gene',
-                    gene_bin,
-                    helpers._jsonify(gene_attributes)
+                    'transcript',
+                    transcript_bin,
+                    helpers._jsonify(transcript_attributes)
                 ])) + '\n')
 
-            last_gene_id = gene_id
-            n_features += 1
+                n_features += 1
+
+            if not self.disable_infer_genes:
+                # Infer gene extent, but only if we haven't done so already
+                if gene_id != last_gene_id:
+                    c2.execute(
+                        '''
+                        SELECT MIN(start), MAX(end), strand, seqid
+                        FROM features
+                        JOIN relations ON
+                        features.id = relations.child
+                        WHERE parent = ? AND featuretype == ?
+                        ''', (gene_id, self.subfeature))
+                    gene_start, gene_end, strand, seqid = c2.fetchone()
+                    gene_attributes = {self.gene_key: [gene_id]}
+                    gene_bin = bins.bins(gene_start, gene_end, one=True)
+
+                    fout.write('\t'.join(map(str, [
+                        gene_id,
+                        seqid,
+                        gene_start,
+                        gene_end,
+                        strand,
+                        'gene',
+                        gene_bin,
+                        helpers._jsonify(gene_attributes)
+                    ])) + '\n')
+
+                last_gene_id = gene_id
+                n_features += 1
 
         fout.close()
 
@@ -925,9 +961,11 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
               gtf_transcript_key='transcript_id', gtf_gene_key='gene_id',
               gtf_subfeature='exon', force_gff=False,
               force_dialect_check=False, from_string=False, keep_order=False,
-              text_factory=sqlite3.OptimizedUnicode, infer_gene_extent=True,
+              text_factory=sqlite3.OptimizedUnicode,
               force_merge_fields=None, pragmas=constants.default_pragmas,
-              sort_attribute_values=False, dialect=None, _keep_tempfiles=False):
+              sort_attribute_values=False, dialect=None, _keep_tempfiles=False,
+              disable_infer_genes=False, disable_infer_transcripts=False,
+              **kwargs):
     """
     Create a database from a GFF or GTF file.
 
@@ -1075,10 +1113,29 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
         time-consuming for many features.
 
     infer_gene_extent : bool
-        Only used for GTF files, set this to False in order to disable the
-        inference of gene and transcript extents.  Use this if you don't care
-        about having gene and transcript features in the database, or if the
-        input GTF file already has "gene" and "transcript" featuretypes.
+        DEPRECATED in version 0.8.4. See `disable_infer_transcripts` and
+        `disable_infer_genes` for more granular control.
+
+    disable_infer_transcripts, disable_infer_genes : bool
+        Only used for GTF files. By default -- and according to the GTF spec --
+        we assume that there are no transcript or gene features in the file.
+        gffutils then infers the extent of each transcript based on its
+        constituent exons and infers the extent of each gene bases on its
+        constituent transcripts.
+
+        This default behavior is problematic if the input file already contains
+        transcript or gene features (like recent GENCODE GTF files for human),
+        since 1) the work to infer extents is unnecessary, and 2)
+        trying to insert an inferred feature back into the database triggers
+        gffutils' feature-merging routines, which can get time consuming.
+
+        The solution is to use `disable_infer_transcripts=True` if your GTF
+        already has transcripts in it, and/or `disable_infer_genes=True` if it
+        already has genes in it. This can result in dramatic (100x) speedup.
+
+        Prior to version 0.8.4, setting `infer_gene_extents=False` would
+        disable both transcript and gene inference simultaneously. As of
+        version 0.8.4, these argument allow more granular control.
 
     force_merge_fields : list
         If merge_strategy="merge", then features will only be merged if their
@@ -1121,6 +1178,10 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
     """
 
     _locals = locals()
+
+    # Check if any older kwargs made it in
+    deprecation_handler(kwargs)
+
     kwargs = dict((i, _locals[i]) for i in constants._iterator_kwargs)
 
     # First construct an iterator so that we can identify the file format.
@@ -1128,6 +1189,8 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
     # filename, or iterable of Features) and checks `checklines` lines to
     # identify the dialect.
     iterator = iterators.DataIterator(**kwargs)
+
+    kwargs.update(**_locals)
 
     if dialect is None:
         dialect = iterator.dialect
@@ -1149,7 +1212,9 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
     if force_gff or (dialect['fmt'] == 'gff3'):
         cls = _GFFDBCreator
         id_spec = id_spec or 'ID'
-        add_kwargs = {}
+        add_kwargs = dict(
+            id_spec=id_spec,
+        )
 
     elif dialect['fmt'] == 'gtf':
         cls = _GTFDBCreator
@@ -1157,15 +1222,14 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
         add_kwargs = dict(
             transcript_key=gtf_transcript_key,
             gene_key=gtf_gene_key,
-            subfeature=gtf_subfeature)
+            subfeature=gtf_subfeature,
+            id_spec=id_spec,
+        )
 
     kwargs.update(**add_kwargs)
     kwargs['dialect'] = dialect
-    c = cls(dbfn=dbfn, id_spec=id_spec, force=force, verbose=verbose,
-            merge_strategy=merge_strategy, text_factory=text_factory,
-            infer_gene_extent=infer_gene_extent,
-            force_merge_fields=force_merge_fields, pragmas=pragmas,
-            _keep_tempfiles=_keep_tempfiles, **kwargs)
+    c = cls(**kwargs)
+
 
     c.create()
     if dbfn == ':memory:':

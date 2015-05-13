@@ -34,6 +34,10 @@ testdbfn_gff = ':memory:'
 
 fn = gffutils.example_filename('FBgn0031208.gtf')
 def make_db(i):
+    """
+    Module-level function that can be pickled across processes for
+    multiprocessing testing.
+    """
     gffutils.create_db(fn, ':memory:', _keep_tempfiles='.%s' % i)
     return i
 
@@ -955,6 +959,54 @@ def test_tempfiles():
 
     clean_tempdir()
 
+def test_disable_infer():
+    """
+    tests the new semantics for disabling gene/transcript inference
+    """
+    # To start, we construct a GTF db by inferring genes and transcripts
+    db = gffutils.create_db(gffutils.example_filename('FBgn0031208.gtf'), ':memory:')
+
+    # Then create a file missing transcripts, and another missing genes.
+    import tempfile
+    tempfile.tempdir = None
+    no_transcripts = open(tempfile.NamedTemporaryFile(delete=False).name, 'w')
+    no_genes = open(tempfile.NamedTemporaryFile(delete=False).name, 'w')
+    for feature in db.all_features():
+        if feature.featuretype != 'transcript':
+            no_transcripts.write(str(feature) + '\n')
+        if feature.featuretype != 'gene':
+            no_genes.write(str(feature) + '\n')
+    no_genes.close()
+    no_transcripts.close()
+
+    no_tx_db = gffutils.create_db(no_transcripts.name, ':memory:', disable_infer_transcripts=True)
+    no_gn_db = gffutils.create_db(no_genes.name, ':memory:', disable_infer_genes=True)
+    no_xx_db = gffutils.create_db(
+        gffutils.example_filename('FBgn0031208.gtf'),
+        ':memory:',
+        disable_infer_genes=True,
+        disable_infer_transcripts=True
+    )
+
+    # no transcripts but 3 genes
+    assert len(list(no_tx_db.features_of_type('transcript'))) == 0
+    assert len(list(no_tx_db.features_of_type('gene'))) == 3
+
+    # no genes but 4 transcripts
+    assert len(list(no_gn_db.features_of_type('gene'))) == 0
+    assert len(list(no_gn_db.features_of_type('transcript'))) == 4
+
+    # no genes or transcripts
+    assert len(list(no_xx_db.features_of_type('gene'))) == 0
+    assert len(list(no_xx_db.features_of_type('transcript'))) == 0
+
+
+
+def test_deprecation_handler():
+    assert_raises(ValueError, gffutils.create_db,
+            gffutils.example_filename('FBgn0031208.gtf'),
+            ':memory:',
+            infer_gene_extent=False)
 
 
 if __name__ == "__main__":

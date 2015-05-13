@@ -694,7 +694,7 @@ identical results:
 >>> db = gffutils.create_db(fn,
 ... ":memory:",
 ... keep_order=True,
-... infer_gene_extent=False)
+... disable_infer_gene=True, disable_infer_transcript=True)
 
 
 
@@ -712,7 +712,7 @@ longer to import:
 >>> db2 = gffutils.create_db(fn,
 ... ":memory:",
 ... keep_order=True,
-... infer_gene_extent=False)
+... disable_infer_gene=True, disable_infer_transcript=True)
 
 >>> for i, j in zip(db.all_features(), db2.all_features()):
 ...     assert i == j
