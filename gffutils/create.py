@@ -677,7 +677,7 @@ class _GTFDBCreator(_DBCreator):
         gene_and_transcript_check_limit = 1000
 
         last_perc = 0
-        lines_seen = None
+        lines_seen = 0
         for i, f in enumerate(lines):
 
             # See issues #48 and #20.
@@ -701,7 +701,7 @@ class _GTFDBCreator(_DBCreator):
                         "`disable_infer_genes` "
                         "option to speed up database creation")
 
-            lines_seen = i
+            lines_seen = i + 1
 
             # Percent complete
             if self.verbose:
@@ -771,7 +771,7 @@ class _GTFDBCreator(_DBCreator):
                 ''', relations
             )
 
-        if lines_seen is None:
+        if lines_seen == 0:
             raise ValueError("No lines parsed -- was an empty file provided?")
         logger.info('Committing changes')
         self.conn.commit()
