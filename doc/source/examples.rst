@@ -686,15 +686,15 @@ inference, which saves time.
 
 Import
 ``````
-We can use `infer_gene_extent=False` to disable the gene and transcript
-inference.  This will dramatically speed up import, but will result in
-identical results:
+We can use `disable_infer_genes=True` and `disable_infer_transcripts=True` to
+disable the gene and transcript inference.  This will dramatically speed up
+import, but will result in identical results:
 
 >>> fn = gffutils.example_filename('gencode-v19.gtf')
 >>> db = gffutils.create_db(fn,
 ... ":memory:",
 ... keep_order=True,
-... disable_infer_gene=True, disable_infer_transcript=True)
+... disable_infer_genes=True, disable_infer_transcripts=True)
 
 
 
@@ -712,7 +712,7 @@ longer to import:
 >>> db2 = gffutils.create_db(fn,
 ... ":memory:",
 ... keep_order=True,
-... disable_infer_gene=True, disable_infer_transcript=True)
+... disable_infer_genes=True, disable_infer_transcripts=True)
 
 >>> for i, j in zip(db.all_features(), db2.all_features()):
 ...     assert i == j

@@ -29,7 +29,6 @@ def deprecation_handler(kwargs):
     """
     As things change from version to version, deal with them here.
     """
-
     if 'infer_gene_extent' in kwargs:
         raise ValueError(
             "'infer_gene_extent' is deprecated as of version 0.8.4 in favor "
@@ -38,6 +37,8 @@ def deprecation_handler(kwargs):
             "corresponds to the new defaults 'disable_infer_genes=False' and "
             "'disable_infer_transcripts=False'. Please see the docstring for "
             "gffutils.create_db for details.")
+    if len(kwargs) > 0:
+        raise TypeError("unhandled kwarg in %s" % kwargs)
 
 
 class _DBCreator(object):
@@ -55,8 +56,6 @@ class _DBCreator(object):
         Base class for _GFFDBCreator and _GTFDBCreator; see create_db()
         function for docs
         """
-        deprecation_handler(kwargs)
-
         self._keep_tempfiles = _keep_tempfiles
         if force_merge_fields is None:
             force_merge_fields = []
@@ -1229,7 +1228,6 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
     kwargs.update(**add_kwargs)
     kwargs['dialect'] = dialect
     c = cls(**kwargs)
-
 
     c.create()
     if dbfn == ':memory:':

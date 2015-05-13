@@ -1001,13 +1001,18 @@ def test_disable_infer():
     assert len(list(no_xx_db.features_of_type('transcript'))) == 0
 
 
-
 def test_deprecation_handler():
     assert_raises(ValueError, gffutils.create_db,
             gffutils.example_filename('FBgn0031208.gtf'),
             ':memory:',
             infer_gene_extent=False)
 
+def test_nonsense_kwarg():
+    assert_raises(TypeError,
+                  gffutils.create_db,
+                  gffutils.example_filename('FBgn0031208.gtf'),
+                  ":memory:",
+                  asdf=True)
 
 if __name__ == "__main__":
     # this test case fails
