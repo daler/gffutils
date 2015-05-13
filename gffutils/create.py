@@ -29,14 +29,19 @@ def deprecation_handler(kwargs):
     """
     As things change from version to version, deal with them here.
     """
-    if 'infer_gene_extent' in kwargs:
-        raise ValueError(
-            "'infer_gene_extent' is deprecated as of version 0.8.4 in favor "
-            "of more granular control over inferring genes and/or transcripts."
-            " The previous default was 'infer_gene_extent=True`, which "
-            "corresponds to the new defaults 'disable_infer_genes=False' and "
-            "'disable_infer_transcripts=False'. Please see the docstring for "
-            "gffutils.create_db for details.")
+    # After reconsidering, let's leave `infer_gene_extent` for another release.
+    # But when it's time to deprecate it, use this code:
+    if 0:
+        if 'infer_gene_extent' in kwargs:
+            raise ValueError(
+                "'infer_gene_extent' is deprecated as of version 0.8.4 in "
+                "favor of more granular control over inferring genes and/or "
+                "transcripts.  The previous default was "
+                "'infer_gene_extent=True`, which corresponds to the new "
+                "defaults "
+                "'disable_infer_genes=False' and "
+                "'disable_infer_transcripts=False'. Please see the docstring "
+                "for gffutils.create_db for details.")
     if len(kwargs) > 0:
         raise TypeError("unhandled kwarg in %s" % kwargs)
 
@@ -48,6 +53,7 @@ class _DBCreator(object):
                  default_encoding='utf-8',
                  disable_infer_genes=False,
                  disable_infer_transcripts=False,
+                 infer_gene_extent=True,
                  force_merge_fields=None,
                  text_factory=sqlite3.OptimizedUnicode,
                  pragmas=constants.default_pragmas, _keep_tempfiles=False,
@@ -74,6 +80,15 @@ class _DBCreator(object):
         self.pragmas = pragmas
         self.merge_strategy = merge_strategy
         self.default_encoding = default_encoding
+
+        if not infer_gene_extent:
+            warnings.warn("'infer_gene_extent' will be deprecated. For now, "
+                          "the following equivalent values were automatically "
+                          "set: 'disable_infer_genes=True', "
+                          "'disable_infer_transcripts=True'. Please use these "
+                          "instead in the future.")
+            disable_infer_genes = True
+            disable_infer_transcripts = True
 
         self.disable_infer_genes = disable_infer_genes
         self.disable_infer_transcripts = disable_infer_transcripts
@@ -986,9 +1001,9 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
               gtf_transcript_key='transcript_id', gtf_gene_key='gene_id',
               gtf_subfeature='exon', force_gff=False,
               force_dialect_check=False, from_string=False, keep_order=False,
-              text_factory=sqlite3.OptimizedUnicode,
-              force_merge_fields=None, pragmas=constants.default_pragmas,
-              sort_attribute_values=False, dialect=None, _keep_tempfiles=False,
+              text_factory=sqlite3.OptimizedUnicode, force_merge_fields=None,
+              pragmas=constants.default_pragmas, sort_attribute_values=False,
+              dialect=None, _keep_tempfiles=False, infer_gene_extent=True,
               disable_infer_genes=False, disable_infer_transcripts=False,
               **kwargs):
     """

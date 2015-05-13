@@ -1002,6 +1002,9 @@ def test_disable_infer():
 
 
 def test_deprecation_handler():
+    return 
+
+    # TODO: when infer_gene_extent actually gets deprecated, test here.
     assert_raises(ValueError, gffutils.create_db,
             gffutils.example_filename('FBgn0031208.gtf'),
             ':memory:',
@@ -1013,6 +1016,16 @@ def test_nonsense_kwarg():
                   gffutils.example_filename('FBgn0031208.gtf'),
                   ":memory:",
                   asdf=True)
+
+def test_infer_gene_extent():
+    # Before we deprecate this, make sure it still works but emits a warning.
+    with warnings.catch_warnings(record=True) as w:
+        gffutils.create_db(
+            gffutils.example_filename('FBgn0031208.gtf'),
+            ':memory:',
+            infer_gene_extent=False)
+        assert len(w) == 1
+
 
 if __name__ == "__main__":
     # this test case fails
