@@ -54,7 +54,7 @@ def fetch(db, ids):
     Fetch IDs.
     """
     if not os.path.isfile(db):
-        raise Exception, "Cannot fetch: %s does not exist." %(db)
+        raise Exception("Cannot fetch: %s does not exist." % (db))
     gff_db = None
     if not helpers.is_gff_db(db):
         gff_db = helpers.get_gff_db(db)
@@ -161,24 +161,28 @@ def common(db):
 @arg('--force', help='''Overwrite an existing database''')
 @arg('--quiet', help='''Suppress the reporting of timing information when
      creating the database''')
-@arg('--merge', help='''Merge strategy to be used if if duplicate IDs are found.''')
-@arg('--disable-infer', help='''Disable inferring of gene and transcript
-     extents for GTF files. Use this if your GTF file already has "gene" or
-     "transcript" featuretypes''')
+@arg('--merge', help='''Merge strategy to be used if if duplicate IDs are
+     found.''')
+@arg('--disable-infer-genes', help='''Disable inferring of gene
+     extents for GTF files. Use this if your GTF file already has "gene"
+     featuretypes''')
+@arg('--disable-infer-transcripts', help='''Disable inferring of transcript
+     extents for GTF files. Use this if your GTF file already has "transcript"
+     featuretypes''')
 def create(filename, output=None, force=False, quiet=False, merge="merge",
-           disable_infer=False):
+           disable_infer_genes=False, disable_infer_transcripts=False):
     """
     Create a database.
     """
     verbose = not quiet
     if output is None:
         output = filename + '.db'
-    infer_gene_extent = not disable_infer
     gffutils.create_db(filename, output,
                        force=force,
                        verbose=verbose,
                        merge_strategy=merge,
-                       infer_gene_extent=infer_gene_extent)
+                       disable_infer_genes=disable_infer_genes,
+                       disable_infer_transcripts=disable_infer_transcripts)
 
 
 # clean subcommand ------------------------------------------------------------
@@ -190,11 +194,12 @@ def clean(filename):
     raise NotImplementedError('sorry, still working on "clean"')
 
 
-# sanitize subcommand ------------------------------------------------------------
+# sanitize subcommand ---------------------------------------------------------
 @arg('filename', help='''GFF or GTF file to use (or GFF database.)''')
 @arg('--in-memory', help='''Load GFF into memory for processing.''')
-@arg('--in-place', 
-     help='''Sanitize file in-place: overwrites current file with sanitized version.''')
+@arg('--in-place',
+     help='''Sanitize file in-place: overwrites current file with sanitized
+     version.''')
 def sanitize(filename,
              in_memory=True,
              in_place=False):
@@ -220,10 +225,11 @@ def sanitize(filename,
 
 
 @arg('filename', help='''GFF or GTF file to use.''')
-@arg('--in-place', help='''Remove duplicates in place (overwrite current file.)''')
+@arg('--in-place', help='''Remove duplicates in place (overwrite current
+     file.)''')
 def rmdups(filename, in_place=False):
     """
-    Remove duplicates from a GFF file. 
+    Remove duplicates from a GFF file.
     """
     print("Removing duplicates from: %s" % filename)
     merge_strategy = "merge"
@@ -243,7 +249,7 @@ def rmdups(filename, in_place=False):
     gff_out.close()
 
 
-# annotate subcommand -----------------------------------------------------------
+# annotate subcommand ---------------------------------------------------------
 @arg('filename', help='''GFF or GTF file to use''')
 @arg('genes-table', help='''Genes table in GFF or GTF format to use.''')
 def annotate(filename, genes_table):
@@ -252,13 +258,13 @@ def annotate(filename, genes_table):
     of gene IDs based on an input GFF annotation of genes.
 
     Computes the most inclusive transcription start/end coordinates
-    for each gene, and then uses pybedtools to intersect (in strand-specific 
+    for each gene, and then uses pybedtools to intersect (in strand-specific
     manner) with the input annotation.
     """
     raise NotImplementedError('implementation in progress')
 
 
-# convert subcommand -----------------------------------------------------------
+# convert subcommand ----------------------------------------------------------
 @arg('filename', help='''GFF or GTF file to convert''')
 def convert(filename):
     """
