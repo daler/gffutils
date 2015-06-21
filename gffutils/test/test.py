@@ -56,7 +56,7 @@ def test_update():
         dialect=db.dialect, strict=False)
 
     # no merge strategy required because we're adding a new feature
-    db.update([f])
+    db.update(iter([f]))
     x = list(db.features_of_type('testing'))
     assert len(x) == 1
     x = x[0]
