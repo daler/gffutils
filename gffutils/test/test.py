@@ -4,7 +4,7 @@ from gffutils import example_filename, create, parser, feature
 import gffutils
 import gffutils.helpers as helpers
 import gffutils.gffwriter as gffwriter
-import gffutils.inspect as inspect
+import gffutils.inspection as inspection
 import gffutils.iterators as iterators
 import sys
 import os
@@ -672,8 +672,8 @@ def test_false_function():
 
 
 def test_inspect():
-    file_results = inspect.inspect(gffutils.example_filename('FBgn0031208.gff'), verbose=False)
-    db_results = inspect.inspect(
+    file_results = inspection.inspect(gffutils.example_filename('FBgn0031208.gff'), verbose=False)
+    db_results = inspection.inspect(
         gffutils.create_db(
             gffutils.example_filename('FBgn0031208.gff'),
             ':memory:'),
@@ -727,15 +727,15 @@ def test_inspect():
         limit=10,
     )
 
-    file_results = inspect.inspect(
+    file_results = inspection.inspect(
         gffutils.example_filename('FBgn0031208.gff'),
         **kwargs
     )
-    iter_results = inspect.inspect(
-        iter(iterators._FileIterator(gffutils.example_filename('FBgn0031208.gff'))),
+    iter_results = inspection.inspect(
+        iter(iterators.DataIterator(gffutils.example_filename('FBgn0031208.gff'))),
         **kwargs
     )
-    db_results = inspect.inspect(
+    db_results = inspection.inspect(
         gffutils.create_db(
             gffutils.example_filename('FBgn0031208.gff'),
             ':memory:'),
@@ -831,7 +831,6 @@ def test_iterator_update():
 
     # exons should have remained unchanged.
     assert orig_exon_coords == set([(i.start, i.stop) for i in db.features_of_type('exon')])
-
 
     def _transform(f):
         f.start = 1
