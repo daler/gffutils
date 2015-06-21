@@ -115,11 +115,7 @@ class _DBCreator(object):
 
         self._orig_logger_level = logger.level
 
-        self.iterator = iterators.DataIterator(
-            data=data, checklines=checklines, transform=transform,
-            force_dialect_check=force_dialect_check, from_string=from_string,
-            dialect=dialect
-        )
+        self.iterator = data
 
     def set_verbose(self, verbose=None):
         if verbose == 'debug':
@@ -1235,16 +1231,7 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
     if dialect is None:
         dialect = iterator.dialect
 
-    if isinstance(iterator, iterators._FeatureIterator):
-        # However, a side-effect of this is that  if `data` was a generator,
-        # then we've just consumed `checklines` items (see
-        # iterators.BaseIterator.__init__, which calls iterators.peek).
-        #
-        # But it also chains those consumed items back onto the beginning, and
-        # the result is available as as iterator._iter.
-        #
-        # That's what we should be using now for `data:
-        kwargs['data'] = iterator._iter
+    kwargs['data'] = iterator
 
     # Since we've already checked lines, we don't want to do it again
     kwargs['checklines'] = 0
