@@ -1,17 +1,9 @@
-"""
-This module provides different kinds of iterators, all wrapped by the
-DataIterator class which should generally be the only one used in practice.
-
-The BaseIterator class allows "peeking" `checklines` lines into the data --
-even if it's a consumable iterator -- in order to figure out what the dialect
-is and therefore decide whether the data is GFF or GTF format, which is
-important for figuring out how to construct the database.
-
-"""
 import os
+import gzip
+import zlib
 import tempfile
 import itertools
-from gffutils.feature import feature_from_line
+from gffutils.feature import feature_from_line, Feature
 from gffutils.interface import FeatureDB
 from gffutils import helpers
 from textwrap import dedent
@@ -38,173 +30,89 @@ class Directive(object):
         self.info = line
 
 
-class _BaseIterator(object):
-    def __init__(self, data, checklines=10, transform=None,
-                 force_dialect_check=False, dialect=None):
-        """
-        Base class for iterating over features.  In general, you should use
-        DataIterator -- so see the docstring of class for argument
-        descriptions.
+# String, URL, and File iterators each yield strings.
+# DataIterator dispatches to the correct generator function, and provides it to
+# BaseIterator.
+#
+# BaseIterator handles dialect detection, directives, transformation, etc.
 
-
-        All subclasses -- _FileIterator, _URLIterator, _FeatureIterator,
-        _StringIterator -- gain the following behavior:
-
-            - self.current_item and self.current_item_number are set on every
-              iteration.  This is very useful for debugging, or reporting to
-              the user exactly what item or line number caused the issue.
-
-            - transform a Feature before it gets yielded, filter out a Feature
-
-            - auto-detect dialect by peeking `checklines` items into the
-              iterator, and then re-reading those, applying the detected
-              dialect.  If multiple dialects are found, use
-              helpers._choose_dialect to figure out the best one.
-
-            - keep track of directives
-
-        """
-        self.data = data
-        self.checklines = checklines
-        self.current_item = None
-        self.current_item_number = None
-        self.dialect = None
-        self._observed_dialects = []
-        self.directives = []
-        self.transform = transform
-        self.warnings = []
-
-        if force_dialect_check and dialect is not None:
-            raise ValueError("force_dialect_check is True, but a dialect "
-                             "is provided")
-        if force_dialect_check:
-            # In this case, self.dialect remains None.  When
-            # parser._split_keyvals gets None as a dialect, it tries to infer
-            # a dialect.
-            self._iter = self._custom_iter()
-        elif dialect is not None:
-            self._observed_dialects = [dialect]
-            self.dialect = helpers._choose_dialect(self._observed_dialects)
-            self._iter = self._custom_iter()
-        else:
-            # Otherwise, check some lines to determine what the dialect should
-            # be
-            self.peek, self._iter = peek(self._custom_iter(), checklines)
-            self._observed_dialects = [i.dialect for i in self.peek]
-            self.dialect = helpers._choose_dialect(self._observed_dialects)
-
-    def _custom_iter(self):
-        raise NotImplementedError("Must define in subclasses")
-
-    def __iter__(self):
-        for i in self._iter:
-            i.dialect = self.dialect
-            if self.transform:
-                i = self.transform(i)
-                if i:
-                    yield i
-            else:
-                yield i
-
-    def _directive_handler(self, directive):
-        self.directives.append(directive[2:])
-
-
-class _FileIterator(_BaseIterator):
+def lines_from_file(data):
     """
-    Subclass for iterating over features provided as a filename
+    Yield lines from a file (gzipped or not), stopping when we see a line start
+    with "##FASTA" or ">"
     """
-    def open_function(self, data):
-        if data.endswith('.gz'):
-            import gzip
-            return gzip.open(data)
-        return open(data)
-
-    def _custom_iter(self):
-        valid_lines = 0
-        for i, line in enumerate(self.open_function(self.data)):
+    if data.endswith('.gz'):
+        _open = gzip.open
+    else:
+        _open = open
+    with _open(data) as in_:
+        for line in in_:
             if isinstance(line, six.binary_type):
                 line = line.decode('utf-8')
             line = line.rstrip('\n\r')
-            self.current_item = line
-            self.current_item_number = i
-
-            if line == '##FASTA' or line.startswith('>'):
-                raise StopIteration
-
             if line.startswith('##'):
-                self._directive_handler(line)
+                yield line
                 continue
-
-            if line.startswith(('#')) or len(line) == 0:
+            if line.startswith(('##FASTA', '>')):
+                raise StopIteration
+            if (len(line) == 0) or (line[0] == '#'):
                 continue
-
-            # (If we got here it should be a valid line)
-            valid_lines += 1
-            yield feature_from_line(line, dialect=self.dialect)
+            yield line
 
 
-class _UrlIterator(_FileIterator):
+def lines_from_url(data):
     """
-    Subclass for iterating over features provided as a URL
+    Yield lines from a URL (gzipped or not, detected by ".gz" extension).
     """
-    def open_function(self, data):
-        response = urlopen(data)
+    response = urlopen(data)
+    if data.endswith('.gz'):
+        d = zlib.decompressobj(16 + zlib.MAX_WBITS)
+        READ_BLOCK_SIZE = 1024
+        last_line = ""
+        while True:
+            data = response.read(READ_BLOCK_SIZE)
+            if not data:
+                break
+            data = "".join((last_line, d.decompress(data).decode()))
+            lines = data.split('\n')
+            last_line = lines.pop()
+            for line in lines:
+                if line.startswith('##'):
+                    yield line
+                    continue
+                if line.startswith(('##FASTA', '>')):
+                    raise StopIteration
+                if (len(line) == 0) or (line[0] == '#'):
+                    continue
+                yield line + '\n'
+        yield last_line
 
-        # ideas from
-        # http://stackoverflow.com/a/17537107
-        # https://rationalpie.wordpress.com/2010/06/02/\
-        #               python-streaming-gzip-decompression/
-        if data.endswith('.gz'):
-            import zlib
-            d = zlib.decompressobj(16 + zlib.MAX_WBITS)
-            READ_BLOCK_SIZE = 1024
-
-            def _iter():
-                last_line = ""
-                while True:
-                    data = response.read(READ_BLOCK_SIZE)
-                    if not data:
-                        break
-                    data = "".join((last_line, d.decompress(data).decode()))
-                    lines = data.split('\n')
-                    last_line = lines.pop()
-                    for line in lines:
-                        yield line + '\n'
-                yield last_line
-            return _iter()
-
-        else:
-            return response
+    else:
+        for line in response:
+            line = line.decode()
+            if line.startswith('##'):
+                yield line
+                continue
+            if line.startswith(('##FASTA', '>')):
+                raise StopIteration
+            if (len(line) == 0) or (line[0] == '#'):
+                continue
+            yield line
 
 
-class _FeatureIterator(_BaseIterator):
+def lines_from_string(data):
     """
-    Subclass for iterating over features that are already in an iterator
+    Yield lines from a string.
     """
-    def _custom_iter(self):
-        for i, feature in enumerate(self.data):
-            self.current_item = feature
-            self.current_item_number = i
-            yield feature
-
-
-class _StringIterator(_FileIterator):
-    """
-    Subclass for iterating over features provided as a string (e.g., from
-    file.read())
-    """
-    def _custom_iter(self):
-        self.tmp = tempfile.NamedTemporaryFile(delete=False)
-        data = dedent(self.data)
-        if isinstance(data, six.text_type):
-            data = data.encode('utf-8')
-        self.tmp.write(data)
-        self.tmp.close()
-        self.data = self.tmp.name
-        for feature in super(_StringIterator, self)._custom_iter():
-            yield feature
-        os.unlink(self.tmp.name)
+    tmp = tempfile.NamedTemporaryFile(delete=False).name
+    data = dedent(data)
+    if isinstance(data, six.text_type):
+        data = data.encode('utf-8')
+    with open(tmp, 'wb') as out:
+        out.write(data)
+    for line in lines_from_file(tmp):
+        yield line
+    os.unlink(tmp)
 
 
 def is_url(url):
@@ -225,54 +133,116 @@ def is_url(url):
         return False
 
 
-def DataIterator(data, checklines=10, transform=None,
-                 force_dialect_check=False, from_string=False, **kwargs):
-    """
-    Iterate over features, no matter how they are provided.
+class DataIterator(object):
+    def __init__(self, data, checklines=10, transform=None,
+                 force_dialect_check=False, from_string=False, dialect=None):
+        """
+        Iterate over features, no matter how they are provided.
 
-    Parameters
-    ----------
-    data : str, iterable of Feature objs, FeatureDB
-        `data` can be a string (filename, URL, or contents of a file, if
-        from_string=True), any arbitrary iterable of features, or a FeatureDB
-        (in which case its all_features() method will be called).
+        Parameters
+        ----------
+        data : str, iterable of Feature objs, FeatureDB
+            `data` can be a string (filename, URL, or contents of a file, if
+            from_string=True), any arbitrary iterable of features, or
+            a FeatureDB (in which case its all_features() method will be
+            called).
 
-    checklines : int
-        Number of lines to check in order to infer a dialect.
+        checklines : int
+            Number of lines to check in order to infer a dialect.
 
-    transform : None or callable
-        If not None, `transform` should accept a Feature object as its only
-        argument and return either a (possibly modified) Feature object or
-        a value that evaluates to False.  If the return value is False, the
-        feature will be skipped.
+        transform : None or callable
+            If not None, `transform` should accept a Feature object as its only
+            argument and return either a (possibly modified) Feature object or
+            a value that evaluates to False.  If the return value is False, the
+            feature will be skipped.
 
-    force_dialect_check : bool
-        If True, check the dialect of every feature.  Thorough, but can be
-        slow.
+        force_dialect_check : bool
+            If True, check the dialect of every feature.  Thorough, but can be
+            slow.
 
-    from_string : bool
-        If True, `data` should be interpreted as the contents of a file rather
-        than the filename itself.
+        from_string : bool
+            If True, `data` should be interpreted as the contents of a file
+            rather than the filename itself.
 
-    dialect : None or dict
-        Provide the dialect, which will override auto-detected dialects.  If
-        provided, you should probably also use `force_dialect_check=False` and
-        `checklines=0` but this is not enforced.
-    """
+        dialect : None or dict
+            Provide the dialect, which will override auto-detected dialects.
+            If provided, you should probably also use
+            `force_dialect_check=False` and `checklines=0` but this is not
+            enforced.
+        """
 
-    _kwargs = dict(data=data, checklines=checklines, transform=transform,
-                   force_dialect_check=force_dialect_check, **kwargs)
-    if isinstance(data, six.string_types):
-        if from_string:
-            return _StringIterator(**_kwargs)
+        if isinstance(data, six.string_types):
+            if from_string:
+                data = lines_from_string(data)
+            else:
+                if os.path.exists(data):
+                    data = lines_from_file(data)
+                elif is_url(data):
+                    data = lines_from_url(data)
+        elif isinstance(data, FeatureDB):
+            data = data.all_features()
+        elif isinstance(data, (list, tuple)):
+            data = iter(data)
+        self.data = data
+        self.checklines = checklines
+        self.current_item = None
+        self.current_item_number = 0
+        self.dialect = None
+        self._observed_dialects = []
+        self.transform = transform
+        self.directives = []
+        self.warnings = []
+
+        if force_dialect_check and dialect is not None:
+            raise ValueError("force_dialect_check is True, but a dialect"
+                             " is provided")
+        if force_dialect_check:
+            # In this case, self.dialect remains None.  When
+            # parser._split_keyvals gets None as a dialect, it tries to infer
+            # a dialect.
+            pass
+        elif dialect is not None:
+            self._observed_dialects = [dialect]
+            self.dialect = helpers._choose_dialect(self._observed_dialects)
+
         else:
-            if os.path.exists(data):
-                return _FileIterator(**_kwargs)
-            elif is_url(data):
-                return _UrlIterator(**_kwargs)
-    elif isinstance(data, FeatureDB):
-        _kwargs['data'] = data.all_features()
-        return _FeatureIterator(**_kwargs)
+            self.peek, self.data = peek(self.data, checklines)
+            for i in self.peek:
+                if isinstance(i, six.string_types):
+                    i = feature_from_line(i)
+                self._observed_dialects.append(i.dialect)
+            self.dialect = helpers._choose_dialect(self._observed_dialects)
 
-    else:
-        return _FeatureIterator(**_kwargs)
+    def _directive_handler(self, directive):
+        self.directives.append(directive[2:])
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        return self.next()
+
+    def next(self):
+        while True:
+            line = six.next(self.data)
+
+            if not isinstance(line, Feature):
+
+                if line.startswith('##'):
+                    self._directive_handler(line)
+                    continue
+
+                feature = feature_from_line(line, dialect=self.dialect)
+            else:
+                feature = line
+
+            self.current_item = line
+            self.current_item_number += 1
+
+            if self.transform is not None:
+                return self.transform(feature)
+            return feature
+
+if __name__ == "__main__":
+    fn = '/home/ryan/proj/gffutils/gffutils/test/data/FBgn0031208.gtf'
+    d = DataIterator(fn)
