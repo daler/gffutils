@@ -15,6 +15,7 @@ for PYTHON in 2 3; do
     # clone into a separate directory just for this python version
     src=/tmp/gffutils_py$PYTHON
     mkdir $src
+    rm -f $HERE/../.git/shallow
     git clone $HERE/.. $src
     cd $src
 
