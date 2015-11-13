@@ -1,3 +1,4 @@
+biopython
 pyfaidx
 six
 argh

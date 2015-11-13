@@ -5,11 +5,11 @@ from setuptools import setup
 
 version_py = os.path.join(os.path.dirname(__file__), 'gffutils', 'version.py')
 version = open(version_py).read().strip().split('=')[-1].replace('"', '')
-
+requirements = open(os.path.join(os.path.dirname(__file__), 'requirements.txt')).readlines()
 setup(
     name='gffutils',
     version=version,
-    install_requires=['six', 'argh', 'argcomplete', 'simplejson', 'pyfaidx'],
+    install_requires=requirements,
     packages=['gffutils', 'gffutils.scripts', 'gffutils.test',
               'gffutils.test.data'],
     scripts=['gffutils/scripts/gffutils-cli'],
