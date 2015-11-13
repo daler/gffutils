@@ -1,20 +1,7 @@
-language: python
-sudo: false
-python:
-    - "2.7"
-    - "3.3"
-
-env: PROCESSES=1
-
-install:
-    - "pip install -r requirements.txt"
-    - "pip install sphinx"
-    - "pip install biopython"
-    - "pip install sphinx_rtd_theme"
-    - "pip install git+https://github.com/numpy/numpydoc.git"
-    - "pip install ."
-
+sudo: required
+services:
+    - docker
+before_install:
+    - docker pull daler/conda-test
 script:
-
-    - nosetests -x --with-doctest
-    - (cd doc && make clean && make doctest)
+    - docker run -v `pwd`:/tmp/gffutils daler/conda-test /tmp/gffutils/docker/travis-run.sh

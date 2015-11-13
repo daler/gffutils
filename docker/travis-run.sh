@@ -15,7 +15,7 @@ for PYTHON in 2 3; do
     # clone into a separate directory just for this python version
     src=/tmp/gffutils_py$PYTHON
     mkdir $src
-    git clone $HERE $src
+    git clone $HERE/.. $src
     cd $src
 
     # extract version
@@ -49,6 +49,5 @@ for PYTHON in 2 3; do
     pip install -r docs-requirements.txt
     (cd doc && make clean && make doctest)
     set +x; source deactivate; set -x
-
 
 done
