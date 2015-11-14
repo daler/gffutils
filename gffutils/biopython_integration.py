@@ -7,8 +7,8 @@ try:
     from Bio.SeqFeature import SeqFeature, FeatureLocation
     from Bio import SeqIO
 except ImportError:
-    raise ImportError(
-        "BioPython must be installed to use this module")
+    import warnings
+    warnings.warn("BioPython must be installed to use this module")
 from .feature import Feature, feature_from_line
 
 _biopython_strand = {
