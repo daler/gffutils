@@ -9,7 +9,7 @@
     :target: https://pypi.python.org/pypi/gffutils
 
 
-See docs at http://pythonhosted.org/gffutils/.
+See docs at http://daler.github.io/gffutils.
 
 ``gffutils`` is a Python package for working with and manipulating the GFF and
 GTF format files typically used for genomic annotations.  Files are loaded into
