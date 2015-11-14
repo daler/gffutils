@@ -15,6 +15,10 @@ for PYTHON in 2 3; do
     # clone into a separate directory just for this python version
     src=/tmp/gffutils_py$PYTHON
     mkdir $src
+
+    # travis-ci pulls the repo using --depth=50 which creates a shallow clone.
+    # Getting rid of the `shallow` file lets us clone it elsewhere, avoiding
+    # the "fatal: attempt to fetch/clone from a shallow repository" error.
     rm -f $HERE/../.git/shallow
     git clone $HERE/.. $src
     cd $src
@@ -25,9 +29,9 @@ for PYTHON in 2 3; do
     # ------------------------------------------------------------------------
     # Installs everything from bioconda channel for this python version.
     # Don't run any tests, just make sure things can be installed using conda.
-    conda create -n bioconda_py${PYTHON} python=$PYTHON
+    conda create -y -n bioconda_py${PYTHON} python=$PYTHON
     set +x; source activate bioconda_py${PYTHON}; set -x
-    conda install -c bioconda --file requirements.txt
+    conda install -y -c bioconda --file requirements.txt
     python setup.py develop
     (cd / && python -c 'import gffutils')
     set +x; source deactivate; set -x
@@ -35,7 +39,7 @@ for PYTHON in 2 3; do
 
     # ------------------------------------------------------------------------
     # Installs everything from sdist (simulates from PyPI)
-    conda create -n py$PYTHON python=$PYTHON
+    conda create -y -n py$PYTHON python=$PYTHON
     set +x; source activate py$PYTHON; set -x
     python setup.py clean sdist
     pip install dist/gffutils-${VERSION}.tar.gz
@@ -43,11 +47,11 @@ for PYTHON in 2 3; do
 
 
     # Prepare for testing by installing just nose for main tests, then run 'em
-    conda install nose
+    conda install -y nose
     nosetests -x --with-doctest
 
     # Install tools and run doctests
-    pip install -r docs-requirements.txt
+    conda install -y --file docs-requirements.txt
     (cd doc && make clean && make doctest)
     set +x; source deactivate; set -x
 
