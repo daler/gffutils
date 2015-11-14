@@ -5,4 +5,3 @@ from gffutils.iterators import DataIterator
 from gffutils.helpers import example_filename
 from gffutils.exceptions import FeatureNotFoundError, DuplicateIDError
 from gffutils.version import version as __version__
-from gffutils import biopython_integration
