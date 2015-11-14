@@ -2,6 +2,12 @@
 
 Change log
 ==========
+Changes in v0.8.5
+-----------------
+Only a warning -- and not an ImportError -- is raised if BioPython is not installed.
+
+Updated testing framework to use docker containers on travis-ci.org.
+
 Changes in v0.8.4
 -----------------
 This version addresses issues `#48
