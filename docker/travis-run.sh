@@ -19,6 +19,9 @@ for PYTHON in 2 3; do
     # travis-ci pulls the repo using --depth=50 which creates a shallow clone.
     # Getting rid of the `shallow` file lets us clone it elsewhere, avoiding
     # the "fatal: attempt to fetch/clone from a shallow repository" error.
+    #
+    # The reason we're cloning in the first place is to avoid root doing
+    # anything in the existing directory -- especially creating the sdist
     rm -f $HERE/../.git/shallow
     git clone $HERE/.. $src
     cd $src
@@ -32,7 +35,7 @@ for PYTHON in 2 3; do
     conda create -y -n bioconda_py${PYTHON} python=$PYTHON
     set +x; source activate bioconda_py${PYTHON}; set -x
     conda install -y -c bioconda --file requirements.txt
-    python setup.py develop
+    python setup.py install
     (cd / && python -c 'import gffutils')
     set +x; source deactivate; set -x
 
@@ -46,8 +49,9 @@ for PYTHON in 2 3; do
     (cd / && python -c 'import gffutils')
 
 
-    # Prepare for testing by installing just nose for main tests, then run 'em
-    conda install -y nose
+    # Prepare for testing by installing nose for main tests, and biopython for
+    # the biopython integration tests.  Then run 'em.
+    conda install -y nose biopython
     nosetests -x --with-doctest
 
     # Install tools and run doctests
