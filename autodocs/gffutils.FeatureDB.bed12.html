@@ -1,0 +1,392 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>gffutils.FeatureDB.bed12 &mdash; gffutils 0.8.5 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="gffutils 0.8.5 documentation" href="../index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="../contents.html" class="icon icon-home"> gffutils
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#example-file">Example file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#create-the-database">Create the database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#use-the-database">Use the database</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#optional-requirements">Optional requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../database-import.html">Importing data into a database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../database-schema.html">Database schema</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../database-schema.html#schema">Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../database-schema.html#features-table"><code class="docutils literal"><span class="pre">features</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../database-schema.html#relations-table"><code class="docutils literal"><span class="pre">relations</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../database-schema.html#meta-table"><code class="docutils literal"><span class="pre">meta</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../database-schema.html#directives-table"><code class="docutils literal"><span class="pre">directives</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../database-schema.html#autoincrements-table"><code class="docutils literal"><span class="pre">autoincrements</span></code> table</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../database-ids.html">Database IDs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../database-ids.html#id-spec"><code class="docutils literal"><span class="pre">id_spec</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../database-ids.html#transform"><code class="docutils literal"><span class="pre">transform</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../database-ids.html#merge-strategy"><code class="docutils literal"><span class="pre">merge_strategy</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../gtf.html">GTF files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../gtf.html#transcript-key-and-gene-key"><code class="docutils literal"><span class="pre">transcript_key</span></code> and <code class="docutils literal"><span class="pre">gene_key</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gtf.html#subfeature"><code class="docutils literal"><span class="pre">subfeature</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../dialect.html">Dialects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../attributes.html">Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#mouse-extra-comma-gff3">mouse_extra_comma.gff3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#file-contents">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#import">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#example-access">Example access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#c-elegans-ws199-ann-gff-txt">c_elegans_WS199_ann_gff.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id4">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id5">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#access">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#c-elegans-ws199-shortened-gff-txt">c_elegans_WS199_shortened_gff.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id7">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id8">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id9">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#ensembl-gtf-txt">ensembl_gtf.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id11">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id12">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id13">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#f3-unique-3-v2-gff">F3-unique-3.v2.gff</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id15">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id16">Import</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#glimmer-nokeyval-gff3">glimmer_nokeyval.gff3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id18">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id19">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id20">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#hybrid1-gff3">hybrid1.gff3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id22">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id23">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id24">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#jgi-gff2-txt">jgi_gff2.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id26">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id27">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id28">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#ncbi-gff3-txt">ncbi_gff3.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id30">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id31">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id32">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#wormbase-gff2-alt-txt">wormbase_gff2_alt.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id34">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id35">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id36">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#wormbase-gff2-txt">wormbase_gff2.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id38">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id39">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id40">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#gencode-v19-gtf">gencode-v19.gtf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id41">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id42">Access</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#create-a-database">Create a database</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#interact-with-a-database">Interact with a database</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#feature-objects">Feature objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gffutils.feature.feature_from_line.html">gffutils.feature.feature_from_line</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#utilities">Utilities</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gffutils.helpers.asinterval.html">gffutils.helpers.asinterval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gffutils.helpers.merge_attributes.html">gffutils.helpers.merge_attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gffutils.helpers.sanitize_gff_db.html">gffutils.helpers.sanitize_gff_db</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gffutils.helpers.annotate_gff_db.html">gffutils.helpers.annotate_gff_db</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gffutils.helpers.infer_dialect.html">gffutils.helpers.infer_dialect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gffutils.helpers.example_filename.html">gffutils.helpers.example_filename</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gffutils.inspect.inspect.html">gffutils.inspect.inspect</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Change log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#changes-in-v0-8-4">Changes in v0.8.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#changes-in-v0-8-3-1">Changes in v0.8.3.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#changes-in-v0-8-3">Changes in v0.8.3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#new-features">New features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#bug-fixes">Bug fixes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developers.html">Developer&#8217;s docs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../developers.html#package-modules">Package modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../developers.html#general-workflow">General workflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../developers.html#how-data-is-read-in">How data is read in</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developers.html#import">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developers.html#access">Access</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developers.html#little-things">Little things</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../meta.html">Meta-docs (docs about the docs)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../meta.html#building-the-docs">Building the docs</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../contents.html">gffutils</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../contents.html">Docs</a> &raquo;</li>
+      
+    <li>gffutils.FeatureDB.bed12</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/autodocs/gffutils.FeatureDB.bed12.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="gffutils-featuredb-bed12">
+<h1>gffutils.FeatureDB.bed12<a class="headerlink" href="#gffutils-featuredb-bed12" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="gffutils.FeatureDB.bed12">
+<code class="descclassname">FeatureDB.</code><code class="descname">bed12</code><span class="sig-paren">(</span><em>feature, block_featuretype=['exon'], thick_featuretype=['CDS'], thin_featuretype=None, name_field='ID', color=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/interface.html#FeatureDB.bed12"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gffutils.FeatureDB.bed12" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts <code class="docutils literal"><span class="pre">feature</span></code> into a BED12 format.</p>
+<p>GFF and GTF files do not necessarily define genes consistently, so this
+method provides flexiblity in specifying what to call a &#8220;transcript&#8221;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>feature</strong> : str or Feature instance</p>
+<blockquote>
+<div><p>In most cases, this feature should be a transcript rather than
+a gene.</p>
+</div></blockquote>
+<p><strong>block_featuretype</strong> : str or list</p>
+<blockquote>
+<div><p>Which featuretype to use as the exons. These are represented as
+blocks in the BED12 format.  Typically &#8216;exon&#8217;.</p>
+<p>Use the <code class="docutils literal"><span class="pre">thick_featuretype</span></code> and <code class="docutils literal"><span class="pre">thin_featuretype</span></code> arguments to
+control the display of CDS as thicker blocks and UTRs as thinner
+blocks.</p>
+<p>Note that the features for <code class="docutils literal"><span class="pre">thick</span></code> or <code class="docutils literal"><span class="pre">thin</span></code> are <em>not</em>
+automatically included in the blocks; if you do want them included,
+then those featuretypes should be added to this <code class="docutils literal"><span class="pre">block_features</span></code>
+list.</p>
+<p>If no child features of type <code class="docutils literal"><span class="pre">block_featuretype</span></code> are found, then
+the full <code class="docutils literal"><span class="pre">feature</span></code> is returned in BED12 format as if it had
+a single exon.</p>
+</div></blockquote>
+<p><strong>thick_featuretype</strong> : str or list</p>
+<blockquote>
+<div><p>Child featuretype(s) to use in order to determine the boundaries of
+the &#8220;thick&#8221; blocks. In BED12 format, these represent coding
+sequences; typically this would be set to &#8220;CDS&#8221;.  This argument is
+mutually exclusive with <code class="docutils literal"><span class="pre">thin_featuretype</span></code>.</p>
+<p>Specifically, the BED12 thickStart will be the start coord of the
+first <code class="docutils literal"><span class="pre">thick</span></code> item and the thickEnd will be the stop coord of the
+last <code class="docutils literal"><span class="pre">thick</span></code> item.</p>
+</div></blockquote>
+<p><strong>thin_featuretype</strong> : str or list</p>
+<blockquote>
+<div><p>Child featuretype(s) to use in order to determine the boundaries of
+the &#8220;thin&#8221; blocks.  In BED12 format, these represent untranslated
+regions.  Typically &#8220;utr&#8221; or [&#8216;three_prime_UTR&#8217;, &#8216;five_prime_UTR&#8217;].
+Mutually exclusive with <code class="docutils literal"><span class="pre">thick_featuretype</span></code>.</p>
+<p>Specifically, the BED12 thickStart field will be the stop coord of
+the first <code class="docutils literal"><span class="pre">thin</span></code> item and the thickEnd field will be the start
+coord of the last <code class="docutils literal"><span class="pre">thin</span></code> item.</p>
+</div></blockquote>
+<p><strong>name_field</strong> : str</p>
+<blockquote>
+<div><p>Which attribute of <code class="docutils literal"><span class="pre">feature</span></code> to use as the feature&#8217;s name.  If this
+field is not present, a &#8221;.&#8221; placeholder will be used instead.</p>
+</div></blockquote>
+<p><strong>color</strong> : None or str</p>
+<blockquote class="last">
+<div><p>If None, then use black (0,0,0) as the RGB color; otherwise this
+should be a comma-separated string of R,G,B values each of which
+are integers in the range 0-255.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2013, Ryan Dale.
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.8.5',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,723 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>gffutils.feature &mdash; gffutils 0.8.5 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="gffutils 0.8.5 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="../../contents.html" class="icon icon-home"> gffutils
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../index.html#example-file">Example file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../index.html#create-the-database">Create the database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../index.html#use-the-database">Use the database</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#optional-requirements">Optional requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../database-import.html">Importing data into a database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../database-schema.html">Database schema</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../database-schema.html#schema">Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../database-schema.html#features-table"><code class="docutils literal"><span class="pre">features</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../database-schema.html#relations-table"><code class="docutils literal"><span class="pre">relations</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../database-schema.html#meta-table"><code class="docutils literal"><span class="pre">meta</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../database-schema.html#directives-table"><code class="docutils literal"><span class="pre">directives</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../database-schema.html#autoincrements-table"><code class="docutils literal"><span class="pre">autoincrements</span></code> table</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../database-ids.html">Database IDs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../database-ids.html#id-spec"><code class="docutils literal"><span class="pre">id_spec</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../database-ids.html#transform"><code class="docutils literal"><span class="pre">transform</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../database-ids.html#merge-strategy"><code class="docutils literal"><span class="pre">merge_strategy</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../gtf.html">GTF files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../gtf.html#transcript-key-and-gene-key"><code class="docutils literal"><span class="pre">transcript_key</span></code> and <code class="docutils literal"><span class="pre">gene_key</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../gtf.html#subfeature"><code class="docutils literal"><span class="pre">subfeature</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../dialect.html">Dialects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../attributes.html">Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#mouse-extra-comma-gff3">mouse_extra_comma.gff3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#file-contents">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#import">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#example-access">Example access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#c-elegans-ws199-ann-gff-txt">c_elegans_WS199_ann_gff.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id4">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id5">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#access">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#c-elegans-ws199-shortened-gff-txt">c_elegans_WS199_shortened_gff.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id7">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id8">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id9">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#ensembl-gtf-txt">ensembl_gtf.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id11">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id12">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id13">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#f3-unique-3-v2-gff">F3-unique-3.v2.gff</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id15">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id16">Import</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#glimmer-nokeyval-gff3">glimmer_nokeyval.gff3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id18">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id19">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id20">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#hybrid1-gff3">hybrid1.gff3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id22">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id23">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id24">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#jgi-gff2-txt">jgi_gff2.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id26">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id27">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id28">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#ncbi-gff3-txt">ncbi_gff3.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id30">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id31">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id32">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#wormbase-gff2-alt-txt">wormbase_gff2_alt.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id34">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id35">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id36">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#wormbase-gff2-txt">wormbase_gff2.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id38">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id39">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id40">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#gencode-v19-gtf">gencode-v19.gtf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id41">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id42">Access</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#create-a-database">Create a database</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#interact-with-a-database">Interact with a database</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#feature-objects">Feature objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../autodocs/gffutils.feature.feature_from_line.html">gffutils.feature.feature_from_line</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#utilities">Utilities</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../autodocs/gffutils.helpers.asinterval.html">gffutils.helpers.asinterval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../autodocs/gffutils.helpers.merge_attributes.html">gffutils.helpers.merge_attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../autodocs/gffutils.helpers.sanitize_gff_db.html">gffutils.helpers.sanitize_gff_db</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../autodocs/gffutils.helpers.annotate_gff_db.html">gffutils.helpers.annotate_gff_db</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../autodocs/gffutils.helpers.infer_dialect.html">gffutils.helpers.infer_dialect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../autodocs/gffutils.helpers.example_filename.html">gffutils.helpers.example_filename</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../autodocs/gffutils.inspect.inspect.html">gffutils.inspect.inspect</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Change log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#changes-in-v0-8-4">Changes in v0.8.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#changes-in-v0-8-3-1">Changes in v0.8.3.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#changes-in-v0-8-3">Changes in v0.8.3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#new-features">New features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#bug-fixes">Bug fixes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../developers.html">Developer&#8217;s docs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../developers.html#package-modules">Package modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../developers.html#general-workflow">General workflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../developers.html#how-data-is-read-in">How data is read in</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developers.html#import">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developers.html#access">Access</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developers.html#little-things">Little things</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../meta.html">Meta-docs (docs about the docs)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../meta.html#building-the-docs">Building the docs</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../contents.html">gffutils</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../contents.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>gffutils.feature</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <h1>Source code for gffutils.feature</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">pyfaidx</span> <span class="kn">import</span> <span class="n">Fasta</span>
+<span class="kn">import</span> <span class="nn">six</span>
+<span class="kn">import</span> <span class="nn">simplejson</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">constants</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">helpers</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">parser</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">bins</span>
+<span class="kn">from</span> <span class="nn">gffutils.attributes</span> <span class="kn">import</span> <span class="n">dict_class</span>
+
+
+<span class="n">_position_lookup</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">([</span><span class="s">&#39;seqid&#39;</span><span class="p">,</span> <span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="s">&#39;featuretype&#39;</span><span class="p">,</span> <span class="s">&#39;start&#39;</span><span class="p">,</span>
+                                   <span class="s">&#39;end&#39;</span><span class="p">,</span> <span class="s">&#39;score&#39;</span><span class="p">,</span> <span class="s">&#39;strand&#39;</span><span class="p">,</span> <span class="s">&#39;frame&#39;</span><span class="p">,</span>
+                                   <span class="s">&#39;attributes&#39;</span><span class="p">]))</span>
+
+
+<div class="viewcode-block" id="Feature"><a class="viewcode-back" href="../../autodocs/gffutils.Feature.html#gffutils.Feature">[docs]</a><span class="k">class</span> <span class="nc">Feature</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Feature.__init__"><a class="viewcode-back" href="../../autodocs/gffutils.Feature.html#gffutils.Feature.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seqid</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span>
+                 <span class="n">start</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span> <span class="n">score</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span> <span class="n">strand</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span>
+                 <span class="n">attributes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="nb">bin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">file_order</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">keep_order</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                 <span class="n">sort_attribute_values</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Represents a feature from the database.</span>
+
+<span class="sd">        Usually you won&#39;t want to use this directly, since it has various</span>
+<span class="sd">        implementation details needed for operating in the context of FeatureDB</span>
+<span class="sd">        objects.  Instead, try the :func:`gffutils.feature.feature_from_line`</span>
+<span class="sd">        function.</span>
+
+<span class="sd">        When printed, reproduces the original line from the file as faithfully</span>
+<span class="sd">        as possible using `dialect`.</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        seqid : string</span>
+<span class="sd">            Name of the sequence (often chromosome)</span>
+
+<span class="sd">        source : string</span>
+<span class="sd">            Source of the feature; typically the originating database or</span>
+<span class="sd">            program that predicted the feature</span>
+
+<span class="sd">        featuretype : string</span>
+<span class="sd">            Type of feature.  For example &quot;gene&quot;, &quot;exon&quot;, &quot;TSS&quot;, etc</span>
+
+<span class="sd">        start, end : int or &quot;.&quot;</span>
+<span class="sd">            1-based coordinates; start must be &lt;= end.  If &quot;.&quot; (the default</span>
+<span class="sd">            placeholder for GFF files), then the corresponding attribute will</span>
+<span class="sd">            be None.</span>
+
+<span class="sd">        score : string</span>
+<span class="sd">            Stored as a string.</span>
+
+<span class="sd">        strand : &quot;+&quot; | &quot;-&quot; | &quot;.&quot;</span>
+<span class="sd">            Strand of the feature; &quot;.&quot; when strand is not relevant.</span>
+
+<span class="sd">        frame : &quot;0&quot; | &quot;1&quot; | &quot;2&quot;</span>
+<span class="sd">            Coding frame.  0 means in-frame; 1 means there is one extra base at</span>
+<span class="sd">            the beginning, so the first codon starts at the second base;</span>
+<span class="sd">            2 means two extra bases at the beginning.  Interpretation is strand</span>
+<span class="sd">            specific; &quot;beginning&quot; for a minus-strand feature is at the end</span>
+<span class="sd">            coordinate.</span>
+
+<span class="sd">        attributes : string or dict</span>
+<span class="sd">            If a string, first assume it is serialized JSON; if this fails then</span>
+<span class="sd">            assume it&#39;s the original key/vals string.  If it&#39;s a dictionary</span>
+<span class="sd">            already, then use as-is.</span>
+
+<span class="sd">            The end result is that this instance&#39;s `attributes` attribute will</span>
+<span class="sd">            always be a dictionary.</span>
+
+<span class="sd">            Upon printing, the attributes will be reconstructed based on this</span>
+<span class="sd">            dictionary and the dialect -- except if the original attributes</span>
+<span class="sd">            string was provided, in which case that will be used directly.</span>
+
+<span class="sd">        extra : string or list</span>
+<span class="sd">            Additional fields after the canonical 9 fields for GFF/GTF.</span>
+
+<span class="sd">            If a string, then first assume it&#39;s serialized JSON; if this fails</span>
+<span class="sd">            then assume it&#39;s a tab-delimited string of additional fields.  If</span>
+<span class="sd">            it&#39;s a list already, then use as-is.</span>
+
+<span class="sd">        bin : int</span>
+<span class="sd">            UCSC genomic bin. If None, will be created based on provided</span>
+<span class="sd">            start/end; if start or end is &quot;.&quot; then bin will be None.</span>
+
+<span class="sd">        id : None or string</span>
+<span class="sd">            Database-specific primary key for this feature.  The only time this</span>
+<span class="sd">            should not be None is if this feature is coming from a database, in</span>
+<span class="sd">            which case it will be filled in automatically.</span>
+
+<span class="sd">        dialect : dict or None</span>
+
+<span class="sd">            The dialect to use when reconstructing attribute strings; defaults</span>
+<span class="sd">            to the GFF3 spec.  :class:`FeatureDB` objects will automatically</span>
+<span class="sd">            attach the dialect from the original file.</span>
+
+<span class="sd">        file_order : int</span>
+<span class="sd">            This is the `rowid` special field used in a sqlite3 database; this</span>
+<span class="sd">            is provided by FeatureDB.</span>
+
+<span class="sd">        keep_order : bool</span>
+<span class="sd">            If True, then the attributes in the printed string will be in the</span>
+<span class="sd">            order specified in the dialect.  Disabled by default, since this</span>
+<span class="sd">            sorting step is time-consuming over many features.</span>
+
+<span class="sd">        sort_attribute_values : bool</span>
+<span class="sd">            If True, then the values of each attribute will be sorted when the</span>
+<span class="sd">            feature is printed.  Mostly useful for testing, where the order is</span>
+<span class="sd">            important for checking against expected values. Disabled by</span>
+<span class="sd">            default, since it can be time-consuming over many features.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># start/end can be provided as int-like, &quot;.&quot;, or None, but will be</span>
+        <span class="c"># converted to int or None</span>
+        <span class="k">if</span> <span class="n">start</span> <span class="o">==</span> <span class="s">&quot;.&quot;</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">elif</span> <span class="n">start</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">end</span> <span class="o">==</span> <span class="s">&quot;.&quot;</span><span class="p">:</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">elif</span> <span class="n">end</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">end</span><span class="p">)</span>
+
+        <span class="c"># Flexible handling of attributes:</span>
+        <span class="c"># If dict, then use that; otherwise assume JSON and convert to a dict;</span>
+        <span class="c"># otherwise assume original string and convert to a dict.</span>
+        <span class="c">#</span>
+        <span class="c"># dict_class is set at the module level above...this is so you can swap</span>
+        <span class="c"># in and out different dict implementations (ordered, defaultdict, etc)</span>
+        <span class="c"># for testing.</span>
+        <span class="n">attributes</span> <span class="o">=</span> <span class="n">attributes</span> <span class="ow">or</span> <span class="n">dict_class</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attributes</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">attributes</span> <span class="o">=</span> <span class="n">helpers</span><span class="o">.</span><span class="n">_unjsonify</span><span class="p">(</span><span class="n">attributes</span><span class="p">,</span> <span class="n">isattributes</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+            <span class="c"># it&#39;s a string but not JSON: assume original attributes string.</span>
+            <span class="k">except</span> <span class="n">simplejson</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
+
+                <span class="c"># But Feature.attributes is still a dict</span>
+                <span class="n">attributes</span><span class="p">,</span> <span class="n">_dialect</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">_split_keyvals</span><span class="p">(</span><span class="n">attributes</span><span class="p">)</span>
+
+                <span class="c"># Use this dialect if none provided.</span>
+                <span class="n">dialect</span> <span class="o">=</span> <span class="n">dialect</span> <span class="ow">or</span> <span class="n">_dialect</span>
+
+        <span class="c"># If string, then try un-JSONifying it into a list; if that doesn&#39;t</span>
+        <span class="c"># work then assume it&#39;s tab-delimited and convert to a list.</span>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">extra</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">extra</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">extra</span> <span class="o">=</span> <span class="n">helpers</span><span class="o">.</span><span class="n">_unjsonify</span><span class="p">(</span><span class="n">extra</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">simplejson</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
+                <span class="n">extra</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">seqid</span> <span class="o">=</span> <span class="n">seqid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">featuretype</span> <span class="o">=</span> <span class="n">featuretype</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">start</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="n">end</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="n">score</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">strand</span> <span class="o">=</span> <span class="n">strand</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">frame</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span> <span class="o">=</span> <span class="n">attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extra</span> <span class="o">=</span> <span class="n">extra</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_bin</span><span class="p">(</span><span class="nb">bin</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialect</span> <span class="o">=</span> <span class="n">dialect</span> <span class="ow">or</span> <span class="n">constants</span><span class="o">.</span><span class="n">dialect</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_order</span> <span class="o">=</span> <span class="n">file_order</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keep_order</span> <span class="o">=</span> <span class="n">keep_order</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sort_attribute_values</span> <span class="o">=</span> <span class="n">sort_attribute_values</span>
+</div>
+    <span class="k">def</span> <span class="nf">calc_bin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_bin</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the smallest UCSC genomic bin that will contain this feature.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">_bin</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">_bin</span> <span class="o">=</span> <span class="n">bins</span><span class="o">.</span><span class="n">bins</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="p">,</span> <span class="n">one</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                <span class="n">_bin</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="n">_bin</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">memory_loc</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+
+        <span class="c"># Reconstruct start/end as &quot;.&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="s">&#39;.&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="s">&#39;.&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="s">&quot;&lt;Feature {x.featuretype} ({x.seqid}:{start}-{end}&quot;</span>
+            <span class="s">&quot;[{x.strand}]) at {loc}&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span>
+                                             <span class="n">loc</span><span class="o">=</span><span class="n">memory_loc</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="c"># TODO: allow access to &quot;extra&quot; fields</span>
+            <span class="n">attr</span> <span class="o">=</span> <span class="n">_position_lookup</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="c"># TODO: allow setting of &quot;extra&quot; fields</span>
+            <span class="n">attr</span> <span class="o">=</span> <span class="n">_position_lookup</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">six</span><span class="o">.</span><span class="n">PY3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__unicode__</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">unicode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># All fields but attributes (and extra).</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">constants</span><span class="o">.</span><span class="n">_gffkeys</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+
+        <span class="c"># Handle start/stop, which are either None or int</span>
+        <span class="k">if</span> <span class="n">items</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">items</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;.&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">items</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">items</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">items</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;.&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">items</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+
+        <span class="c"># Reconstruct from dict and dialect</span>
+        <span class="n">reconstructed_attributes</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">_reconstruct</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialect</span><span class="p">,</span> <span class="n">keep_order</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">keep_order</span><span class="p">,</span>
+            <span class="n">sort_attribute_values</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sort_attribute_values</span><span class="p">)</span>
+
+        <span class="c"># Final line includes reconstructed as well as any previously-added</span>
+        <span class="c"># &quot;extra&quot; fields</span>
+        <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reconstructed_attributes</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="p">:</span>
+            <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">str</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="c"># aliases for official GFF field names; this way x.chrom == x.seqid; and</span>
+    <span class="c"># x.start == x.end.</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">chrom</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">seqid</span>
+
+    <span class="nd">@chrom.setter</span>
+    <span class="k">def</span> <span class="nf">chrom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seqid</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span>
+
+    <span class="nd">@stop.setter</span>
+    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">astuple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a tuple suitable for import into a database.</span>
+
+<span class="sd">        Attributes field and extra field jsonified into strings. The order of</span>
+<span class="sd">        fields is such that they can be supplied as arguments for the query</span>
+<span class="sd">        defined in :attr:`gffutils.constants._INSERT`.</span>
+
+<span class="sd">        If `encoding` is not None, then convert string fields to unicode using</span>
+<span class="sd">        the provided encoding.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Tuple</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">encoding</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">seqid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">featuretype</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">score</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">strand</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">,</span>
+                <span class="n">helpers</span><span class="o">.</span><span class="n">_jsonify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">),</span>
+                <span class="n">helpers</span><span class="o">.</span><span class="n">_jsonify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_bin</span><span class="p">()</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoding</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">seqid</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoding</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoding</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">featuretype</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoding</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">score</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoding</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">strand</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoding</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoding</span><span class="p">),</span>
+            <span class="n">helpers</span><span class="o">.</span><span class="n">_jsonify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoding</span><span class="p">),</span>
+            <span class="n">helpers</span><span class="o">.</span><span class="n">_jsonify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoding</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_bin</span><span class="p">()</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="Feature.sequence"><a class="viewcode-back" href="../../autodocs/gffutils.Feature.sequence.html#gffutils.Feature.sequence">[docs]</a>    <span class="k">def</span> <span class="nf">sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fasta</span><span class="p">,</span> <span class="n">use_strand</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the sequence of this feature as a string.</span>
+
+<span class="sd">        Uses the pyfaidx package.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        fasta : str</span>
+<span class="sd">            If str, then it&#39;s a FASTA-format filename; otherwise assume it&#39;s</span>
+<span class="sd">            a pyfaidx.Fasta object.</span>
+
+<span class="sd">        use_strand : bool</span>
+<span class="sd">            If True (default), the sequence returned will be</span>
+<span class="sd">            reverse-complemented for minus-strand features.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fasta</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+            <span class="n">fasta</span> <span class="o">=</span> <span class="n">Fasta</span><span class="p">(</span><span class="n">fasta</span><span class="p">,</span> <span class="n">as_raw</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+        <span class="c"># recall GTF/GFF is 1-based closed;  pyfaidx uses Python slice notation</span>
+        <span class="c"># and is therefore 0-based half-open.</span>
+        <span class="k">return</span> <span class="n">fasta</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">chrom</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">]</span>
+
+</div></div>
+<div class="viewcode-block" id="feature_from_line"><a class="viewcode-back" href="../../autodocs/gffutils.feature.feature_from_line.html#gffutils.feature_from_line">[docs]</a><span class="k">def</span> <span class="nf">feature_from_line</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">keep_order</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a line from a GFF file, return a Feature object</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    line : string</span>
+
+<span class="sd">    strict : bool</span>
+<span class="sd">        If True (default), assume `line` is a single, tab-delimited string that</span>
+<span class="sd">        has at least 9 fields.</span>
+
+<span class="sd">        If False, then the input can have a more flexible format, useful for</span>
+<span class="sd">        creating single ad hoc features or for writing tests.  In this case,</span>
+<span class="sd">        `line` can be a multi-line string (as long as it has a single non-empty</span>
+<span class="sd">        line), and, as long as there are only 9 fields (standard GFF/GTF), then</span>
+<span class="sd">        it&#39;s OK to use spaces instead of tabs to separate fields in `line`.</span>
+<span class="sd">        But if &gt;9 fields are to be used, then tabs must be used.</span>
+
+<span class="sd">    keep_order, dialect</span>
+<span class="sd">        Passed directly to :class:`Feature`; see docstring for that class for</span>
+<span class="sd">        description</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    A new :class:`Feature` object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">strict</span><span class="p">:</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">splitlines</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">_lines</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">_lines</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="n">_lines</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">_lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n\r</span><span class="s">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n\r</span><span class="s">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n\r</span><span class="s">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">attr_string</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+        <span class="n">attr_string</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+    <span class="n">attrs</span><span class="p">,</span> <span class="n">_dialect</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">_split_keyvals</span><span class="p">(</span><span class="n">attr_string</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="n">dialect</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">_gffkeys</span><span class="p">,</span> <span class="n">fields</span><span class="p">)))</span>
+    <span class="n">d</span><span class="p">[</span><span class="s">&#39;attributes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">attrs</span>
+    <span class="n">d</span><span class="p">[</span><span class="s">&#39;extra&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="mi">9</span><span class="p">:]</span>
+    <span class="n">d</span><span class="p">[</span><span class="s">&#39;keep_order&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">keep_order</span>
+    <span class="k">if</span> <span class="n">dialect</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">dialect</span> <span class="o">=</span> <span class="n">_dialect</span>
+    <span class="k">return</span> <span class="n">Feature</span><span class="p">(</span><span class="n">dialect</span><span class="o">=</span><span class="n">dialect</span><span class="p">,</span> <span class="o">**</span><span class="n">d</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2013, Ryan Dale.
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.8.5',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

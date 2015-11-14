@@ -1,0 +1,623 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Introduction &mdash; gffutils 0.8.5 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="gffutils 0.8.5 documentation" href="#"/>
+        <link rel="next" title="Installation" href="installation.html"/>
+        <link rel="prev" title="Table of Contents" href="contents.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="contents.html" class="icon icon-home"> gffutils
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#example-file">Example file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-the-database">Create the database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#use-the-database">Use the database</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#optional-requirements">Optional requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="database-import.html">Importing data into a database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="database-schema.html">Database schema</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="database-schema.html#schema">Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database-schema.html#features-table"><code class="docutils literal"><span class="pre">features</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database-schema.html#relations-table"><code class="docutils literal"><span class="pre">relations</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database-schema.html#meta-table"><code class="docutils literal"><span class="pre">meta</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database-schema.html#directives-table"><code class="docutils literal"><span class="pre">directives</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database-schema.html#autoincrements-table"><code class="docutils literal"><span class="pre">autoincrements</span></code> table</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="database-ids.html">Database IDs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="database-ids.html#id-spec"><code class="docutils literal"><span class="pre">id_spec</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="database-ids.html#transform"><code class="docutils literal"><span class="pre">transform</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="database-ids.html#merge-strategy"><code class="docutils literal"><span class="pre">merge_strategy</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gtf.html">GTF files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gtf.html#transcript-key-and-gene-key"><code class="docutils literal"><span class="pre">transcript_key</span></code> and <code class="docutils literal"><span class="pre">gene_key</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="gtf.html#subfeature"><code class="docutils literal"><span class="pre">subfeature</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dialect.html">Dialects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="attributes.html">Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#mouse-extra-comma-gff3">mouse_extra_comma.gff3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#file-contents">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#import">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#example-access">Example access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#c-elegans-ws199-ann-gff-txt">c_elegans_WS199_ann_gff.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id4">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id5">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#access">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#c-elegans-ws199-shortened-gff-txt">c_elegans_WS199_shortened_gff.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id7">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id8">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id9">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#ensembl-gtf-txt">ensembl_gtf.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id11">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id12">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id13">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#f3-unique-3-v2-gff">F3-unique-3.v2.gff</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id15">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id16">Import</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#glimmer-nokeyval-gff3">glimmer_nokeyval.gff3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id18">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id19">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id20">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#hybrid1-gff3">hybrid1.gff3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id22">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id23">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id24">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#jgi-gff2-txt">jgi_gff2.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id26">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id27">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id28">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#ncbi-gff3-txt">ncbi_gff3.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id30">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id31">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id32">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#wormbase-gff2-alt-txt">wormbase_gff2_alt.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id34">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id35">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id36">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#wormbase-gff2-txt">wormbase_gff2.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id38">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id39">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id40">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#gencode-v19-gtf">gencode-v19.gtf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id41">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#id42">Access</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#create-a-database">Create a database</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#interact-with-a-database">Interact with a database</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#feature-objects">Feature objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="autodocs/gffutils.feature.feature_from_line.html">gffutils.feature.feature_from_line</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#utilities">Utilities</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="autodocs/gffutils.helpers.asinterval.html">gffutils.helpers.asinterval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autodocs/gffutils.helpers.merge_attributes.html">gffutils.helpers.merge_attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autodocs/gffutils.helpers.sanitize_gff_db.html">gffutils.helpers.sanitize_gff_db</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autodocs/gffutils.helpers.annotate_gff_db.html">gffutils.helpers.annotate_gff_db</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autodocs/gffutils.helpers.infer_dialect.html">gffutils.helpers.infer_dialect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autodocs/gffutils.helpers.example_filename.html">gffutils.helpers.example_filename</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autodocs/gffutils.inspect.inspect.html">gffutils.inspect.inspect</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Change log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#changes-in-v0-8-4">Changes in v0.8.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#changes-in-v0-8-3-1">Changes in v0.8.3.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#changes-in-v0-8-3">Changes in v0.8.3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#new-features">New features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="changelog.html#bug-fixes">Bug fixes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">Developer&#8217;s docs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="developers.html#package-modules">Package modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developers.html#general-workflow">General workflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="developers.html#how-data-is-read-in">How data is read in</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developers.html#import">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developers.html#access">Access</a></li>
+<li class="toctree-l3"><a class="reference internal" href="developers.html#little-things">Little things</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="meta.html">Meta-docs (docs about the docs)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="meta.html#building-the-docs">Building the docs</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="contents.html">gffutils</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="contents.html">Docs</a> &raquo;</li>
+      
+    <li>Introduction</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/index.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="introduction">
+<span id="id1"></span><h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p><code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code> is a Python package for working with <a class="reference external" href="http://www.sanger.ac.uk/resources/software/gff/spec.htm">GFF</a> and <a class="reference external" href="http://mblab.wustl.edu/GTF22.html">GTF</a> files in a hierarchical manner.  It
+allows operations which would be complicated or time-consuming using
+a text-file-only approach.</p>
+<p>Below is a short demonstration of <code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code>. For the full documentation,
+see <a class="reference internal" href="contents.html"><em>Table of Contents</em></a>.</p>
+<div class="section" id="example-file">
+<h2>Example file<a class="headerlink" href="#example-file" title="Permalink to this headline">¶</a></h2>
+<p>Consider the first gene on chromosome 2L in <em>Drosophila melanogaster</em>, CG11023.
+Here is a graphical representation of this gene&#8217;s three alternative
+transcripts, from <a class="reference external" href="http://flybase.org/reports/FBgn0031208.html">FlyBase</a> :</p>
+<img alt="_images/flybase-FBgn0031208.png" src="_images/flybase-FBgn0031208.png" />
+<p><code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code> ships with the GFF annotation of this gene, downloaded from
+<a class="reference external" href="ftp://ftp.flybase.net/genomes/Drosophila_melanogaster/dmel_r5.54_FB2013_06/gff/">release 5.54 of FlyBase</a>.
+We&#8217;ll be using it to describe some features of <code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code>, because it
+contains just enough complexity to be representative of a real-world,
+genome-wide GFF file.</p>
+<p>Let&#8217;s look at what the file contains:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gffutils</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fn</span> <span class="o">=</span> <span class="n">gffutils</span><span class="o">.</span><span class="n">example_filename</span><span class="p">(</span><span class="s">&#39;intro_docs_example.gff&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span> 
+<span class="go">2L      FlyBase gene    7529    9484    .       +       .       ID=FBgn0031208;Name=CG11023;Ontology_term=SO:0000010,SO:0000087,GO:0016929,GO:0016926,GO:0006508;Dbxref=FlyBase:FBan0011023,FlyBase_Annotation_IDs:CG11023,GB_protein:ACZ94128,GB_protein:AAO41164,GB:AI944728,GB:AJ564667,GB_protein:CAD92822,GB:BF495604,UniProt/TrEMBL:Q86BM6,INTERPRO:IPR003653,GB_protein:AGB92323,UniProt/TrEMBL:M9PAY1,OrthoDB7_Drosophila:EOG796K1P,OrthoDB7_Diptera:EOG7X1604,EntrezGene:33155,UniProt/TrEMBL:E1JHP8,UniProt/TrEMBL:Q6KEV3,OrthoDB7_Insecta:EOG7Q8QM7,OrthoDB7_Arthropoda:EOG7R5K68,OrthoDB7_Metazoa:EOG7D59MP,InterologFinder:33155,BIOGRID:59420,FlyAtlas:CG11023-RA,GenomeRNAi:33155;gbunit=AE014134;derived_computed_cyto=21A5-21A5</span>
+<span class="go">2L      FlyBase mRNA    7529    9484    .       +       .       ID=FBtr0300689;Name=CG11023-RB;Parent=FBgn0031208;Dbxref=REFSEQ:NM_001169365,FlyBase_Annotation_IDs:CG11023-RB;score_text=Strongly Supported;score=11</span>
+<span class="go">2L      FlyBase mRNA    7529    9484    .       +       .       ID=FBtr0300690;Name=CG11023-RC;Parent=FBgn0031208;Dbxref=REFSEQ:NM_175941,FlyBase_Annotation_IDs:CG11023-RC;score_text=Strongly Supported;score=15</span>
+<span class="go">2L      FlyBase mRNA    7529    9484    .       +       .       ID=FBtr0330654;Name=CG11023-RD;Parent=FBgn0031208;Dbxref=FlyBase_Annotation_IDs:CG11023-RD,REFSEQ:NM_001272857;score_text=Strongly Supported;score=11</span>
+<span class="go">2L      FlyBase exon    7529    8116    .       +       .       Name=CG11023:1;Parent=FBtr0300689,FBtr0300690,FBtr0330654;parent_type=mRNA</span>
+<span class="go">2L      FlyBase five_prime_UTR  7529    7679    .       +       .       Name=CG11023-u5;Parent=FBtr0300689,FBtr0300690;parent_type=mRNA</span>
+<span class="go">2L      FlyBase five_prime_UTR  7529    7679    .       +       .       Name=CG11023-u5;Parent=FBtr0330654;parent_type=mRNA</span>
+<span class="go">2L      FlyBase CDS     7680    8116    .       +       0       Name=CG11023-cds;Parent=FBtr0300689,FBtr0300690;parent_type=mRNA</span>
+<span class="go">2L      FlyBase CDS     7680    8116    .       +       0       Name=CG11023-cds;Parent=FBtr0330654;parent_type=mRNA</span>
+<span class="go">2L      FlyBase intron  8117    8228    .       +       .       Name=CG11023-in;Parent=FBtr0330654;parent_type=mRNA</span>
+<span class="go">2L      FlyBase intron  8117    8192    .       +       .       Name=CG11023-in;Parent=FBtr0300689;parent_type=mRNA</span>
+<span class="go">2L      FlyBase intron  8117    8192    .       +       .       Name=CG11023-in;Parent=FBtr0300690;parent_type=mRNA</span>
+<span class="go">2L      FlyBase exon    8193    9484    .       +       .       Name=CG11023:3;Parent=FBtr0300689;parent_type=mRNA</span>
+<span class="go">2L      FlyBase CDS     8193    8610    .       +       1       Name=CG11023-cds;Parent=FBtr0300689;parent_type=mRNA</span>
+<span class="go">2L      FlyBase CDS     8193    8589    .       +       1       Name=CG11023-cds;Parent=FBtr0300690;parent_type=mRNA</span>
+<span class="go">2L      FlyBase exon    8193    8589    .       +       .       Name=CG11023:2;Parent=FBtr0300690;parent_type=mRNA</span>
+<span class="go">2L      FlyBase exon    8229    9484    .       +       .       Name=CG11023:4;Parent=FBtr0330654;parent_type=mRNA</span>
+<span class="go">2L      FlyBase CDS     8229    8610    .       +       1       Name=CG11023-cds;Parent=FBtr0330654;parent_type=mRNA</span>
+<span class="go">2L      FlyBase intron  8590    8667    .       +       .       Name=CG11023-in;Parent=FBtr0300690;parent_type=mRNA</span>
+<span class="go">2L      FlyBase three_prime_UTR 8611    9484    .       +       .       Name=CG11023-u3;Parent=FBtr0300689;parent_type=mRNA</span>
+<span class="go">2L      FlyBase three_prime_UTR 8611    9484    .       +       .       Name=CG11023-u3;Parent=FBtr0330654;parent_type=mRNA</span>
+<span class="go">2L      FlyBase three_prime_UTR 9277    9484    .       +       .       Name=CG11023-u3;Parent=FBtr0300690;parent_type=mRNA</span>
+<span class="go">2L      FlyBase exon    8668    9484    .       +       .       Name=CG11023:5;Parent=FBtr0300690;parent_type=mRNA</span>
+<span class="go">2L      FlyBase CDS     8668    9276    .       +       0       Name=CG11023-cds;Parent=FBtr0300690;parent_type=mRNA</span>
+</pre></div>
+</div>
+<p>While this is a (relatively) simple gene, the annotation looks quite complex.
+In no particular order, some comments about this annotation:</p>
+<ul>
+<li><p class="first">The gene has lots of attributes (last column), which would be nice to be able
+to access from Python.</p>
+</li>
+<li><p class="first">The gene and mRNA features have &#8220;ID&#8221; attributes, while UTRs, exons, CDSs, and
+introns only have &#8220;Name&#8221; attributes, e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre>gene: ID=FBgn0031208;Name=CG11023...
+mRNA: ID=FBtr0300689;Name=CG11023-RB...
+exon: Name=CG11023:1...
+</pre></div>
+</div>
+</li>
+<li><p class="first">The &#8220;Name&#8221; attributes of UTRs, exons, CDSs, and introns contain the &#8220;Name&#8221;
+attribute of the parent gene, followed by some extra info.  For exons, it&#8217;s
+a colon and a number; for introns its &#8220;-in&#8221;, and so on.  But the &#8220;Parent&#8221;
+mRNA is indicated with the mRNA&#8217;s &#8220;ID&#8221; attribute, e.g.,:</p>
+<div class="highlight-python"><div class="highlight"><pre>exon: Name=CG11023:3;Parent=FBtr0300689;
+</pre></div>
+</div>
+<p>For routine tasks like counting reads in exons (say, with <a class="reference external" href="http://www-huber.embl.de/users/anders/HTSeq/doc/overview.html">HTSeq</a>), it would
+be nice to be able to add a &#8220;gene_id&#8221; attribute to exons.  That is, change:</p>
+<div class="highlight-python"><div class="highlight"><pre>exon: Name=CG11023:3;Parent=FBtr0300689;
+</pre></div>
+</div>
+<p>to:</p>
+<div class="highlight-python"><div class="highlight"><pre>exon: Name=CG11023:3;Parent=FBtr0300689;gene_id=FBgn0031208;
+</pre></div>
+</div>
+<p>Then, we could use <code class="docutils literal"><span class="pre">htseq-count</span></code> like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>htseq-count --type=exon --idattr=gene_id reads.sam fixed_annotation.gff
+</pre></div>
+</div>
+</li>
+<li><p class="first">UTRs, exons, CDSs, and introns have the same name for different features.
+For example, these two introns have different coordinates and have different
+mRNA parents, yet have the same &#8220;Name&#8221; attribute:</p>
+<div class="highlight-python"><div class="highlight"><pre>2L  FlyBase intron  8117    8228    .       +       .       Name=CG11023-in;Parent=FBtr0330654;parent_type=mRNA
+2L  FlyBase intron  8117    8192    .       +       .       Name=CG11023-in;Parent=FBtr0300689;parent_type=mRNA
+</pre></div>
+</div>
+<p>It would be nice to have unique IDs for these features so we could
+differentiate them for, say, counting the unique introns of a gene or
+generating a file of splice junctions.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="create-the-database">
+<h2>Create the database<a class="headerlink" href="#create-the-database" title="Permalink to this headline">¶</a></h2>
+<p>The first step to working with <code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code> is to import the file into
+a local sqlite3 file-based database.  The <a class="reference internal" href="autodocs/gffutils.create_db.html#gffutils.create_db" title="gffutils.create_db"><code class="xref py py-func docutils literal"><span class="pre">gffutils.create_db()</span></code></a> function
+is used for this, and it takes many optional arguments for configuring how to
+interpret your GFF or GTF file.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">gffutils</span><span class="o">.</span><span class="n">create_db</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">dbfn</span><span class="o">=</span><span class="s">&#39;test.db&#39;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">keep_order</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">merge_strategy</span><span class="o">=</span><span class="s">&#39;merge&#39;</span><span class="p">,</span> <span class="n">sort_attribute_values</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here, <code class="docutils literal"><span class="pre">force=True</span></code> will overwrite any existing database, <code class="docutils literal"><span class="pre">keep_order=True</span></code>
+will maintain the order of the attributes (ID, Name, Parent, and so on), and
+<code class="docutils literal"><span class="pre">sort_attribute_values=True</span></code> will ensure the values of each attribute are
+always sorted.  These latter two settings are necessary here for this
+documentation (which undergoes automated testing) to have predictable output,
+but in general you can gain a speedup by using the default <code class="docutils literal"><span class="pre">keep_order=False</span></code>
+and <code class="docutils literal"><span class="pre">sort_attributes_order=False</span></code>.</p>
+<p>If your input file follows the GFF or GTF file format specifications, this is
+all you need to create a database.  But real-world files don&#8217;t always
+completely adhere to the format specifications.  So <code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code> provides lots
+of configuration options to tailor the pre-processing to your particular file
+&#8211; see <a class="reference internal" href="database-import.html"><em>Importing data into a database</em></a> for more details, and <a class="reference internal" href="examples.html"><em>Examples</em></a> for more
+practical examples.</p>
+</div>
+<div class="section" id="use-the-database">
+<h2>Use the database<a class="headerlink" href="#use-the-database" title="Permalink to this headline">¶</a></h2>
+<p>Once the database has been created, downstream code can connect to it simply
+by:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gffutils</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">gffutils</span><span class="o">.</span><span class="n">FeatureDB</span><span class="p">(</span><span class="s">&#39;test.db&#39;</span><span class="p">,</span> <span class="n">keep_order</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Features are accessed by name:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">gene</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="s">&#39;FBgn0031208&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gene</span>
+<span class="go">&lt;Feature gene (2L:7529-9484[+]) at 0x...&gt;</span>
+</pre></div>
+</div>
+<p>Inspect fields from the GFF line:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">gene</span><span class="o">.</span><span class="n">start</span>
+<span class="go">7529</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">gene</span><span class="o">.</span><span class="n">end</span>
+<span class="go">9484</span>
+</pre></div>
+</div>
+<p>Attributes are stored in the <code class="docutils literal"><span class="pre">attributes</span></code> dictionary.  Values are always in
+a list, even if there&#8217;s only one item:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">gene</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s">&#39;Name&#39;</span><span class="p">]</span>
+<span class="go">[&#39;CG11023&#39;]</span>
+</pre></div>
+</div>
+<p>Attributes can also be accessed from the <a class="reference internal" href="autodocs/gffutils.Feature.html#gffutils.Feature" title="gffutils.Feature"><code class="xref py py-class docutils literal"><span class="pre">Feature</span></code></a> object itself, to
+save some typing:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">gene</span><span class="p">[</span><span class="s">&#39;Name&#39;</span><span class="p">]</span>
+<span class="go">[&#39;CG11023&#39;]</span>
+</pre></div>
+</div>
+<p>Printing a <a class="reference internal" href="autodocs/gffutils.Feature.html#gffutils.Feature" title="gffutils.Feature"><code class="xref py py-class docutils literal"><span class="pre">Feature</span></code></a> reproduces the original GFF line as faithfully as
+possible.  See the <a class="reference internal" href="dialect.html#dialects"><span>Dialects</span></a> section for more details on how this is
+handled and configured.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">gene</span><span class="p">)</span>  
+<span class="go">2L      FlyBase gene    7529    9484    .       +       .       ID=FBgn0031208;Name=CG11023;Ontology_term=SO:0000010,SO:0000087,GO:0016929,GO:0016926,GO:0006508;Dbxref=FlyBase:FBan0011023,FlyBase_Annotation_IDs:CG11023,GB_protein:ACZ94128,GB_protein:AAO41164,GB:AI944728,GB:AJ564667,GB_protein:CAD92822,GB:BF495604,UniProt/TrEMBL:Q86BM6,INTERPRO:IPR003653,GB_protein:AGB92323,UniProt/TrEMBL:M9PAY1,OrthoDB7_Drosophila:EOG796K1P,OrthoDB7_Diptera:EOG7X1604,EntrezGene:33155,UniProt/TrEMBL:E1JHP8,UniProt/TrEMBL:Q6KEV3,OrthoDB7_Insecta:EOG7Q8QM7,OrthoDB7_Arthropoda:EOG7R5K68,OrthoDB7_Metazoa:EOG7D59MP,InterologFinder:33155,BIOGRID:59420,FlyAtlas:CG11023-RA,GenomeRNAi:33155;gbunit=AE014134;derived_computed_cyto=21A5-21A5</span>
+</pre></div>
+</div>
+<p>Get all the mRNAs for a gene:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="n">gene</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="s">&#39;mRNA&#39;</span><span class="p">,</span> <span class="n">order_by</span><span class="o">=</span><span class="s">&#39;start&#39;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> 
+<span class="go">2L      FlyBase mRNA    7529    9484    .       +       .       ID=FBtr0300689;Name=CG11023-RB;Dbxref=REFSEQ:NM_001169365,FlyBase_Annotation_IDs:CG11023-RB;Parent=FBgn0031208;score_text=Strongly Supported;score=11</span>
+<span class="go">2L      FlyBase mRNA    7529    9484    .       +       .       ID=FBtr0300690;Name=CG11023-RC;Dbxref=REFSEQ:NM_175941,FlyBase_Annotation_IDs:CG11023-RC;Parent=FBgn0031208;score_text=Strongly Supported;score=15</span>
+<span class="go">2L      FlyBase mRNA    7529    9484    .       +       .       ID=FBtr0330654;Name=CG11023-RD;Dbxref=FlyBase_Annotation_IDs:CG11023-RD,REFSEQ:NM_001272857;Parent=FBgn0031208;score_text=Strongly Supported;score=11</span>
+</pre></div>
+</div>
+<p>Get all the exons for a gene:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="n">gene</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="s">&#39;exon&#39;</span><span class="p">,</span> <span class="n">order_by</span><span class="o">=</span><span class="s">&#39;start&#39;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> 
+<span class="go">2L      FlyBase exon    7529    8116    .       +       .       Name=CG11023:1;Parent=FBtr0300689,FBtr0300690,FBtr0330654;parent_type=mRNA</span>
+<span class="go">2L      FlyBase exon    8193    9484    .       +       .       Name=CG11023:3;Parent=FBtr0300689;parent_type=mRNA</span>
+<span class="go">2L      FlyBase exon    8193    8589    .       +       .       Name=CG11023:2;Parent=FBtr0300690;parent_type=mRNA</span>
+<span class="go">2L      FlyBase exon    8229    9484    .       +       .       Name=CG11023:4;Parent=FBtr0330654;parent_type=mRNA</span>
+<span class="go">2L      FlyBase exon    8668    9484    .       +       .       Name=CG11023:5;Parent=FBtr0300690;parent_type=mRNA</span>
+</pre></div>
+</div>
+<p>Does this gene have any constitutive exons (exons found in every alternative
+transcript)?  This is an example of something that would be difficult to do
+using only standard text file processing tools, and demonstrates the usefulness
+of the <code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mRNA_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="n">gene</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="s">&#39;mRNA&#39;</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">constitutive_exons</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">exon</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">features_of_type</span><span class="p">(</span><span class="s">&#39;exon&#39;</span><span class="p">,</span> <span class="n">order_by</span><span class="o">=</span><span class="s">&#39;start&#39;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">parents</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">parents</span><span class="p">(</span><span class="n">exon</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="s">&#39;mRNA&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">parents</span><span class="p">))</span> <span class="o">==</span> <span class="n">mRNA_count</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="n">constitutive_exons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">exon</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">constitutive_exons</span><span class="p">)</span>
+<span class="go">[&lt;Feature exon (2L:7529-8116[+]) at 0x...&gt;]</span>
+</pre></div>
+</div>
+<p>Retrieve entries by genomic coordinates, which uses the <a class="reference external" href="http://genome.cshlp.org/content/12/6/996/F7.expansion.html">UCSC binning strategy</a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">region</span><span class="p">(</span><span class="n">region</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;2L&#39;</span><span class="p">,</span> <span class="mi">9277</span><span class="p">,</span> <span class="mi">10000</span><span class="p">),</span> <span class="n">completely_within</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+<span class="go">[&lt;Feature three_prime_UTR (2L:9277-9484[+]) at 0x...&gt;]</span>
+</pre></div>
+</div>
+<p>Retrieve UTRs that overlap the gene (note that a feature can be provided as the
+coordinates):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">UTR</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">region</span><span class="p">(</span><span class="n">gene</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;three_prime_UTR&#39;</span><span class="p">,</span> <span class="s">&#39;five_prime_UTR&#39;</span><span class="p">]):</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">UTR</span><span class="p">)</span> 
+<span class="go">2L      FlyBase five_prime_UTR  7529    7679    .       +       .       Name=CG11023-u5;Parent=FBtr0300689,FBtr0300690;parent_type=mRNA</span>
+<span class="go">2L      FlyBase five_prime_UTR  7529    7679    .       +       .       Name=CG11023-u5;Parent=FBtr0330654;parent_type=mRNA</span>
+<span class="go">2L      FlyBase three_prime_UTR 8611    9484    .       +       .       Name=CG11023-u3;Parent=FBtr0300689;parent_type=mRNA</span>
+<span class="go">2L      FlyBase three_prime_UTR 8611    9484    .       +       .       Name=CG11023-u3;Parent=FBtr0330654;parent_type=mRNA</span>
+<span class="go">2L      FlyBase three_prime_UTR 9277    9484    .       +       .       Name=CG11023-u3;Parent=FBtr0300690;parent_type=mRNA</span>
+</pre></div>
+</div>
+<p>Now let&#8217;s illustrate a problem in the GFF file as it is currently formatted by
+trying to get the consitutive 5&#8217;UTRs in the same way we got the constitutive
+exons above:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">constitutive_5UTRs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">utr</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">features_of_type</span><span class="p">(</span><span class="s">&#39;five_prime_UTR&#39;</span><span class="p">,</span> <span class="n">order_by</span><span class="o">=</span><span class="s">&#39;start&#39;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">parents</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">parents</span><span class="p">(</span><span class="n">utr</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="s">&#39;mRNA&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">parents</span><span class="p">))</span> <span class="o">==</span> <span class="n">mRNA_count</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="n">constitutive_5UTRs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">utr</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">constitutive_5UTRs</span><span class="p">)</span>
+<span class="go">[]</span>
+</pre></div>
+</div>
+<p>Yikes!  What happened?  This is because by default, each line in the GFF file
+is treated as a unique feature.  From this perspective, the first 5&#8217;UTR has two
+parents, and the second 5&#8217;UTR has one parent &#8211; there are zero 5&#8217;UTRs with all
+three transcripts as parents.</p>
+<p>What we&#8217;d really like to do is to merge the features that have identical IDs
+and coordinates.  Specifically, we&#8217;d like to have these two features:</p>
+<div class="highlight-python"><div class="highlight"><pre>2L  FlyBase five_prime_UTR  7529    7679    .       +       .       Name=CG11023-u5;Parent=FBtr0300689,FBtr0300690;parent_type=mRNA
+2L  FlyBase five_prime_UTR  7529    7679    .       +       .       Name=CG11023-u5;Parent=FBtr0330654;parent_type=mRNA
+</pre></div>
+</div>
+<p>become a single feature:</p>
+<div class="highlight-python"><div class="highlight"><pre>2L  FlyBase five_prime_UTR  7529    7679    .       +       .       Name=CG11023-u5;Parent=FBtr0300689,FBtr0300690,FBtr0330654;parent_type=mRNA
+</pre></div>
+</div>
+<p>Similarly, we&#8217;d like these three 3&#8217;UTRs:</p>
+<div class="highlight-python"><div class="highlight"><pre>2L  FlyBase three_prime_UTR 8611    9484    .       +       .       Name=CG11023-u3;Parent=FBtr0300689;parent_type=mRNA
+2L  FlyBase three_prime_UTR 8611    9484    .       +       .       Name=CG11023-u3;Parent=FBtr0330654;parent_type=mRNA
+2L  FlyBase three_prime_UTR 9277    9484    .       +       .       Name=CG11023-u3;Parent=FBtr0300690;parent_type=mRNA
+</pre></div>
+</div>
+<p>to become two (merging only the first two because they have identical
+coordinates):</p>
+<div class="highlight-python"><div class="highlight"><pre>2L  FlyBase three_prime_UTR 8611    9484    .       +       .       Name=CG11023-u3;Parent=FBtr0300689,FBtr0330654;parent_type=mRNA
+2L  FlyBase three_prime_UTR 9277    9484    .       +       .       Name=CG11023-u3;Parent=FBtr0300690;parent_type=mRNA
+</pre></div>
+</div>
+<p>In order to do this, we need to change how features are loaded into the
+database by using <code class="docutils literal"><span class="pre">merge_strategy=True</span></code> and <code class="docutils literal"><span class="pre">id_spec=['ID',</span> <span class="pre">'Name']</span></code>.  You can
+read more about exactly what these arguments do, and other ways of tweaking the
+import, at <a class="reference internal" href="database-ids.html#database-ids"><span>Database IDs</span></a>.  But for now, let&#8217;s see what happens:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">db2</span> <span class="o">=</span> <span class="n">gffutils</span><span class="o">.</span><span class="n">create_db</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">dbfn</span><span class="o">=</span><span class="s">&#39;test.db&#39;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">keep_order</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">sort_attribute_values</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">merge_strategy</span><span class="o">=</span><span class="s">&#39;merge&#39;</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">id_spec</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ID&#39;</span><span class="p">,</span> <span class="s">&#39;Name&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">utr</span> <span class="ow">in</span> <span class="n">db2</span><span class="o">.</span><span class="n">features_of_type</span><span class="p">(</span><span class="s">&#39;five_prime_UTR&#39;</span><span class="p">,</span> <span class="n">order_by</span><span class="o">=</span><span class="s">&#39;start&#39;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">parents</span> <span class="o">=</span> <span class="n">db2</span><span class="o">.</span><span class="n">parents</span><span class="p">(</span><span class="n">utr</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="s">&#39;mRNA&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">parents</span><span class="p">))</span> <span class="o">==</span> <span class="n">mRNA_count</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="n">constitutive_5UTRs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">utr</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">constitutive_5UTRs</span><span class="p">)</span>
+<span class="go">[&lt;Feature five_prime_UTR (2L:7529-7679[+]) at 0x...&gt;]</span>
+</pre></div>
+</div>
+<p>Let&#8217;s look at all the 5&#8217;UTRs in the database to see how the merge strategy
+affected them:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">db2</span><span class="o">.</span><span class="n">features_of_type</span><span class="p">(</span><span class="s">&#39;five_prime_UTR&#39;</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> 
+<span class="go">2L      FlyBase five_prime_UTR  7529    7679    .       +       .       Name=CG11023-u5;Parent=FBtr0300689,FBtr0300690,FBtr0330654;parent_type=mRNA</span>
+</pre></div>
+</div>
+<p>Aha! A single 5&#8217;UTR.  What about 3&#8217;UTRs?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">db2</span><span class="o">.</span><span class="n">features_of_type</span><span class="p">(</span><span class="s">&#39;three_prime_UTR&#39;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> 
+<span class="go">2L      FlyBase three_prime_UTR 8611    9484    .       +       .       Name=CG11023-u3;Parent=FBtr0300689,FBtr0330654;parent_type=mRNA</span>
+<span class="go">2L      FlyBase three_prime_UTR 9277    9484    .       +       .       Name=CG11023-u3;Parent=FBtr0300690;parent_type=mRNA</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">db2</span><span class="o">.</span><span class="n">features_of_type</span><span class="p">(</span><span class="s">&#39;intron&#39;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> 
+<span class="go">2L      FlyBase intron  8117    8228    .       +       .       Name=CG11023-in;Parent=FBtr0330654;parent_type=mRNA</span>
+<span class="go">2L      FlyBase intron  8117    8192    .       +       .       Name=CG11023-in;Parent=FBtr0300689,FBtr0300690;parent_type=mRNA</span>
+<span class="go">2L      FlyBase intron  8590    8667    .       +       .       Name=CG11023-in;Parent=FBtr0300690;parent_type=mRNA</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="contents.html" class="btn btn-neutral" title="Table of Contents" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2013, Ryan Dale.
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.8.5',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

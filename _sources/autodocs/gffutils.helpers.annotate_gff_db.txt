@@ -1,0 +1,6 @@
+gffutils.helpers.annotate_gff_db
+================================
+
+.. currentmodule:: gffutils.helpers
+
+.. autofunction:: annotate_gff_db

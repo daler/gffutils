@@ -1,0 +1,536 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>gffutils.create_db &mdash; gffutils 0.8.5 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="gffutils 0.8.5 documentation" href="../index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="../contents.html" class="icon icon-home"> gffutils
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#example-file">Example file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#create-the-database">Create the database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#use-the-database">Use the database</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#optional-requirements">Optional requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../database-import.html">Importing data into a database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../database-schema.html">Database schema</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../database-schema.html#schema">Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../database-schema.html#features-table"><code class="docutils literal"><span class="pre">features</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../database-schema.html#relations-table"><code class="docutils literal"><span class="pre">relations</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../database-schema.html#meta-table"><code class="docutils literal"><span class="pre">meta</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../database-schema.html#directives-table"><code class="docutils literal"><span class="pre">directives</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../database-schema.html#autoincrements-table"><code class="docutils literal"><span class="pre">autoincrements</span></code> table</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../database-ids.html">Database IDs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../database-ids.html#id-spec"><code class="docutils literal"><span class="pre">id_spec</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../database-ids.html#transform"><code class="docutils literal"><span class="pre">transform</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../database-ids.html#merge-strategy"><code class="docutils literal"><span class="pre">merge_strategy</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../gtf.html">GTF files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../gtf.html#transcript-key-and-gene-key"><code class="docutils literal"><span class="pre">transcript_key</span></code> and <code class="docutils literal"><span class="pre">gene_key</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gtf.html#subfeature"><code class="docutils literal"><span class="pre">subfeature</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../dialect.html">Dialects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../attributes.html">Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#mouse-extra-comma-gff3">mouse_extra_comma.gff3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#file-contents">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#import">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#example-access">Example access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#c-elegans-ws199-ann-gff-txt">c_elegans_WS199_ann_gff.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id4">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id5">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#access">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#c-elegans-ws199-shortened-gff-txt">c_elegans_WS199_shortened_gff.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id7">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id8">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id9">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#ensembl-gtf-txt">ensembl_gtf.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id11">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id12">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id13">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#f3-unique-3-v2-gff">F3-unique-3.v2.gff</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id15">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id16">Import</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#glimmer-nokeyval-gff3">glimmer_nokeyval.gff3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id18">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id19">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id20">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#hybrid1-gff3">hybrid1.gff3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id22">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id23">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id24">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#jgi-gff2-txt">jgi_gff2.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id26">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id27">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id28">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#ncbi-gff3-txt">ncbi_gff3.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id30">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id31">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id32">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#wormbase-gff2-alt-txt">wormbase_gff2_alt.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id34">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id35">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id36">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#wormbase-gff2-txt">wormbase_gff2.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id38">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id39">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id40">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html#gencode-v19-gtf">gencode-v19.gtf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id41">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples.html#id42">Access</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#create-a-database">Create a database</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#interact-with-a-database">Interact with a database</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#feature-objects">Feature objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gffutils.feature.feature_from_line.html">gffutils.feature.feature_from_line</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#utilities">Utilities</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gffutils.helpers.asinterval.html">gffutils.helpers.asinterval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gffutils.helpers.merge_attributes.html">gffutils.helpers.merge_attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gffutils.helpers.sanitize_gff_db.html">gffutils.helpers.sanitize_gff_db</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gffutils.helpers.annotate_gff_db.html">gffutils.helpers.annotate_gff_db</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gffutils.helpers.infer_dialect.html">gffutils.helpers.infer_dialect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gffutils.helpers.example_filename.html">gffutils.helpers.example_filename</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gffutils.inspect.inspect.html">gffutils.inspect.inspect</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Change log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#changes-in-v0-8-4">Changes in v0.8.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#changes-in-v0-8-3-1">Changes in v0.8.3.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../changelog.html#changes-in-v0-8-3">Changes in v0.8.3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#new-features">New features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../changelog.html#bug-fixes">Bug fixes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../developers.html">Developer&#8217;s docs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../developers.html#package-modules">Package modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../developers.html#general-workflow">General workflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../developers.html#how-data-is-read-in">How data is read in</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developers.html#import">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developers.html#access">Access</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../developers.html#little-things">Little things</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../meta.html">Meta-docs (docs about the docs)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../meta.html#building-the-docs">Building the docs</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../contents.html">gffutils</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../contents.html">Docs</a> &raquo;</li>
+      
+    <li>gffutils.create_db</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/autodocs/gffutils.create_db.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="gffutils-create-db">
+<h1>gffutils.create_db<a class="headerlink" href="#gffutils-create-db" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="gffutils.create_db">
+<code class="descclassname">gffutils.</code><code class="descname">create_db</code><span class="sig-paren">(</span><em>data</em>, <em>dbfn</em>, <em>id_spec=None</em>, <em>force=False</em>, <em>verbose=False</em>, <em>checklines=10</em>, <em>merge_strategy='error'</em>, <em>transform=None</em>, <em>gtf_transcript_key='transcript_id'</em>, <em>gtf_gene_key='gene_id'</em>, <em>gtf_subfeature='exon'</em>, <em>force_gff=False</em>, <em>force_dialect_check=False</em>, <em>from_string=False</em>, <em>keep_order=False</em>, <em>text_factory=&lt;type 'cell'&gt;</em>, <em>force_merge_fields=None</em>, <em>pragmas={'main.page_size': 4096</em>, <em>'synchronous': 'NORMAL'</em>, <em>'journal_mode': 'MEMORY'</em>, <em>'main.cache_size': 10000}</em>, <em>sort_attribute_values=False</em>, <em>dialect=None</em>, <em>_keep_tempfiles=False</em>, <em>infer_gene_extent=True</em>, <em>disable_infer_genes=False</em>, <em>disable_infer_transcripts=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/create.html#create_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gffutils.create_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a database from a GFF or GTF file.</p>
+<p>For more details on when and how to use the kwargs below, see the examples
+in the online documentation (<a class="reference internal" href="../examples.html#examples"><span>Examples</span></a>).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data</strong> : string or iterable</p>
+<blockquote>
+<div><p>If a string (and <code class="docutils literal"><span class="pre">from_string</span></code> is False), then <code class="docutils literal"><span class="pre">data</span></code> is the path to
+the original GFF or GTF file.</p>
+<p>If a string and <code class="docutils literal"><span class="pre">from_string</span></code> is True, then assume <code class="docutils literal"><span class="pre">data</span></code> is the actual
+data to use.</p>
+<p>Otherwise, it&#8217;s an iterable of Feature objects.</p>
+</div></blockquote>
+<p><strong>dbfn</strong> : string</p>
+<blockquote>
+<div><p>Path to the database that will be created.  Can be the special string
+&#8221;:memory:&#8221; to create an in-memory database.</p>
+</div></blockquote>
+<p><strong>id_spec</strong> : string, list, dict, callable, or None</p>
+<blockquote>
+<div><p>This parameter guides what will be used as the primary key for the
+database, which in turn determines how you will access individual
+features by name from the database.</p>
+<p>If <code class="docutils literal"><span class="pre">id_spec=None</span></code>, then auto-increment primary keys based on the
+feature type (e.g., &#8220;gene_1&#8221;, &#8220;gene_2&#8221;).  This is also the fallback
+behavior for the other values below.</p>
+<p>If <code class="docutils literal"><span class="pre">id_spec</span></code> is a string, then look for this key in the attributes.  If
+it exists, then use its value as the primary key, otherwise
+autoincrement based on the feature type.  For many GFF3 files, &#8220;ID&#8221;
+usually works well.</p>
+<p>If <code class="docutils literal"><span class="pre">id_spec</span></code> is a list or tuple of keys, then check for each one in
+order, using the first one found.  For GFF3, this might be [&#8220;ID&#8221;,
+&#8220;Name&#8221;], which would use the ID if it exists, otherwise the Name,
+otherwise autoincrement based on the feature type.</p>
+<p>If <code class="docutils literal"><span class="pre">id_spec</span></code> is a dictionary, then it is a mapping of feature types to
+what should be used as the ID.  For example, for GTF files, <code class="docutils literal"><span class="pre">{'gene':</span>
+<span class="pre">'gene_id',</span> <span class="pre">'transcript':</span> <span class="pre">'transcript_id'}</span></code> may be useful.  The values
+of this dictionary can also be a list, e.g., <code class="docutils literal"><span class="pre">{'gene':</span> <span class="pre">['gene_id',</span>
+<span class="pre">'geneID']}</span></code></p>
+<p>If <code class="docutils literal"><span class="pre">id_spec</span></code> is a callable object, then it accepts a dictionary from
+the iterator and returns one of the following:</p>
+<blockquote>
+<div><ul class="simple">
+<li>None (in which case the feature type will be auto-incremented)</li>
+<li>string (which will be used as the primary key)</li>
+<li>special string starting with &#8220;autoincrement:X&#8221;, where &#8220;X&#8221; is
+a string that will be used for auto-incrementing.  For example,
+if &#8220;autoincrement:chr10&#8221;, then the first feature will be
+&#8220;chr10_1&#8221;, the second &#8220;chr10_2&#8221;, and so on.</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+<p><strong>force</strong> : bool</p>
+<blockquote>
+<div><p>If <code class="docutils literal"><span class="pre">False</span></code> (default), then raise an exception if <code class="docutils literal"><span class="pre">dbfn</span></code> already exists.
+Use <code class="docutils literal"><span class="pre">force=True</span></code> to overwrite any existing databases.</p>
+</div></blockquote>
+<p><strong>verbose</strong> : bool</p>
+<blockquote>
+<div><p>Report percent complete and other feedback on how the db creation is
+progressing.</p>
+<p>In order to report percent complete, the entire file needs to be read
+once to see how many items there are; for large files you may want to
+use <code class="docutils literal"><span class="pre">verbose=False</span></code> to avoid this.</p>
+</div></blockquote>
+<p><strong>checklines</strong> : int</p>
+<blockquote>
+<div><p>Number of lines to check the dialect.</p>
+</div></blockquote>
+<p><strong>merge_strategy</strong> : str</p>
+<blockquote>
+<div><p>One of {merge, create_unique, error, warning, replace}.</p>
+<p>This parameter specifies the behavior when two items have an identical
+primary key.</p>
+<p>Using <code class="docutils literal"><span class="pre">merge_strategy=&quot;merge&quot;</span></code>, then there will be a single entry in
+the database, but the attributes of all features with the same primary
+key will be merged.</p>
+<p>Using <code class="docutils literal"><span class="pre">merge_strategy=&quot;create_unique&quot;</span></code>, then the first entry will use
+the original primary key, but the second entry will have a unique,
+autoincremented primary key assigned to it</p>
+<p>Using <code class="docutils literal"><span class="pre">merge_strategy=&quot;error&quot;</span></code>, a <code class="xref py py-class docutils literal"><span class="pre">gffutils.DuplicateID</span></code>
+exception will be raised.  This means you will have to edit the file
+yourself to fix the duplicated IDs.</p>
+<p>Using <code class="docutils literal"><span class="pre">merge_strategy=&quot;warning&quot;</span></code>, a warning will be printed to the
+logger, and the duplicate feature will be skipped.</p>
+<p>Using <a href="#id1"><span class="problematic" id="id2">`</span></a>merge_strategy=&#8221;replace&#8221; will replace the entire existing
+feature with the new feature.</p>
+</div></blockquote>
+<p><strong>transform</strong> : callable</p>
+<blockquote>
+<div><p>Function (or other callable object) that accepts a <code class="docutils literal"><span class="pre">Feature</span></code> object and
+returns a (possibly modified) <code class="docutils literal"><span class="pre">Feature</span></code> object.</p>
+</div></blockquote>
+<p><strong>gtf_transcript_key, gtf_gene_key</strong> : string</p>
+<blockquote>
+<div><p>Which attribute to use as the transcript ID and gene ID respectively
+for GTF files.  Default is <code class="docutils literal"><span class="pre">transcript_id</span></code> and <code class="docutils literal"><span class="pre">gene_id</span></code> according to
+the GTF spec.</p>
+</div></blockquote>
+<p><strong>gtf_subfeature</strong> : string</p>
+<blockquote>
+<div><p>Feature type to use as a &#8220;gene component&#8221; when inferring gene and
+transcript extents for GTF files.  Default is <code class="docutils literal"><span class="pre">exon</span></code> according to the
+GTF spec.</p>
+</div></blockquote>
+<p><strong>force_gff</strong> : bool</p>
+<blockquote>
+<div><p>If True, do not do automatic format detection &#8211; only use GFF.</p>
+</div></blockquote>
+<p><strong>force_dialect_check</strong> : bool</p>
+<blockquote>
+<div><p>If True, the dialect will be checkef for every feature (instead of just
+<code class="docutils literal"><span class="pre">checklines</span></code> features).  This can be slow, but may be necessary for
+inconsistently-formatted input files.</p>
+</div></blockquote>
+<p><strong>from_string</strong> : bool</p>
+<blockquote>
+<div><p>If True, then treat <code class="docutils literal"><span class="pre">data</span></code> as actual data (rather than the path to
+a file).</p>
+</div></blockquote>
+<p><strong>keep_order</strong> : bool</p>
+<blockquote>
+<div><p>If True, all features returned from this instance will have the
+order of their attributes maintained.  This can be turned on or off
+database-wide by setting the <code class="docutils literal"><span class="pre">keep_order</span></code> attribute or with this
+kwarg, or on a feature-by-feature basis by setting the <code class="docutils literal"><span class="pre">keep_order</span></code>
+attribute of an individual feature.</p>
+<p>Note that a single order of attributes will be used for all features.
+Specifically, the order will be determined by the order of attribute
+keys in the first <code class="docutils literal"><span class="pre">checklines</span></code> of the input data. See
+helpers._choose_dialect for more information on this.</p>
+<p>Default is False, since this includes a sorting step that can get
+time-consuming for many features.</p>
+</div></blockquote>
+<p><strong>infer_gene_extent</strong> : bool</p>
+<blockquote>
+<div><p>DEPRECATED in version 0.8.4. See <code class="docutils literal"><span class="pre">disable_infer_transcripts</span></code> and
+<code class="docutils literal"><span class="pre">disable_infer_genes</span></code> for more granular control.</p>
+</div></blockquote>
+<p><strong>disable_infer_transcripts, disable_infer_genes</strong> : bool</p>
+<blockquote>
+<div><p>Only used for GTF files. By default &#8211; and according to the GTF spec &#8211;
+we assume that there are no transcript or gene features in the file.
+gffutils then infers the extent of each transcript based on its
+constituent exons and infers the extent of each gene bases on its
+constituent transcripts.</p>
+<p>This default behavior is problematic if the input file already contains
+transcript or gene features (like recent GENCODE GTF files for human),
+since 1) the work to infer extents is unnecessary, and 2)
+trying to insert an inferred feature back into the database triggers
+gffutils&#8217; feature-merging routines, which can get time consuming.</p>
+<p>The solution is to use <code class="docutils literal"><span class="pre">disable_infer_transcripts=True</span></code> if your GTF
+already has transcripts in it, and/or <code class="docutils literal"><span class="pre">disable_infer_genes=True</span></code> if it
+already has genes in it. This can result in dramatic (100x) speedup.</p>
+<p>Prior to version 0.8.4, setting <code class="docutils literal"><span class="pre">infer_gene_extents=False</span></code> would
+disable both transcript and gene inference simultaneously. As of
+version 0.8.4, these argument allow more granular control.</p>
+</div></blockquote>
+<p><strong>force_merge_fields</strong> : list</p>
+<blockquote>
+<div><p>If merge_strategy=&#8221;merge&#8221;, then features will only be merged if their
+non-attribute values are identical (same chrom, source, start, stop,
+score, strand, phase).  Using <code class="docutils literal"><span class="pre">force_merge_fields</span></code>, you can override
+this behavior to allow merges even when fields are different.  This
+list can contain one or more of [&#8216;seqid&#8217;, &#8216;source&#8217;, &#8216;featuretype&#8217;,
+&#8216;score&#8217;, &#8216;strand&#8217;, &#8216;frame&#8217;].  The resulting merged fields will be
+strings of comma-separated values.  Note that &#8216;start&#8217; and &#8216;end&#8217; are not
+available, since these fields need to be integers.</p>
+</div></blockquote>
+<p><strong>text_factory</strong> : callable</p>
+<blockquote>
+<div><p>Text factory to use for the sqlite3 database.  See
+<a class="reference external" href="https://docs.python.org/2/library/">https://docs.python.org/2/library/</a>                sqlite3.html#sqlite3.Connection.text_factory
+for details. The default sqlite3.OptimizedUnicode will return Unicode
+objects only for non-ASCII data, and bytestrings otherwise.</p>
+</div></blockquote>
+<p><strong>pragmas</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of pragmas used when creating the sqlite3 database. See
+<a class="reference external" href="http://www.sqlite.org/pragma.html">http://www.sqlite.org/pragma.html</a> for a list of available pragmas.  The
+defaults are stored in constants.default_pragmas, which can be used as
+a template for supplying a custom dictionary.</p>
+</div></blockquote>
+<p><strong>sort_attribute_values</strong> : bool</p>
+<blockquote>
+<div><p>All features returned from the database will have their attribute
+values sorted.  Typically this is only useful for testing, since this
+can get time-consuming for large numbers of features.</p>
+</div></blockquote>
+<p><strong>_keep_tempfiles</strong> : bool or string</p>
+<blockquote>
+<div><p>False by default to clean up intermediate tempfiles created during GTF
+import.  If True, then keep these tempfile for testing or debugging.
+If string, then keep the tempfile for testing, but also use the string
+as the suffix fo the tempfile. This can be useful for testing in
+parallel environments.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">New <a class="reference internal" href="gffutils.FeatureDB.html#gffutils.FeatureDB" title="gffutils.FeatureDB"><code class="xref py py-class docutils literal"><span class="pre">FeatureDB</span></code></a> object.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2013, Ryan Dale.
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.8.5',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,6 @@
+gffutils.helpers.merge_attributes
+=================================
+
+.. currentmodule:: gffutils.helpers
+
+.. autofunction:: merge_attributes

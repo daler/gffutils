@@ -1,0 +1,1611 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>gffutils.create &mdash; gffutils 0.8.5 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="gffutils 0.8.5 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="../../contents.html" class="icon icon-home"> gffutils
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../index.html#example-file">Example file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../index.html#create-the-database">Create the database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../index.html#use-the-database">Use the database</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#optional-requirements">Optional requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../database-import.html">Importing data into a database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../database-schema.html">Database schema</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../database-schema.html#schema">Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../database-schema.html#features-table"><code class="docutils literal"><span class="pre">features</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../database-schema.html#relations-table"><code class="docutils literal"><span class="pre">relations</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../database-schema.html#meta-table"><code class="docutils literal"><span class="pre">meta</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../database-schema.html#directives-table"><code class="docutils literal"><span class="pre">directives</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../database-schema.html#autoincrements-table"><code class="docutils literal"><span class="pre">autoincrements</span></code> table</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../database-ids.html">Database IDs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../database-ids.html#id-spec"><code class="docutils literal"><span class="pre">id_spec</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../database-ids.html#transform"><code class="docutils literal"><span class="pre">transform</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../database-ids.html#merge-strategy"><code class="docutils literal"><span class="pre">merge_strategy</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../gtf.html">GTF files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../gtf.html#transcript-key-and-gene-key"><code class="docutils literal"><span class="pre">transcript_key</span></code> and <code class="docutils literal"><span class="pre">gene_key</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../gtf.html#subfeature"><code class="docutils literal"><span class="pre">subfeature</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../dialect.html">Dialects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../attributes.html">Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#mouse-extra-comma-gff3">mouse_extra_comma.gff3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#file-contents">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#import">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#example-access">Example access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#c-elegans-ws199-ann-gff-txt">c_elegans_WS199_ann_gff.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id4">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id5">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#access">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#c-elegans-ws199-shortened-gff-txt">c_elegans_WS199_shortened_gff.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id7">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id8">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id9">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#ensembl-gtf-txt">ensembl_gtf.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id11">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id12">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id13">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#f3-unique-3-v2-gff">F3-unique-3.v2.gff</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id15">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id16">Import</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#glimmer-nokeyval-gff3">glimmer_nokeyval.gff3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id18">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id19">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id20">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#hybrid1-gff3">hybrid1.gff3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id22">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id23">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id24">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#jgi-gff2-txt">jgi_gff2.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id26">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id27">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id28">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#ncbi-gff3-txt">ncbi_gff3.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id30">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id31">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id32">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#wormbase-gff2-alt-txt">wormbase_gff2_alt.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id34">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id35">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id36">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#wormbase-gff2-txt">wormbase_gff2.txt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id38">File contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id39">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id40">Access</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#gencode-v19-gtf">gencode-v19.gtf</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id41">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples.html#id42">Access</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#create-a-database">Create a database</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#interact-with-a-database">Interact with a database</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#feature-objects">Feature objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../autodocs/gffutils.feature.feature_from_line.html">gffutils.feature.feature_from_line</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#utilities">Utilities</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../autodocs/gffutils.helpers.asinterval.html">gffutils.helpers.asinterval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../autodocs/gffutils.helpers.merge_attributes.html">gffutils.helpers.merge_attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../autodocs/gffutils.helpers.sanitize_gff_db.html">gffutils.helpers.sanitize_gff_db</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../autodocs/gffutils.helpers.annotate_gff_db.html">gffutils.helpers.annotate_gff_db</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../autodocs/gffutils.helpers.infer_dialect.html">gffutils.helpers.infer_dialect</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../autodocs/gffutils.helpers.example_filename.html">gffutils.helpers.example_filename</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../autodocs/gffutils.inspect.inspect.html">gffutils.inspect.inspect</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Change log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#changes-in-v0-8-4">Changes in v0.8.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#changes-in-v0-8-3-1">Changes in v0.8.3.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#changes-in-v0-8-3">Changes in v0.8.3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#new-features">New features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../changelog.html#bug-fixes">Bug fixes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../developers.html">Developer&#8217;s docs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../developers.html#package-modules">Package modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../developers.html#general-workflow">General workflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../developers.html#how-data-is-read-in">How data is read in</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developers.html#import">Import</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developers.html#access">Access</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../developers.html#little-things">Little things</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../meta.html">Meta-docs (docs about the docs)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../meta.html#building-the-docs">Building the docs</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../contents.html">gffutils</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../contents.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>gffutils.create</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <h1>Source code for gffutils.create</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sqlite3</span>
+<span class="kn">import</span> <span class="nn">six</span>
+<span class="kn">from</span> <span class="nn">textwrap</span> <span class="kn">import</span> <span class="n">dedent</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">constants</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">version</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">bins</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">helpers</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">feature</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">interface</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">iterators</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%(asctime)s</span><span class="s"> - </span><span class="si">%(levelname)s</span><span class="s"> - </span><span class="si">%(message)s</span><span class="s">&#39;</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+<span class="n">ch</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
+<span class="n">ch</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+<span class="n">ch</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">deprecation_handler</span><span class="p">(</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    As things change from version to version, deal with them here.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># After reconsidering, let&#39;s leave `infer_gene_extent` for another release.</span>
+    <span class="c"># But when it&#39;s time to deprecate it, use this code:</span>
+    <span class="k">if</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s">&#39;infer_gene_extent&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s">&quot;&#39;infer_gene_extent&#39; is deprecated as of version 0.8.4 in &quot;</span>
+                <span class="s">&quot;favor of more granular control over inferring genes and/or &quot;</span>
+                <span class="s">&quot;transcripts.  The previous default was &quot;</span>
+                <span class="s">&quot;&#39;infer_gene_extent=True`, which corresponds to the new &quot;</span>
+                <span class="s">&quot;defaults &quot;</span>
+                <span class="s">&quot;&#39;disable_infer_genes=False&#39; and &quot;</span>
+                <span class="s">&quot;&#39;disable_infer_transcripts=False&#39;. Please see the docstring &quot;</span>
+                <span class="s">&quot;for gffutils.create_db for details.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;unhandled kwarg in </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">_DBCreator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">dbfn</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">id_spec</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">merge_strategy</span><span class="o">=</span><span class="s">&#39;merge&#39;</span><span class="p">,</span> <span class="n">checklines</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">force_dialect_check</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">from_string</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">default_encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">,</span>
+                 <span class="n">disable_infer_genes</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                 <span class="n">disable_infer_transcripts</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                 <span class="n">infer_gene_extent</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                 <span class="n">force_merge_fields</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">text_factory</span><span class="o">=</span><span class="n">sqlite3</span><span class="o">.</span><span class="n">OptimizedUnicode</span><span class="p">,</span>
+                 <span class="n">pragmas</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">default_pragmas</span><span class="p">,</span> <span class="n">_keep_tempfiles</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Base class for _GFFDBCreator and _GTFDBCreator; see create_db()</span>
+<span class="sd">        function for docs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_keep_tempfiles</span> <span class="o">=</span> <span class="n">_keep_tempfiles</span>
+        <span class="k">if</span> <span class="n">force_merge_fields</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">force_merge_fields</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">merge_strategy</span> <span class="o">==</span> <span class="s">&#39;merge&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">set</span><span class="p">([</span><span class="s">&#39;start&#39;</span><span class="p">,</span> <span class="s">&#39;end&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">force_merge_fields</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Can&#39;t merge start/end fields since &quot;</span>
+                                 <span class="s">&quot;they must be integers&quot;</span><span class="p">)</span>
+            <span class="n">warn</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">force_merge_fields</span><span class="p">)</span>\
+                <span class="o">.</span><span class="n">intersection</span><span class="p">([</span><span class="s">&#39;frame&#39;</span><span class="p">,</span> <span class="s">&#39;strand&#39;</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">warn</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="s">&quot;</span><span class="si">%s</span><span class="s"> field will be merged for features with the same ID; &quot;</span>
+                    <span class="s">&quot;this may result in unusable features.&quot;</span> <span class="o">%</span> <span class="n">w</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">force_merge_fields</span> <span class="o">=</span> <span class="n">force_merge_fields</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pragmas</span> <span class="o">=</span> <span class="n">pragmas</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">merge_strategy</span> <span class="o">=</span> <span class="n">merge_strategy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">default_encoding</span> <span class="o">=</span> <span class="n">default_encoding</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">infer_gene_extent</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;&#39;infer_gene_extent&#39; will be deprecated. For now, &quot;</span>
+                          <span class="s">&quot;the following equivalent values were automatically &quot;</span>
+                          <span class="s">&quot;set: &#39;disable_infer_genes=True&#39;, &quot;</span>
+                          <span class="s">&quot;&#39;disable_infer_transcripts=True&#39;. Please use these &quot;</span>
+                          <span class="s">&quot;instead in the future.&quot;</span><span class="p">)</span>
+            <span class="n">disable_infer_genes</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">disable_infer_transcripts</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">disable_infer_genes</span> <span class="o">=</span> <span class="n">disable_infer_genes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">disable_infer_transcripts</span> <span class="o">=</span> <span class="n">disable_infer_transcripts</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_autoincrements</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">force</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dbfn</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">dbfn</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dbfn</span> <span class="o">=</span> <span class="n">dbfn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_spec</span> <span class="o">=</span> <span class="n">id_spec</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dbfn</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+            <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">dbfn</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">conn</span> <span class="o">=</span> <span class="n">dbfn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="n">conn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">row_factory</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Row</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_verbose</span><span class="p">(</span><span class="n">verbose</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">text_factory</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">==</span> <span class="s">&#39;debug&#39;</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;setting text factory to </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">text_factory</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">text_factory</span> <span class="o">=</span> <span class="n">text_factory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">data</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_orig_logger_level</span> <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">level</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">iterator</span> <span class="o">=</span> <span class="n">iterators</span><span class="o">.</span><span class="n">DataIterator</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">checklines</span><span class="o">=</span><span class="n">checklines</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">,</span>
+            <span class="n">force_dialect_check</span><span class="o">=</span><span class="n">force_dialect_check</span><span class="p">,</span> <span class="n">from_string</span><span class="o">=</span><span class="n">from_string</span><span class="p">,</span>
+            <span class="n">dialect</span><span class="o">=</span><span class="n">dialect</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">set_verbose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">verbose</span> <span class="o">==</span> <span class="s">&#39;debug&#39;</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+
+    <span class="k">def</span> <span class="nf">_increment_featuretype_autoid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_autoincrements</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">_</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_autoincrements</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_id_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given a Feature from self.iterator, figure out what the ID should be.</span>
+
+<span class="sd">        This uses `self.id_spec` identify the ID.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># If id_spec is a string, convert to iterable for later</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id_spec</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+            <span class="n">id_key</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">id_spec</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id_spec</span><span class="p">,</span> <span class="s">&#39;__call__&#39;</span><span class="p">):</span>
+            <span class="n">id_key</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">id_spec</span><span class="p">]</span>
+
+        <span class="c"># If dict, then assume it&#39;s a feature -&gt; attribute mapping, e.g.,</span>
+        <span class="c"># {&#39;gene&#39;: &#39;gene_id&#39;} for GTF</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id_spec</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">id_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_spec</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">featuretype</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">id_key</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+                    <span class="n">id_key</span> <span class="o">=</span> <span class="p">[</span><span class="n">id_key</span><span class="p">]</span>
+
+            <span class="c"># Otherwise, use default auto-increment.</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_increment_featuretype_autoid</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">featuretype</span><span class="p">)</span>
+
+        <span class="c"># Otherwise assume it&#39;s an iterable.</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">id_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_spec</span>
+
+        <span class="c"># Then try them in order, returning the first one that works:</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">id_key</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="s">&#39;__call__&#39;</span><span class="p">):</span>
+                <span class="n">_id</span> <span class="o">=</span> <span class="n">k</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">_id</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">_id</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;autoincrement:&#39;</span><span class="p">):</span>
+                        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_increment_featuretype_autoid</span><span class="p">(</span><span class="n">_id</span><span class="p">[</span><span class="mi">14</span><span class="p">:])</span>
+                    <span class="k">return</span> <span class="n">_id</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c"># use GFF fields rather than attributes for cases like :seqid:</span>
+                <span class="c"># or :strand:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;:&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;:&#39;</span><span class="p">):</span>
+                    <span class="c"># No [0] here -- only attributes key/vals are forced into</span>
+                    <span class="c"># lists, not standard GFF fields.</span>
+                    <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">f</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">):</span>
+                        <span class="k">pass</span>
+        <span class="c"># If we get here, then default autoincrement</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_increment_featuretype_autoid</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">featuretype</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_feature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ID</span><span class="p">):</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="n">constants</span><span class="o">.</span><span class="n">_SELECT</span> <span class="o">+</span> <span class="s">&#39; WHERE id = ?&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">ID</span><span class="p">,))</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">feature</span><span class="o">.</span><span class="n">Feature</span><span class="p">(</span><span class="n">dialect</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">iterator</span><span class="o">.</span><span class="n">dialect</span><span class="p">,</span> <span class="o">**</span><span class="n">results</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_do_merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">merge_strategy</span><span class="p">,</span> <span class="n">add_duplicate</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Different merge strategies upon name conflicts.</span>
+
+<span class="sd">        &quot;error&quot;:</span>
+<span class="sd">            Raise error</span>
+
+<span class="sd">        &quot;warning&quot;</span>
+<span class="sd">            Log a warning</span>
+
+<span class="sd">        &quot;merge&quot;:</span>
+<span class="sd">            Combine old and new attributes -- but only if everything else</span>
+<span class="sd">            matches; otherwise error.  This can be slow, but is thorough.</span>
+
+<span class="sd">        &quot;create_unique&quot;:</span>
+<span class="sd">            Autoincrement based on the ID, always creating a new ID.</span>
+
+<span class="sd">        &quot;replace&quot;:</span>
+<span class="sd">            Replaces existing database feature with `f`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">merge_strategy</span> <span class="o">==</span> <span class="s">&#39;error&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Duplicate ID {0.id}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">merge_strategy</span> <span class="o">==</span> <span class="s">&#39;warning&#39;</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s">&quot;Duplicate lines in file for id &#39;{0.id}&#39;; &quot;</span>
+                <span class="s">&quot;ignoring all but the first&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+            <span class="k">return</span> <span class="bp">None</span><span class="p">,</span> <span class="n">merge_strategy</span>
+
+        <span class="k">elif</span> <span class="n">merge_strategy</span> <span class="o">==</span> <span class="s">&#39;replace&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">f</span><span class="p">,</span> <span class="n">merge_strategy</span>
+
+        <span class="c"># This is by far the most complicated strategy.</span>
+        <span class="k">elif</span> <span class="n">merge_strategy</span> <span class="o">==</span> <span class="s">&#39;merge&#39;</span><span class="p">:</span>
+
+            <span class="c"># Recall that if we made it to this method, there was at least one</span>
+            <span class="c"># ID collision.</span>
+
+            <span class="c"># This will eventually contain the features that match ID AND that</span>
+            <span class="c"># match non-attribute fields like start, stop, strand, etc.</span>
+            <span class="n">features_to_merge</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="c"># Iterate through all features that have the same ID according to</span>
+            <span class="c"># the id_spec provided.</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">==</span> <span class="s">&quot;debug&quot;</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;candidates with same idspec: </span><span class="si">%s</span><span class="s">&#39;</span>
+                             <span class="o">%</span> <span class="p">([</span><span class="n">i</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_candidate_merges</span><span class="p">(</span><span class="n">f</span><span class="p">)]))</span>
+
+            <span class="c"># If force_merge_fields was provided, don&#39;t pay attention to these</span>
+            <span class="c"># fields if they&#39;re different.  We are assuming attributes will be</span>
+            <span class="c"># different, hence the [:-1]</span>
+            <span class="n">_gffkeys_to_check</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+                <span class="nb">set</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">_gffkeys</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">force_merge_fields</span><span class="p">))</span>
+
+            <span class="k">for</span> <span class="n">existing_feature</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_candidate_merges</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+                <span class="c"># Check other GFF fields (if not specified in</span>
+                <span class="c"># self.force_merge_fields) to make sure they match.</span>
+                <span class="n">other_attributes_same</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">_gffkeys_to_check</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">existing_feature</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+                        <span class="n">other_attributes_same</span> <span class="o">=</span> <span class="bp">False</span>
+                        <span class="k">break</span>
+
+                <span class="k">if</span> <span class="n">other_attributes_same</span><span class="p">:</span>
+                    <span class="c"># All the other GFF fields match.  So this existing feature</span>
+                    <span class="c"># should be merged.</span>
+                    <span class="n">features_to_merge</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">existing_feature</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">==</span> <span class="s">&#39;debug&#39;</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                            <span class="s">&#39;same attributes between:</span><span class="se">\n</span><span class="s">existing: </span><span class="si">%s</span><span class="s">&#39;</span>
+                            <span class="s">&#39;</span><span class="se">\n</span><span class="s">this    : </span><span class="si">%s</span><span class="s">&#39;</span>
+                            <span class="o">%</span> <span class="p">(</span><span class="n">existing_feature</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c"># The existing feature&#39;s GFF fields don&#39;t match, so don&#39;t</span>
+                    <span class="c"># append anything.</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">==</span> <span class="s">&#39;debug&#39;</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                            <span class="s">&#39;different attributes between:</span><span class="se">\n</span><span class="s">existing: </span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span>
+                            <span class="s">&#39;this    : </span><span class="si">%s</span><span class="s">&#39;</span>
+                            <span class="o">%</span> <span class="p">(</span><span class="n">existing_feature</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">features_to_merge</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="c"># No merge candidates found, so we should make a new ID for</span>
+                <span class="c"># this feature. This can happen when idspecs match, but other</span>
+                <span class="c"># fields (like start/stop) are different.  Call this method</span>
+                <span class="c"># again, but using the &quot;create_unique&quot; strategy, and then</span>
+                <span class="c"># record the newly-created ID in the duplicates table.</span>
+                <span class="n">orig_id</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">id</span>
+                <span class="n">uniqued_feature</span><span class="p">,</span> <span class="n">merge_strategy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_do_merge</span><span class="p">(</span>
+                    <span class="n">f</span><span class="p">,</span> <span class="n">merge_strategy</span><span class="o">=</span><span class="s">&#39;create_unique&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_add_duplicate</span><span class="p">(</span><span class="n">orig_id</span><span class="p">,</span> <span class="n">uniqued_feature</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">uniqued_feature</span><span class="p">,</span> <span class="n">merge_strategy</span>
+
+            <span class="c"># Whoo! Found some candidates to merge.</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">==</span> <span class="s">&#39;debug&#39;</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;num candidates: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">features_to_merge</span><span class="p">))</span>
+
+                <span class="c"># This is the attributes dictionary we&#39;ll be modifying.</span>
+                <span class="n">merged_attributes</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">attributes</span><span class="p">)</span>
+
+                <span class="c"># Keep track of non-attribute fields (this will be an empty</span>
+                <span class="c"># dict if no force_merge_fields)</span>
+                <span class="n">final_fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+                    <span class="p">[(</span><span class="n">field</span><span class="p">,</span> <span class="nb">set</span><span class="p">([</span><span class="nb">getattr</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">field</span><span class="p">)]))</span>
+                     <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">force_merge_fields</span><span class="p">])</span>
+
+                <span class="c"># Update the attributes</span>
+                <span class="k">for</span> <span class="n">existing_feature</span> <span class="ow">in</span> <span class="n">features_to_merge</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">==</span> <span class="s">&#39;debug&#39;</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                            <span class="s">&#39;</span><span class="se">\n</span><span class="s">merging</span><span class="se">\n\n</span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">existing_feature</span><span class="p">))</span>
+                    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">existing_feature</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="n">v</span> <span class="o">=</span> <span class="n">merged_attributes</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="p">[])</span>
+                        <span class="n">v</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">existing_feature</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+                        <span class="n">merged_attributes</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+
+                    <span class="c"># Update the set of non-attribute fields found so far</span>
+                    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">force_merge_fields</span><span class="p">:</span>
+                        <span class="n">final_fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                            <span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">existing_feature</span><span class="p">,</span> <span class="n">field</span><span class="p">)])</span>
+
+                <span class="c"># Set the merged attributes</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">merged_attributes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">merged_attributes</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+                <span class="n">existing_feature</span><span class="o">.</span><span class="n">attributes</span> <span class="o">=</span> <span class="n">merged_attributes</span>
+
+                <span class="c"># Set the final merged non-attributes</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">final_fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="n">existing_feature</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">v</span><span class="p">))))</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">==</span> <span class="s">&#39;debug&#39;</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">MERGED:</span><span class="se">\n</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">existing_feature</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">existing_feature</span><span class="p">,</span> <span class="n">merge_strategy</span>
+
+        <span class="k">elif</span> <span class="n">merge_strategy</span> <span class="o">==</span> <span class="s">&#39;create_unique&#39;</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_increment_featuretype_autoid</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">f</span><span class="p">,</span> <span class="n">merge_strategy</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Invalid merge strategy &#39;</span><span class="si">%s</span><span class="s">&#39;&quot;</span>
+                             <span class="o">%</span> <span class="p">(</span><span class="n">merge_strategy</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_add_duplicate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idspecid</span><span class="p">,</span> <span class="n">newid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds a duplicate ID (as identified by id_spec) and its new ID to the</span>
+<span class="sd">        duplicates table so that they can be later searched for merging.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        newid : str</span>
+<span class="sd">            The primary key used in the features table</span>
+
+<span class="sd">        idspecid : str</span>
+<span class="sd">            The ID identified by id_spec</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">                INSERT INTO duplicates</span>
+<span class="sd">                (idspecid, newid)</span>
+<span class="sd">                VALUES (?, ?)&#39;&#39;&#39;</span><span class="p">,</span>
+                <span class="p">(</span><span class="n">idspecid</span><span class="p">,</span> <span class="n">newid</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">ProgrammingError</span><span class="p">:</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">                INSERT INTO duplicates</span>
+<span class="sd">                (idspecid, newid)</span>
+<span class="sd">                VALUES (?, ?)&#39;&#39;&#39;</span><span class="p">,</span>
+                <span class="p">(</span><span class="n">idspecid</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_encoding</span><span class="p">),</span>
+                 <span class="n">newid</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_encoding</span><span class="p">))</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">==</span> <span class="s">&#39;debug&#39;</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;added id=</span><span class="si">%s</span><span class="s">; new=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">idspecid</span><span class="p">,</span> <span class="n">newid</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_candidate_merges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Identifies those features that originally had the same ID as `f`</span>
+<span class="sd">        (according to the id_spec),  but were modified because of duplicate</span>
+<span class="sd">        IDs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_feature</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="p">)]</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="n">constants</span><span class="o">.</span><span class="n">_SELECT</span> <span class="o">+</span> <span class="s">&#39;&#39;&#39;</span>
+<span class="s">            JOIN duplicates ON</span>
+<span class="s">            duplicates.newid = features.id WHERE duplicates.idspecid = ?&#39;&#39;&#39;</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="p">,)</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+            <span class="n">candidates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">feature</span><span class="o">.</span><span class="n">Feature</span><span class="p">(</span><span class="n">dialect</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">iterator</span><span class="o">.</span><span class="n">dialect</span><span class="p">,</span> <span class="o">**</span><span class="n">i</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">candidates</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_populate_from_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="k">def</span> <span class="nf">_update_relations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="k">def</span> <span class="nf">_drop_indexes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">constants</span><span class="o">.</span><span class="n">INDEXES</span><span class="p">:</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;DROP INDEX IF EXISTS ?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">index</span><span class="p">,))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">set_pragmas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pragmas</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set pragmas for the current database connection.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pragmas : dict</span>
+<span class="sd">            Dictionary of pragmas; see constants.default_pragmas for a template</span>
+<span class="sd">            and http://www.sqlite.org/pragma.html for a full list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pragmas</span> <span class="o">=</span> <span class="n">pragmas</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">executescript</span><span class="p">(</span>
+            <span class="s">&#39;;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="p">[</span><span class="s">&#39;PRAGMA </span><span class="si">%s</span><span class="s">=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pragmas</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_init_tables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Table creation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">sqlite_version_info</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_pragmas</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pragmas</span><span class="p">)</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">executescript</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">SCHEMA</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Various last-minute stuff to perform after file has been parsed and</span>
+<span class="sd">        imported.</span>
+
+<span class="sd">        In general, if you&#39;ll be adding stuff to the meta table, do it here.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="s">&#39;&#39;&#39;</span>
+<span class="s">                      INSERT INTO directives VALUES (?)</span>
+<span class="s">                      &#39;&#39;&#39;</span><span class="p">,</span> <span class="p">((</span><span class="n">i</span><span class="p">,)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">iterator</span><span class="o">.</span><span class="n">directives</span><span class="p">))</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            INSERT INTO meta (version, dialect)</span>
+<span class="sd">            VALUES (:version, :dialect)&#39;&#39;&#39;</span><span class="p">,</span>
+            <span class="nb">dict</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="o">.</span><span class="n">version</span><span class="p">,</span>
+                 <span class="n">dialect</span><span class="o">=</span><span class="n">helpers</span><span class="o">.</span><span class="n">_jsonify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterator</span><span class="o">.</span><span class="n">dialect</span><span class="p">))</span>
+        <span class="p">)</span>
+
+        <span class="n">c</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span>
+            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            INSERT OR REPLACE INTO autoincrements VALUES (?, ?)</span>
+<span class="sd">            &#39;&#39;&#39;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_autoincrements</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+
+        <span class="c"># These indexes are *well* worth the effort and extra storage: over</span>
+        <span class="c"># 500x speedup on code like this:</span>
+        <span class="c">#</span>
+        <span class="c">#   genes = []</span>
+        <span class="c">#   for i in db.features_of_type(&#39;snoRNA&#39;):</span>
+        <span class="c">#       for k in db.parents(i, level=1, featuretype=&#39;gene&#39;):</span>
+        <span class="c">#           genes.append(k.id)</span>
+        <span class="c">#</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Creating relations(parent) index&quot;</span><span class="p">)</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;DROP INDEX IF EXISTS relationsparent&#39;</span><span class="p">)</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;CREATE INDEX relationsparent ON relations (parent)&#39;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Creating relations(child) index&quot;</span><span class="p">)</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;DROP INDEX IF EXISTS relationschild&#39;</span><span class="p">)</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;CREATE INDEX relationschild ON relations (child)&#39;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Creating features(featuretype) index&quot;</span><span class="p">)</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;DROP INDEX IF EXISTS featuretype&#39;</span><span class="p">)</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;CREATE INDEX featuretype ON features (featuretype)&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">iterator</span><span class="o">.</span><span class="n">warnings</span>
+
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calls various methods sequentially in order to fully build the</span>
+<span class="sd">        database.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># Calls each of these methods in order.  _populate_from_lines and</span>
+        <span class="c"># _update_relations must be implemented in subclasses.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_tables</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_populate_from_lines</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterator</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_relations</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_finalize</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterator</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_populate_from_lines</span><span class="p">(</span><span class="n">iterator</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_relations</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Execute a query directly on the database.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">i</span>
+
+    <span class="k">def</span> <span class="nf">_insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">cursor</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Insert a feature into the database.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">_INSERT</span><span class="p">,</span> <span class="n">feature</span><span class="o">.</span><span class="n">astuple</span><span class="p">())</span>
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">ProgrammingError</span><span class="p">:</span>
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                <span class="n">constants</span><span class="o">.</span><span class="n">_INSERT</span><span class="p">,</span> <span class="n">feature</span><span class="o">.</span><span class="n">astuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_encoding</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">cursor</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Insert a feature into the database.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                <span class="n">constants</span><span class="o">.</span><span class="n">_UPDATE</span><span class="p">,</span>
+                <span class="nb">list</span><span class="p">(</span><span class="n">feature</span><span class="o">.</span><span class="n">astuple</span><span class="p">())</span> <span class="o">+</span> <span class="p">[</span><span class="n">feature</span><span class="o">.</span><span class="n">id</span><span class="p">])</span>
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">ProgrammingError</span><span class="p">:</span>
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                <span class="n">constants</span><span class="o">.</span><span class="n">_INSERT</span><span class="p">,</span>
+                <span class="nb">list</span><span class="p">(</span><span class="n">feature</span><span class="o">.</span><span class="n">astuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_encoding</span><span class="p">))</span> <span class="o">+</span> <span class="p">[</span><span class="n">feature</span><span class="o">.</span><span class="n">id</span><span class="p">])</span>
+
+
+<span class="k">class</span> <span class="nc">_GFFDBCreator</span><span class="p">(</span><span class="n">_DBCreator</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        _DBCreator subclass specifically for working with GFF files.</span>
+
+<span class="sd">        create_db() delegates to this class -- see that function for docs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">_GFFDBCreator</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_populate_from_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">):</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_drop_indexes</span><span class="p">()</span>
+        <span class="n">last_perc</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Populating features&quot;</span><span class="p">)</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s">&quot;Populating features table and first-order relations: &quot;</span>
+               <span class="s">&quot;</span><span class="si">%d</span><span class="s"> features</span><span class="se">\r</span><span class="s">&quot;</span><span class="p">)</span>
+
+        <span class="c"># c.executemany() was not as much of an improvement as I had expected.</span>
+        <span class="c">#</span>
+        <span class="c"># Compared to a benchmark of doing each insert separately:</span>
+        <span class="c"># executemany using a list of dicts to iterate over is ~15% slower</span>
+        <span class="c"># executemany using a list of tuples to iterate over is ~8% faster</span>
+        <span class="n">features_seen</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">_features</span><span class="p">,</span> <span class="n">_relations</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
+            <span class="n">features_seen</span> <span class="o">=</span> <span class="n">i</span>
+
+            <span class="c"># Percent complete</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">1000</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">msg</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+            <span class="c"># TODO: handle ID creation here...should be combined with the</span>
+            <span class="c"># INSERT below (that is, don&#39;t IGNORE below but catch the error and</span>
+            <span class="c"># re-try with a new ID).  However, is this doable with an</span>
+            <span class="c"># execute-many?</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_id_handler</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_insert</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">IntegrityError</span><span class="p">:</span>
+                <span class="n">fixed</span><span class="p">,</span> <span class="n">final_strategy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_do_merge</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">merge_strategy</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">final_strategy</span> <span class="o">==</span> <span class="s">&#39;merge&#39;</span><span class="p">:</span>
+                    <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">                        UPDATE features SET attributes = ?</span>
+<span class="sd">                        WHERE id = ?</span>
+<span class="sd">                        &#39;&#39;&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">helpers</span><span class="o">.</span><span class="n">_jsonify</span><span class="p">(</span><span class="n">fixed</span><span class="o">.</span><span class="n">attributes</span><span class="p">),</span>
+                              <span class="n">fixed</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+
+                    <span class="c"># For any additional fields we&#39;re merging, update those as</span>
+                    <span class="c"># well.</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">force_merge_fields</span><span class="p">:</span>
+                        <span class="n">_set_clause</span> <span class="o">=</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                            <span class="p">[</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> = ?&#39;</span> <span class="o">%</span> <span class="n">field</span>
+                             <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">force_merge_fields</span><span class="p">])</span>
+                        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span>
+                            <span class="nb">getattr</span><span class="p">(</span><span class="n">fixed</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
+                            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">force_merge_fields</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">fixed</span><span class="o">.</span><span class="n">id</span><span class="p">]</span>
+                        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">                            UPDATE features SET %s</span>
+<span class="sd">                            WHERE id = ?</span>
+<span class="sd">                            &#39;&#39;&#39;</span> <span class="o">%</span> <span class="n">_set_clause</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
+
+                <span class="k">elif</span> <span class="n">final_strategy</span> <span class="o">==</span> <span class="s">&#39;replace&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_replace</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+
+                <span class="k">elif</span> <span class="n">final_strategy</span> <span class="o">==</span> <span class="s">&#39;create_unique&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_insert</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="s">&#39;Parent&#39;</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">attributes</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s">&#39;Parent&#39;</span><span class="p">]:</span>
+                    <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">                        INSERT OR IGNORE INTO relations VALUES</span>
+<span class="sd">                        (?, ?, 1)</span>
+<span class="sd">                        &#39;&#39;&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">features_seen</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;No lines parsed -- was an empty file provided?&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_update_relations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Updating relations&quot;</span><span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">c2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">c3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+        <span class="c"># TODO: pre-compute indexes?</span>
+        <span class="c"># c.execute(&#39;CREATE INDEX ids ON features (id)&#39;)</span>
+        <span class="c"># c.execute(&#39;CREATE INDEX parentindex ON relations (parent)&#39;)</span>
+        <span class="c"># c.execute(&#39;CREATE INDEX childindex ON relations (child)&#39;)</span>
+        <span class="c"># self.conn.commit()</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_keep_tempfiles</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+            <span class="n">suffix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keep_tempfiles</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">suffix</span> <span class="o">=</span> <span class="s">&#39;.gffutils&#39;</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">delete</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="n">suffix</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">fout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+
+        <span class="c"># Here we look for &quot;grandchildren&quot; -- for each ID, get the child</span>
+        <span class="c"># (parenthetical subquery below); then for each of those get *its*</span>
+        <span class="c"># child (main query below).</span>
+        <span class="c">#</span>
+        <span class="c"># Results are written to temp file so that we don&#39;t read and write at</span>
+        <span class="c"># the same time, which would slow things down considerably.</span>
+
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;SELECT id FROM features&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="n">c</span><span class="p">:</span>
+            <span class="n">c2</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;&#39;&#39;</span>
+<span class="s">                       SELECT child FROM relations WHERE parent IN</span>
+<span class="s">                       (SELECT child FROM relations WHERE parent = ?)</span>
+<span class="s">                       &#39;&#39;&#39;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">parent</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">grandchild</span> <span class="ow">in</span> <span class="n">c2</span><span class="p">:</span>
+                <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="n">parent</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">grandchild</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">fout</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">relations_generator</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="n">fout</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
+                <span class="n">parent</span><span class="p">,</span> <span class="n">child</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">)</span>
+                <span class="k">yield</span> <span class="nb">dict</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="n">child</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">c</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span>
+            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            INSERT OR IGNORE INTO relations VALUES</span>
+<span class="sd">            (:parent, :child, :level)</span>
+<span class="sd">            &#39;&#39;&#39;</span><span class="p">,</span> <span class="n">relations_generator</span><span class="p">())</span>
+
+        <span class="c"># TODO: Index creation.  Which ones affect performance?</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;DROP INDEX IF EXISTS binindex&quot;</span><span class="p">)</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;CREATE INDEX binindex ON features (bin)&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keep_tempfiles</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">fout</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">_GTFDBCreator</span><span class="p">(</span><span class="n">_DBCreator</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        create_db() delegates to this class -- see that function for docs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transcript_key</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;transcript_key&#39;</span><span class="p">,</span> <span class="s">&#39;transcript_id&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gene_key</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;gene_key&#39;</span><span class="p">,</span> <span class="s">&#39;gene_id&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subfeature</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;subfeature&#39;</span><span class="p">,</span> <span class="s">&#39;exon&#39;</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">_GTFDBCreator</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_populate_from_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s">&quot;Populating features table and first-order relations: </span><span class="si">%d</span><span class="s"> &quot;</span>
+            <span class="s">&quot;features</span><span class="se">\r</span><span class="s">&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+        <span class="c"># Only check this many features to see if it&#39;s a gene or transcript and</span>
+        <span class="c"># issue the appropriate warning.</span>
+        <span class="n">gene_and_transcript_check_limit</span> <span class="o">=</span> <span class="mi">1000</span>
+
+        <span class="n">last_perc</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">lines_seen</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
+
+            <span class="c"># See issues #48 and #20.</span>
+            <span class="k">if</span> <span class="n">lines_seen</span> <span class="o">&lt;</span> <span class="n">gene_and_transcript_check_limit</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">featuretype</span> <span class="o">==</span> <span class="s">&#39;transcript&#39;</span> <span class="ow">and</span>
+                    <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">disable_infer_transcripts</span>
+                <span class="p">):</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                        <span class="s">&quot;It appears you have a transcript feature in your GTF &quot;</span>
+                        <span class="s">&quot;file. You may want to use the &quot;</span>
+                        <span class="s">&quot;`disable_infer_transcripts` &quot;</span>
+                        <span class="s">&quot;option to speed up database creation&quot;</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="p">(</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">featuretype</span> <span class="o">==</span> <span class="s">&#39;gene&#39;</span> <span class="ow">and</span>
+                    <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">disable_infer_genes</span>
+                <span class="p">):</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                        <span class="s">&quot;It appears you have a gene feature in your GTF &quot;</span>
+                        <span class="s">&quot;file. You may want to use the &quot;</span>
+                        <span class="s">&quot;`disable_infer_genes` &quot;</span>
+                        <span class="s">&quot;option to speed up database creation&quot;</span><span class="p">)</span>
+
+            <span class="n">lines_seen</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+
+            <span class="c"># Percent complete</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+
+                <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">1000</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">msg</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+            <span class="n">f</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_id_handler</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+            <span class="c"># Insert the feature itself...</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_insert</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">IntegrityError</span><span class="p">:</span>
+                <span class="n">fixed</span><span class="p">,</span> <span class="n">final_strategy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_do_merge</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">merge_strategy</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">final_strategy</span> <span class="o">==</span> <span class="s">&#39;merge&#39;</span><span class="p">:</span>
+                    <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">                        UPDATE features SET attributes = ?</span>
+<span class="sd">                        WHERE id = ?</span>
+<span class="sd">                        &#39;&#39;&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">helpers</span><span class="o">.</span><span class="n">_jsonify</span><span class="p">(</span><span class="n">fixed</span><span class="o">.</span><span class="n">attributes</span><span class="p">),</span>
+                              <span class="n">fixed</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+                    <span class="c"># For any additional fields we&#39;re merging, update those as</span>
+                    <span class="c"># well.</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">force_merge_fields</span><span class="p">:</span>
+                        <span class="n">_set_clause</span> <span class="o">=</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                            <span class="p">[</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> = ?&#39;</span> <span class="o">%</span> <span class="n">field</span>
+                             <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">force_merge_fields</span><span class="p">])</span>
+                        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">fixed</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
+                                  <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">force_merge_fields</span><span class="p">]</span>\
+                            <span class="o">+</span> <span class="p">[</span><span class="n">fixed</span><span class="o">.</span><span class="n">id</span><span class="p">]</span>
+                        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">                            UPDATE features SET %s</span>
+<span class="sd">                            WHERE id = ?</span>
+<span class="sd">                            &#39;&#39;&#39;</span> <span class="o">%</span> <span class="n">_set_clause</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">final_strategy</span> <span class="o">==</span> <span class="s">&#39;replace&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_replace</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">final_strategy</span> <span class="o">==</span> <span class="s">&#39;create_unique&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_insert</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+
+            <span class="c"># For an on-spec GTF file,</span>
+            <span class="c"># self.transcript_key = &quot;transcript_id&quot;</span>
+            <span class="c"># self.gene_key = &quot;gene_id&quot;</span>
+            <span class="n">relations</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">parent</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="n">grandparent</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">transcript_key</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">attributes</span><span class="p">:</span>
+                <span class="n">parent</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">transcript_key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">relations</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">parent</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene_key</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">attributes</span><span class="p">:</span>
+                <span class="n">grandparent</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">gene_key</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">grandparent</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">grandparent</span> <span class="o">=</span> <span class="n">grandparent</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">relations</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">grandparent</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="n">parent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                        <span class="n">relations</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">grandparent</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+            <span class="c"># Note the IGNORE, so relationships defined many times in the file</span>
+            <span class="c"># (e.g., the transcript-gene relation on pretty much every line in</span>
+            <span class="c"># a GTF) will only be included once.</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span>
+                <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">                INSERT OR IGNORE INTO relations (parent, child, level)</span>
+<span class="sd">                VALUES (?, ?, ?)</span>
+<span class="sd">                &#39;&#39;&#39;</span><span class="p">,</span> <span class="n">relations</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">lines_seen</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;No lines parsed -- was an empty file provided?&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Committing changes&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_update_relations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">disable_infer_genes</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">disable_infer_transcripts</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c"># TODO: do any indexes speed this up?</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">c2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Creating relations(parent) index&quot;</span><span class="p">)</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;DROP INDEX IF EXISTS relationsparent&#39;</span><span class="p">)</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;CREATE INDEX relationsparent ON relations (parent)&#39;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Creating relations(child) index&quot;</span><span class="p">)</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;DROP INDEX IF EXISTS relationschild&#39;</span><span class="p">)</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;CREATE INDEX relationschild ON relations (child)&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">disable_infer_genes</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">disable_infer_transcripts</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;gene and transcript&#39;</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">disable_infer_transcripts</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;gene&#39;</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">disable_infer_genes</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;transcript&#39;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Inferring </span><span class="si">%s</span><span class="s"> extents &#39;</span>
+                    <span class="s">&#39;and writing to tempfile&#39;</span> <span class="o">%</span> <span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_keep_tempfiles</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+            <span class="n">suffix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keep_tempfiles</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">suffix</span> <span class="o">=</span> <span class="s">&#39;.gffutils&#39;</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">delete</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="n">suffix</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">fout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tmpfile</span> <span class="o">=</span> <span class="n">tmp</span>
+
+        <span class="c"># This takes some explanation...</span>
+        <span class="c">#</span>
+        <span class="c"># First, the nested subquery gets the level-1 parents of</span>
+        <span class="c"># self.subfeature featuretypes.  For an on-spec GTF file,</span>
+        <span class="c"># self.subfeature = &quot;exon&quot;. So this subquery translates to getting the</span>
+        <span class="c"># distinct level-1 parents of exons -- which are transcripts.</span>
+        <span class="c">#</span>
+        <span class="c"># OK, so this first subquery is now a list of transcripts; call it</span>
+        <span class="c"># &quot;firstlevel&quot;.</span>
+        <span class="c">#</span>
+        <span class="c"># Then join firstlevel on relations, but the trick is to now consider</span>
+        <span class="c"># each transcript a *child* -- so that relations.parent (on the first</span>
+        <span class="c"># line of the query) will be the first-level parent of the transcript</span>
+        <span class="c"># (the gene).</span>
+        <span class="c">#</span>
+        <span class="c">#</span>
+        <span class="c"># The result is something like:</span>
+        <span class="c">#</span>
+        <span class="c">#   transcript1     gene1</span>
+        <span class="c">#   transcript2     gene1</span>
+        <span class="c">#   transcript3     gene2</span>
+        <span class="c">#</span>
+        <span class="c"># Note that genes are repeated; below we need to ensure that only one</span>
+        <span class="c"># is added.  To ensure this, the results are ordered by the gene ID.</span>
+        <span class="c">#</span>
+        <span class="c"># By the way, we do this even if we&#39;re only looking for transcripts or</span>
+        <span class="c"># only looking for genes.</span>
+
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            SELECT DISTINCT firstlevel.parent, relations.parent</span>
+<span class="sd">            FROM (</span>
+<span class="sd">                SELECT DISTINCT parent</span>
+<span class="sd">                FROM relations</span>
+<span class="sd">                JOIN features ON features.id = relations.child</span>
+<span class="sd">                WHERE features.featuretype = ?</span>
+<span class="sd">                AND relations.level = 1</span>
+<span class="sd">            )</span>
+<span class="sd">            AS firstlevel</span>
+<span class="sd">            JOIN relations ON firstlevel.parent = child</span>
+<span class="sd">            WHERE relations.level = 1</span>
+<span class="sd">            ORDER BY relations.parent</span>
+<span class="sd">            &#39;&#39;&#39;</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subfeature</span><span class="p">,))</span>
+
+        <span class="c"># Now we iterate through those results (using a new cursor) to infer</span>
+        <span class="c"># the extent of transcripts and/or genes.</span>
+
+        <span class="n">last_gene_id</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">n_features</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">transcript_id</span><span class="p">,</span> <span class="n">gene_id</span> <span class="ow">in</span> <span class="n">c</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">disable_infer_transcripts</span><span class="p">:</span>
+                <span class="c"># transcript extent</span>
+                <span class="n">c2</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">                    SELECT MIN(start), MAX(end), strand, seqid</span>
+<span class="sd">                    FROM features</span>
+<span class="sd">                    JOIN relations ON</span>
+<span class="sd">                    features.id = relations.child</span>
+<span class="sd">                    WHERE parent = ? AND featuretype == ?</span>
+<span class="sd">                    &#39;&#39;&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">transcript_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">subfeature</span><span class="p">))</span>
+                <span class="n">transcript_start</span><span class="p">,</span> <span class="n">transcript_end</span><span class="p">,</span> <span class="n">strand</span><span class="p">,</span> <span class="n">seqid</span> <span class="o">=</span> <span class="n">c2</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+                <span class="n">transcript_attributes</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">transcript_key</span><span class="p">:</span> <span class="p">[</span><span class="n">transcript_id</span><span class="p">],</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">gene_key</span><span class="p">:</span> <span class="p">[</span><span class="n">gene_id</span><span class="p">]</span>
+                <span class="p">}</span>
+                <span class="n">transcript_bin</span> <span class="o">=</span> <span class="n">bins</span><span class="o">.</span><span class="n">bins</span><span class="p">(</span>
+                    <span class="n">transcript_start</span><span class="p">,</span> <span class="n">transcript_end</span><span class="p">,</span> <span class="n">one</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+                <span class="c"># Write out to file; we&#39;ll be reading it back in shortly.  Omit</span>
+                <span class="c"># score, frame, source, and extra since they will always have</span>
+                <span class="c"># the same default values (&quot;.&quot;, &quot;.&quot;, &quot;gffutils_derived&quot;, and []</span>
+                <span class="c"># respectively)</span>
+
+                <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="p">[</span>
+                    <span class="n">transcript_id</span><span class="p">,</span>
+                    <span class="n">seqid</span><span class="p">,</span>
+                    <span class="n">transcript_start</span><span class="p">,</span>
+                    <span class="n">transcript_end</span><span class="p">,</span>
+                    <span class="n">strand</span><span class="p">,</span>
+                    <span class="s">&#39;transcript&#39;</span><span class="p">,</span>
+                    <span class="n">transcript_bin</span><span class="p">,</span>
+                    <span class="n">helpers</span><span class="o">.</span><span class="n">_jsonify</span><span class="p">(</span><span class="n">transcript_attributes</span><span class="p">)</span>
+                <span class="p">]))</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+
+                <span class="n">n_features</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">disable_infer_genes</span><span class="p">:</span>
+                <span class="c"># Infer gene extent, but only if we haven&#39;t done so already</span>
+                <span class="k">if</span> <span class="n">gene_id</span> <span class="o">!=</span> <span class="n">last_gene_id</span><span class="p">:</span>
+                    <span class="n">c2</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">                        SELECT MIN(start), MAX(end), strand, seqid</span>
+<span class="sd">                        FROM features</span>
+<span class="sd">                        JOIN relations ON</span>
+<span class="sd">                        features.id = relations.child</span>
+<span class="sd">                        WHERE parent = ? AND featuretype == ?</span>
+<span class="sd">                        &#39;&#39;&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">gene_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">subfeature</span><span class="p">))</span>
+                    <span class="n">gene_start</span><span class="p">,</span> <span class="n">gene_end</span><span class="p">,</span> <span class="n">strand</span><span class="p">,</span> <span class="n">seqid</span> <span class="o">=</span> <span class="n">c2</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+                    <span class="n">gene_attributes</span> <span class="o">=</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gene_key</span><span class="p">:</span> <span class="p">[</span><span class="n">gene_id</span><span class="p">]}</span>
+                    <span class="n">gene_bin</span> <span class="o">=</span> <span class="n">bins</span><span class="o">.</span><span class="n">bins</span><span class="p">(</span><span class="n">gene_start</span><span class="p">,</span> <span class="n">gene_end</span><span class="p">,</span> <span class="n">one</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+                    <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="p">[</span>
+                        <span class="n">gene_id</span><span class="p">,</span>
+                        <span class="n">seqid</span><span class="p">,</span>
+                        <span class="n">gene_start</span><span class="p">,</span>
+                        <span class="n">gene_end</span><span class="p">,</span>
+                        <span class="n">strand</span><span class="p">,</span>
+                        <span class="s">&#39;gene&#39;</span><span class="p">,</span>
+                        <span class="n">gene_bin</span><span class="p">,</span>
+                        <span class="n">helpers</span><span class="o">.</span><span class="n">_jsonify</span><span class="p">(</span><span class="n">gene_attributes</span><span class="p">)</span>
+                    <span class="p">]))</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+
+                <span class="n">last_gene_id</span> <span class="o">=</span> <span class="n">gene_id</span>
+                <span class="n">n_features</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">fout</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">derived_feature_generator</span><span class="p">():</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Generator of items from the file that was just created...</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;parent&#39;</span><span class="p">,</span> <span class="s">&#39;seqid&#39;</span><span class="p">,</span> <span class="s">&#39;start&#39;</span><span class="p">,</span> <span class="s">&#39;end&#39;</span><span class="p">,</span> <span class="s">&#39;strand&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;featuretype&#39;</span><span class="p">,</span> <span class="s">&#39;bin&#39;</span><span class="p">,</span> <span class="s">&#39;attributes&#39;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="n">fout</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
+                <span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">))))</span>
+                <span class="n">d</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;parent&#39;</span><span class="p">)</span>
+                <span class="n">d</span><span class="p">[</span><span class="s">&#39;score&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;.&#39;</span>
+                <span class="n">d</span><span class="p">[</span><span class="s">&#39;source&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;gffutils_derived&#39;</span>
+                <span class="n">d</span><span class="p">[</span><span class="s">&#39;frame&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;.&#39;</span>
+                <span class="n">d</span><span class="p">[</span><span class="s">&#39;extra&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">d</span><span class="p">[</span><span class="s">&#39;attributes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">helpers</span><span class="o">.</span><span class="n">_unjsonify</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s">&#39;attributes&#39;</span><span class="p">])</span>
+                <span class="n">f</span> <span class="o">=</span> <span class="n">feature</span><span class="o">.</span><span class="n">Feature</span><span class="p">(</span><span class="o">**</span><span class="n">d</span><span class="p">)</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_id_handler</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                <span class="k">yield</span> <span class="n">f</span>
+
+        <span class="c"># Drop the indexes so the inserts are faster</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;DROP INDEX IF EXISTS relationsparent&#39;</span><span class="p">)</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;DROP INDEX IF EXISTS relationschild&#39;</span><span class="p">)</span>
+
+        <span class="c"># Insert the just-inferred transcripts and genes.  TODO: should we</span>
+        <span class="c"># *always* use &quot;merge&quot; here for the merge_strategy?</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Importing inferred features into db&quot;</span><span class="p">)</span>
+        <span class="n">last_perc</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">derived_feature_generator</span><span class="p">()):</span>
+            <span class="n">perc</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">n_features</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">perc</span> <span class="o">!=</span> <span class="n">last_perc</span><span class="p">:</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> of </span><span class="si">%s</span><span class="s"> (</span><span class="si">%s%%</span><span class="s">)</span><span class="se">\r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">n_features</span><span class="p">,</span> <span class="n">perc</span><span class="p">))</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+            <span class="n">last_perc</span> <span class="o">=</span> <span class="n">perc</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_insert</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">IntegrityError</span><span class="p">:</span>
+                <span class="n">fixed</span><span class="p">,</span> <span class="n">final_strategy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_do_merge</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s">&#39;merge&#39;</span><span class="p">)</span>
+                <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">                    UPDATE features SET attributes = ?</span>
+<span class="sd">                    WHERE id = ?</span>
+<span class="sd">                    &#39;&#39;&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">helpers</span><span class="o">.</span><span class="n">_jsonify</span><span class="p">(</span><span class="n">fixed</span><span class="o">.</span><span class="n">attributes</span><span class="p">),</span>
+                          <span class="n">fixed</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Committing changes&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keep_tempfiles</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">fout</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="c"># TODO: recreate indexes?</span>
+
+
+<div class="viewcode-block" id="create_db"><a class="viewcode-back" href="../../autodocs/gffutils.create_db.html#gffutils.create_db">[docs]</a><span class="k">def</span> <span class="nf">create_db</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dbfn</span><span class="p">,</span> <span class="n">id_spec</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+              <span class="n">checklines</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">merge_strategy</span><span class="o">=</span><span class="s">&#39;error&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+              <span class="n">gtf_transcript_key</span><span class="o">=</span><span class="s">&#39;transcript_id&#39;</span><span class="p">,</span> <span class="n">gtf_gene_key</span><span class="o">=</span><span class="s">&#39;gene_id&#39;</span><span class="p">,</span>
+              <span class="n">gtf_subfeature</span><span class="o">=</span><span class="s">&#39;exon&#39;</span><span class="p">,</span> <span class="n">force_gff</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+              <span class="n">force_dialect_check</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">from_string</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">keep_order</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+              <span class="n">text_factory</span><span class="o">=</span><span class="n">sqlite3</span><span class="o">.</span><span class="n">OptimizedUnicode</span><span class="p">,</span> <span class="n">force_merge_fields</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+              <span class="n">pragmas</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">default_pragmas</span><span class="p">,</span> <span class="n">sort_attribute_values</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+              <span class="n">dialect</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">_keep_tempfiles</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">infer_gene_extent</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+              <span class="n">disable_infer_genes</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">disable_infer_transcripts</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+              <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a database from a GFF or GTF file.</span>
+
+<span class="sd">    For more details on when and how to use the kwargs below, see the examples</span>
+<span class="sd">    in the online documentation (:ref:`examples`).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : string or iterable</span>
+
+<span class="sd">        If a string (and `from_string` is False), then `data` is the path to</span>
+<span class="sd">        the original GFF or GTF file.</span>
+
+<span class="sd">        If a string and `from_string` is True, then assume `data` is the actual</span>
+<span class="sd">        data to use.</span>
+
+<span class="sd">        Otherwise, it&#39;s an iterable of Feature objects.</span>
+
+<span class="sd">    dbfn : string</span>
+
+<span class="sd">        Path to the database that will be created.  Can be the special string</span>
+<span class="sd">        &quot;:memory:&quot; to create an in-memory database.</span>
+
+<span class="sd">    id_spec : string, list, dict, callable, or None</span>
+
+<span class="sd">        This parameter guides what will be used as the primary key for the</span>
+<span class="sd">        database, which in turn determines how you will access individual</span>
+<span class="sd">        features by name from the database.</span>
+
+<span class="sd">        If `id_spec=None`, then auto-increment primary keys based on the</span>
+<span class="sd">        feature type (e.g., &quot;gene_1&quot;, &quot;gene_2&quot;).  This is also the fallback</span>
+<span class="sd">        behavior for the other values below.</span>
+
+<span class="sd">        If `id_spec` is a string, then look for this key in the attributes.  If</span>
+<span class="sd">        it exists, then use its value as the primary key, otherwise</span>
+<span class="sd">        autoincrement based on the feature type.  For many GFF3 files, &quot;ID&quot;</span>
+<span class="sd">        usually works well.</span>
+
+<span class="sd">        If `id_spec` is a list or tuple of keys, then check for each one in</span>
+<span class="sd">        order, using the first one found.  For GFF3, this might be [&quot;ID&quot;,</span>
+<span class="sd">        &quot;Name&quot;], which would use the ID if it exists, otherwise the Name,</span>
+<span class="sd">        otherwise autoincrement based on the feature type.</span>
+
+<span class="sd">        If `id_spec` is a dictionary, then it is a mapping of feature types to</span>
+<span class="sd">        what should be used as the ID.  For example, for GTF files, `{&#39;gene&#39;:</span>
+<span class="sd">        &#39;gene_id&#39;, &#39;transcript&#39;: &#39;transcript_id&#39;}` may be useful.  The values</span>
+<span class="sd">        of this dictionary can also be a list, e.g., `{&#39;gene&#39;: [&#39;gene_id&#39;,</span>
+<span class="sd">        &#39;geneID&#39;]}`</span>
+
+<span class="sd">        If `id_spec` is a callable object, then it accepts a dictionary from</span>
+<span class="sd">        the iterator and returns one of the following:</span>
+
+<span class="sd">            * None (in which case the feature type will be auto-incremented)</span>
+<span class="sd">            * string (which will be used as the primary key)</span>
+<span class="sd">            * special string starting with &quot;autoincrement:X&quot;, where &quot;X&quot; is</span>
+<span class="sd">              a string that will be used for auto-incrementing.  For example,</span>
+<span class="sd">              if &quot;autoincrement:chr10&quot;, then the first feature will be</span>
+<span class="sd">              &quot;chr10_1&quot;, the second &quot;chr10_2&quot;, and so on.</span>
+
+<span class="sd">    force : bool</span>
+
+<span class="sd">        If `False` (default), then raise an exception if `dbfn` already exists.</span>
+<span class="sd">        Use `force=True` to overwrite any existing databases.</span>
+
+<span class="sd">    verbose : bool</span>
+
+<span class="sd">        Report percent complete and other feedback on how the db creation is</span>
+<span class="sd">        progressing.</span>
+
+<span class="sd">        In order to report percent complete, the entire file needs to be read</span>
+<span class="sd">        once to see how many items there are; for large files you may want to</span>
+<span class="sd">        use `verbose=False` to avoid this.</span>
+
+<span class="sd">    checklines : int</span>
+
+<span class="sd">        Number of lines to check the dialect.</span>
+
+<span class="sd">    merge_strategy : str</span>
+<span class="sd">        One of {merge, create_unique, error, warning, replace}.</span>
+
+<span class="sd">        This parameter specifies the behavior when two items have an identical</span>
+<span class="sd">        primary key.</span>
+
+<span class="sd">        Using `merge_strategy=&quot;merge&quot;`, then there will be a single entry in</span>
+<span class="sd">        the database, but the attributes of all features with the same primary</span>
+<span class="sd">        key will be merged.</span>
+
+<span class="sd">        Using `merge_strategy=&quot;create_unique&quot;`, then the first entry will use</span>
+<span class="sd">        the original primary key, but the second entry will have a unique,</span>
+<span class="sd">        autoincremented primary key assigned to it</span>
+
+<span class="sd">        Using `merge_strategy=&quot;error&quot;`, a :class:`gffutils.DuplicateID`</span>
+<span class="sd">        exception will be raised.  This means you will have to edit the file</span>
+<span class="sd">        yourself to fix the duplicated IDs.</span>
+
+<span class="sd">        Using `merge_strategy=&quot;warning&quot;`, a warning will be printed to the</span>
+<span class="sd">        logger, and the duplicate feature will be skipped.</span>
+
+<span class="sd">        Using `merge_strategy=&quot;replace&quot; will replace the entire existing</span>
+<span class="sd">        feature with the new feature.</span>
+
+<span class="sd">    transform : callable</span>
+
+<span class="sd">        Function (or other callable object) that accepts a `Feature` object and</span>
+<span class="sd">        returns a (possibly modified) `Feature` object.</span>
+
+<span class="sd">    gtf_transcript_key, gtf_gene_key : string</span>
+
+<span class="sd">        Which attribute to use as the transcript ID and gene ID respectively</span>
+<span class="sd">        for GTF files.  Default is `transcript_id` and `gene_id` according to</span>
+<span class="sd">        the GTF spec.</span>
+
+<span class="sd">    gtf_subfeature : string</span>
+
+<span class="sd">        Feature type to use as a &quot;gene component&quot; when inferring gene and</span>
+<span class="sd">        transcript extents for GTF files.  Default is `exon` according to the</span>
+<span class="sd">        GTF spec.</span>
+
+<span class="sd">    force_gff : bool</span>
+<span class="sd">        If True, do not do automatic format detection -- only use GFF.</span>
+
+<span class="sd">    force_dialect_check : bool</span>
+<span class="sd">        If True, the dialect will be checkef for every feature (instead of just</span>
+<span class="sd">        `checklines` features).  This can be slow, but may be necessary for</span>
+<span class="sd">        inconsistently-formatted input files.</span>
+
+<span class="sd">    from_string : bool</span>
+<span class="sd">        If True, then treat `data` as actual data (rather than the path to</span>
+<span class="sd">        a file).</span>
+
+<span class="sd">    keep_order : bool</span>
+
+<span class="sd">        If True, all features returned from this instance will have the</span>
+<span class="sd">        order of their attributes maintained.  This can be turned on or off</span>
+<span class="sd">        database-wide by setting the `keep_order` attribute or with this</span>
+<span class="sd">        kwarg, or on a feature-by-feature basis by setting the `keep_order`</span>
+<span class="sd">        attribute of an individual feature.</span>
+
+<span class="sd">        Note that a single order of attributes will be used for all features.</span>
+<span class="sd">        Specifically, the order will be determined by the order of attribute</span>
+<span class="sd">        keys in the first `checklines` of the input data. See</span>
+<span class="sd">        helpers._choose_dialect for more information on this.</span>
+
+<span class="sd">        Default is False, since this includes a sorting step that can get</span>
+<span class="sd">        time-consuming for many features.</span>
+
+<span class="sd">    infer_gene_extent : bool</span>
+<span class="sd">        DEPRECATED in version 0.8.4. See `disable_infer_transcripts` and</span>
+<span class="sd">        `disable_infer_genes` for more granular control.</span>
+
+<span class="sd">    disable_infer_transcripts, disable_infer_genes : bool</span>
+<span class="sd">        Only used for GTF files. By default -- and according to the GTF spec --</span>
+<span class="sd">        we assume that there are no transcript or gene features in the file.</span>
+<span class="sd">        gffutils then infers the extent of each transcript based on its</span>
+<span class="sd">        constituent exons and infers the extent of each gene bases on its</span>
+<span class="sd">        constituent transcripts.</span>
+
+<span class="sd">        This default behavior is problematic if the input file already contains</span>
+<span class="sd">        transcript or gene features (like recent GENCODE GTF files for human),</span>
+<span class="sd">        since 1) the work to infer extents is unnecessary, and 2)</span>
+<span class="sd">        trying to insert an inferred feature back into the database triggers</span>
+<span class="sd">        gffutils&#39; feature-merging routines, which can get time consuming.</span>
+
+<span class="sd">        The solution is to use `disable_infer_transcripts=True` if your GTF</span>
+<span class="sd">        already has transcripts in it, and/or `disable_infer_genes=True` if it</span>
+<span class="sd">        already has genes in it. This can result in dramatic (100x) speedup.</span>
+
+<span class="sd">        Prior to version 0.8.4, setting `infer_gene_extents=False` would</span>
+<span class="sd">        disable both transcript and gene inference simultaneously. As of</span>
+<span class="sd">        version 0.8.4, these argument allow more granular control.</span>
+
+<span class="sd">    force_merge_fields : list</span>
+<span class="sd">        If merge_strategy=&quot;merge&quot;, then features will only be merged if their</span>
+<span class="sd">        non-attribute values are identical (same chrom, source, start, stop,</span>
+<span class="sd">        score, strand, phase).  Using `force_merge_fields`, you can override</span>
+<span class="sd">        this behavior to allow merges even when fields are different.  This</span>
+<span class="sd">        list can contain one or more of [&#39;seqid&#39;, &#39;source&#39;, &#39;featuretype&#39;,</span>
+<span class="sd">        &#39;score&#39;, &#39;strand&#39;, &#39;frame&#39;].  The resulting merged fields will be</span>
+<span class="sd">        strings of comma-separated values.  Note that &#39;start&#39; and &#39;end&#39; are not</span>
+<span class="sd">        available, since these fields need to be integers.</span>
+
+<span class="sd">    text_factory : callable</span>
+<span class="sd">        Text factory to use for the sqlite3 database.  See</span>
+<span class="sd">        https://docs.python.org/2/library/\</span>
+<span class="sd">                sqlite3.html#sqlite3.Connection.text_factory</span>
+<span class="sd">        for details. The default sqlite3.OptimizedUnicode will return Unicode</span>
+<span class="sd">        objects only for non-ASCII data, and bytestrings otherwise.</span>
+
+<span class="sd">    pragmas : dict</span>
+<span class="sd">        Dictionary of pragmas used when creating the sqlite3 database. See</span>
+<span class="sd">        http://www.sqlite.org/pragma.html for a list of available pragmas.  The</span>
+<span class="sd">        defaults are stored in constants.default_pragmas, which can be used as</span>
+<span class="sd">        a template for supplying a custom dictionary.</span>
+
+<span class="sd">    sort_attribute_values : bool</span>
+<span class="sd">        All features returned from the database will have their attribute</span>
+<span class="sd">        values sorted.  Typically this is only useful for testing, since this</span>
+<span class="sd">        can get time-consuming for large numbers of features.</span>
+
+<span class="sd">    _keep_tempfiles : bool or string</span>
+<span class="sd">        False by default to clean up intermediate tempfiles created during GTF</span>
+<span class="sd">        import.  If True, then keep these tempfile for testing or debugging.</span>
+<span class="sd">        If string, then keep the tempfile for testing, but also use the string</span>
+<span class="sd">        as the suffix fo the tempfile. This can be useful for testing in</span>
+<span class="sd">        parallel environments.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    New :class:`FeatureDB` object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_locals</span> <span class="o">=</span> <span class="nb">locals</span><span class="p">()</span>
+
+    <span class="c"># Check if any older kwargs made it in</span>
+    <span class="n">deprecation_handler</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="n">kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">_locals</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">constants</span><span class="o">.</span><span class="n">_iterator_kwargs</span><span class="p">)</span>
+
+    <span class="c"># First construct an iterator so that we can identify the file format.</span>
+    <span class="c"># DataIterator figures out what kind of data was provided (string of lines,</span>
+    <span class="c"># filename, or iterable of Features) and checks `checklines` lines to</span>
+    <span class="c"># identify the dialect.</span>
+    <span class="n">iterator</span> <span class="o">=</span> <span class="n">iterators</span><span class="o">.</span><span class="n">DataIterator</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">_locals</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">dialect</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">dialect</span> <span class="o">=</span> <span class="n">iterator</span><span class="o">.</span><span class="n">dialect</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">iterator</span><span class="p">,</span> <span class="n">iterators</span><span class="o">.</span><span class="n">_FeatureIterator</span><span class="p">):</span>
+        <span class="c"># However, a side-effect of this is that  if `data` was a generator,</span>
+        <span class="c"># then we&#39;ve just consumed `checklines` items (see</span>
+        <span class="c"># iterators.BaseIterator.__init__, which calls iterators.peek).</span>
+        <span class="c">#</span>
+        <span class="c"># But it also chains those consumed items back onto the beginning, and</span>
+        <span class="c"># the result is available as as iterator._iter.</span>
+        <span class="c">#</span>
+        <span class="c"># That&#39;s what we should be using now for `data:</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">iterator</span><span class="o">.</span><span class="n">_iter</span>
+
+    <span class="c"># Since we&#39;ve already checked lines, we don&#39;t want to do it again</span>
+    <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;checklines&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="n">force_gff</span> <span class="ow">or</span> <span class="p">(</span><span class="n">dialect</span><span class="p">[</span><span class="s">&#39;fmt&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;gff3&#39;</span><span class="p">):</span>
+        <span class="n">cls</span> <span class="o">=</span> <span class="n">_GFFDBCreator</span>
+        <span class="n">id_spec</span> <span class="o">=</span> <span class="n">id_spec</span> <span class="ow">or</span> <span class="s">&#39;ID&#39;</span>
+        <span class="n">add_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">id_spec</span><span class="o">=</span><span class="n">id_spec</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">dialect</span><span class="p">[</span><span class="s">&#39;fmt&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;gtf&#39;</span><span class="p">:</span>
+        <span class="n">cls</span> <span class="o">=</span> <span class="n">_GTFDBCreator</span>
+        <span class="n">id_spec</span> <span class="o">=</span> <span class="n">id_spec</span> <span class="ow">or</span> <span class="p">{</span><span class="s">&#39;gene&#39;</span><span class="p">:</span> <span class="s">&#39;gene_id&#39;</span><span class="p">,</span> <span class="s">&#39;transcript&#39;</span><span class="p">:</span> <span class="s">&#39;transcript_id&#39;</span><span class="p">}</span>
+        <span class="n">add_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">transcript_key</span><span class="o">=</span><span class="n">gtf_transcript_key</span><span class="p">,</span>
+            <span class="n">gene_key</span><span class="o">=</span><span class="n">gtf_gene_key</span><span class="p">,</span>
+            <span class="n">subfeature</span><span class="o">=</span><span class="n">gtf_subfeature</span><span class="p">,</span>
+            <span class="n">id_spec</span><span class="o">=</span><span class="n">id_spec</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">add_kwargs</span><span class="p">)</span>
+    <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;dialect&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dialect</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">cls</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="n">c</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">dbfn</span> <span class="o">==</span> <span class="s">&#39;:memory:&#39;</span><span class="p">:</span>
+        <span class="n">db</span> <span class="o">=</span> <span class="n">interface</span><span class="o">.</span><span class="n">FeatureDB</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">conn</span><span class="p">,</span>
+                                 <span class="n">keep_order</span><span class="o">=</span><span class="n">keep_order</span><span class="p">,</span>
+                                 <span class="n">pragmas</span><span class="o">=</span><span class="n">pragmas</span><span class="p">,</span>
+                                 <span class="n">sort_attribute_values</span><span class="o">=</span><span class="n">sort_attribute_values</span><span class="p">,</span>
+                                 <span class="n">text_factory</span><span class="o">=</span><span class="n">text_factory</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">db</span> <span class="o">=</span> <span class="n">interface</span><span class="o">.</span><span class="n">FeatureDB</span><span class="p">(</span><span class="n">c</span><span class="p">,</span>
+                                 <span class="n">keep_order</span><span class="o">=</span><span class="n">keep_order</span><span class="p">,</span>
+                                 <span class="n">pragmas</span><span class="o">=</span><span class="n">pragmas</span><span class="p">,</span>
+                                 <span class="n">sort_attribute_values</span><span class="o">=</span><span class="n">sort_attribute_values</span><span class="p">,</span>
+                                 <span class="n">text_factory</span><span class="o">=</span><span class="n">text_factory</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">db</span></div>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2013, Ryan Dale.
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.8.5',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
