@@ -6,7 +6,7 @@ Changes in v0.8.6.1
 -------------------
 Only a warning -- and not an ImportError -- is raised if BioPython is not installed.
 
-Updated testing framework to use docker containers on travis-ci.org.
+Lots of updates in the testing framework to use docker containers on travis-ci.org.
 
 Changes in v0.8.4
 -----------------
