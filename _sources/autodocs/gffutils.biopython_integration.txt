@@ -1,0 +1,32 @@
+gffutils.biopython_integration
+==============================
+
+.. automodule:: gffutils.biopython_integration
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      feature_from_line
+      from_seqfeature
+      to_seqfeature
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Feature
+      FeatureLocation
+      SeqFeature
+   
+   
+
+   
+   
+   

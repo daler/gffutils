@@ -85,6 +85,14 @@ Creating a :class:`Feature` object:
 
     gffutils.feature.feature_from_line
 
+Integration with other tools
+----------------------------
+.. autosummary::
+    :toctree: autodocs
+
+    gffutils.biopython_integration
+    gffutils.pybedtools_integration
+
 Utilities
 ---------
 

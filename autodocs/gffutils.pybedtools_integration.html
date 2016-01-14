@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gffutils.FeatureDB.children &mdash; gffutils 0.8.6.1 documentation</title>
+  <title>gffutils.pybedtools_integration &mdash; gffutils 0.8.6.1 documentation</title>
   
 
   
@@ -30,7 +30,10 @@
   
 
   
-    <link rel="top" title="gffutils 0.8.6.1 documentation" href="../index.html"/> 
+    <link rel="top" title="gffutils 0.8.6.1 documentation" href="../index.html"/>
+        <link rel="up" title="API" href="../api.html"/>
+        <link rel="next" title="gffutils.helpers.asinterval" href="gffutils.helpers.asinterval.html"/>
+        <link rel="prev" title="gffutils.biopython_integration" href="gffutils.biopython_integration.html"/> 
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
@@ -61,7 +64,7 @@
         
           
           
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#example-file">Example file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#create-the-database">Create the database</a></li>
@@ -110,11 +113,11 @@
 <li class="toctree-l2"><a class="reference internal" href="../examples.html#gencode-v19-gtf">gencode-v19.gtf</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a><ul>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../api.html#create-a-database">Create a database</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#interact-with-a-database">Interact with a database</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#feature-objects">Feature objects</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api.html#integration-with-other-tools">Integration with other tools</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#integration-with-other-tools">Integration with other tools</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#utilities">Utilities</a></li>
 </ul>
 </li>
@@ -158,10 +161,12 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../contents.html">Docs</a> &raquo;</li>
       
-    <li>gffutils.FeatureDB.children</li>
+          <li><a href="../api.html">API</a> &raquo;</li>
+      
+    <li>gffutils.pybedtools_integration</li>
       <li class="wy-breadcrumbs-aside">
         
-          <a href="../_sources/autodocs/gffutils.FeatureDB.children.txt" rel="nofollow"> View page source</a>
+          <a href="../_sources/autodocs/gffutils.pybedtools_integration.txt" rel="nofollow"> View page source</a>
         
       </li>
   </ul>
@@ -169,68 +174,37 @@
 </div>
           <div role="main" class="document">
             
-  <div class="section" id="gffutils-featuredb-children">
-<h1>gffutils.FeatureDB.children<a class="headerlink" href="#gffutils-featuredb-children" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="gffutils.FeatureDB.children">
-<code class="descclassname">FeatureDB.</code><code class="descname">children</code><span class="sig-paren">(</span><em>id</em>, <em>level=None</em>, <em>featuretype=None</em>, <em>order_by=None</em>, <em>reverse=False</em>, <em>limit=None</em>, <em>completely_within=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/interface.html#FeatureDB.children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gffutils.FeatureDB.children" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return children of feature <code class="docutils literal"><span class="pre">id</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
+  <div class="section" id="module-gffutils.pybedtools_integration">
+<span id="gffutils-pybedtools-integration"></span><h1>gffutils.pybedtools_integration<a class="headerlink" href="#module-gffutils.pybedtools_integration" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Functions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>id</strong> : string or a Feature object</p>
-<p><strong>level</strong> : None or int</p>
-<blockquote>
-<div><p>If <code class="docutils literal"><span class="pre">level=None</span></code> (default), then return all children regardless
-of level.  If <code class="docutils literal"><span class="pre">level</span></code> is an integer, then constrain to just that
-level.</p>
-</div></blockquote>
-<p><strong>limit</strong> : string or tuple</p>
-<blockquote>
-<div><p>Limit the results to a genomic region.  If string, then of the form
-&#8220;seqid:start-end&#8221;; if tuple, then (seqid, start, end).</p>
-</div></blockquote>
-<p><strong>strand</strong> : &#8220;-&#8221; | &#8220;+&#8221; | &#8221;.&#8221;</p>
-<blockquote>
-<div><p>Limit the results to one strand</p>
-</div></blockquote>
-<p><strong>featuretype</strong> : string or tuple</p>
-<blockquote>
-<div><p>Limit the results to one or several featuretypes.</p>
-</div></blockquote>
-<p><strong>order_by</strong> : string or tuple</p>
-<blockquote>
-<div><p>Order results by one or many fields; the string or tuple items must
-be in: &#8216;seqid&#8217;, &#8216;source&#8217;, &#8216;featuretype&#8217;, &#8216;start&#8217;, &#8216;end&#8217;, &#8216;score&#8217;,
-&#8216;strand&#8217;, &#8216;frame&#8217;, &#8216;attributes&#8217;, &#8216;extra&#8217;.</p>
-</div></blockquote>
-<p><strong>reverse</strong> : bool</p>
-<blockquote>
-<div><p>Change sort order; only relevant if <code class="docutils literal"><span class="pre">order_by</span></code> is not None.  By
-default, results will be in ascending order, so use <code class="docutils literal"><span class="pre">reverse=True</span></code>
-for descending.</p>
-</div></blockquote>
-<p><strong>completely_within</strong> : bool</p>
-<blockquote>
-<div><p>If False (default), a single bp overlap with <code class="docutils literal"><span class="pre">limit</span></code> is sufficient
-to return a feature; if True, then the feature must be completely
-within <code class="docutils literal"><span class="pre">limit</span></code>. Only relevant when <code class="docutils literal"><span class="pre">limit</span></code> is not None.</p>
-</div></blockquote>
-</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">to_bedtool</span></code>(iterator)</td>
+<td>Convert any iterator into a pybedtools.BedTool object.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A generator object that yields <a class="reference internal" href="gffutils.Feature.html#gffutils.Feature" title="gffutils.Feature"><code class="xref py py-class docutils literal"><span class="pre">Feature</span></code></a> objects.</p>
-</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">tsses</span></code>(db[,&nbsp;merge_overlapping,&nbsp;attrs,&nbsp;...])</td>
+<td>Create 1-bp transcription start sites for all transcripts in the database and return as a pybedtools.BedTool object.</td>
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
 </div>
 
 
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="gffutils.helpers.asinterval.html" class="btn btn-neutral float-right" title="gffutils.helpers.asinterval">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="gffutils.biopython_integration.html" class="btn btn-neutral" title="gffutils.biopython_integration"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
