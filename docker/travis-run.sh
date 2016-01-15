@@ -49,10 +49,10 @@ for PYTHON in 2 3; do
     (cd / && python -c 'import gffutils')
 
 
-    # Prepare for testing by installing nose for main tests, and biopython for
-    # the biopython integration tests.  Then run 'em.
+    # Prepare for testing by installing nose for main tests, other optional
+    # packages for integration tests (biopython, pybedtools, bedtools) Then run
+    # 'em.
     conda install -y nose --file optional-requirements.txt --channel bioconda
-    bedtools
     nosetests -x --with-doctest
 
     # Install tools and run doctests
