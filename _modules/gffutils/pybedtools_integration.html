@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gffutils.pybedtools_integration &mdash; gffutils 0.8.7 documentation</title>
+  <title>gffutils.pybedtools_integration &mdash; gffutils 0.8.7.1 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="gffutils 0.8.7 documentation" href="../../index.html"/>
+    <link rel="top" title="gffutils 0.8.7.1 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.8.7
+                0.8.7.1
               </div>
             
           
@@ -159,17 +159,21 @@
     <span class="k">def</span> <span class="nf">gen</span><span class="p">():</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">iterator</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">helpers</span><span class="o">.</span><span class="n">asinterval</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">pybedtools</span><span class="o">.</span><span class="n">BedTool</span><span class="p">(</span><span class="n">gen</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">pybedtools</span><span class="o">.</span><span class="n">BedTool</span><span class="p">(</span><span class="n">gen</span><span class="p">())</span></div>
 
-</div>
+
 <div class="viewcode-block" id="tsses"><a class="viewcode-back" href="../../autodocs/gffutils.pybedtools_integration.tsses.html#gffutils.pybedtools_integration.tsses">[docs]</a><span class="k">def</span> <span class="nf">tsses</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">merge_overlapping</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">attrs_sep</span><span class="o">=</span><span class="s">&quot;:&quot;</span><span class="p">,</span>
           <span class="n">merge_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">o</span><span class="o">=</span><span class="s">&#39;distinct&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span> <span class="n">as_bed6</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create 1-bp transcription start sites for all transcripts in the database</span>
-<span class="sd">    and return as a pybedtools.BedTool object.</span>
+<span class="sd">    and return as a sorted pybedtools.BedTool object pointing to a temporary</span>
+<span class="sd">    file.</span>
+
+<span class="sd">    To save the file to a known location, use the `.moveto()` method on the</span>
+<span class="sd">    resulting `pybedtools.BedTool` object.</span>
 
 <span class="sd">    To extend regions upstream/downstream, see the `.slop()` method on the</span>
-<span class="sd">    resulting pybedtools.BedTool object.</span>
+<span class="sd">    resulting `pybedtools.BedTool object`.</span>
 
 <span class="sd">    Requires pybedtools.</span>
 
@@ -301,7 +305,7 @@
                 <span class="k">yield</span> <span class="n">helpers</span><span class="o">.</span><span class="n">asinterval</span><span class="p">(</span><span class="n">transcript</span><span class="p">)</span>
 
     <span class="c"># GFF/GTF format</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">pybedtools</span><span class="o">.</span><span class="n">BedTool</span><span class="p">(</span><span class="n">gen</span><span class="p">())</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">pybedtools</span><span class="o">.</span><span class="n">BedTool</span><span class="p">(</span><span class="n">gen</span><span class="p">())</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
 
     <span class="c"># Figure out default attrs to use, depending on the original format.</span>
     <span class="k">if</span> <span class="n">attrs</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -329,7 +333,7 @@
                 <span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">score</span><span class="p">),</span>
                 <span class="n">f</span><span class="o">.</span><span class="n">strand</span><span class="p">)</span>
 
-        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">each</span><span class="p">(</span><span class="n">to_bed</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">each</span><span class="p">(</span><span class="n">to_bed</span><span class="p">)</span><span class="o">.</span><span class="n">saveas</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">merge_overlapping</span><span class="p">:</span>
 
@@ -380,7 +384,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.8.7',
+            VERSION:'0.8.7.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

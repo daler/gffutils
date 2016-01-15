@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Change log &mdash; gffutils 0.8.7 documentation</title>
+  <title>Change log &mdash; gffutils 0.8.7.1 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="gffutils 0.8.7 documentation" href="index.html"/>
+    <link rel="top" title="gffutils 0.8.7.1 documentation" href="index.html"/>
         <link rel="next" title="Developer’s docs" href="developers.html"/>
         <link rel="prev" title="gffutils.inspect.inspect" href="autodocs/gffutils.inspect.inspect.html"/> 
 
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.8.7
+                0.8.7.1
               </div>
             
           
@@ -93,6 +93,7 @@
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Change log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#changes-in-v0-8-7-1">Changes in v0.8.7.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#changes-in-v0-8-7">Changes in v0.8.7</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#changes-in-v0-8-6-1">Changes in v0.8.6.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#changes-in-v0-8-4">Changes in v0.8.4</a></li>
@@ -152,6 +153,11 @@
             
   <div class="section" id="change-log">
 <h1>Change log<a class="headerlink" href="#change-log" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="changes-in-v0-8-7-1">
+<h2>Changes in v0.8.7.1<a class="headerlink" href="#changes-in-v0-8-7-1" title="Permalink to this headline">¶</a></h2>
+<p>Fixes bug in <code class="docutils literal"><span class="pre">gffutils.pybedtools_integration.tsses</span></code> where iterating over large
+databases and using the <code class="docutils literal"><span class="pre">as_bed6=True</span></code> argument could cause a deadlock.</p>
+</div>
 <div class="section" id="changes-in-v0-8-7">
 <h2>Changes in v0.8.7<a class="headerlink" href="#changes-in-v0-8-7" title="Permalink to this headline">¶</a></h2>
 <p>New module, <code class="xref py py-mod docutils literal"><span class="pre">gffutils.pybedtools_integration</span></code>. In particular, the
@@ -280,7 +286,7 @@ ideas and testing)</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.8.7',
+            VERSION:'0.8.7.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

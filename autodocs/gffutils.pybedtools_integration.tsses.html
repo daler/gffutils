@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gffutils.pybedtools_integration.tsses &mdash; gffutils 0.8.7 documentation</title>
+  <title>gffutils.pybedtools_integration.tsses &mdash; gffutils 0.8.7.1 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="gffutils 0.8.7 documentation" href="../index.html"/>
+    <link rel="top" title="gffutils 0.8.7.1 documentation" href="../index.html"/>
         <link rel="up" title="API" href="../api.html"/>
         <link rel="next" title="gffutils.pybedtools_integration.to_bedtool" href="gffutils.pybedtools_integration.to_bedtool.html"/>
         <link rel="prev" title="gffutils.biopython_integration.from_seqfeature" href="gffutils.biopython_integration.from_seqfeature.html"/> 
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.8.7
+                0.8.7.1
               </div>
             
           
@@ -162,9 +162,12 @@
 <dt id="gffutils.pybedtools_integration.tsses">
 <code class="descclassname">gffutils.pybedtools_integration.</code><code class="descname">tsses</code><span class="sig-paren">(</span><em>db</em>, <em>merge_overlapping=False</em>, <em>attrs=None</em>, <em>attrs_sep=':'</em>, <em>merge_kwargs={'c': 4</em>, <em>'s': True</em>, <em>'o': 'distinct'}</em>, <em>as_bed6=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/pybedtools_integration.html#tsses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gffutils.pybedtools_integration.tsses" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create 1-bp transcription start sites for all transcripts in the database
-and return as a pybedtools.BedTool object.</p>
+and return as a sorted pybedtools.BedTool object pointing to a temporary
+file.</p>
+<p>To save the file to a known location, use the <code class="docutils literal"><span class="pre">.moveto()</span></code> method on the
+resulting <code class="docutils literal"><span class="pre">pybedtools.BedTool</span></code> object.</p>
 <p>To extend regions upstream/downstream, see the <code class="docutils literal"><span class="pre">.slop()</span></code> method on the
-resulting pybedtools.BedTool object.</p>
+resulting <code class="docutils literal"><span class="pre">pybedtools.BedTool</span> <span class="pre">object</span></code>.</p>
 <p>Requires pybedtools.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -318,7 +321,7 @@ specified, we must add <code class="docutils literal"><span class="pre">as_bed6=
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.8.7',
+            VERSION:'0.8.7.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
