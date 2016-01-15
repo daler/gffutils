@@ -83,6 +83,7 @@ def tsses(db, merge_overlapping=False, attrs=None, attrs_sep=":",
     >>> import gffutils
     >>> db = gffutils.create_db(
     ...    gffutils.example_filename('FBgn0031208.gtf'),
+    ...    keep_order=True,
     ...    ":memory:",
     ...    verbose=False)
 

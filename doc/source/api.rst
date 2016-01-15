@@ -1,63 +1,81 @@
 .. _api:
 
-.. currentmodule:: gffutils
 
 .. rst-class:: html-toggle
 
 API
 ===
+
+`gffutils`
+----------
+
+.. automodule:: gffutils
+    :members:
+
 Create a database
 -----------------
+
+
+.. currentmodule:: gffutils.create
+
 .. autosummary::
     :toctree: autodocs
+    :nosignatures:
 
-    gffutils.create_db
+    create_db
 
 Interact with a database
 ------------------------
 First, connect to an existing database:
 
+.. currentmodule:: gffutils.interface
+
 .. autosummary::
     :toctree: autodocs
+    :nosignatures:
 
-    gffutils.FeatureDB
+    FeatureDB
 
 Then, use the methods of :class:`FeatureDB` to interact:
 
+
 .. autosummary::
     :toctree: autodocs
+    :nosignatures:
 
-    gffutils.FeatureDB.children
-    gffutils.FeatureDB.parents
-    gffutils.FeatureDB.schema
-    gffutils.FeatureDB.features_of_type
-    gffutils.FeatureDB.count_features_of_type
-    gffutils.FeatureDB.all_features
-    gffutils.FeatureDB.execute
-    gffutils.FeatureDB.featuretypes
-    gffutils.FeatureDB.region
-    gffutils.FeatureDB.iter_by_parent_childs
+    FeatureDB.children
+    FeatureDB.parents
+    FeatureDB.schema
+    FeatureDB.features_of_type
+    FeatureDB.count_features_of_type
+    FeatureDB.all_features
+    FeatureDB.execute
+    FeatureDB.featuretypes
+    FeatureDB.region
+    FeatureDB.iter_by_parent_childs
 
 Modify a :class:`FeatureDB`:
 
 .. autosummary::
     :toctree: autodocs
+    :nosignatures:
 
-    gffutils.FeatureDB.update
-    gffutils.FeatureDB.delete
-    gffutils.FeatureDB.add_relation
-    gffutils.FeatureDB.set_pragmas
+    FeatureDB.update
+    FeatureDB.delete
+    FeatureDB.add_relation
+    FeatureDB.set_pragmas
 
 Operate on features:
 
 .. autosummary::
     :toctree: autodocs
+    :nosignatures:
 
-    gffutils.FeatureDB.interfeatures
-    gffutils.FeatureDB.children_bp
-    gffutils.FeatureDB.merge
-    gffutils.FeatureDB.create_introns
-    gffutils.FeatureDB.bed12
+    FeatureDB.interfeatures
+    FeatureDB.children_bp
+    FeatureDB.merge
+    FeatureDB.create_introns
+    FeatureDB.bed12
 
 
 
@@ -66,30 +84,48 @@ Feature objects
 ---------------
 Most :class:`FeatureDB` methods return :class:`Feature` objects:
 
+
+.. currentmodule:: gffutils.feature
+
 .. autosummary::
     :toctree: autodocs
+    :nosignatures:
 
-    gffutils.Feature
+    Feature
 
 You can extract the sequence for a feature:
 
 .. autosummary::
     :toctree: autodocs
+    :nosignatures:
 
-    gffutils.Feature.sequence
+    Feature.sequence
 
 Creating a :class:`Feature` object:
 
 .. autosummary::
     :toctree: autodocs
+    :nosignatures:
 
-    gffutils.feature.feature_from_line
+    feature_from_line
+
+Integration with other tools
+----------------------------
+.. currentmodule:: gffutils
+
+.. autosummary::
+    :toctree: autodocs
+    :nosignatures:
+
+    gffutils.biopython_integration
+    gffutils.pybedtools_integration
 
 Utilities
 ---------
 
 .. autosummary::
     :toctree: autodocs
+    :nosignatures:
 
     gffutils.helpers.asinterval
     gffutils.helpers.merge_attributes
