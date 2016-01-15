@@ -131,6 +131,7 @@ def tsses(db, merge_overlapping=False, attrs=None, attrs_sep=":",
 
 
     The set of unique TSSes for each gene, +1kb upstream and 500bp downstream:
+
     >>> x = tsses(db, merge_overlapping=True)
     >>> x = x.slop(l=1000, r=500, s=True, genome='dm3')
     >>> print(x)  # doctest: +NORMALIZE_WHITESPACE
