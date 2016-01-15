@@ -51,7 +51,7 @@ for PYTHON in 2 3; do
 
     # Prepare for testing by installing nose for main tests, and biopython for
     # the biopython integration tests.  Then run 'em.
-    conda install -y nose biopython
+    conda install -y nose biopython pybedtools
     nosetests -x --with-doctest
 
     # Install tools and run doctests
