@@ -25,10 +25,14 @@ def tsses(db, merge_overlapping=False, attrs=None, attrs_sep=":",
           merge_kwargs=dict(o='distinct', s=True, c=4), as_bed6=False):
     """
     Create 1-bp transcription start sites for all transcripts in the database
-    and return as a pybedtools.BedTool object.
+    and return as a sorted pybedtools.BedTool object pointing to a temporary
+    file.
+
+    To save the file to a known location, use the `.moveto()` method on the
+    resulting `pybedtools.BedTool` object.
 
     To extend regions upstream/downstream, see the `.slop()` method on the
-    resulting pybedtools.BedTool object.
+    resulting `pybedtools.BedTool object`.
 
     Requires pybedtools.
 
@@ -160,7 +164,7 @@ def tsses(db, merge_overlapping=False, attrs=None, attrs_sep=":",
                 yield helpers.asinterval(transcript)
 
     # GFF/GTF format
-    x = pybedtools.BedTool(gen())
+    x = pybedtools.BedTool(gen()).sort()
 
     # Figure out default attrs to use, depending on the original format.
     if attrs is None:
@@ -188,7 +192,7 @@ def tsses(db, merge_overlapping=False, attrs=None, attrs_sep=":",
                 str(f.score),
                 f.strand)
 
-        x = x.each(to_bed)
+        x = x.each(to_bed).saveas()
 
     if merge_overlapping:
 
