@@ -1,0 +1,442 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>gffutils.pybedtools_integration &mdash; gffutils 0.8.7 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="gffutils 0.8.7 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="../../contents.html" class="fa fa-home"> gffutils</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../index.html#example-file">Example file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../index.html#create-the-database">Create the database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../index.html#use-the-database">Use the database</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#optional-requirements">Optional requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../database-import.html">Importing data into a database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../database-schema.html">Database schema</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../database-schema.html#schema">Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../database-schema.html#features-table"><code class="docutils literal"><span class="pre">features</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../database-schema.html#relations-table"><code class="docutils literal"><span class="pre">relations</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../database-schema.html#meta-table"><code class="docutils literal"><span class="pre">meta</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../database-schema.html#directives-table"><code class="docutils literal"><span class="pre">directives</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../database-schema.html#autoincrements-table"><code class="docutils literal"><span class="pre">autoincrements</span></code> table</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../database-ids.html">Database IDs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../database-ids.html#id-spec"><code class="docutils literal"><span class="pre">id_spec</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../database-ids.html#transform"><code class="docutils literal"><span class="pre">transform</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../database-ids.html#merge-strategy"><code class="docutils literal"><span class="pre">merge_strategy</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../gtf.html">GTF files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../gtf.html#transcript-key-and-gene-key"><code class="docutils literal"><span class="pre">transcript_key</span></code> and <code class="docutils literal"><span class="pre">gene_key</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../gtf.html#subfeature"><code class="docutils literal"><span class="pre">subfeature</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../dialect.html">Dialects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../attributes.html">Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#mouse-extra-comma-gff3">mouse_extra_comma.gff3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#c-elegans-ws199-ann-gff-txt">c_elegans_WS199_ann_gff.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#c-elegans-ws199-shortened-gff-txt">c_elegans_WS199_shortened_gff.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#ensembl-gtf-txt">ensembl_gtf.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#f3-unique-3-v2-gff">F3-unique-3.v2.gff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#glimmer-nokeyval-gff3">glimmer_nokeyval.gff3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#hybrid1-gff3">hybrid1.gff3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#jgi-gff2-txt">jgi_gff2.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#ncbi-gff3-txt">ncbi_gff3.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#wormbase-gff2-alt-txt">wormbase_gff2_alt.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#wormbase-gff2-txt">wormbase_gff2.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples.html#gencode-v19-gtf">gencode-v19.gtf</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#module-gffutils"><code class="docutils literal"><span class="pre">gffutils</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#create-a-database">Create a database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#interact-with-a-database">Interact with a database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#feature-objects">Feature objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#integration-with-other-tools">Integration with other tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Change log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#changes-in-v0-8-7">Changes in v0.8.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#changes-in-v0-8-6-1">Changes in v0.8.6.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#changes-in-v0-8-4">Changes in v0.8.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#changes-in-v0-8-3-1">Changes in v0.8.3.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#changes-in-v0-8-3">Changes in v0.8.3</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../developers.html">Developer&#8217;s docs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../developers.html#package-modules">Package modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../developers.html#general-workflow">General workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../meta.html">Meta-docs (docs about the docs)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../meta.html#building-the-docs">Building the docs</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../contents.html">gffutils</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../contents.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>gffutils.pybedtools_integration</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <h1>Source code for gffutils.pybedtools_integration</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module for integration with pybedtools</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">pybedtools</span>
+<span class="kn">from</span> <span class="nn">pybedtools</span> <span class="kn">import</span> <span class="n">featurefuncs</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">helpers</span>
+<span class="kn">import</span> <span class="nn">six</span>
+
+<div class="viewcode-block" id="to_bedtool"><a class="viewcode-back" href="../../autodocs/gffutils.pybedtools_integration.to_bedtool.html#gffutils.pybedtools_integration.to_bedtool">[docs]</a><span class="k">def</span> <span class="nf">to_bedtool</span><span class="p">(</span><span class="n">iterator</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert any iterator into a pybedtools.BedTool object.</span>
+
+<span class="sd">    Note that the supplied iterator is not consumed by this function. To save</span>
+<span class="sd">    to a temp file or to a known location, use the `.saveas()` method of the</span>
+<span class="sd">    returned BedTool object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">gen</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">iterator</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">helpers</span><span class="o">.</span><span class="n">asinterval</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pybedtools</span><span class="o">.</span><span class="n">BedTool</span><span class="p">(</span><span class="n">gen</span><span class="p">())</span>
+
+</div>
+<div class="viewcode-block" id="tsses"><a class="viewcode-back" href="../../autodocs/gffutils.pybedtools_integration.tsses.html#gffutils.pybedtools_integration.tsses">[docs]</a><span class="k">def</span> <span class="nf">tsses</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">merge_overlapping</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">attrs_sep</span><span class="o">=</span><span class="s">&quot;:&quot;</span><span class="p">,</span>
+          <span class="n">merge_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">o</span><span class="o">=</span><span class="s">&#39;distinct&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span> <span class="n">as_bed6</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create 1-bp transcription start sites for all transcripts in the database</span>
+<span class="sd">    and return as a pybedtools.BedTool object.</span>
+
+<span class="sd">    To extend regions upstream/downstream, see the `.slop()` method on the</span>
+<span class="sd">    resulting pybedtools.BedTool object.</span>
+
+<span class="sd">    Requires pybedtools.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    db : gffutils.FeatureDB</span>
+<span class="sd">        The database to use</span>
+
+<span class="sd">    as_bed6 : bool</span>
+<span class="sd">        If True, output file is in BED6 format; otherwise it remains in the</span>
+<span class="sd">        GFF/GTF format and dialect of the file used to create the database.</span>
+
+<span class="sd">        Note that the merge options below necessarily force `as_bed6=True`.</span>
+
+<span class="sd">    merge_overlapping : bool</span>
+<span class="sd">        If True, output will be in BED format. Overlapping TSSes will be merged</span>
+<span class="sd">        into a single feature, and their names will be collapsed using</span>
+<span class="sd">        `merge_sep` and placed in the new name field.</span>
+
+<span class="sd">    merge_kwargs : dict</span>
+<span class="sd">        If `merge_overlapping=True`, these keyword arguments are passed to</span>
+<span class="sd">        pybedtools.BedTool.merge(), which are in turn sent to `bedtools merge`.</span>
+<span class="sd">        The merge operates on a BED6 file which will have had the name field</span>
+<span class="sd">        constructed as specified by other arguments here.  See the available</span>
+<span class="sd">        options for your installed version of BEDTools; the defaults used here</span>
+<span class="sd">        are `merge_kwargs=dict(o=&#39;distinct&#39;, c=4, s=True)`.</span>
+
+<span class="sd">        Any provided `merge_kwargs` are used to *update* the default. It is</span>
+<span class="sd">        recommended to not override `c=4` and `s=True`, otherwise the</span>
+<span class="sd">        post-merge fixing may not work correctly. Good candidates for tweaking</span>
+<span class="sd">        are `d` (merge distance), `o` (operation), `delim` (delimiter to use</span>
+<span class="sd">        for collapse operations).</span>
+
+<span class="sd">    attrs : str or list</span>
+<span class="sd">        Only has an effect when `as_bed6=True` or `merge_overlapping=True`.</span>
+
+<span class="sd">        Determines what goes in the name field of an output BED file. By</span>
+<span class="sd">        default, &quot;gene_id&quot; for GTF databases and &quot;ID&quot; for GFF. If a list of</span>
+<span class="sd">        attributes is supplied, e.g. [&quot;gene_id&quot;, &quot;transcript_id&quot;], then these</span>
+<span class="sd">        will be joined by `attr_join_sep` and then placed in the name field.</span>
+
+
+<span class="sd">    attrs_sep: str</span>
+<span class="sd">        If `as_bed6=True` or `merge_overlapping=True`, then use this character</span>
+<span class="sd">        to separate attributes in the name field of the output BED. If also</span>
+<span class="sd">        using `merge_overlapping=True`, you&#39;ll probably want this to be</span>
+<span class="sd">        different than `merge_sep` in order to parse things out later.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; import gffutils</span>
+<span class="sd">    &gt;&gt;&gt; db = gffutils.create_db(</span>
+<span class="sd">    ...    gffutils.example_filename(&#39;FBgn0031208.gtf&#39;),</span>
+<span class="sd">    ...    &quot;:memory:&quot;,</span>
+<span class="sd">    ...    keep_order=True,</span>
+<span class="sd">    ...    verbose=False)</span>
+
+<span class="sd">    Default settings -- no merging, and report a separate TSS on each line even</span>
+<span class="sd">    if they overlap (as in the first two):</span>
+
+
+<span class="sd">    &gt;&gt;&gt; print(tsses(db))                        # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">    chr2L	gffutils_derived	transcript_TSS	7529	7529	.	+	.	gene_id &quot;FBgn0031208&quot;; transcript_id &quot;FBtr0300689&quot;;</span>
+<span class="sd">    chr2L	gffutils_derived	transcript_TSS	7529	7529	.	+	.	gene_id &quot;FBgn0031208&quot;; transcript_id &quot;FBtr0300690&quot;;</span>
+<span class="sd">    chr2L	gffutils_derived	transcript_TSS	11000	11000	.	-	.	gene_id &quot;Fk_gene_1&quot;; transcript_id &quot;transcript_Fk_gene_1&quot;;</span>
+<span class="sd">    chr2L	gffutils_derived	transcript_TSS	12500	12500	.	-	.	gene_id &quot;Fk_gene_2&quot;; transcript_id &quot;transcript_Fk_gene_2&quot;;</span>
+<span class="sd">    &lt;BLANKLINE&gt;</span>
+
+
+<span class="sd">    Default merging, showing the first two TSSes merged and reported as</span>
+<span class="sd">    a single unique TSS for the gene. Note the conversion to BED:</span>
+
+<span class="sd">    &gt;&gt;&gt; x = tsses(db, merge_overlapping=True)</span>
+<span class="sd">    &gt;&gt;&gt; print(x)  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">    chr2L	7528	7529	FBgn0031208	.	+</span>
+<span class="sd">    chr2L	10999	11000	Fk_gene_1	.	-</span>
+<span class="sd">    chr2L	12499	12500	Fk_gene_2	.	-</span>
+<span class="sd">    &lt;BLANKLINE&gt;</span>
+
+<span class="sd">    Report both gene ID and transcript ID in the name. In some cases this can</span>
+<span class="sd">    be easier to parse than the original GTF or GFF file. With no merging</span>
+<span class="sd">    specified, we must add `as_bed6=True` to see the names in BED format.</span>
+
+<span class="sd">    &gt;&gt;&gt; x = tsses(db, attrs=[&#39;gene_id&#39;, &#39;transcript_id&#39;], as_bed6=True)</span>
+<span class="sd">    &gt;&gt;&gt; print(x)  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">    chr2L	7528	7529	FBgn0031208:FBtr0300689	.	+</span>
+<span class="sd">    chr2L	7528	7529	FBgn0031208:FBtr0300690	.	+</span>
+<span class="sd">    chr2L	10999	11000	Fk_gene_1:transcript_Fk_gene_1	.	-</span>
+<span class="sd">    chr2L	12499	12500	Fk_gene_2:transcript_Fk_gene_2	.	-</span>
+<span class="sd">    &lt;BLANKLINE&gt;</span>
+
+<span class="sd">    Use a 3kb merge distance so the last 2 features are merged together:</span>
+
+<span class="sd">    &gt;&gt;&gt; x = tsses(db, merge_overlapping=True, merge_kwargs=dict(d=3000))</span>
+<span class="sd">    &gt;&gt;&gt; print(x)  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">    chr2L	7528	7529	FBgn0031208	.	+</span>
+<span class="sd">    chr2L	10999	12500	Fk_gene_1,Fk_gene_2	.	-</span>
+<span class="sd">    &lt;BLANKLINE&gt;</span>
+
+
+<span class="sd">    The set of unique TSSes for each gene, +1kb upstream and 500bp downstream:</span>
+
+<span class="sd">    &gt;&gt;&gt; x = tsses(db, merge_overlapping=True)</span>
+<span class="sd">    &gt;&gt;&gt; x = x.slop(l=1000, r=500, s=True, genome=&#39;dm3&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; print(x)  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">    chr2L	6528	8029	FBgn0031208	.	+</span>
+<span class="sd">    chr2L	10499	12000	Fk_gene_1	.	-</span>
+<span class="sd">    chr2L	11999	13500	Fk_gene_2	.	-</span>
+<span class="sd">    &lt;BLANKLINE&gt;</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_merge_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">o</span><span class="o">=</span><span class="s">&#39;distinct&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">merge_kwargs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">_merge_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">merge_kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">gen</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generator of pybedtools.Intervals representing TSSes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">gene</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">features_of_type</span><span class="p">(</span><span class="s">&#39;gene&#39;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">transcript</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="n">gene</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">transcript</span><span class="o">.</span><span class="n">strand</span> <span class="o">==</span> <span class="s">&#39;-&#39;</span><span class="p">:</span>
+                    <span class="n">transcript</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">transcript</span><span class="o">.</span><span class="n">stop</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">transcript</span><span class="o">.</span><span class="n">stop</span> <span class="o">=</span> <span class="n">transcript</span><span class="o">.</span><span class="n">start</span>
+                <span class="n">transcript</span><span class="o">.</span><span class="n">featuretype</span> <span class="o">=</span> <span class="n">transcript</span><span class="o">.</span><span class="n">featuretype</span> <span class="o">+</span> <span class="s">&#39;_TSS&#39;</span>
+                <span class="k">yield</span> <span class="n">helpers</span><span class="o">.</span><span class="n">asinterval</span><span class="p">(</span><span class="n">transcript</span><span class="p">)</span>
+
+    <span class="c"># GFF/GTF format</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">pybedtools</span><span class="o">.</span><span class="n">BedTool</span><span class="p">(</span><span class="n">gen</span><span class="p">())</span>
+
+    <span class="c"># Figure out default attrs to use, depending on the original format.</span>
+    <span class="k">if</span> <span class="n">attrs</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">db</span><span class="o">.</span><span class="n">dialect</span><span class="p">[</span><span class="s">&#39;fmt&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;gtf&#39;</span><span class="p">:</span>
+            <span class="n">attrs</span> <span class="o">=</span> <span class="s">&#39;gene_id&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">attrs</span> <span class="o">=</span> <span class="s">&#39;ID&#39;</span>
+
+    <span class="k">if</span> <span class="n">merge_overlapping</span> <span class="ow">or</span> <span class="n">as_bed6</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attrs</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+            <span class="n">attrs</span> <span class="o">=</span> <span class="p">[</span><span class="n">attrs</span><span class="p">]</span>
+
+        <span class="k">def</span> <span class="nf">to_bed</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Given a pybedtools.Interval, return a new Interval with the name</span>
+<span class="sd">            set according to the kwargs provided above.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">attrs_sep</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">f</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">pybedtools</span><span class="o">.</span><span class="n">Interval</span><span class="p">(</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">chrom</span><span class="p">,</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">start</span><span class="p">,</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span>
+                <span class="n">name</span><span class="p">,</span>
+                <span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">score</span><span class="p">),</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">strand</span><span class="p">)</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">each</span><span class="p">(</span><span class="n">to_bed</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">merge_overlapping</span><span class="p">:</span>
+
+        <span class="k">def</span> <span class="nf">fix_merge</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">featurefuncs</span><span class="o">.</span><span class="n">extend_fields</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">pybedtools</span><span class="o">.</span><span class="n">Interval</span><span class="p">(</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">chrom</span><span class="p">,</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">start</span><span class="p">,</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span>
+                <span class="n">f</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+                <span class="s">&#39;.&#39;</span><span class="p">,</span>
+                <span class="n">f</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="o">**</span><span class="n">_merge_kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">each</span><span class="p">(</span><span class="n">fix_merge</span><span class="p">)</span><span class="o">.</span><span class="n">saveas</span><span class="p">()</span>
+
+
+    <span class="k">return</span> <span class="n">x</span></div>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2013, Ryan Dale.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.8.7',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

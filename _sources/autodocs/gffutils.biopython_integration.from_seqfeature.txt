@@ -1,0 +1,6 @@
+gffutils.biopython_integration.from_seqfeature
+==============================================
+
+.. currentmodule:: gffutils.biopython_integration
+
+.. autofunction:: from_seqfeature

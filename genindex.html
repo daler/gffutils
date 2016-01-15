@@ -6,7 +6,6 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>Index &mdash; gffutils 0.8.7 documentation</title>
@@ -16,6 +15,7 @@
   
 
   
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 
   
   
@@ -34,7 +34,7 @@
     <link rel="top" title="gffutils 0.8.7 documentation" href="index.html"/> 
 
   
-  <script src="_static/js/modernizr.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
 
 </head>
 
@@ -44,27 +44,11 @@
 
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
-            <a href="contents.html" class="icon icon-home"> gffutils
-          
-
-          
-          </a>
-
-          
-            
-            
-              <div class="version">
-                0.8.7
-              </div>
-            
-          
-
-          
+      <div class="wy-side-nav-search">
+        
+          <a href="contents.html" class="fa fa-home"> gffutils</a>
+        
+        
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -72,34 +56,93 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
+      </div>
 
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
           
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
-            
-            
-                <ul>
-<li class="toctree-l1"><a class="reference internal" href="index.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="index.html#example-file">Example file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#create-the-database">Create the database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#use-the-database">Use the database</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#optional-requirements">Optional requirements</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="database-import.html">Importing data into a database</a></li>
-<li class="toctree-l1"><a class="reference internal" href="database-schema.html">Database schema</a></li>
-<li class="toctree-l1"><a class="reference internal" href="database-ids.html">Database IDs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gtf.html">GTF files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="database-schema.html">Database schema</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="database-schema.html#schema">Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database-schema.html#features-table"><code class="docutils literal"><span class="pre">features</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database-schema.html#relations-table"><code class="docutils literal"><span class="pre">relations</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database-schema.html#meta-table"><code class="docutils literal"><span class="pre">meta</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database-schema.html#directives-table"><code class="docutils literal"><span class="pre">directives</span></code> table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database-schema.html#autoincrements-table"><code class="docutils literal"><span class="pre">autoincrements</span></code> table</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="database-ids.html">Database IDs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="database-ids.html#id-spec"><code class="docutils literal"><span class="pre">id_spec</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="database-ids.html#transform"><code class="docutils literal"><span class="pre">transform</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="database-ids.html#merge-strategy"><code class="docutils literal"><span class="pre">merge_strategy</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gtf.html">GTF files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gtf.html#transcript-key-and-gene-key"><code class="docutils literal"><span class="pre">transcript_key</span></code> and <code class="docutils literal"><span class="pre">gene_key</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="gtf.html#subfeature"><code class="docutils literal"><span class="pre">subfeature</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="dialect.html">Dialects</a></li>
 <li class="toctree-l1"><a class="reference internal" href="attributes.html">Attributes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Change log</a></li>
-<li class="toctree-l1"><a class="reference internal" href="developers.html">Developer&#8217;s docs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="meta.html">Meta-docs (docs about the docs)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#mouse-extra-comma-gff3">mouse_extra_comma.gff3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#c-elegans-ws199-ann-gff-txt">c_elegans_WS199_ann_gff.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#c-elegans-ws199-shortened-gff-txt">c_elegans_WS199_shortened_gff.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#ensembl-gtf-txt">ensembl_gtf.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#f3-unique-3-v2-gff">F3-unique-3.v2.gff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#glimmer-nokeyval-gff3">glimmer_nokeyval.gff3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#hybrid1-gff3">hybrid1.gff3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#jgi-gff2-txt">jgi_gff2.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#ncbi-gff3-txt">ncbi_gff3.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#wormbase-gff2-alt-txt">wormbase_gff2_alt.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#wormbase-gff2-txt">wormbase_gff2.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#gencode-v19-gtf">gencode-v19.gtf</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-gffutils"><code class="docutils literal"><span class="pre">gffutils</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#create-a-database">Create a database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#interact-with-a-database">Interact with a database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#feature-objects">Feature objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#integration-with-other-tools">Integration with other tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Change log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#changes-in-v0-8-7">Changes in v0.8.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#changes-in-v0-8-6-1">Changes in v0.8.6.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#changes-in-v0-8-4">Changes in v0.8.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#changes-in-v0-8-3-1">Changes in v0.8.3.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#changes-in-v0-8-3">Changes in v0.8.3</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">Developer&#8217;s docs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="developers.html#package-modules">Package modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developers.html#general-workflow">General workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="meta.html">Meta-docs (docs about the docs)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="meta.html#building-the-docs">Building the docs</a></li>
+</ul>
+</li>
 </ul>
 
-            
           
-        </div>
+        
       </div>
+      &nbsp;
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
@@ -114,27 +157,18 @@
       
       <div class="wy-nav-content">
         <div class="rst-content">
-          
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
+          <div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="contents.html">Docs</a> &raquo;</li>
       
     <li></li>
       <li class="wy-breadcrumbs-aside">
         
-          
-        
       </li>
   </ul>
   <hr/>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
+          <div role="main" class="document">
             
 
 <h1 id="index">Index</h1>
@@ -153,6 +187,7 @@
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
  | <a href="#U"><strong>U</strong></a>
  
 </div>
@@ -285,6 +320,10 @@
   <dt><a href="autodocs/gffutils.interface.FeatureDB.featuretypes.html#gffutils.interface.FeatureDB.featuretypes">featuretypes() (gffutils.interface.FeatureDB method)</a>
   </dt>
 
+      
+  <dt><a href="autodocs/gffutils.biopython_integration.from_seqfeature.html#gffutils.biopython_integration.from_seqfeature">from_seqfeature() (in module gffutils.biopython_integration)</a>
+  </dt>
+
   </dl></td>
 </tr></table>
 
@@ -293,16 +332,6 @@
   <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api.html#module-gffutils">gffutils (module)</a>
-  </dt>
-
-      
-  <dt><a href="autodocs/gffutils.biopython_integration.html#module-gffutils.biopython_integration">gffutils.biopython_integration (module)</a>
-  </dt>
-
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
-      
-  <dt><a href="autodocs/gffutils.pybedtools_integration.html#module-gffutils.pybedtools_integration">gffutils.pybedtools_integration (module)</a>
   </dt>
 
   </dl></td>
@@ -392,6 +421,26 @@
   </dl></td>
 </tr></table>
 
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="autodocs/gffutils.pybedtools_integration.to_bedtool.html#gffutils.pybedtools_integration.to_bedtool">to_bedtool() (in module gffutils.pybedtools_integration)</a>
+  </dt>
+
+      
+  <dt><a href="autodocs/gffutils.biopython_integration.to_seqfeature.html#gffutils.biopython_integration.to_seqfeature">to_seqfeature() (in module gffutils.biopython_integration)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="autodocs/gffutils.pybedtools_integration.tsses.html#gffutils.pybedtools_integration.tsses">tsses() (in module gffutils.pybedtools_integration)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
@@ -404,7 +453,6 @@
 
 
 
-           </div>
           </div>
           <footer>
   
@@ -414,13 +462,12 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2013, Ryan Dale.
-
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
 </footer>
-
         </div>
       </div>
 

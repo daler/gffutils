@@ -117,8 +117,12 @@ Integration with other tools
     :toctree: autodocs
     :nosignatures:
 
-    gffutils.biopython_integration
-    gffutils.pybedtools_integration
+    gffutils.biopython_integration.to_seqfeature
+    gffutils.biopython_integration.from_seqfeature
+    gffutils.pybedtools_integration.tsses
+    gffutils.pybedtools_integration.to_bedtool
+
+
 
 Utilities
 ---------
