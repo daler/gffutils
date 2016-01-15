@@ -51,12 +51,14 @@ for PYTHON in 2 3; do
 
     # Prepare for testing by installing nose for main tests, and biopython for
     # the biopython integration tests.  Then run 'em.
-    conda install -y nose --file optional-requirements.txt
+    conda install -y nose --file optional-requirements.txt --channel bioconda
+    bedtools
     nosetests -x --with-doctest
 
     # Install tools and run doctests
     conda install -y --file docs-requirements.txt
     (cd doc && make clean && make doctest)
     set +x; source deactivate; set -x
+
 
 done

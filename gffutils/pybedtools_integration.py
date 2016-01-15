@@ -1,3 +1,7 @@
+"""
+Module for integration with pybedtools
+"""
+
 import pybedtools
 from pybedtools import featurefuncs
 from gffutils import helpers
