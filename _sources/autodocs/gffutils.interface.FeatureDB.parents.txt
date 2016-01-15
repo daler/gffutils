@@ -1,0 +1,6 @@
+gffutils.interface.FeatureDB.parents
+====================================
+
+.. currentmodule:: gffutils.interface
+
+.. automethod:: FeatureDB.parents

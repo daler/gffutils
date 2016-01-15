@@ -5,6 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>Introduction &mdash; gffutils 0.8.6.1 documentation</title>
@@ -14,7 +15,6 @@
   
 
   
-  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 
   
   
@@ -35,7 +35,7 @@
         <link rel="prev" title="Table of Contents" href="contents.html"/> 
 
   
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+  <script src="_static/js/modernizr.min.js"></script>
 
 </head>
 
@@ -45,11 +45,27 @@
 
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-nav-search">
-        
-          <a href="contents.html" class="fa fa-home"> gffutils</a>
-        
-        
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="contents.html" class="icon icon-home"> gffutils
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.8.6.1
+              </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -57,90 +73,39 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-      </div>
 
-      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-        
           
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
-              <ul class="current">
+            
+            
+                <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="">Introduction</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#example-file">Example file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#create-the-database">Create the database</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#use-the-database">Use the database</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#optional-requirements">Optional requirements</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="database-import.html">Importing data into a database</a></li>
-<li class="toctree-l1"><a class="reference internal" href="database-schema.html">Database schema</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="database-schema.html#schema">Schema</a></li>
-<li class="toctree-l2"><a class="reference internal" href="database-schema.html#features-table"><code class="docutils literal"><span class="pre">features</span></code> table</a></li>
-<li class="toctree-l2"><a class="reference internal" href="database-schema.html#relations-table"><code class="docutils literal"><span class="pre">relations</span></code> table</a></li>
-<li class="toctree-l2"><a class="reference internal" href="database-schema.html#meta-table"><code class="docutils literal"><span class="pre">meta</span></code> table</a></li>
-<li class="toctree-l2"><a class="reference internal" href="database-schema.html#directives-table"><code class="docutils literal"><span class="pre">directives</span></code> table</a></li>
-<li class="toctree-l2"><a class="reference internal" href="database-schema.html#autoincrements-table"><code class="docutils literal"><span class="pre">autoincrements</span></code> table</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="database-ids.html">Database IDs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="database-ids.html#id-spec"><code class="docutils literal"><span class="pre">id_spec</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="database-ids.html#transform"><code class="docutils literal"><span class="pre">transform</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="database-ids.html#merge-strategy"><code class="docutils literal"><span class="pre">merge_strategy</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="gtf.html">GTF files</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="gtf.html#transcript-key-and-gene-key"><code class="docutils literal"><span class="pre">transcript_key</span></code> and <code class="docutils literal"><span class="pre">gene_key</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="gtf.html#subfeature"><code class="docutils literal"><span class="pre">subfeature</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="database-schema.html">Database schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="database-ids.html">Database IDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gtf.html">GTF files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dialect.html">Dialects</a></li>
 <li class="toctree-l1"><a class="reference internal" href="attributes.html">Attributes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#mouse-extra-comma-gff3">mouse_extra_comma.gff3</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#c-elegans-ws199-ann-gff-txt">c_elegans_WS199_ann_gff.txt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#c-elegans-ws199-shortened-gff-txt">c_elegans_WS199_shortened_gff.txt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#ensembl-gtf-txt">ensembl_gtf.txt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#f3-unique-3-v2-gff">F3-unique-3.v2.gff</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#glimmer-nokeyval-gff3">glimmer_nokeyval.gff3</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#hybrid1-gff3">hybrid1.gff3</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#jgi-gff2-txt">jgi_gff2.txt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#ncbi-gff3-txt">ncbi_gff3.txt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#wormbase-gff2-alt-txt">wormbase_gff2_alt.txt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#wormbase-gff2-txt">wormbase_gff2.txt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#gencode-v19-gtf">gencode-v19.gtf</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api.html#create-a-database">Create a database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#interact-with-a-database">Interact with a database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#feature-objects">Feature objects</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#utilities">Utilities</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Change log</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#changes-in-v0-8-6-1">Changes in v0.8.6.1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#changes-in-v0-8-4">Changes in v0.8.4</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#changes-in-v0-8-3-1">Changes in v0.8.3.1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#changes-in-v0-8-3">Changes in v0.8.3</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="developers.html">Developer&#8217;s docs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="developers.html#package-modules">Package modules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="developers.html#general-workflow">General workflow</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="meta.html">Meta-docs (docs about the docs)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="meta.html#building-the-docs">Building the docs</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Change log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">Developer&#8217;s docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="meta.html">Meta-docs (docs about the docs)</a></li>
 </ul>
 
+            
           
-        
+        </div>
       </div>
-      &nbsp;
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
@@ -155,27 +120,36 @@
       
       <div class="wy-nav-content">
         <div class="rst-content">
-          <div role="navigation" aria-label="breadcrumbs navigation">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="contents.html">Docs</a> &raquo;</li>
       
     <li>Introduction</li>
       <li class="wy-breadcrumbs-aside">
         
-          <a href="_sources/index.txt" rel="nofollow"> View page source</a>
+          
+            <a href="_sources/index.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
   </ul>
   <hr/>
 </div>
-          <div role="main" class="document">
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <div class="section" id="introduction">
 <span id="id1"></span><h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
-<p><code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code> is a Python package for working with <a class="reference external" href="http://www.sanger.ac.uk/resources/software/gff/spec.htm">GFF</a> and <a class="reference external" href="http://mblab.wustl.edu/GTF22.html">GTF</a> files in a hierarchical manner.  It
+<p><a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code></a> is a Python package for working with <a class="reference external" href="http://www.sanger.ac.uk/resources/software/gff/spec.htm">GFF</a> and <a class="reference external" href="http://mblab.wustl.edu/GTF22.html">GTF</a> files in a hierarchical manner.  It
 allows operations which would be complicated or time-consuming using
 a text-file-only approach.</p>
-<p>Below is a short demonstration of <code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code>. For the full documentation,
+<p>Below is a short demonstration of <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code></a>. For the full documentation,
 see <a class="reference internal" href="contents.html"><em>Table of Contents</em></a>.</p>
 <div class="section" id="example-file">
 <h2>Example file<a class="headerlink" href="#example-file" title="Permalink to this headline">¶</a></h2>
@@ -183,9 +157,9 @@ see <a class="reference internal" href="contents.html"><em>Table of Contents</em
 Here is a graphical representation of this gene&#8217;s three alternative
 transcripts, from <a class="reference external" href="http://flybase.org/reports/FBgn0031208.html">FlyBase</a> :</p>
 <img alt="_images/flybase-FBgn0031208.png" src="_images/flybase-FBgn0031208.png" />
-<p><code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code> ships with the GFF annotation of this gene, downloaded from
+<p><a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code></a> ships with the GFF annotation of this gene, downloaded from
 <a class="reference external" href="ftp://ftp.flybase.net/genomes/Drosophila_melanogaster/dmel_r5.54_FB2013_06/gff/">release 5.54 of FlyBase</a>.
-We&#8217;ll be using it to describe some features of <code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code>, because it
+We&#8217;ll be using it to describe some features of <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code></a>, because it
 contains just enough complexity to be representative of a real-world,
 genome-wide GFF file.</p>
 <p>Let&#8217;s look at what the file contains:</p>
@@ -268,8 +242,8 @@ generating a file of splice junctions.</p>
 </div>
 <div class="section" id="create-the-database">
 <h2>Create the database<a class="headerlink" href="#create-the-database" title="Permalink to this headline">¶</a></h2>
-<p>The first step to working with <code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code> is to import the file into
-a local sqlite3 file-based database.  The <a class="reference internal" href="autodocs/gffutils.create_db.html#gffutils.create_db" title="gffutils.create_db"><code class="xref py py-func docutils literal"><span class="pre">gffutils.create_db()</span></code></a> function
+<p>The first step to working with <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code></a> is to import the file into
+a local sqlite3 file-based database.  The <code class="xref py py-func docutils literal"><span class="pre">gffutils.create_db()</span></code> function
 is used for this, and it takes many optional arguments for configuring how to
 interpret your GFF or GTF file.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">gffutils</span><span class="o">.</span><span class="n">create_db</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">dbfn</span><span class="o">=</span><span class="s">&#39;test.db&#39;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">keep_order</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
@@ -285,7 +259,7 @@ but in general you can gain a speedup by using the default <code class="docutils
 and <code class="docutils literal"><span class="pre">sort_attributes_order=False</span></code>.</p>
 <p>If your input file follows the GFF or GTF file format specifications, this is
 all you need to create a database.  But real-world files don&#8217;t always
-completely adhere to the format specifications.  So <code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code> provides lots
+completely adhere to the format specifications.  So <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code></a> provides lots
 of configuration options to tailor the pre-processing to your particular file
 &#8211; see <a class="reference internal" href="database-import.html"><em>Importing data into a database</em></a> for more details, and <a class="reference internal" href="examples.html"><em>Examples</em></a> for more
 practical examples.</p>
@@ -319,13 +293,13 @@ a list, even if there&#8217;s only one item:</p>
 <span class="go">[&#39;CG11023&#39;]</span>
 </pre></div>
 </div>
-<p>Attributes can also be accessed from the <a class="reference internal" href="autodocs/gffutils.Feature.html#gffutils.Feature" title="gffutils.Feature"><code class="xref py py-class docutils literal"><span class="pre">Feature</span></code></a> object itself, to
+<p>Attributes can also be accessed from the <code class="xref py py-class docutils literal"><span class="pre">Feature</span></code> object itself, to
 save some typing:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">gene</span><span class="p">[</span><span class="s">&#39;Name&#39;</span><span class="p">]</span>
 <span class="go">[&#39;CG11023&#39;]</span>
 </pre></div>
 </div>
-<p>Printing a <a class="reference internal" href="autodocs/gffutils.Feature.html#gffutils.Feature" title="gffutils.Feature"><code class="xref py py-class docutils literal"><span class="pre">Feature</span></code></a> reproduces the original GFF line as faithfully as
+<p>Printing a <code class="xref py py-class docutils literal"><span class="pre">Feature</span></code> reproduces the original GFF line as faithfully as
 possible.  See the <a class="reference internal" href="dialect.html#dialects"><span>Dialects</span></a> section for more details on how this is
 handled and configured.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">gene</span><span class="p">)</span>  
@@ -353,7 +327,7 @@ handled and configured.</p>
 <p>Does this gene have any constitutive exons (exons found in every alternative
 transcript)?  This is an example of something that would be difficult to do
 using only standard text file processing tools, and demonstrates the usefulness
-of the <code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code>:</p>
+of the <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code></a>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mRNA_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="n">gene</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="s">&#39;mRNA&#39;</span><span class="p">)))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">constitutive_exons</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">exon</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">features_of_type</span><span class="p">(</span><span class="s">&#39;exon&#39;</span><span class="p">,</span> <span class="n">order_by</span><span class="o">=</span><span class="s">&#39;start&#39;</span><span class="p">):</span>
@@ -462,15 +436,16 @@ affected them:</p>
 </div>
 
 
+           </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="installation.html" class="btn btn-neutral float-right" title="Installation">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="contents.html" class="btn btn-neutral" title="Table of Contents"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="contents.html" class="btn btn-neutral" title="Table of Contents" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -480,12 +455,13 @@ affected them:</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2013, Ryan Dale.
+
     </p>
   </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
-  
 </footer>
+
         </div>
       </div>
 

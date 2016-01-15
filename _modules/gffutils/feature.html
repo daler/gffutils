@@ -5,6 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>gffutils.feature &mdash; gffutils 0.8.6.1 documentation</title>
@@ -14,7 +15,6 @@
   
 
   
-  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 
   
   
@@ -34,7 +34,7 @@
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+  <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
@@ -44,11 +44,27 @@
 
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-nav-search">
-        
-          <a href="../../contents.html" class="fa fa-home"> gffutils</a>
-        
-        
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../contents.html" class="icon icon-home"> gffutils
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.8.6.1
+              </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -56,91 +72,34 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-      </div>
 
-      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-        
           
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
-              <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../index.html">Introduction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../index.html#example-file">Example file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../index.html#create-the-database">Create the database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../index.html#use-the-database">Use the database</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../installation.html#optional-requirements">Optional requirements</a></li>
-</ul>
-</li>
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../database-import.html">Importing data into a database</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../database-schema.html">Database schema</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../database-schema.html#schema">Schema</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../database-schema.html#features-table"><code class="docutils literal"><span class="pre">features</span></code> table</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../database-schema.html#relations-table"><code class="docutils literal"><span class="pre">relations</span></code> table</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../database-schema.html#meta-table"><code class="docutils literal"><span class="pre">meta</span></code> table</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../database-schema.html#directives-table"><code class="docutils literal"><span class="pre">directives</span></code> table</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../database-schema.html#autoincrements-table"><code class="docutils literal"><span class="pre">autoincrements</span></code> table</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../database-ids.html">Database IDs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../database-ids.html#id-spec"><code class="docutils literal"><span class="pre">id_spec</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../database-ids.html#transform"><code class="docutils literal"><span class="pre">transform</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../database-ids.html#merge-strategy"><code class="docutils literal"><span class="pre">merge_strategy</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../gtf.html">GTF files</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../gtf.html#transcript-key-and-gene-key"><code class="docutils literal"><span class="pre">transcript_key</span></code> and <code class="docutils literal"><span class="pre">gene_key</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../gtf.html#subfeature"><code class="docutils literal"><span class="pre">subfeature</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../../database-schema.html">Database schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../database-ids.html">Database IDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gtf.html">GTF files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../dialect.html">Dialects</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../attributes.html">Attributes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../examples.html#mouse-extra-comma-gff3">mouse_extra_comma.gff3</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../examples.html#c-elegans-ws199-ann-gff-txt">c_elegans_WS199_ann_gff.txt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../examples.html#c-elegans-ws199-shortened-gff-txt">c_elegans_WS199_shortened_gff.txt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../examples.html#ensembl-gtf-txt">ensembl_gtf.txt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../examples.html#f3-unique-3-v2-gff">F3-unique-3.v2.gff</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../examples.html#glimmer-nokeyval-gff3">glimmer_nokeyval.gff3</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../examples.html#hybrid1-gff3">hybrid1.gff3</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../examples.html#jgi-gff2-txt">jgi_gff2.txt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../examples.html#ncbi-gff3-txt">ncbi_gff3.txt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../examples.html#wormbase-gff2-alt-txt">wormbase_gff2_alt.txt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../examples.html#wormbase-gff2-txt">wormbase_gff2.txt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../examples.html#gencode-v19-gtf">gencode-v19.gtf</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../api.html">API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../api.html#create-a-database">Create a database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../api.html#interact-with-a-database">Interact with a database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../api.html#feature-objects">Feature objects</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../api.html#integration-with-other-tools">Integration with other tools</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../api.html#utilities">Utilities</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Change log</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#changes-in-v0-8-6-1">Changes in v0.8.6.1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#changes-in-v0-8-4">Changes in v0.8.4</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#changes-in-v0-8-3-1">Changes in v0.8.3.1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#changes-in-v0-8-3">Changes in v0.8.3</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../developers.html">Developer&#8217;s docs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../developers.html#package-modules">Package modules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../developers.html#general-workflow">General workflow</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../meta.html">Meta-docs (docs about the docs)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../meta.html#building-the-docs">Building the docs</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Change log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developers.html">Developer&#8217;s docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../meta.html">Meta-docs (docs about the docs)</a></li>
 </ul>
 
+            
           
-        
+        </div>
       </div>
-      &nbsp;
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
@@ -155,7 +114,13 @@
       
       <div class="wy-nav-content">
         <div class="rst-content">
-          <div role="navigation" aria-label="breadcrumbs navigation">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="../../contents.html">Docs</a> &raquo;</li>
       
@@ -164,11 +129,14 @@
     <li>gffutils.feature</li>
       <li class="wy-breadcrumbs-aside">
         
+          
+        
       </li>
   </ul>
   <hr/>
 </div>
-          <div role="main" class="document">
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <h1>Source code for gffutils.feature</h1><div class="highlight"><pre>
 <span class="kn">from</span> <span class="nn">pyfaidx</span> <span class="kn">import</span> <span class="n">Fasta</span>
@@ -186,8 +154,8 @@
                                    <span class="s">&#39;attributes&#39;</span><span class="p">]))</span>
 
 
-<div class="viewcode-block" id="Feature"><a class="viewcode-back" href="../../autodocs/gffutils.Feature.html#gffutils.Feature">[docs]</a><span class="k">class</span> <span class="nc">Feature</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<div class="viewcode-block" id="Feature.__init__"><a class="viewcode-back" href="../../autodocs/gffutils.Feature.html#gffutils.Feature.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seqid</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span>
+<div class="viewcode-block" id="Feature"><a class="viewcode-back" href="../../autodocs/gffutils.feature.Feature.html#gffutils.feature.Feature">[docs]</a><span class="k">class</span> <span class="nc">Feature</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Feature.__init__"><a class="viewcode-back" href="../../autodocs/gffutils.feature.Feature.html#gffutils.feature.Feature.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seqid</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span>
                  <span class="n">start</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span> <span class="n">score</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span> <span class="n">strand</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span>
                  <span class="n">attributes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="nb">bin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                  <span class="n">file_order</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">keep_order</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
@@ -342,8 +310,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">dialect</span> <span class="o">=</span> <span class="n">dialect</span> <span class="ow">or</span> <span class="n">constants</span><span class="o">.</span><span class="n">dialect</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">file_order</span> <span class="o">=</span> <span class="n">file_order</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">keep_order</span> <span class="o">=</span> <span class="n">keep_order</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sort_attribute_values</span> <span class="o">=</span> <span class="n">sort_attribute_values</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sort_attribute_values</span> <span class="o">=</span> <span class="n">sort_attribute_values</span></div>
+
     <span class="k">def</span> <span class="nf">calc_bin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_bin</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate the smallest UCSC genomic bin that will contain this feature.</span>
@@ -485,7 +453,7 @@
             <span class="n">helpers</span><span class="o">.</span><span class="n">_jsonify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoding</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_bin</span><span class="p">()</span>
         <span class="p">)</span>
 
-<div class="viewcode-block" id="Feature.sequence"><a class="viewcode-back" href="../../autodocs/gffutils.Feature.sequence.html#gffutils.Feature.sequence">[docs]</a>    <span class="k">def</span> <span class="nf">sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fasta</span><span class="p">,</span> <span class="n">use_strand</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Feature.sequence"><a class="viewcode-back" href="../../autodocs/gffutils.feature.Feature.sequence.html#gffutils.feature.Feature.sequence">[docs]</a>    <span class="k">def</span> <span class="nf">sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fasta</span><span class="p">,</span> <span class="n">use_strand</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieves the sequence of this feature as a string.</span>
 
@@ -511,10 +479,10 @@
 
         <span class="c"># recall GTF/GFF is 1-based closed;  pyfaidx uses Python slice notation</span>
         <span class="c"># and is therefore 0-based half-open.</span>
-        <span class="k">return</span> <span class="n">fasta</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">chrom</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">fasta</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">chrom</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">]</span></div></div>
 
-</div></div>
-<div class="viewcode-block" id="feature_from_line"><a class="viewcode-back" href="../../autodocs/gffutils.feature.feature_from_line.html#gffutils.feature_from_line">[docs]</a><span class="k">def</span> <span class="nf">feature_from_line</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">keep_order</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+
+<div class="viewcode-block" id="feature_from_line"><a class="viewcode-back" href="../../autodocs/gffutils.feature.feature_from_line.html#gffutils.feature.feature_from_line">[docs]</a><span class="k">def</span> <span class="nf">feature_from_line</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">keep_order</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given a line from a GFF file, return a Feature object</span>
 
@@ -572,6 +540,7 @@
     <span class="k">return</span> <span class="n">Feature</span><span class="p">(</span><span class="n">dialect</span><span class="o">=</span><span class="n">dialect</span><span class="p">,</span> <span class="o">**</span><span class="n">d</span><span class="p">)</span></div>
 </pre></div>
 
+           </div>
           </div>
           <footer>
   
@@ -581,12 +550,13 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2013, Ryan Dale.
+
     </p>
   </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
-  
 </footer>
+
         </div>
       </div>
 

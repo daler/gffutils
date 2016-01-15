@@ -1,0 +1,6 @@
+gffutils.interface.FeatureDB.execute
+====================================
+
+.. currentmodule:: gffutils.interface
+
+.. automethod:: FeatureDB.execute

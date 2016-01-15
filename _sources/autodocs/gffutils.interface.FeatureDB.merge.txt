@@ -1,0 +1,6 @@
+gffutils.interface.FeatureDB.merge
+==================================
+
+.. currentmodule:: gffutils.interface
+
+.. automethod:: FeatureDB.merge

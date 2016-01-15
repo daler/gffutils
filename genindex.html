@@ -6,6 +6,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>Index &mdash; gffutils 0.8.6.1 documentation</title>
@@ -15,7 +16,6 @@
   
 
   
-  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 
   
   
@@ -34,7 +34,7 @@
     <link rel="top" title="gffutils 0.8.6.1 documentation" href="index.html"/> 
 
   
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+  <script src="_static/js/modernizr.min.js"></script>
 
 </head>
 
@@ -44,11 +44,27 @@
 
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-nav-search">
-        
-          <a href="contents.html" class="fa fa-home"> gffutils</a>
-        
-        
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="contents.html" class="icon icon-home"> gffutils
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.8.6.1
+              </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -56,91 +72,34 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-      </div>
 
-      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-        
           
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
-              <ul>
-<li class="toctree-l1"><a class="reference internal" href="index.html">Introduction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="index.html#example-file">Example file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="index.html#create-the-database">Create the database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="index.html#use-the-database">Use the database</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#optional-requirements">Optional requirements</a></li>
-</ul>
-</li>
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="database-import.html">Importing data into a database</a></li>
-<li class="toctree-l1"><a class="reference internal" href="database-schema.html">Database schema</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="database-schema.html#schema">Schema</a></li>
-<li class="toctree-l2"><a class="reference internal" href="database-schema.html#features-table"><code class="docutils literal"><span class="pre">features</span></code> table</a></li>
-<li class="toctree-l2"><a class="reference internal" href="database-schema.html#relations-table"><code class="docutils literal"><span class="pre">relations</span></code> table</a></li>
-<li class="toctree-l2"><a class="reference internal" href="database-schema.html#meta-table"><code class="docutils literal"><span class="pre">meta</span></code> table</a></li>
-<li class="toctree-l2"><a class="reference internal" href="database-schema.html#directives-table"><code class="docutils literal"><span class="pre">directives</span></code> table</a></li>
-<li class="toctree-l2"><a class="reference internal" href="database-schema.html#autoincrements-table"><code class="docutils literal"><span class="pre">autoincrements</span></code> table</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="database-ids.html">Database IDs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="database-ids.html#id-spec"><code class="docutils literal"><span class="pre">id_spec</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="database-ids.html#transform"><code class="docutils literal"><span class="pre">transform</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="database-ids.html#merge-strategy"><code class="docutils literal"><span class="pre">merge_strategy</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="gtf.html">GTF files</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="gtf.html#transcript-key-and-gene-key"><code class="docutils literal"><span class="pre">transcript_key</span></code> and <code class="docutils literal"><span class="pre">gene_key</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="gtf.html#subfeature"><code class="docutils literal"><span class="pre">subfeature</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="database-schema.html">Database schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="database-ids.html">Database IDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gtf.html">GTF files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dialect.html">Dialects</a></li>
 <li class="toctree-l1"><a class="reference internal" href="attributes.html">Attributes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#mouse-extra-comma-gff3">mouse_extra_comma.gff3</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#c-elegans-ws199-ann-gff-txt">c_elegans_WS199_ann_gff.txt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#c-elegans-ws199-shortened-gff-txt">c_elegans_WS199_shortened_gff.txt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#ensembl-gtf-txt">ensembl_gtf.txt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#f3-unique-3-v2-gff">F3-unique-3.v2.gff</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#glimmer-nokeyval-gff3">glimmer_nokeyval.gff3</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#hybrid1-gff3">hybrid1.gff3</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#jgi-gff2-txt">jgi_gff2.txt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#ncbi-gff3-txt">ncbi_gff3.txt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#wormbase-gff2-alt-txt">wormbase_gff2_alt.txt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#wormbase-gff2-txt">wormbase_gff2.txt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#gencode-v19-gtf">gencode-v19.gtf</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api.html#create-a-database">Create a database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#interact-with-a-database">Interact with a database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#feature-objects">Feature objects</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#integration-with-other-tools">Integration with other tools</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#utilities">Utilities</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Change log</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#changes-in-v0-8-6-1">Changes in v0.8.6.1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#changes-in-v0-8-4">Changes in v0.8.4</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#changes-in-v0-8-3-1">Changes in v0.8.3.1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#changes-in-v0-8-3">Changes in v0.8.3</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="developers.html">Developer&#8217;s docs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="developers.html#package-modules">Package modules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="developers.html#general-workflow">General workflow</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="meta.html">Meta-docs (docs about the docs)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="meta.html#building-the-docs">Building the docs</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Change log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">Developer&#8217;s docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="meta.html">Meta-docs (docs about the docs)</a></li>
 </ul>
 
+            
           
-        
+        </div>
       </div>
-      &nbsp;
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
@@ -155,18 +114,27 @@
       
       <div class="wy-nav-content">
         <div class="rst-content">
-          <div role="navigation" aria-label="breadcrumbs navigation">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="contents.html">Docs</a> &raquo;</li>
       
     <li></li>
       <li class="wy-breadcrumbs-aside">
         
+          
+        
       </li>
   </ul>
   <hr/>
 </div>
-          <div role="main" class="document">
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
 
 <h1 id="index">Index</h1>
@@ -192,12 +160,12 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="autodocs/gffutils.Feature.html#gffutils.Feature.__init__">__init__() (gffutils.Feature method)</a>
+  <dt><a href="autodocs/gffutils.feature.Feature.html#gffutils.feature.Feature.__init__">__init__() (gffutils.feature.Feature method)</a>
   </dt>
 
       <dd><dl>
         
-  <dt><a href="autodocs/gffutils.FeatureDB.html#gffutils.FeatureDB.__init__">(gffutils.FeatureDB method)</a>
+  <dt><a href="autodocs/gffutils.interface.FeatureDB.html#gffutils.interface.FeatureDB.__init__">(gffutils.interface.FeatureDB method)</a>
   </dt>
 
       </dl></dd>
@@ -208,11 +176,11 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="autodocs/gffutils.FeatureDB.add_relation.html#gffutils.FeatureDB.add_relation">add_relation() (gffutils.FeatureDB method)</a>
+  <dt><a href="autodocs/gffutils.interface.FeatureDB.add_relation.html#gffutils.interface.FeatureDB.add_relation">add_relation() (gffutils.interface.FeatureDB method)</a>
   </dt>
 
       
-  <dt><a href="autodocs/gffutils.FeatureDB.all_features.html#gffutils.FeatureDB.all_features">all_features() (gffutils.FeatureDB method)</a>
+  <dt><a href="autodocs/gffutils.interface.FeatureDB.all_features.html#gffutils.interface.FeatureDB.all_features">all_features() (gffutils.interface.FeatureDB method)</a>
   </dt>
 
   </dl></td>
@@ -232,7 +200,7 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="autodocs/gffutils.FeatureDB.bed12.html#gffutils.FeatureDB.bed12">bed12() (gffutils.FeatureDB method)</a>
+  <dt><a href="autodocs/gffutils.interface.FeatureDB.bed12.html#gffutils.interface.FeatureDB.bed12">bed12() (gffutils.interface.FeatureDB method)</a>
   </dt>
 
   </dl></td>
@@ -242,25 +210,25 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="autodocs/gffutils.FeatureDB.children.html#gffutils.FeatureDB.children">children() (gffutils.FeatureDB method)</a>
+  <dt><a href="autodocs/gffutils.interface.FeatureDB.children.html#gffutils.interface.FeatureDB.children">children() (gffutils.interface.FeatureDB method)</a>
   </dt>
 
       
-  <dt><a href="autodocs/gffutils.FeatureDB.children_bp.html#gffutils.FeatureDB.children_bp">children_bp() (gffutils.FeatureDB method)</a>
+  <dt><a href="autodocs/gffutils.interface.FeatureDB.children_bp.html#gffutils.interface.FeatureDB.children_bp">children_bp() (gffutils.interface.FeatureDB method)</a>
   </dt>
 
       
-  <dt><a href="autodocs/gffutils.FeatureDB.count_features_of_type.html#gffutils.FeatureDB.count_features_of_type">count_features_of_type() (gffutils.FeatureDB method)</a>
+  <dt><a href="autodocs/gffutils.interface.FeatureDB.count_features_of_type.html#gffutils.interface.FeatureDB.count_features_of_type">count_features_of_type() (gffutils.interface.FeatureDB method)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="autodocs/gffutils.create_db.html#gffutils.create_db">create_db() (in module gffutils)</a>
+  <dt><a href="autodocs/gffutils.create.create_db.html#gffutils.create.create_db">create_db() (in module gffutils.create)</a>
   </dt>
 
       
-  <dt><a href="autodocs/gffutils.FeatureDB.create_introns.html#gffutils.FeatureDB.create_introns">create_introns() (gffutils.FeatureDB method)</a>
+  <dt><a href="autodocs/gffutils.interface.FeatureDB.create_introns.html#gffutils.interface.FeatureDB.create_introns">create_introns() (gffutils.interface.FeatureDB method)</a>
   </dt>
 
   </dl></td>
@@ -270,7 +238,7 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="autodocs/gffutils.FeatureDB.delete.html#gffutils.FeatureDB.delete">delete() (gffutils.FeatureDB method)</a>
+  <dt><a href="autodocs/gffutils.interface.FeatureDB.delete.html#gffutils.interface.FeatureDB.delete">delete() (gffutils.interface.FeatureDB method)</a>
   </dt>
 
   </dl></td>
@@ -286,7 +254,7 @@
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="autodocs/gffutils.FeatureDB.execute.html#gffutils.FeatureDB.execute">execute() (gffutils.FeatureDB method)</a>
+  <dt><a href="autodocs/gffutils.interface.FeatureDB.execute.html#gffutils.interface.FeatureDB.execute">execute() (gffutils.interface.FeatureDB method)</a>
   </dt>
 
   </dl></td>
@@ -296,7 +264,7 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="autodocs/gffutils.Feature.html#gffutils.Feature">Feature (class in gffutils)</a>
+  <dt><a href="autodocs/gffutils.feature.Feature.html#gffutils.feature.Feature">Feature (class in gffutils.feature)</a>
   </dt>
 
       
@@ -304,17 +272,17 @@
   </dt>
 
       
-  <dt><a href="autodocs/gffutils.FeatureDB.html#gffutils.FeatureDB">FeatureDB (class in gffutils)</a>
+  <dt><a href="autodocs/gffutils.interface.FeatureDB.html#gffutils.interface.FeatureDB">FeatureDB (class in gffutils.interface)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="autodocs/gffutils.FeatureDB.features_of_type.html#gffutils.FeatureDB.features_of_type">features_of_type() (gffutils.FeatureDB method)</a>
+  <dt><a href="autodocs/gffutils.interface.FeatureDB.features_of_type.html#gffutils.interface.FeatureDB.features_of_type">features_of_type() (gffutils.interface.FeatureDB method)</a>
   </dt>
 
       
-  <dt><a href="autodocs/gffutils.FeatureDB.featuretypes.html#gffutils.FeatureDB.featuretypes">featuretypes() (gffutils.FeatureDB method)</a>
+  <dt><a href="autodocs/gffutils.interface.FeatureDB.featuretypes.html#gffutils.interface.FeatureDB.featuretypes">featuretypes() (gffutils.interface.FeatureDB method)</a>
   </dt>
 
   </dl></td>
@@ -323,6 +291,10 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api.html#module-gffutils">gffutils (module)</a>
+  </dt>
+
       
   <dt><a href="autodocs/gffutils.biopython_integration.html#module-gffutils.biopython_integration">gffutils.biopython_integration (module)</a>
   </dt>
@@ -350,11 +322,11 @@
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="autodocs/gffutils.FeatureDB.interfeatures.html#gffutils.FeatureDB.interfeatures">interfeatures() (gffutils.FeatureDB method)</a>
+  <dt><a href="autodocs/gffutils.interface.FeatureDB.interfeatures.html#gffutils.interface.FeatureDB.interfeatures">interfeatures() (gffutils.interface.FeatureDB method)</a>
   </dt>
 
       
-  <dt><a href="autodocs/gffutils.FeatureDB.iter_by_parent_childs.html#gffutils.FeatureDB.iter_by_parent_childs">iter_by_parent_childs() (gffutils.FeatureDB method)</a>
+  <dt><a href="autodocs/gffutils.interface.FeatureDB.iter_by_parent_childs.html#gffutils.interface.FeatureDB.iter_by_parent_childs">iter_by_parent_childs() (gffutils.interface.FeatureDB method)</a>
   </dt>
 
   </dl></td>
@@ -364,7 +336,7 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="autodocs/gffutils.FeatureDB.merge.html#gffutils.FeatureDB.merge">merge() (gffutils.FeatureDB method)</a>
+  <dt><a href="autodocs/gffutils.interface.FeatureDB.merge.html#gffutils.interface.FeatureDB.merge">merge() (gffutils.interface.FeatureDB method)</a>
   </dt>
 
   </dl></td>
@@ -380,7 +352,7 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="autodocs/gffutils.FeatureDB.parents.html#gffutils.FeatureDB.parents">parents() (gffutils.FeatureDB method)</a>
+  <dt><a href="autodocs/gffutils.interface.FeatureDB.parents.html#gffutils.interface.FeatureDB.parents">parents() (gffutils.interface.FeatureDB method)</a>
   </dt>
 
   </dl></td>
@@ -390,7 +362,7 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="autodocs/gffutils.FeatureDB.region.html#gffutils.FeatureDB.region">region() (gffutils.FeatureDB method)</a>
+  <dt><a href="autodocs/gffutils.interface.FeatureDB.region.html#gffutils.interface.FeatureDB.region">region() (gffutils.interface.FeatureDB method)</a>
   </dt>
 
   </dl></td>
@@ -404,17 +376,17 @@
   </dt>
 
       
-  <dt><a href="autodocs/gffutils.FeatureDB.schema.html#gffutils.FeatureDB.schema">schema() (gffutils.FeatureDB method)</a>
+  <dt><a href="autodocs/gffutils.interface.FeatureDB.schema.html#gffutils.interface.FeatureDB.schema">schema() (gffutils.interface.FeatureDB method)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="autodocs/gffutils.Feature.sequence.html#gffutils.Feature.sequence">sequence() (gffutils.Feature method)</a>
+  <dt><a href="autodocs/gffutils.feature.Feature.sequence.html#gffutils.feature.Feature.sequence">sequence() (gffutils.feature.Feature method)</a>
   </dt>
 
       
-  <dt><a href="autodocs/gffutils.FeatureDB.set_pragmas.html#gffutils.FeatureDB.set_pragmas">set_pragmas() (gffutils.FeatureDB method)</a>
+  <dt><a href="autodocs/gffutils.interface.FeatureDB.set_pragmas.html#gffutils.interface.FeatureDB.set_pragmas">set_pragmas() (gffutils.interface.FeatureDB method)</a>
   </dt>
 
   </dl></td>
@@ -424,7 +396,7 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="autodocs/gffutils.FeatureDB.update.html#gffutils.FeatureDB.update">update() (gffutils.FeatureDB method)</a>
+  <dt><a href="autodocs/gffutils.interface.FeatureDB.update.html#gffutils.interface.FeatureDB.update">update() (gffutils.interface.FeatureDB method)</a>
   </dt>
 
   </dl></td>
@@ -432,6 +404,7 @@
 
 
 
+           </div>
           </div>
           <footer>
   
@@ -441,12 +414,13 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2013, Ryan Dale.
+
     </p>
   </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
-  
 </footer>
+
         </div>
       </div>
 

@@ -1,0 +1,258 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>gffutils.feature.Feature.sequence &mdash; gffutils 0.8.6.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="gffutils 0.8.6.1 documentation" href="../index.html"/>
+        <link rel="up" title="API" href="../api.html"/>
+        <link rel="next" title="gffutils.feature.feature_from_line" href="gffutils.feature.feature_from_line.html"/>
+        <link rel="prev" title="gffutils.feature.Feature" href="gffutils.feature.Feature.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../contents.html" class="icon icon-home"> gffutils
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.8.6.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../database-import.html">Importing data into a database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../database-schema.html">Database schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../database-ids.html">Database IDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gtf.html">GTF files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dialect.html">Dialects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../attributes.html">Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-gffutils"><code class="docutils literal"><span class="pre">gffutils</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#create-a-database">Create a database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#interact-with-a-database">Interact with a database</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#feature-objects">Feature objects</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="gffutils.feature.Feature.html">gffutils.feature.Feature</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="">gffutils.feature.Feature.sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gffutils.feature.feature_from_line.html">gffutils.feature.feature_from_line</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#integration-with-other-tools">Integration with other tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Change log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developers.html">Developer&#8217;s docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../meta.html">Meta-docs (docs about the docs)</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../contents.html">gffutils</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../contents.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../api.html">API</a> &raquo;</li>
+      
+    <li>gffutils.feature.Feature.sequence</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/autodocs/gffutils.feature.Feature.sequence.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="gffutils-feature-feature-sequence">
+<h1>gffutils.feature.Feature.sequence<a class="headerlink" href="#gffutils-feature-feature-sequence" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="gffutils.feature.Feature.sequence">
+<code class="descclassname">Feature.</code><code class="descname">sequence</code><span class="sig-paren">(</span><em>fasta</em>, <em>use_strand=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/feature.html#Feature.sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gffutils.feature.Feature.sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the sequence of this feature as a string.</p>
+<p>Uses the pyfaidx package.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fasta</strong> : str</p>
+<blockquote>
+<div><p>If str, then it&#8217;s a FASTA-format filename; otherwise assume it&#8217;s
+a pyfaidx.Fasta object.</p>
+</div></blockquote>
+<p><strong>use_strand</strong> : bool</p>
+<blockquote>
+<div><p>If True (default), the sequence returned will be
+reverse-complemented for minus-strand features.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">string</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="gffutils.feature.feature_from_line.html" class="btn btn-neutral float-right" title="gffutils.feature.feature_from_line" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="gffutils.feature.Feature.html" class="btn btn-neutral" title="gffutils.feature.Feature" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2013, Ryan Dale.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.8.6.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

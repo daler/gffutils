@@ -1,0 +1,32 @@
+gffutils.feature.Feature
+========================
+
+.. currentmodule:: gffutils.feature
+
+.. autoclass:: Feature
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Feature.__init__
+      ~Feature.astuple
+      ~Feature.calc_bin
+      ~Feature.sequence
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Feature.chrom
+      ~Feature.stop
+   
+   
