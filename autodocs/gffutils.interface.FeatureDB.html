@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gffutils.interface.FeatureDB &mdash; gffutils 0.8.6.1 documentation</title>
+  <title>gffutils.interface.FeatureDB &mdash; gffutils 0.8.7 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="gffutils 0.8.6.1 documentation" href="../index.html"/>
+    <link rel="top" title="gffutils 0.8.7 documentation" href="../index.html"/>
         <link rel="up" title="API" href="../api.html"/>
         <link rel="next" title="gffutils.interface.FeatureDB.children" href="gffutils.interface.FeatureDB.children.html"/>
         <link rel="prev" title="gffutils.create.create_db" href="gffutils.create.create_db.html"/> 
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.8.6.1
+                0.8.7
               </div>
             
           
@@ -176,10 +176,10 @@
 <h1>gffutils.interface.FeatureDB<a class="headerlink" href="#gffutils-interface-featuredb" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="gffutils.interface.FeatureDB">
-<em class="property">class </em><code class="descclassname">gffutils.interface.</code><code class="descname">FeatureDB</code><span class="sig-paren">(</span><em>dbfn</em>, <em>default_encoding='utf-8'</em>, <em>keep_order=False</em>, <em>pragmas={'synchronous': 'NORMAL'</em>, <em>'journal_mode': 'MEMORY'</em>, <em>'main.page_size': 4096</em>, <em>'main.cache_size': 10000}</em>, <em>sort_attribute_values=False</em>, <em>text_factory=&lt;class 'str'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/interface.html#FeatureDB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gffutils.interface.FeatureDB" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">gffutils.interface.</code><code class="descname">FeatureDB</code><span class="sig-paren">(</span><em>dbfn</em>, <em>default_encoding='utf-8'</em>, <em>keep_order=False</em>, <em>pragmas={'main.page_size': 4096</em>, <em>'main.cache_size': 10000</em>, <em>'synchronous': 'NORMAL'</em>, <em>'journal_mode': 'MEMORY'}</em>, <em>sort_attribute_values=False</em>, <em>text_factory=&lt;class 'str'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/interface.html#FeatureDB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gffutils.interface.FeatureDB" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
 <dt id="gffutils.interface.FeatureDB.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>dbfn</em>, <em>default_encoding='utf-8'</em>, <em>keep_order=False</em>, <em>pragmas={'synchronous': 'NORMAL'</em>, <em>'journal_mode': 'MEMORY'</em>, <em>'main.page_size': 4096</em>, <em>'main.cache_size': 10000}</em>, <em>sort_attribute_values=False</em>, <em>text_factory=&lt;class 'str'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#gffutils.interface.FeatureDB.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>dbfn</em>, <em>default_encoding='utf-8'</em>, <em>keep_order=False</em>, <em>pragmas={'main.page_size': 4096</em>, <em>'main.cache_size': 10000</em>, <em>'synchronous': 'NORMAL'</em>, <em>'journal_mode': 'MEMORY'}</em>, <em>sort_attribute_values=False</em>, <em>text_factory=&lt;class 'str'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#gffutils.interface.FeatureDB.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Connect to a database created by <code class="xref py py-func docutils literal"><span class="pre">gffutils.create_db()</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -345,7 +345,7 @@ kwarg.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.8.6.1',
+            VERSION:'0.8.7',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
