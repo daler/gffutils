@@ -2,6 +2,11 @@
 
 Change log
 ==========
+Changes in v0.8.7.1
+-------------------
+Fixes bug in `gffutils.pybedtools_integration.tsses` where iterating over large
+databases and using the `as_bed6=True` argument could cause a deadlock.
+
 Changes in v0.8.7
 -----------------
 New module, :mod:`gffutils.pybedtools_integration`. In particular, the
