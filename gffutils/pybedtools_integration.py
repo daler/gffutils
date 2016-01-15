@@ -90,11 +90,12 @@ def tsses(db, merge_overlapping=False, attrs=None, attrs_sep=":",
     Default settings -- no merging, and report a separate TSS on each line even
     if they overlap (as in the first two):
 
+
     >>> print(tsses(db))                        # doctest: +NORMALIZE_WHITESPACE
-    chr2L	gffutils_derived	transcript_TSS	7529	7529	.	+	.	transcript_id "FBtr0300689"; gene_id "FBgn0031208";
-    chr2L	gffutils_derived	transcript_TSS	7529	7529	.	+	.	transcript_id "FBtr0300690"; gene_id "FBgn0031208";
-    chr2L	gffutils_derived	transcript_TSS	11000	11000	.	-	.	transcript_id "transcript_Fk_gene_1"; gene_id "Fk_gene_1";
-    chr2L	gffutils_derived	transcript_TSS	12500	12500	.	-	.	transcript_id "transcript_Fk_gene_2"; gene_id "Fk_gene_2";
+    chr2L	gffutils_derived	transcript_TSS	7529	7529	.	+	.	gene_id "FBgn0031208"; transcript_id "FBtr0300689";
+    chr2L	gffutils_derived	transcript_TSS	7529	7529	.	+	.	gene_id "FBgn0031208"; transcript_id "FBtr0300690";
+    chr2L	gffutils_derived	transcript_TSS	11000	11000	.	-	.	gene_id "Fk_gene_1"; transcript_id "transcript_Fk_gene_1";
+    chr2L	gffutils_derived	transcript_TSS	12500	12500	.	-	.	gene_id "Fk_gene_2"; transcript_id "transcript_Fk_gene_2";
     <BLANKLINE>
 
 
