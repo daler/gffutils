@@ -144,6 +144,11 @@
             
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>Using <a class="reference external" href="http://conda.pydata.org/docs/index.html">conda</a>:</p>
+<div class="highlight-python"><div class="highlight"><pre>conda install --channel bioconda gffutils
+</pre></div>
+</div>
+<p>Or <code class="docutils literal"><span class="pre">pip</span></code>:</p>
 <div class="highlight-python"><div class="highlight"><pre>pip install gffutils
 </pre></div>
 </div>
@@ -153,7 +158,13 @@ and Python 3.3.</p>
 <h2>Optional requirements<a class="headerlink" href="#optional-requirements" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>BioPython (for creating SeqFeatures and SeqRecords)</li>
+<li>pybedtools (for integration with pybedtools)</li>
+<li>BEDTools (used by pybedtools)</li>
 </ul>
+<p>Install them all with <code class="docutils literal"><span class="pre">conda</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre>conda install --channel bioconda pybedtools bedtools biopython
+</pre></div>
+</div>
 </div>
 </div>
 
