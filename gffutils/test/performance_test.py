@@ -1,25 +1,22 @@
 import random
 from IPython import embed
 from nose.plugins.attrib import attr
-
+import unittest
+import os
 
 import gffutils
 
-@attr('slow')
-class TestPerformanceTestFeatureDB:
-    def __init__(self):
-        self.gff_file = gffutils.example_filename('Saccharomyces_cerevisiae.R64-1-1.83.gff3')#, )
-
-    def setUp(self):
-        random.seed(1842346386)
-        self.db = gffutils.create_db(self.gff_file, ':memory:', merge_strategy="merge")
+class PerformanceTestFeatureDB(object):
+    @classmethod
+    def setUpClass(cls):
         # Chromosome sizes for testing fetching features from regions
-        self.chromosome_sizes = {}
-        with open(gffutils.example_filename('Saccharomyces_cerevisiae.R64-1-1.83.chromsizes.txt')) as chromosome_sizes:
+        cls.chromosome_sizes = {}
+        with open(cls.chromsizes_file) as chromosome_sizes:
             for chromosome_size in chromosome_sizes:
                 chromosome, size = chromosome_size.split()
                 size = int(size)
-                self.chromosome_sizes[chromosome] = size
+                cls.chromosome_sizes[chromosome] = size
+        random.seed(1842346386)
 
     def test_make_db(self):
         gffutils.create_db(self.gff_file, ':memory:', merge_strategy="merge")
@@ -36,7 +33,7 @@ class TestPerformanceTestFeatureDB:
         '''
             Given a gene id find it's features in db.
         '''
-        with open(gffutils.example_filename('Saccharomyces_cerevisiae.R64-1-1.83.5000_gene_ids.txt')) as gene_list:
+        with open(self.gene_list) as gene_list:
             for gene_id in gene_list:
                 gene_id = gene_id.strip()
                 gene_from_db = self.db[gene_id]
@@ -46,7 +43,7 @@ class TestPerformanceTestFeatureDB:
             Given a transcript find a gene it belongs to.
         '''
         found_parent = False
-        with open(gffutils.example_filename('Saccharomyces_cerevisiae.R64-1-1.83.5000_transcript_ids.txt')) as transript_list:
+        with open(self.transcript_list) as transript_list:
             for transcript in transript_list:
                 transcript = transcript.strip()
                 found_parent = False
@@ -91,3 +88,19 @@ class TestPerformanceTestFeatureDB:
             Testing fetching features from random part of random chromosome, case with ['gene', 'transcript'] as featuretype.
         '''
         self.region_fetch_helper(number_of_attempts=1000, featuretype=['gene', 'transcript'])
+
+
+@attr('slow')
+class TestPerformanceOnSacCer(PerformanceTestFeatureDB, unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.gff_file = gffutils.example_filename('Saccharomyces_cerevisiae.R64-1-1.83.gff3')
+        cls.db = gffutils.create_db(cls.gff_file, 'test.db', merge_strategy="merge")
+        cls.chromsizes_file = gffutils.example_filename('Saccharomyces_cerevisiae.R64-1-1.83.chromsizes.txt')
+        cls.gene_list = gffutils.example_filename('Saccharomyces_cerevisiae.R64-1-1.83.5000_gene_ids.txt')
+        cls.transcript_list = gffutils.example_filename('Saccharomyces_cerevisiae.R64-1-1.83.5000_transcript_ids.txt')
+        super(TestPerformanceOnSacCer, cls).setUpClass()
+    @classmethod
+    def tearDownClass(cls):
+        os.remove('test.db')
+        super(TestPerformanceOnSacCer, cls).tearDownClass()
