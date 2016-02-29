@@ -5,7 +5,7 @@ from nose.plugins.attrib import attr
 
 import gffutils
 
-@attr(speed='slow')
+@attr('slow')
 class TestPerformanceTestFeatureDB:
     def __init__(self):
         self.gff_file = gffutils.example_filename('Saccharomyces_cerevisiae.R64-1-1.83.gff3')#, )
