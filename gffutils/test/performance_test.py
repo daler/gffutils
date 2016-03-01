@@ -1,27 +1,40 @@
+import tempfile
 import random
 import unittest
 import os
 
-from nose.plugins.attrib import attr
+from nose.plugins import attrib
 
 import gffutils
 
 class PerformanceTestFeatureDB(object):
     '''
         Common scenarious to test performance on.
+        Subclass both this class and uittest.TestCase to provide it
+        with neeeded files.
     '''
     # All this variables should be given file names in subclasses
+    # gff or gtf file to build database from
     gff_file = None
+    # each line of chromsizes_file is <chromosome_name><space><chromosome_length>
     chromsizes_file = None
+    # each line is gene_id
     gene_list = None
+    # each line is transcript_id
     transcript_list = None
-    # db should be gffutils.FeatureDB
-    db = None
+    # these args are passed to gffutils.create_db
+    # can be overrided in subclasses
+    create_db_kwargs = {'disable_infer_transcripts':True,
+                        'disable_infer_genes':True,
+                        'merge_strategy':'merge'}
     @classmethod
     def setUpClass(cls):
         '''
             Prepearing for all tests.
         '''
+        dbfile_handle, cls.dbfilename = tempfile.mkstemp(suffix='.db', prefix = 'test')
+        os.close(dbfile_handle)
+        cls.db = gffutils.create_db(cls.gff_file, cls.dbfilename, **cls.create_db_kwargs)
         # Chromosome sizes for testing fetching features from regions
         cls.chromosome_sizes = {}
         with open(cls.chromsizes_file) as chromosome_sizes:
@@ -30,12 +43,17 @@ class PerformanceTestFeatureDB(object):
                 size = int(size)
                 cls.chromosome_sizes[chromosome] = size
         random.seed(1842346386)
+        print('Preparation finished')
+
+    @classmethod
+    def tearDownClass(cls):
+        os.remove(cls.dbfilename)
 
     def test_make_db(self):
         '''
             Measure time of creating new FeatureDB.
         '''
-        gffutils.create_db(self.gff_file, ':memory:', merge_strategy="merge")
+        gffutils.create_db(self.gff_file, ':memory:', **self.create_db_kwargs)
 
     def test_iterate_features(self):
         '''
@@ -114,44 +132,28 @@ class PerformanceTestFeatureDB(object):
         self.region_fetch_helper(number_of_repeats=1000, featuretype=['gene', 'transcript'])
 
 
-@attr('slow')
+@attrib.attr('slow')
 class TestPerformanceOnSacCer(PerformanceTestFeatureDB, unittest.TestCase):
     '''
         Test frequent scenarious on medium size genome of yeast.
     '''
-    @classmethod
-    def setUpClass(cls):
-        cls.gff_file = gffutils.example_filename(
-            'Saccharomyces_cerevisiae.R64-1-1.83.gff3')
-        cls.chromsizes_file = gffutils.example_filename(
-            'Saccharomyces_cerevisiae.R64-1-1.83.chromsizes.txt')
-        cls.gene_list = gffutils.example_filename(
-            'Saccharomyces_cerevisiae.R64-1-1.83.5000_gene_ids.txt')
-        cls.transcript_list = gffutils.example_filename(
-            'Saccharomyces_cerevisiae.R64-1-1.83.5000_transcript_ids.txt')
-        cls.db = gffutils.create_db(cls.gff_file, 'test.db', merge_strategy="merge")
-        super(TestPerformanceOnSacCer, cls).setUpClass()
-    @classmethod
-    def tearDownClass(cls):
-        os.remove('test.db')
-        super(TestPerformanceOnSacCer, cls).tearDownClass()
+    gff_file = gffutils.example_filename(
+        'Saccharomyces_cerevisiae.R64-1-1.83.gff3')
+    chromsizes_file = gffutils.example_filename(
+        'Saccharomyces_cerevisiae.R64-1-1.83.chromsizes.txt')
+    gene_list = gffutils.example_filename(
+        'Saccharomyces_cerevisiae.R64-1-1.83.5000_gene_ids.txt')
+    transcript_list = gffutils.example_filename(
+        'Saccharomyces_cerevisiae.R64-1-1.83.5000_transcript_ids.txt')
 
 
-@attr('slow')
+@attrib.attr('slow')
 class TestPerformanceOnMouse(PerformanceTestFeatureDB, unittest.TestCase):
     '''
         Test frequent scenarious on large genome of mouse.
     '''
-    @classmethod
-    def setUpClass(cls):
-        cls.gff_file = gffutils.example_filename('gencode.vM8.annotation.gtf')
-        cls.chromsizes_file = gffutils.example_filename('gencode.vM8.chromsizes.txt')
-        cls.gene_list = gffutils.example_filename('gencode.vM8.5000_gene_ids.txt')
-        cls.transcript_list = gffutils.example_filename('gencode.vM8.5000_transcript_ids.txt')
-        cls.db = gffutils.create_db(cls.gff_file, 'test.db', merge_strategy="merge")
-        super(TestPerformanceOnMouse, cls).setUpClass()
-    @classmethod
-    def tearDownClass(cls):
-        os.remove('test.db')
-        super(TestPerformanceOnMouse, cls).tearDownClass()
+    gff_file = gffutils.example_filename('gencode.vM8.annotation.gtf')
+    chromsizes_file = gffutils.example_filename('gencode.vM8.chromsizes.txt')
+    gene_list = gffutils.example_filename('gencode.vM8.5000_gene_ids.txt')
+    transcript_list = gffutils.example_filename('gencode.vM8.5000_transcript_ids.txt')
 
