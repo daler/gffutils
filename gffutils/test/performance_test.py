@@ -109,27 +109,27 @@ class PerformanceTestFeatureDB(object):
         '''
             Testing fetching features from random part of random chromosome, simple case.
         '''
-        self.region_fetch_helper(number_of_repeats=1000)
+        self.region_fetch_helper(number_of_repeats=500)
 
     def test_fetch_from_regions_strand(self):
         '''
             Testing fetching features from random part of random chromosome, specific strand.
         '''
-        self.region_fetch_helper(number_of_repeats=500, strand='+')
-        self.region_fetch_helper(number_of_repeats=500, strand='-')
+        self.region_fetch_helper(number_of_repeats=200, strand='+')
+        self.region_fetch_helper(number_of_repeats=200, strand='-')
 
     def test_fetch_from_regions_genes_only(self):
         '''
             Testing fetching features from random part of random chromosome, 'gene' as featuretype.
         '''
-        self.region_fetch_helper(number_of_repeats=1000, featuretype='gene')
+        self.region_fetch_helper(number_of_repeats=400, featuretype='gene')
 
     def test_fetch_from_regions_genes_and_transcripts(self):
         '''
             Testing fetching features from random part of random chromosome,
             ['gene', 'transcript'] as featuretype.
         '''
-        self.region_fetch_helper(number_of_repeats=1000, featuretype=['gene', 'transcript'])
+        self.region_fetch_helper(number_of_repeats=400, featuretype=['gene', 'transcript'])
 
 
 @attrib.attr('slow')
