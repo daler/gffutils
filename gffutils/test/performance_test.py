@@ -34,7 +34,10 @@ class PerformanceTestFeatureDB(object):
         '''
         dbfile_handle, cls.dbfilename = tempfile.mkstemp(suffix='.db', prefix = 'test')
         os.close(dbfile_handle)
-        cls.db = gffutils.create_db(cls.gff_file, cls.dbfilename, **cls.create_db_kwargs)
+        # Some slowness effects doesn't show themselves on the fresh-created database,
+        # I've no idea why. But I maake a new connection to a fresh database.
+        gffutils.create_db(cls.gff_file, cls.dbfilename, **cls.create_db_kwargs)
+        cls.db = gffutils.FeatureDB(cls.dbfilename)
         # Chromosome sizes for testing fetching features from regions
         cls.chromosome_sizes = {}
         with open(cls.chromsizes_file) as chromosome_sizes:
