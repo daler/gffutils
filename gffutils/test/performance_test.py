@@ -1,3 +1,11 @@
+'''
+Some perfomance tests. I recommend running them with https://github.com/mahmoudimus/nose-timer
+nosetests --nocapture -a slow --with-timer 
+WARNING
+These tests can take about 1.5 hours to run!
+Downloar required annotation files by running
+gffutils/test/data/download-large-annotation-files.sh
+'''
 import tempfile
 import random
 import unittest
