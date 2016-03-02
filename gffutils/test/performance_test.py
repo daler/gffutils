@@ -36,7 +36,14 @@ class PerformanceTestFeatureDB(object):
         os.close(dbfile_handle)
         # Some slowness effects doesn't show themselves on the fresh-created database,
         # I've no idea why. But I maake a new connection to a fresh database.
-        gffutils.create_db(cls.gff_file, cls.dbfilename, **cls.create_db_kwargs)
+        # the annotations files are large so they are not inclided in repo,
+        # download it manualy with 
+        # gffutils/test/data/download-large-annotation-files.sh
+        try:
+            gffutils.create_db(cls.gff_file, cls.dbfilename, **cls.create_db_kwargs)
+        except ValueError:
+            raise EnvironmentError("Annotation files not found. Download them manualy by"
+                      " running gffutils/test/data/download-large-annotation-files.sh")
         cls.db = gffutils.FeatureDB(cls.dbfilename)
         # Chromosome sizes for testing fetching features from regions
         cls.chromosome_sizes = {}
@@ -155,7 +162,7 @@ class TestPerformanceOnMouse(PerformanceTestFeatureDB, unittest.TestCase):
     '''
         Test frequent scenarious on large genome of mouse.
     '''
-    gff_file = gffutils.example_filename('gencode.vM8.annotation.gtf')
+    gff_file = gffutils.example_filename('gencode.vM8.annotation.gff3')
     chromsizes_file = gffutils.example_filename('gencode.vM8.chromsizes.txt')
     gene_list = gffutils.example_filename('gencode.vM8.5000_gene_ids.txt')
     transcript_list = gffutils.example_filename('gencode.vM8.5000_transcript_ids.txt')
