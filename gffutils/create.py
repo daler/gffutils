@@ -477,7 +477,6 @@ class _DBCreator(object):
         logger.info("Running ANALYSE features")
         c.execute('ANALYZE features')
 
-
         self.conn.commit()
 
         self.warnings = self.iterator.warnings
