@@ -473,6 +473,11 @@ class _DBCreator(object):
         c.execute('DROP INDEX IF EXISTS featuretype')
         c.execute('CREATE INDEX featuretype ON features (featuretype)')
 
+        # speeds computation 1000x in some cases
+        logger.info("Running ANALYSE features")
+        c.execute('ANALYZE features')
+
+
         self.conn.commit()
 
         self.warnings = self.iterator.warnings
