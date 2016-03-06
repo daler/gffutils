@@ -51,9 +51,9 @@ for PYTHON in 2 3; do
 
     # Prepare for testing by installing nose for main tests, other optional
     # packages for integration tests (biopython, pybedtools, bedtools) Then run
-    # 'em.
+    # 'em. Exclude slow tests.
     conda install -y nose --file optional-requirements.txt --channel bioconda
-    nosetests -x --with-doctest
+    nosetests -x --with-doctest -a '!slow'
 
     # Install tools and run doctests
     conda install -y --file docs-requirements.txt
