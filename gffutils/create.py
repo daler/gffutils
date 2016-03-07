@@ -472,6 +472,12 @@ class _DBCreator(object):
         logger.info("Creating features(featuretype) index")
         c.execute('DROP INDEX IF EXISTS featuretype')
         c.execute('CREATE INDEX featuretype ON features (featuretype)')
+        logger.info("Creating features (seqid, start, end) index")
+        c.execute('DROP INDEX IF EXISTS seqidstartend')
+        c.execute('CREATE INDEX seqidstartend ON features (seqid, start, end)')
+        logger.info("Creating features (seqid, start, end, strand) index")
+        c.execute('DROP INDEX IF EXISTS seqidstartendstrand')
+        c.execute('CREATE INDEX seqidstartendstrand ON features (seqid, start, end, strand)')
 
         # speeds computation 1000x in some cases
         logger.info("Running ANALYSE features")
