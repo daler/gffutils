@@ -1,9 +1,14 @@
 '''
-Some perfomance tests. I recommend running them with https://github.com/mahmoudimus/nose-timer
-nosetests --nocapture -a slow --with-timer 
-WARNING
-These tests can take about 1.5 hours to run!
-Downloar required annotation files by running
+Some perfomance tests. I recommend running them with
+https://github.com/mahmoudimus/nose-timer:
+
+```
+nosetests --nocapture -a slow --with-timer
+```
+
+WARNING: These tests can take about 1.5 hours to run!
+
+Download required annotation files by running
 gffutils/test/data/download-large-annotation-files.sh
 '''
 import tempfile
@@ -17,11 +22,11 @@ import gffutils
 
 class PerformanceTestFeatureDB(object):
     '''
-        Common scenarious to test performance on.
-        Subclass both this class and uittest.TestCase to provide it
+        Common scenarios on which to test performance.
+        Subclass both this class and unittest.TestCase to provide it
         with neeeded files.
     '''
-    # All this variables should be given file names in subclasses
+    # All these variables should be given file names in subclasses
     # gff or gtf file to build database from
     gff_file = None
     # each line of chromsizes_file is <chromosome_name><space><chromosome_length>
@@ -42,10 +47,8 @@ class PerformanceTestFeatureDB(object):
         '''
         dbfile_handle, cls.dbfilename = tempfile.mkstemp(suffix='.db', prefix = 'test')
         os.close(dbfile_handle)
-        # Some slowness effects doesn't show themselves on the fresh-created database,
-        # I've no idea why. But I maake a new connection to a fresh database.
-        # the annotations files are large so they are not inclided in repo,
-        # download it manualy with 
+        # The annotation files are large so they are not inclided in repo,
+        # download it manualy with
         # gffutils/test/data/download-large-annotation-files.sh
         try:
             gffutils.create_db(cls.gff_file, cls.dbfilename, **cls.create_db_kwargs)
@@ -83,7 +86,7 @@ class PerformanceTestFeatureDB(object):
 
     def test_find_genes(self):
         '''
-            Given a gene id find it's features in db.
+            Given a gene id find its features in db.
         '''
         with open(self.gene_list) as gene_list:
             for gene_id in gene_list:
@@ -92,7 +95,7 @@ class PerformanceTestFeatureDB(object):
 
     def test_find_trainscripts(self):
         '''
-            Given a transcript find a gene it belongs to.
+            Given a transcript find the gene it belongs to.
         '''
         found_parent = False
         with open(self.transcript_list) as transript_list:
@@ -153,7 +156,7 @@ class PerformanceTestFeatureDB(object):
 @attrib.attr('slow')
 class TestPerformanceOnSacCer(PerformanceTestFeatureDB, unittest.TestCase):
     '''
-        Test frequent scenarious on medium size genome of yeast.
+        Test frequent scenarios on medium size genome of yeast.
     '''
     gff_file = gffutils.example_filename(
         'Saccharomyces_cerevisiae.R64-1-1.83.gff3')
@@ -168,7 +171,7 @@ class TestPerformanceOnSacCer(PerformanceTestFeatureDB, unittest.TestCase):
 @attrib.attr('slow')
 class TestPerformanceOnMouse(PerformanceTestFeatureDB, unittest.TestCase):
     '''
-        Test frequent scenarious on large genome of mouse.
+        Test frequent scenarios on large genome of mouse.
     '''
     gff_file = gffutils.example_filename('gencode.vM8.annotation.gff3')
     chromsizes_file = gffutils.example_filename('gencode.vM8.chromsizes.txt')
