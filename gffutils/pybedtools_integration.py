@@ -1,3 +1,7 @@
+"""
+Module for integration with pybedtools
+"""
+
 import pybedtools
 from pybedtools import featurefuncs
 from gffutils import helpers
@@ -21,10 +25,14 @@ def tsses(db, merge_overlapping=False, attrs=None, attrs_sep=":",
           merge_kwargs=dict(o='distinct', s=True, c=4), as_bed6=False):
     """
     Create 1-bp transcription start sites for all transcripts in the database
-    and return as a pybedtools.BedTool object.
+    and return as a sorted pybedtools.BedTool object pointing to a temporary
+    file.
+
+    To save the file to a known location, use the `.moveto()` method on the
+    resulting `pybedtools.BedTool` object.
 
     To extend regions upstream/downstream, see the `.slop()` method on the
-    resulting pybedtools.BedTool object.
+    resulting `pybedtools.BedTool object`.
 
     Requires pybedtools.
 
@@ -80,16 +88,18 @@ def tsses(db, merge_overlapping=False, attrs=None, attrs_sep=":",
     >>> db = gffutils.create_db(
     ...    gffutils.example_filename('FBgn0031208.gtf'),
     ...    ":memory:",
+    ...    keep_order=True,
     ...    verbose=False)
 
     Default settings -- no merging, and report a separate TSS on each line even
     if they overlap (as in the first two):
 
+
     >>> print(tsses(db))                        # doctest: +NORMALIZE_WHITESPACE
-    chr2L	gffutils_derived	transcript_TSS	7529	7529	.	+	.	transcript_id "FBtr0300689"; gene_id "FBgn0031208";
-    chr2L	gffutils_derived	transcript_TSS	7529	7529	.	+	.	transcript_id "FBtr0300690"; gene_id "FBgn0031208";
-    chr2L	gffutils_derived	transcript_TSS	11000	11000	.	-	.	transcript_id "transcript_Fk_gene_1"; gene_id "Fk_gene_1";
-    chr2L	gffutils_derived	transcript_TSS	12500	12500	.	-	.	transcript_id "transcript_Fk_gene_2"; gene_id "Fk_gene_2";
+    chr2L	gffutils_derived	transcript_TSS	7529	7529	.	+	.	gene_id "FBgn0031208"; transcript_id "FBtr0300689";
+    chr2L	gffutils_derived	transcript_TSS	7529	7529	.	+	.	gene_id "FBgn0031208"; transcript_id "FBtr0300690";
+    chr2L	gffutils_derived	transcript_TSS	11000	11000	.	-	.	gene_id "Fk_gene_1"; transcript_id "transcript_Fk_gene_1";
+    chr2L	gffutils_derived	transcript_TSS	12500	12500	.	-	.	gene_id "Fk_gene_2"; transcript_id "transcript_Fk_gene_2";
     <BLANKLINE>
 
 
@@ -125,6 +135,7 @@ def tsses(db, merge_overlapping=False, attrs=None, attrs_sep=":",
 
 
     The set of unique TSSes for each gene, +1kb upstream and 500bp downstream:
+
     >>> x = tsses(db, merge_overlapping=True)
     >>> x = x.slop(l=1000, r=500, s=True, genome='dm3')
     >>> print(x)  # doctest: +NORMALIZE_WHITESPACE
@@ -153,7 +164,7 @@ def tsses(db, merge_overlapping=False, attrs=None, attrs_sep=":",
                 yield helpers.asinterval(transcript)
 
     # GFF/GTF format
-    x = pybedtools.BedTool(gen())
+    x = pybedtools.BedTool(gen()).sort()
 
     # Figure out default attrs to use, depending on the original format.
     if attrs is None:
@@ -181,7 +192,7 @@ def tsses(db, merge_overlapping=False, attrs=None, attrs_sep=":",
                 str(f.score),
                 f.strand)
 
-        x = x.each(to_bed)
+        x = x.each(to_bed).saveas()
 
     if merge_overlapping:
 

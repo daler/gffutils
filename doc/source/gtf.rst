@@ -31,6 +31,7 @@ extra options for the :func:`gffutils.create_db` function:
     Example that shows the use of `transcript_key`:
 
     * :ref:`jgi_gff2.txt`
+
 These kwargs are used to extract the parent and grandparent feature
 respectively.
 

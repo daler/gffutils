@@ -1,3 +1,5 @@
+# use conda install -c bioconda
 biopython
 bedtools
 pybedtools
+bedtools

@@ -48,15 +48,16 @@ for PYTHON in 2 3; do
     pip install dist/gffutils-${VERSION}.tar.gz
     (cd / && python -c 'import gffutils')
 
-
-    # Prepare for testing by installing nose for main tests, and biopython for
-    # the biopython integration tests.  Then run 'em.
-    conda install -y nose --file optional-requirements.txt -c bioconda
-    nosetests -x --with-doctest
+    # Prepare for testing by installing nose for main tests, other optional
+    # packages for integration tests (biopython, pybedtools, bedtools) Then run
+    # 'em. Exclude slow tests.
+    conda install -y nose --file optional-requirements.txt --channel bioconda
+    nosetests -x --with-doctest -a '!slow'
 
     # Install tools and run doctests
     conda install -y --file docs-requirements.txt
     (cd doc && make clean && make doctest)
     set +x; source deactivate; set -x
+
 
 done

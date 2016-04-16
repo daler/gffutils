@@ -2,6 +2,18 @@
 
 Change log
 ==========
+Changes in v0.8.7.1
+-------------------
+Fixes bug in `gffutils.pybedtools_integration.tsses` where iterating over large
+databases and using the `as_bed6=True` argument could cause a deadlock.
+
+Changes in v0.8.7
+-----------------
+New module, :mod:`gffutils.pybedtools_integration`. In particular, the
+:func:`gffutils.pybedtools_integration.tsses` function provides many options
+for creating a GTF, GFF, or BED file of transcription start sites (TSSes) from
+an annotation.
+
 Changes in v0.8.6.1
 -------------------
 Only a warning -- and not an ImportError -- is raised if BioPython is not installed.
