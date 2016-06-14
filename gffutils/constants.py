@@ -21,7 +21,9 @@ CREATE TABLE relations (
     parent text,
     child text,
     level int,
-    primary key (parent, child, level)
+    primary key (parent, child, level),
+    FOREIGN KEY(parent) REFERENCES features(id),
+    FOREIGN KEY(child) REFERENCES features(id)
     );
 
 CREATE TABLE meta (
