@@ -1114,7 +1114,7 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
         Using `merge_strategy="warning"`, a warning will be printed to the
         logger, and the duplicate feature will be skipped.
 
-        Using `merge_strategy="replace" will replace the entire existing
+        Using `merge_strategy="replace"` will replace the entire existing
         feature with the new feature.
 
     transform : callable
