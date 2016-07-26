@@ -480,9 +480,8 @@ Access
 Since we used that transform function, the exons and CDSs are all children of
 the "873" transcript:
 
->>> list(db.children('873', level=1))
+>>> sorted(list(db.children('873', level=1)), key=lambda x: (x.featuretype, x.start))
 [<Feature CDS (chr_1:37061-37174[-]) at 0x...>, <Feature CDS (chr_1:37315-37620[-]) at 0x...>, <Feature CDS (chr_1:37752-38216[-]) at 0x...>, <Feature exon (chr_1:37061-37174[-]) at 0x...>, <Feature exon (chr_1:37315-37620[-]) at 0x...>, <Feature exon (chr_1:37752-38216[-]) at 0x...>]
-
 
 Here we can see that all children of the gene are accounted for:
 
