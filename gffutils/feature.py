@@ -264,7 +264,7 @@ class Feature(object):
         return self.stop - self.start + 1
 
     # aliases for official GFF field names; this way x.chrom == x.seqid; and
-    # x.start == x.end.
+    # x.stop == x.end.
     @property
     def chrom(self):
         return self.seqid
