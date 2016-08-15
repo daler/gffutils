@@ -1050,6 +1050,24 @@ def test_issue_79():
     print(''.join(difflib.ndiff([exp_1], [obs_1])))
     assert obs_1 == exp_1
 
+def test_for_analyze():
+    db = gffutils.create_db(
+            gffutils.example_filename('FBgn0031208.gtf'),
+            'deleteme',
+            force=True
+    )
+    assert db._analyzed()
+    db.execute('DROP TABLE sqlite_stat1')
+    assert not db._analyzed()
+
+    with warnings.catch_warnings(record=True) as w:
+        warnings.simplefilter("always")
+        db2 = gffutils.FeatureDB('deleteme')
+        assert len(w) == 1
+        assert "analyze" in str(w[-1].message)
+    db.analyze()
+    assert db._analyzed()
+    os.unlink('deleteme')
 
 
 if __name__ == "__main__":

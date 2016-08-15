@@ -2,6 +2,7 @@ import os
 import six
 import sqlite3
 import shutil
+import warnings
 from gffutils import bins
 from gffutils import helpers
 from gffutils import constants
@@ -150,6 +151,15 @@ class FeatureDB(object):
 
         self.set_pragmas(pragmas)
 
+        if not self._analyzed():
+            warnings.warn(
+                "It appears that this database has not had the ANALYZE "
+                "sqlite3 command run on it. Doing so can dramatically "
+                "speed up queries, and is done by default for databases "
+                "created with gffutils >0.8.7.1 (this database was "
+                "created with version %s) Consider calling the analyze() "
+                "method of this object." % self.version)
+
     def set_pragmas(self, pragmas):
         """
         Set pragmas for the current database connection.
@@ -177,6 +187,14 @@ class FeatureDB(object):
         kwargs.setdefault('keep_order', self.keep_order)
         kwargs.setdefault('sort_attribute_values', self.sort_attribute_values)
         return Feature(**kwargs)
+
+    def _analyzed(self):
+        res = self.execute(
+            """
+            SELECT name FROM sqlite_master WHERE type='table'
+            AND name='sqlite_stat1';
+            """)
+        return len(list(res)) == 1
 
     def schema(self):
         """
@@ -441,6 +459,14 @@ class FeatureDB(object):
         """
         c = self.conn.cursor()
         return c.execute(query)
+
+    def analyze(self):
+        """
+        Runs the sqlite ANALYZE command to potentially speed up queries
+        dramatically.
+        """
+        self.execute('ANALYZE features')
+        self.conn.commit()
 
     def region(self, region=None, seqid=None, start=None, end=None,
                strand=None, featuretype=None, completely_within=False):
