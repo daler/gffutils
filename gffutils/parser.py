@@ -87,7 +87,10 @@ def _reconstruct(keyvals, dialect, keep_order=False,
                 # Typically "=" for GFF3 or " " otherwise
                 part = dialect['keyval separator'].join([key, val_str])
         else:
-            part = key
+            if dialect['fmt'] == 'gtf':
+                part = dialect['keyval separator'].join([key, '""'])
+            else:
+                part = key
         parts.append(part)
 
     # Typically ";" or "; "

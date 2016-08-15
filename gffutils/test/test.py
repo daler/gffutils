@@ -1027,6 +1027,31 @@ def test_infer_gene_extent():
         assert len(w) == 1
 
 
+# From #79
+def test_issue_79():
+    gtf = gffutils.example_filename('keep-order-test.gtf')
+    db = gffutils.create_db(gtf, 'tmp.db',
+                       disable_infer_genes=False,
+                       disable_infer_transcripts=False,
+                       id_spec={"gene": "gene_id", "transcript": "transcript_id"},
+                       merge_strategy="create_unique",
+                       keep_order=True,
+                            force=True)
+
+    exp = open(gtf).read()
+    obs = '\n'.join([str(i) for i in db.all_features()])
+    exp_1 = exp.splitlines(True)[0].strip()
+    obs_1 = obs.splitlines(True)[0].strip()
+    print('EXP')
+    print(exp_1)
+    print('OBS')
+    print(obs_1)
+    print('DIFF')
+    print(''.join(difflib.ndiff([exp_1], [obs_1])))
+    assert obs_1 == exp_1
+
+
+
 if __name__ == "__main__":
     # this test case fails
     #test_attributes_modify()
