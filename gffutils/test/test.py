@@ -1070,6 +1070,16 @@ def test_for_analyze():
     os.unlink('deleteme')
 
 
+def test_issue_82():
+    # key-val separator is inside an unquoted attribute value
+    x = (
+        'Spenn-ch12\tsgn_markers\tmatch\t2621812\t2622049\t.\t+\t.\t'
+        'Alias=SGN-M1347;ID=T0028;Note=marker name(s): T0028 SGN-M1347 |identity=99.58|escore=2e-126'
+    )
+    y = feature.feature_from_line(x)
+    assert y.attributes['Note'] == ['marker name(s): T0028 SGN-M1347 |identity=99.58|escore=2e-126']
+
+
 if __name__ == "__main__":
     # this test case fails
     #test_attributes_modify()

@@ -232,10 +232,16 @@ def _split_keyvals(keyval_str, dialect=None):
             key, val = item
 
         # Only key provided?
+        elif len(item) == 1:
+                key = item[0]
+                val = ''
+
+        # Pathological cases where values of a key have within them the key-val
+        # separator, e.g., 
+        #  Alias=SGN-M1347;ID=T0028;Note=marker name(s): T0028 SGN-M1347 |identity=99.58|escore=2e-126
         else:
-            assert len(item) == 1, item
             key = item[0]
-            val = ''
+            val = dialect['keyval separator'].join(item[1:])
 
         # Is the key already in there?
         if key in quals:
