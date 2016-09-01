@@ -1079,6 +1079,7 @@ def test_issue_82():
     y = feature.feature_from_line(x)
     assert y.attributes['Note'] == ['marker name(s): T0028 SGN-M1347 |identity=99.58|escore=2e-126']
 
+    gffutils.create_db(gffutils.example_filename('keyval_sep_in_attrs.gff'), ':memory:')
 
 if __name__ == "__main__":
     # this test case fails

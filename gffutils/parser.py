@@ -163,10 +163,13 @@ def _split_keyvals(keyval_str, dialect=None):
                 key, val = item
 
             # Only key provided?
-            else:
-                assert len(item) == 1, item
+            elif len(item) == 1:
                 key = item[0]
                 val = ''
+
+            else:
+                key = item[0]
+                val = dialect['keyval separator'].join(item[1:])
 
             try:
                 quals[key]
