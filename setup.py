@@ -22,7 +22,7 @@ setup(
     url='none',
     classifiers=[
         'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: GNU General Public License (GPL)',
+        'License :: OSI Approved :: MIT License',
         'Topic :: Scientific/Engineering :: Bio-Informatics',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
