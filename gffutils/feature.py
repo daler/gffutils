@@ -334,11 +334,15 @@ class Feature(object):
         string
         """
         if isinstance(fasta, six.string_types):
-            fasta = Fasta(fasta, as_raw=True)
+            fasta = Fasta(fasta, as_raw=False)
 
         # recall GTF/GFF is 1-based closed;  pyfaidx uses Python slice notation
         # and is therefore 0-based half-open.
-        return fasta[self.chrom][self.start-1:self.stop]
+        seq = fasta[self.chrom][self.start-1:self.stop]
+        if use_strand and self.strand == '-':
+            seq = seq.reverse.complement
+        return seq.seq
+
 
 
 def feature_from_line(line, dialect=None, strict=True, keep_order=False):

@@ -1081,6 +1081,19 @@ def test_issue_82():
 
     gffutils.create_db(gffutils.example_filename('keyval_sep_in_attrs.gff'), ':memory:')
 
+def test_sequence():
+    fasta = gffutils.example_filename('dm6-chr2L.fa')
+    f = feature.feature_from_line(
+        'chr2L	FlyBase	gene	154	170	.	+	.	ID=one;')
+    seq = f.sequence(fasta)
+    assert seq == 'aCGAGATGATAATATAT'
+    assert len(seq) == len(f)
+    f.strand = '-'
+    seq = f.sequence(fasta) == 'ATATATTATCATCTCGt'
+    assert len(seq) == len(f)
+
+
+
 if __name__ == "__main__":
     # this test case fails
     #test_attributes_modify()
