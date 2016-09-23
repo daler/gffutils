@@ -1089,7 +1089,8 @@ def test_sequence():
     assert seq == 'aCGAGATGATAATATAT'
     assert len(seq) == len(f)
     f.strand = '-'
-    seq = f.sequence(fasta) == 'ATATATTATCATCTCGt'
+    seq = f.sequence(fasta)
+    assert seq == 'ATATATTATCATCTCGt'
     assert len(seq) == len(f)
 
 
