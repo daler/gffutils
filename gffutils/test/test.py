@@ -1093,7 +1093,13 @@ def test_sequence():
     assert seq == 'ATATATTATCATCTCGt'
     assert len(seq) == len(f)
 
+def test_issue_85():
+    # when start or stop was empty, #85 would fail Should now work with
+    # blank fields
+    f = feature.feature_from_line('\t'.join([''] * 9))
 
+    # or with "." placeholders
+    f = feature.feature_from_line('\t'.join(['.'] * 9))
 
 if __name__ == "__main__":
     # this test case fails

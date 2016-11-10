@@ -114,11 +114,11 @@ class Feature(object):
         """
         # start/end can be provided as int-like, ".", or None, but will be
         # converted to int or None
-        if start == ".":
+        if start == "." or start == "":
             start = None
         elif start is not None:
             start = int(start)
-        if end == ".":
+        if end == "." or end == "":
             end = None
         elif end is not None:
             end = int(end)
