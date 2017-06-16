@@ -2,6 +2,29 @@
 
 Change log
 ==========
+Changes in v0.8.8
+-----------------
+Long-overdue release with performance improvements and better handling of
+corner-case GFF and GTF files.
+
+- performance tests (thanks Andrew Lando)
+- performance improvements by building additional indexes (thanks Andrew Lando)
+- performance improvments by running ``analyze features`` on created table
+  (thanks Andrew Lando). Existing databases that have not had this run will
+  trigger a warning suggesting that this should be run to speed up queries
+  dramatically.
+- add test for corner-case GTFs (`issue #79 <https://github.com/daler/gffutils/issues/79>`_)
+- add fix for corner-case GFFs where `"="` is both a separator between fields
+  as well as part of a value inside a field even when not quoted (`issue #82
+  <https://github.com/daler/gffutils/issues/82>`_)
+- fix handling of strandedness in :meth:`gffutils.feature.Feature.sequence`
+  (`issue #87 <https://github.com/daler/gffutils/issues/87>`_)
+- fix handling of corner-case GFFs that are completely missing a start or end
+  position (`issue #85 <https://github.com/daler/gffutils/issues/85>`_)
+- improvements to test framework
+
+
+
 Changes in v0.8.7.1
 -------------------
 Fixes bug in `gffutils.pybedtools_integration.tsses` where iterating over large
