@@ -1167,6 +1167,10 @@ class FeatureDB(object):
             the full `feature` is returned in BED12 format as if it had
             a single exon.
 
+            If only `exon` is specified for `block_featuretype` and only "CDS"
+            is specified for `thick_featuretype`, truncate the `feature` to 
+            the end of the last exon.
+
         thick_featuretype : str or list
             Child featuretype(s) to use in order to determine the boundaries of
             the "thick" blocks. In BED12 format, these represent coding
@@ -1207,6 +1211,11 @@ class FeatureDB(object):
         feature = self[feature]
         first = exons[0].start
         last = exons[-1].stop
+        
+        # check unannoated 3'UTR
+        if last < feature.stop:
+            if thick_featuretype == ['CDS'] and block_featuretype == ['exon']:
+                feature.stop = last
 
         if first != feature.start:
             raise ValueError(
