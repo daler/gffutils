@@ -3,7 +3,6 @@ before_script:
   - export PATH=~/anaconda/bin:$PATH
 python:
   - "2.7"
-  - "3.4"
   - "3.5"
   - "3.6"
 install: "ci/travis-setup.sh"
