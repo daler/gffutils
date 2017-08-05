@@ -2,6 +2,7 @@
 
 import re
 import copy
+import collections
 from six.moves import urllib
 from gffutils import constants
 from gffutils.exceptions import AttributeStringError
@@ -16,6 +17,39 @@ ch.setFormatter(formatter)
 logger.addHandler(ch)
 
 gff3_kw_pat = re.compile('\w+=')
+
+# From GFF specs:
+#
+#           tab (%09)
+#           newline (%0A)
+#           carriage return (%0D)
+#           % percent (%25)
+#           control characters (%00 through %1F, %7F)
+#
+#       In addition, the following characters have reserved meanings in
+#       column 9 and must be escaped when used in other contexts:
+#
+#           ; semicolon (%3B)
+#           = equals (%3D)
+#           & ampersand (%26)
+#           , comma (%2C)
+_to_quote = ' \n\t\r%;=&,'
+_to_quote += ''.join([chr(i) for i in range(32)])
+_to_quote += chr(127)
+
+
+# Idea from urllib.parse.Quoter, which uses a defaultdict for efficiency
+class Quoter(collections.defaultdict):
+    def __missing__(self, b):
+        if b in _to_quote:
+            res = '%{:02X}'.format(ord(b))
+        else:
+            res = b
+        self[b] = res
+        return res
+
+quoter = Quoter()
+print(quoter)
 
 
 def _reconstruct(keyvals, dialect, keep_order=False,
@@ -47,17 +81,26 @@ def _reconstruct(keyvals, dialect, keep_order=False,
         return ""
     parts = []
 
+    if constants.ignore_url_escape_characters or dialect['fmt'] != 'gff3':
+        attributes = keyvals
+    else:
+        attributes = {}
+        for k, v in keyvals.items():
+            attributes[k] = []
+            for i in v:
+                attributes[k].append(''.join([quoter[j] for j in i]))
+
     # May need to split multiple values into multiple key/val pairs
     if dialect['repeated keys']:
         items = []
-        for key, val in keyvals.items():
+        for key, val in attributes.items():
             if len(val) > 1:
                 for v in val:
                     items.append((key, [v]))
             else:
                 items.append((key, val))
     else:
-        items = list(keyvals.items())
+        items = list(attributes.items())
 
     def sort_key(x):
         # sort keys by their order in the dialect; anything not in there will
