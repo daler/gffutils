@@ -104,7 +104,7 @@ class _DBCreator(object):
         self.dbfn = dbfn
         self.id_spec = id_spec
         if isinstance(dbfn, six.string_types):
-            conn = sqlite3.connect(dbfn)
+            conn = sqlite3.connect(dbfn, timeout=10)
         else:
             conn = dbfn
         self.conn = conn
