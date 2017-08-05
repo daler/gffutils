@@ -7,5 +7,5 @@ export PATH=~/anaconda/bin:$PATH
 conda config --add channels defaults
 conda config --add channels conda-forge
 conda config --add channels bioconda
-conda install -y --file $HERE/../requirements.txt --file $HERE/../optional-requirements.txt
+conda install -y --file $HERE/../requirements.txt --file $HERE/../optional-requirements.txt nosetests
 python setup.py install
