@@ -89,7 +89,7 @@ attrs = [
              'AFFX-U95:1332_f_at',
              'Swissprot:SOMA_HUMAN',
          ],
-         'Note': ['growth%20hormone%201'],
+         'Note': ['growth hormone 1'],
          'Alias': ['GH1']},
 
         None,
@@ -157,8 +157,8 @@ attrs = [
          'Parent': ['NC_008596.1:speB'],
          'locus_tag': ['MSMEG_1072'],
          'EC_number': ['3.5.3.11'],
-         'note': ['identified%20by%20match%20to%20protein%20family%20HMM%20P'
-                  'F00491%3B%20match%20to%20protein%20family%20HMM%20TIGR01'
+         'note': ['identified by match to protein family HMM P'
+                  'F00491; match to protein family HMM TIGR01'
                   '230'],
          'transl_table': ['11'],
          'product': ['agmatinase'],

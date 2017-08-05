@@ -427,7 +427,7 @@ Print out the attributes:
 Alias = ['GH1']
 Dbxref = ['AFFX-U133:205840_x_at', 'Locuslink:2688', 'Genbank-mRNA:A00469', 'Swissprot:P01241', 'PFAM:PF00103', 'AFFX-U95:1332_f_at', 'Swissprot:SOMA_HUMAN']
 ID = ['A00469']
-Note = ['growth%20hormone%201']
+Note = ['growth hormone 1']
 
 .. _jgi_gff2.txt:
 
