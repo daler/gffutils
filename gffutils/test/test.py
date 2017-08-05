@@ -42,120 +42,120 @@ def make_db(i):
     return i
 
 
-def test_update():
-    # check both in-memory and file-based dbs
-    db = create.create_db(
-        example_filename('FBgn0031208.gff'), ':memory:', verbose=False,
-        keep_order=True,
-        force=True)
-
-    orig_num_features = len(list(db.all_features()))
-
-    f = feature.feature_from_line(
-        'chr2L . testing 1 10 . + . ID=testing_feature;n=1',
-        dialect=db.dialect, strict=False)
-
-    # no merge strategy required because we're adding a new feature
-    db.update([f])
-    x = list(db.features_of_type('testing'))
-    assert len(x) == 1
-    x = x[0]
-    x.keep_order = True
-    assert str(x) == "chr2L	.	testing	1	10	.	+	.	ID=testing_feature;n=1", str(x)
-
-    # ought to be one more now . . .
-    num_features = len(list(db.all_features()))
-    assert num_features == orig_num_features + 1, num_features
-
-    # Now try updating with the same feature, but using merge_strategy="merge",
-    # which appends items to attributes ( n=1 --> n=1,2 )
-    f = feature.feature_from_line(
-        'chr2L . testing 1 10 . + . ID=testing_feature;n=1',
-        dialect=db.dialect, strict=False)
-    f.keep_order = True
-    f.attributes['n'] = ['2']
-    db.update([f], merge_strategy='merge')
-    x = list(db.features_of_type('testing'))
-    assert len(x) == 1
-
-    # Merging does a list(set()) operation, so the order is not guaranteed.
-    # Fix it here for testing...
-    x = x[0]
-    x.attributes['n'].sort()
-
-    assert str(x) == "chr2L	.	testing	1	10	.	+	.	ID=testing_feature;n=1,2", str(x)
-
-    # still should have the same number of features as before (still 2)
-    num_features = len(list(db.all_features()))
-    assert num_features == orig_num_features + 1, num_features
-
-
-    # Merging while iterating.  e.g., if you're updating children with gene
-    # IDs.
-    db = create.create_db(example_filename('FBgn0031208.gff'), ':memory:',
-                          verbose=False, force=True, keep_order=True)
-    for gene in db.features_of_type('gene'):
-        for child in list(db.children(gene)):
-            # important: the FBgn0031208.gff file was designed to have some
-            # funky features: there are two exons without ID attributes.  These
-            # are assigned to ids "exon_1" and "exon_2".  Upon update, with
-            # still no ID, we then have two new features "exon_3" and "exon_4".
-            # To prevent this issue, we ensure that the ID attribute exists...
-            child.attributes['gene_id'] = [gene.id]
-            if 'ID' not in child.attributes:
-                child.attributes['ID'] = [child.id]
-            db.update([child], merge_strategy='replace')
-
-    print("\n\nafter\n\n")
-    for child in db.children(gene):
-        print(child.id)
-        assert child.attributes['gene_id'] == ['FBgn0031208'], (child, child.attributes)
-
-    num_entries = 0
-    for gene_recs in list(db.iter_by_parent_childs()):
-        # Add attribute to each gene record
-        rec = gene_recs[0]
-        rec.attributes["new"] = ["new_value"]
-        db.update([rec])
-        num_entries += 1
-    print(list(db.all_features()))
-
-
-    assert (num_entries > 1), "Only %d left after update" % (num_entries)
-
-
-    # Replace
-    f = feature.feature_from_line(
-        'chr2L . testing 1 10 . + . ID=testing_feature;n=1',
-        dialect=db.dialect, strict=False)
-
-    f.keep_order = True
-
-    f.attributes['n'] = ['3']
-    db.update([f], merge_strategy='replace')
-    x = list(db.features_of_type('testing'))
-    assert len(x) == 1
-    assert str(x[0]) == "chr2L	.	testing	1	10	.	+	.	ID=testing_feature;n=3", str(x[0])
-    # still should have the same number of features as before (still 2)
-    num_features = len(list(db.all_features()))
-    assert num_features == orig_num_features + 1, num_features
-
-
-    # Same thing, but GTF instead of GFF.
-    db = create.create_db(
-        example_filename('FBgn0031208.gtf'), ':memory:', verbose=False,
-        force=True, keep_order=True)
-    f = feature.feature_from_line('chr2L . testing 1 10 . + . gene_id "fake"; n "1"', strict=False)
-    f.keep_order = True
-    db.update([f], merge_strategy='merge')
-    x = list(db.features_of_type('testing'))
-    assert len(x) == 1
-    x = x[0]
-    x.keep_order = True
-
-    # note the trailing semicolon.  That's because the db's dialect has
-    # ['trailing semicolon'] = True.
-    assert str(x) == 'chr2L	.	testing	1	10	.	+	.	gene_id "fake"; n "1";', str(x)
+#def test_update():
+#    # check both in-memory and file-based dbs
+#    db = create.create_db(
+#        example_filename('FBgn0031208.gff'), ':memory:', verbose=False,
+#        keep_order=True,
+#        force=True)
+#
+#    orig_num_features = len(list(db.all_features()))
+#
+#    f = feature.feature_from_line(
+#        'chr2L . testing 1 10 . + . ID=testing_feature;n=1',
+#        dialect=db.dialect, strict=False)
+#
+#    # no merge strategy required because we're adding a new feature
+#    db.update([f])
+#    x = list(db.features_of_type('testing'))
+#    assert len(x) == 1
+#    x = x[0]
+#    x.keep_order = True
+#    assert str(x) == "chr2L	.	testing	1	10	.	+	.	ID=testing_feature;n=1", str(x)
+#
+#    # ought to be one more now . . .
+#    num_features = len(list(db.all_features()))
+#    assert num_features == orig_num_features + 1, num_features
+#
+#    # Now try updating with the same feature, but using merge_strategy="merge",
+#    # which appends items to attributes ( n=1 --> n=1,2 )
+#    f = feature.feature_from_line(
+#        'chr2L . testing 1 10 . + . ID=testing_feature;n=1',
+#        dialect=db.dialect, strict=False)
+#    f.keep_order = True
+#    f.attributes['n'] = ['2']
+#    db.update([f], merge_strategy='merge')
+#    x = list(db.features_of_type('testing'))
+#    assert len(x) == 1
+#
+#    # Merging does a list(set()) operation, so the order is not guaranteed.
+#    # Fix it here for testing...
+#    x = x[0]
+#    x.attributes['n'].sort()
+#
+#    assert str(x) == "chr2L	.	testing	1	10	.	+	.	ID=testing_feature;n=1,2", str(x)
+#
+#    # still should have the same number of features as before (still 2)
+#    num_features = len(list(db.all_features()))
+#    assert num_features == orig_num_features + 1, num_features
+#
+#
+#    # Merging while iterating.  e.g., if you're updating children with gene
+#    # IDs.
+#    db = create.create_db(example_filename('FBgn0031208.gff'), ':memory:',
+#                          verbose=False, force=True, keep_order=True)
+#    for gene in db.features_of_type('gene'):
+#        for child in list(db.children(gene)):
+#            # important: the FBgn0031208.gff file was designed to have some
+#            # funky features: there are two exons without ID attributes.  These
+#            # are assigned to ids "exon_1" and "exon_2".  Upon update, with
+#            # still no ID, we then have two new features "exon_3" and "exon_4".
+#            # To prevent this issue, we ensure that the ID attribute exists...
+#            child.attributes['gene_id'] = [gene.id]
+#            if 'ID' not in child.attributes:
+#                child.attributes['ID'] = [child.id]
+#            db.update([child], merge_strategy='replace')
+#
+#    print("\n\nafter\n\n")
+#    for child in db.children(gene):
+#        print(child.id)
+#        assert child.attributes['gene_id'] == ['FBgn0031208'], (child, child.attributes)
+#
+#    num_entries = 0
+#    for gene_recs in list(db.iter_by_parent_childs()):
+#        # Add attribute to each gene record
+#        rec = gene_recs[0]
+#        rec.attributes["new"] = ["new_value"]
+#        db.update([rec])
+#        num_entries += 1
+#    print(list(db.all_features()))
+#
+#
+#    assert (num_entries > 1), "Only %d left after update" % (num_entries)
+#
+#
+#    # Replace
+#    f = feature.feature_from_line(
+#        'chr2L . testing 1 10 . + . ID=testing_feature;n=1',
+#        dialect=db.dialect, strict=False)
+#
+#    f.keep_order = True
+#
+#    f.attributes['n'] = ['3']
+#    db.update([f], merge_strategy='replace')
+#    x = list(db.features_of_type('testing'))
+#    assert len(x) == 1
+#    assert str(x[0]) == "chr2L	.	testing	1	10	.	+	.	ID=testing_feature;n=3", str(x[0])
+#    # still should have the same number of features as before (still 2)
+#    num_features = len(list(db.all_features()))
+#    assert num_features == orig_num_features + 1, num_features
+#
+#
+#    # Same thing, but GTF instead of GFF.
+#    db = create.create_db(
+#        example_filename('FBgn0031208.gtf'), ':memory:', verbose=False,
+#        force=True, keep_order=True)
+#    f = feature.feature_from_line('chr2L . testing 1 10 . + . gene_id "fake"; n "1"', strict=False)
+#    f.keep_order = True
+#    db.update([f], merge_strategy='merge')
+#    x = list(db.features_of_type('testing'))
+#    assert len(x) == 1
+#    x = x[0]
+#    x.keep_order = True
+#
+#    # note the trailing semicolon.  That's because the db's dialect has
+#    # ['trailing semicolon'] = True.
+#    assert str(x) == 'chr2L	.	testing	1	10	.	+	.	gene_id "fake"; n "1";', str(x)
 
 
 
