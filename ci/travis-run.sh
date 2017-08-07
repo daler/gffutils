@@ -9,7 +9,7 @@ conda install -y --file $HERE/../docs-requirements.txt
 (cd doc && make clean && make doctest)
 
 
-conda create -n new python=$TRAVIS_PYTHON_VERSION
+conda create -y -n new python=$TRAVIS_PYTHON_VERSION
 source activate new
 python setup.py sdist
 pip install dist/gffutils-*.tar.gz
