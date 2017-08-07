@@ -94,20 +94,23 @@ def test_update():
     # IDs.
     db = create.create_db(example_filename('FBgn0031208.gff'), ':memory:',
                           verbose=False, force=True, keep_order=True)
-    for gene in db.features_of_type('gene'):
-        for child in list(db.children(gene)):
-            # important: the FBgn0031208.gff file was designed to have some
-            # funky features: there are two exons without ID attributes.  These
-            # are assigned to ids "exon_1" and "exon_2".  Upon update, with
-            # still no ID, we then have two new features "exon_3" and "exon_4".
-            # To prevent this issue, we ensure that the ID attribute exists...
-            child.attributes['gene_id'] = [gene.id]
-            if 'ID' not in child.attributes:
-                child.attributes['ID'] = [child.id]
-            db.update([child], merge_strategy='replace')
+    def gen():
+        for gene in db.features_of_type('gene'):
+            for child in list(db.children(gene)):
+                # important: the FBgn0031208.gff file was designed to have some
+                # funky features: there are two exons without ID attributes.  These
+                # are assigned to ids "exon_1" and "exon_2".  Upon update, with
+                # still no ID, we then have two new features "exon_3" and "exon_4".
+                # To prevent this issue, we ensure that the ID attribute exists...
+                child.attributes['gene_id'] = [gene.id]
+                if 'ID' not in child.attributes:
+                    child.attributes['ID'] = [child.id]
+                yield child
+
+    db.update(gen(), merge_strategy='replace')
 
     print("\n\nafter\n\n")
-    for child in db.children(gene):
+    for child in db.children('FBgn0031208'):
         print(child.id)
         assert child.attributes['gene_id'] == ['FBgn0031208'], (child, child.attributes)
 

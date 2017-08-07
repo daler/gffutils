@@ -10,3 +10,4 @@ build/*
 doc/source/autodocs/*
 gffutils/test/data/*.db
 gffutils/test/data/*.gz
+gffutils/test/benchmarking/gencode*
