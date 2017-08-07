@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gffutils.create.create_db &mdash; gffutils 0.8.7.1 documentation</title>
+  <title>gffutils.create.create_db &mdash; gffutils 0.8.8 documentation</title>
   
 
   
@@ -30,7 +30,10 @@
   
 
   
-    <link rel="top" title="gffutils 0.8.7.1 documentation" href="../index.html"/>
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="gffutils 0.8.8 documentation" href="../index.html"/>
         <link rel="up" title="API" href="../api.html"/>
         <link rel="next" title="gffutils.interface.FeatureDB" href="gffutils.interface.FeatureDB.html"/>
         <link rel="prev" title="API" href="../api.html"/> 
@@ -61,7 +64,7 @@
             
             
               <div class="version">
-                0.8.7.1
+                0.8.8
               </div>
             
           
@@ -95,7 +98,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-gffutils"><code class="docutils literal"><span class="pre">gffutils</span></code></a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../api.html#create-a-database">Create a database</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="">gffutils.create.create_db</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">gffutils.create.create_db</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#interact-with-a-database">Interact with a database</a></li>
@@ -129,7 +132,7 @@
         <div class="rst-content">
           
 
-
+ 
 
 
 
@@ -143,7 +146,7 @@
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="../_sources/autodocs/gffutils.create.create_db.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/autodocs/gffutils.create.create_db.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -157,10 +160,10 @@
 <h1>gffutils.create.create_db<a class="headerlink" href="#gffutils-create-create-db" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="gffutils.create.create_db">
-<code class="descclassname">gffutils.create.</code><code class="descname">create_db</code><span class="sig-paren">(</span><em>data</em>, <em>dbfn</em>, <em>id_spec=None</em>, <em>force=False</em>, <em>verbose=False</em>, <em>checklines=10</em>, <em>merge_strategy='error'</em>, <em>transform=None</em>, <em>gtf_transcript_key='transcript_id'</em>, <em>gtf_gene_key='gene_id'</em>, <em>gtf_subfeature='exon'</em>, <em>force_gff=False</em>, <em>force_dialect_check=False</em>, <em>from_string=False</em>, <em>keep_order=False</em>, <em>text_factory=&lt;type 'cell'&gt;</em>, <em>force_merge_fields=None</em>, <em>pragmas={'main.page_size': 4096</em>, <em>'synchronous': 'NORMAL'</em>, <em>'journal_mode': 'MEMORY'</em>, <em>'main.cache_size': 10000}</em>, <em>sort_attribute_values=False</em>, <em>dialect=None</em>, <em>_keep_tempfiles=False</em>, <em>infer_gene_extent=True</em>, <em>disable_infer_genes=False</em>, <em>disable_infer_transcripts=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/create.html#create_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gffutils.create.create_db" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">gffutils.create.</code><code class="descname">create_db</code><span class="sig-paren">(</span><em>data</em>, <em>dbfn</em>, <em>id_spec=None</em>, <em>force=False</em>, <em>verbose=False</em>, <em>checklines=10</em>, <em>merge_strategy='error'</em>, <em>transform=None</em>, <em>gtf_transcript_key='transcript_id'</em>, <em>gtf_gene_key='gene_id'</em>, <em>gtf_subfeature='exon'</em>, <em>force_gff=False</em>, <em>force_dialect_check=False</em>, <em>from_string=False</em>, <em>keep_order=False</em>, <em>text_factory=&lt;class 'str'&gt;</em>, <em>force_merge_fields=None</em>, <em>pragmas={'synchronous': 'NORMAL'</em>, <em>'main.page_size': 4096</em>, <em>'journal_mode': 'MEMORY'</em>, <em>'main.cache_size': 10000}</em>, <em>sort_attribute_values=False</em>, <em>dialect=None</em>, <em>_keep_tempfiles=False</em>, <em>infer_gene_extent=True</em>, <em>disable_infer_genes=False</em>, <em>disable_infer_transcripts=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/create.html#create_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gffutils.create.create_db" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a database from a GFF or GTF file.</p>
 <p>For more details on when and how to use the kwargs below, see the examples
-in the online documentation (<a class="reference internal" href="../examples.html#examples"><span>Examples</span></a>).</p>
+in the online documentation (<a class="reference internal" href="../examples.html#examples"><span class="std std-ref">Examples</span></a>).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -245,7 +248,7 @@ exception will be raised.  This means you will have to edit the file
 yourself to fix the duplicated IDs.</p>
 <p>Using <code class="docutils literal"><span class="pre">merge_strategy=&quot;warning&quot;</span></code>, a warning will be printed to the
 logger, and the duplicate feature will be skipped.</p>
-<p>Using <a href="#id1"><span class="problematic" id="id2">`</span></a>merge_strategy=&#8221;replace&#8221; will replace the entire existing
+<p>Using <code class="docutils literal"><span class="pre">merge_strategy=&quot;replace&quot;</span></code> will replace the entire existing
 feature with the new feature.</p>
 </div></blockquote>
 <p><strong>transform</strong> : callable</p>
@@ -409,7 +412,7 @@ parallel environments.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.8.7.1',
+            VERSION:'0.8.8',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

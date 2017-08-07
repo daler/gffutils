@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gffutils.pybedtools_integration &mdash; gffutils 0.8.7.1 documentation</title>
+  <title>gffutils.pybedtools_integration &mdash; gffutils 0.8.8 documentation</title>
   
 
   
@@ -30,7 +30,10 @@
   
 
   
-    <link rel="top" title="gffutils 0.8.7.1 documentation" href="../../index.html"/>
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="gffutils 0.8.8 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -59,7 +62,7 @@
             
             
               <div class="version">
-                0.8.7.1
+                0.8.8
               </div>
             
           
@@ -139,13 +142,13 @@
            <div itemprop="articleBody">
             
   <h1>Source code for gffutils.pybedtools_integration</h1><div class="highlight"><pre>
-<span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Module for integration with pybedtools</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">pybedtools</span>
-<span class="kn">from</span> <span class="nn">pybedtools</span> <span class="kn">import</span> <span class="n">featurefuncs</span>
-<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">helpers</span>
+<span class="kn">from</span> <span class="nn">pybedtools</span> <span class="k">import</span> <span class="n">featurefuncs</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="k">import</span> <span class="n">helpers</span>
 <span class="kn">import</span> <span class="nn">six</span>
 
 <div class="viewcode-block" id="to_bedtool"><a class="viewcode-back" href="../../autodocs/gffutils.pybedtools_integration.to_bedtool.html#gffutils.pybedtools_integration.to_bedtool">[docs]</a><span class="k">def</span> <span class="nf">to_bedtool</span><span class="p">(</span><span class="n">iterator</span><span class="p">):</span>
@@ -162,8 +165,8 @@
     <span class="k">return</span> <span class="n">pybedtools</span><span class="o">.</span><span class="n">BedTool</span><span class="p">(</span><span class="n">gen</span><span class="p">())</span></div>
 
 
-<div class="viewcode-block" id="tsses"><a class="viewcode-back" href="../../autodocs/gffutils.pybedtools_integration.tsses.html#gffutils.pybedtools_integration.tsses">[docs]</a><span class="k">def</span> <span class="nf">tsses</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">merge_overlapping</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">attrs_sep</span><span class="o">=</span><span class="s">&quot;:&quot;</span><span class="p">,</span>
-          <span class="n">merge_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">o</span><span class="o">=</span><span class="s">&#39;distinct&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span> <span class="n">as_bed6</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="tsses"><a class="viewcode-back" href="../../autodocs/gffutils.pybedtools_integration.tsses.html#gffutils.pybedtools_integration.tsses">[docs]</a><span class="k">def</span> <span class="nf">tsses</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">merge_overlapping</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">attrs_sep</span><span class="o">=</span><span class="s2">&quot;:&quot;</span><span class="p">,</span>
+          <span class="n">merge_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">o</span><span class="o">=</span><span class="s1">&#39;distinct&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span> <span class="n">as_bed6</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create 1-bp transcription start sites for all transcripts in the database</span>
 <span class="sd">    and return as a sorted pybedtools.BedTool object pointing to a temporary</span>
@@ -287,32 +290,32 @@
 
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">_merge_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">o</span><span class="o">=</span><span class="s">&#39;distinct&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">merge_kwargs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="n">_merge_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">o</span><span class="o">=</span><span class="s1">&#39;distinct&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">merge_kwargs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">_merge_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">merge_kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">gen</span><span class="p">():</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generator of pybedtools.Intervals representing TSSes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">gene</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">features_of_type</span><span class="p">(</span><span class="s">&#39;gene&#39;</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">gene</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">features_of_type</span><span class="p">(</span><span class="s1">&#39;gene&#39;</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">transcript</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="n">gene</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">transcript</span><span class="o">.</span><span class="n">strand</span> <span class="o">==</span> <span class="s">&#39;-&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">transcript</span><span class="o">.</span><span class="n">strand</span> <span class="o">==</span> <span class="s1">&#39;-&#39;</span><span class="p">:</span>
                     <span class="n">transcript</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">transcript</span><span class="o">.</span><span class="n">stop</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">transcript</span><span class="o">.</span><span class="n">stop</span> <span class="o">=</span> <span class="n">transcript</span><span class="o">.</span><span class="n">start</span>
-                <span class="n">transcript</span><span class="o">.</span><span class="n">featuretype</span> <span class="o">=</span> <span class="n">transcript</span><span class="o">.</span><span class="n">featuretype</span> <span class="o">+</span> <span class="s">&#39;_TSS&#39;</span>
+                <span class="n">transcript</span><span class="o">.</span><span class="n">featuretype</span> <span class="o">=</span> <span class="n">transcript</span><span class="o">.</span><span class="n">featuretype</span> <span class="o">+</span> <span class="s1">&#39;_TSS&#39;</span>
                 <span class="k">yield</span> <span class="n">helpers</span><span class="o">.</span><span class="n">asinterval</span><span class="p">(</span><span class="n">transcript</span><span class="p">)</span>
 
-    <span class="c"># GFF/GTF format</span>
+    <span class="c1"># GFF/GTF format</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">pybedtools</span><span class="o">.</span><span class="n">BedTool</span><span class="p">(</span><span class="n">gen</span><span class="p">())</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
 
-    <span class="c"># Figure out default attrs to use, depending on the original format.</span>
-    <span class="k">if</span> <span class="n">attrs</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">db</span><span class="o">.</span><span class="n">dialect</span><span class="p">[</span><span class="s">&#39;fmt&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;gtf&#39;</span><span class="p">:</span>
-            <span class="n">attrs</span> <span class="o">=</span> <span class="s">&#39;gene_id&#39;</span>
+    <span class="c1"># Figure out default attrs to use, depending on the original format.</span>
+    <span class="k">if</span> <span class="n">attrs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">db</span><span class="o">.</span><span class="n">dialect</span><span class="p">[</span><span class="s1">&#39;fmt&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;gtf&#39;</span><span class="p">:</span>
+            <span class="n">attrs</span> <span class="o">=</span> <span class="s1">&#39;gene_id&#39;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">attrs</span> <span class="o">=</span> <span class="s">&#39;ID&#39;</span>
+            <span class="n">attrs</span> <span class="o">=</span> <span class="s1">&#39;ID&#39;</span>
 
     <span class="k">if</span> <span class="n">merge_overlapping</span> <span class="ow">or</span> <span class="n">as_bed6</span><span class="p">:</span>
 
@@ -344,7 +347,7 @@
                 <span class="n">f</span><span class="o">.</span><span class="n">start</span><span class="p">,</span>
                 <span class="n">f</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span>
                 <span class="n">f</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
-                <span class="s">&#39;.&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;.&#39;</span><span class="p">,</span>
                 <span class="n">f</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
 
         <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="o">**</span><span class="n">_merge_kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">each</span><span class="p">(</span><span class="n">fix_merge</span><span class="p">)</span><span class="o">.</span><span class="n">saveas</span><span class="p">()</span>
@@ -384,7 +387,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.8.7.1',
+            VERSION:'0.8.8',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

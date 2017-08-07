@@ -1,0 +1,6 @@
+gffutils\.interface\.FeatureDB\.all\_features
+=============================================
+
+.. currentmodule:: gffutils.interface
+
+.. automethod:: FeatureDB.all_features

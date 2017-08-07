@@ -1,0 +1,6 @@
+gffutils\.interface\.FeatureDB\.create\_introns
+===============================================
+
+.. currentmodule:: gffutils.interface
+
+.. automethod:: FeatureDB.create_introns

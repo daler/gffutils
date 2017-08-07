@@ -1,0 +1,6 @@
+gffutils\.interface\.FeatureDB\.delete
+======================================
+
+.. currentmodule:: gffutils.interface
+
+.. automethod:: FeatureDB.delete

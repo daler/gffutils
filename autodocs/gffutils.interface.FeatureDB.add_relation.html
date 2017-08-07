@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gffutils.interface.FeatureDB.add_relation &mdash; gffutils 0.8.7.1 documentation</title>
+  <title>gffutils.interface.FeatureDB.add_relation &mdash; gffutils 0.8.8 documentation</title>
   
 
   
@@ -30,7 +30,10 @@
   
 
   
-    <link rel="top" title="gffutils 0.8.7.1 documentation" href="../index.html"/>
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="gffutils 0.8.8 documentation" href="../index.html"/>
         <link rel="up" title="API" href="../api.html"/>
         <link rel="next" title="gffutils.interface.FeatureDB.set_pragmas" href="gffutils.interface.FeatureDB.set_pragmas.html"/>
         <link rel="prev" title="gffutils.interface.FeatureDB.delete" href="gffutils.interface.FeatureDB.delete.html"/> 
@@ -61,7 +64,7 @@
             
             
               <div class="version">
-                0.8.7.1
+                0.8.8
               </div>
             
           
@@ -109,7 +112,7 @@
 <li class="toctree-l3"><a class="reference internal" href="gffutils.interface.FeatureDB.iter_by_parent_childs.html">gffutils.interface.FeatureDB.iter_by_parent_childs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gffutils.interface.FeatureDB.update.html">gffutils.interface.FeatureDB.update</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gffutils.interface.FeatureDB.delete.html">gffutils.interface.FeatureDB.delete</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="">gffutils.interface.FeatureDB.add_relation</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">gffutils.interface.FeatureDB.add_relation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gffutils.interface.FeatureDB.set_pragmas.html">gffutils.interface.FeatureDB.set_pragmas</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gffutils.interface.FeatureDB.interfeatures.html">gffutils.interface.FeatureDB.interfeatures</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gffutils.interface.FeatureDB.children_bp.html">gffutils.interface.FeatureDB.children_bp</a></li>
@@ -148,7 +151,7 @@
         <div class="rst-content">
           
 
-
+ 
 
 
 
@@ -162,7 +165,7 @@
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="../_sources/autodocs/gffutils.interface.FeatureDB.add_relation.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/autodocs/gffutils.interface.FeatureDB.add_relation.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -203,13 +206,13 @@ database.  They both have the signature <code class="docutils literal"><span cla
 must return a [possibly modified] Feature instance.  For example,
 we could add the child&#8217;s database id as the &#8220;child&#8221; attribute in
 the parent:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">parent_func</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="p">):</span>
-    <span class="n">parent</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s">&#39;child&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">child</span><span class="o">.</span><span class="n">id</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">parent_func</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="p">):</span>
+    <span class="n">parent</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s1">&#39;child&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">child</span><span class="o">.</span><span class="n">id</span>
 </pre></div>
 </div>
 <p>and add the parent&#8217;s &#8220;gene_id&#8221; as the child&#8217;s &#8220;Parent&#8221; attribute:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">child_func</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="p">):</span>
-    <span class="n">child</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s">&#39;Parent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">parent</span><span class="p">[</span><span class="s">&#39;gene_id&#39;</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">child_func</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="p">):</span>
+    <span class="n">child</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s1">&#39;Parent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">parent</span><span class="p">[</span><span class="s1">&#39;gene_id&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -265,7 +268,7 @@ the parent:</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.8.7.1',
+            VERSION:'0.8.8',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

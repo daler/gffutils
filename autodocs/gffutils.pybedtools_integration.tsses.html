@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gffutils.pybedtools_integration.tsses &mdash; gffutils 0.8.7.1 documentation</title>
+  <title>gffutils.pybedtools_integration.tsses &mdash; gffutils 0.8.8 documentation</title>
   
 
   
@@ -30,7 +30,10 @@
   
 
   
-    <link rel="top" title="gffutils 0.8.7.1 documentation" href="../index.html"/>
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="gffutils 0.8.8 documentation" href="../index.html"/>
         <link rel="up" title="API" href="../api.html"/>
         <link rel="next" title="gffutils.pybedtools_integration.to_bedtool" href="gffutils.pybedtools_integration.to_bedtool.html"/>
         <link rel="prev" title="gffutils.biopython_integration.from_seqfeature" href="gffutils.biopython_integration.from_seqfeature.html"/> 
@@ -61,7 +64,7 @@
             
             
               <div class="version">
-                0.8.7.1
+                0.8.8
               </div>
             
           
@@ -100,7 +103,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../api.html#integration-with-other-tools">Integration with other tools</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="gffutils.biopython_integration.to_seqfeature.html">gffutils.biopython_integration.to_seqfeature</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gffutils.biopython_integration.from_seqfeature.html">gffutils.biopython_integration.from_seqfeature</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="">gffutils.pybedtools_integration.tsses</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">gffutils.pybedtools_integration.tsses</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gffutils.pybedtools_integration.to_bedtool.html">gffutils.pybedtools_integration.to_bedtool</a></li>
 </ul>
 </li>
@@ -132,7 +135,7 @@
         <div class="rst-content">
           
 
-
+ 
 
 
 
@@ -146,7 +149,7 @@
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="../_sources/autodocs/gffutils.pybedtools_integration.tsses.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/autodocs/gffutils.pybedtools_integration.tsses.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -160,7 +163,7 @@
 <h1>gffutils.pybedtools_integration.tsses<a class="headerlink" href="#gffutils-pybedtools-integration-tsses" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="gffutils.pybedtools_integration.tsses">
-<code class="descclassname">gffutils.pybedtools_integration.</code><code class="descname">tsses</code><span class="sig-paren">(</span><em>db</em>, <em>merge_overlapping=False</em>, <em>attrs=None</em>, <em>attrs_sep=':'</em>, <em>merge_kwargs={'c': 4</em>, <em>'s': True</em>, <em>'o': 'distinct'}</em>, <em>as_bed6=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/pybedtools_integration.html#tsses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gffutils.pybedtools_integration.tsses" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">gffutils.pybedtools_integration.</code><code class="descname">tsses</code><span class="sig-paren">(</span><em>db</em>, <em>merge_overlapping=False</em>, <em>attrs=None</em>, <em>attrs_sep=':'</em>, <em>merge_kwargs={'s': True</em>, <em>'c': 4</em>, <em>'o': 'distinct'}</em>, <em>as_bed6=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/pybedtools_integration.html#tsses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gffutils.pybedtools_integration.tsses" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create 1-bp transcription start sites for all transcripts in the database
 and return as a sorted pybedtools.BedTool object pointing to a temporary
 file.</p>
@@ -223,17 +226,17 @@ different than <code class="docutils literal"><span class="pre">merge_sep</span>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gffutils</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gffutils</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">gffutils</span><span class="o">.</span><span class="n">create_db</span><span class="p">(</span>
-<span class="gp">... </span>   <span class="n">gffutils</span><span class="o">.</span><span class="n">example_filename</span><span class="p">(</span><span class="s">&#39;FBgn0031208.gtf&#39;</span><span class="p">),</span>
-<span class="gp">... </span>   <span class="s">&quot;:memory:&quot;</span><span class="p">,</span>
-<span class="gp">... </span>   <span class="n">keep_order</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-<span class="gp">... </span>   <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">... </span>   <span class="n">gffutils</span><span class="o">.</span><span class="n">example_filename</span><span class="p">(</span><span class="s1">&#39;FBgn0031208.gtf&#39;</span><span class="p">),</span>
+<span class="gp">... </span>   <span class="s2">&quot;:memory:&quot;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">keep_order</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Default settings &#8211; no merging, and report a separate TSS on each line even
 if they overlap (as in the first two):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">tsses</span><span class="p">(</span><span class="n">db</span><span class="p">))</span>                        
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">tsses</span><span class="p">(</span><span class="n">db</span><span class="p">))</span>                        
 <span class="go">chr2L       gffutils_derived        transcript_TSS  7529    7529    .       +       .       gene_id &quot;FBgn0031208&quot;; transcript_id &quot;FBtr0300689&quot;;</span>
 <span class="go">chr2L       gffutils_derived        transcript_TSS  7529    7529    .       +       .       gene_id &quot;FBgn0031208&quot;; transcript_id &quot;FBtr0300690&quot;;</span>
 <span class="go">chr2L       gffutils_derived        transcript_TSS  11000   11000   .       -       .       gene_id &quot;Fk_gene_1&quot;; transcript_id &quot;transcript_Fk_gene_1&quot;;</span>
@@ -242,8 +245,8 @@ if they overlap (as in the first two):</p>
 </div>
 <p>Default merging, showing the first two TSSes merged and reported as
 a single unique TSS for the gene. Note the conversion to BED:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">tsses</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">merge_overlapping</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">tsses</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">merge_overlapping</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  
 <span class="go">chr2L       7528    7529    FBgn0031208     .       +</span>
 <span class="go">chr2L       10999   11000   Fk_gene_1       .       -</span>
 <span class="go">chr2L       12499   12500   Fk_gene_2       .       -</span>
@@ -252,8 +255,8 @@ a single unique TSS for the gene. Note the conversion to BED:</p>
 <p>Report both gene ID and transcript ID in the name. In some cases this can
 be easier to parse than the original GTF or GFF file. With no merging
 specified, we must add <code class="docutils literal"><span class="pre">as_bed6=True</span></code> to see the names in BED format.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">tsses</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;gene_id&#39;</span><span class="p">,</span> <span class="s">&#39;transcript_id&#39;</span><span class="p">],</span> <span class="n">as_bed6</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">tsses</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;gene_id&#39;</span><span class="p">,</span> <span class="s1">&#39;transcript_id&#39;</span><span class="p">],</span> <span class="n">as_bed6</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  
 <span class="go">chr2L       7528    7529    FBgn0031208:FBtr0300689 .       +</span>
 <span class="go">chr2L       7528    7529    FBgn0031208:FBtr0300690 .       +</span>
 <span class="go">chr2L       10999   11000   Fk_gene_1:transcript_Fk_gene_1  .       -</span>
@@ -261,16 +264,16 @@ specified, we must add <code class="docutils literal"><span class="pre">as_bed6=
 </pre></div>
 </div>
 <p>Use a 3kb merge distance so the last 2 features are merged together:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">tsses</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">merge_overlapping</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">merge_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mi">3000</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">tsses</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">merge_overlapping</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">merge_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">d</span><span class="o">=</span><span class="mi">3000</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  
 <span class="go">chr2L       7528    7529    FBgn0031208     .       +</span>
 <span class="go">chr2L       10999   12500   Fk_gene_1,Fk_gene_2     .       -</span>
 </pre></div>
 </div>
 <p>The set of unique TSSes for each gene, +1kb upstream and 500bp downstream:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">tsses</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">merge_overlapping</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">slop</span><span class="p">(</span><span class="n">l</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">genome</span><span class="o">=</span><span class="s">&#39;dm3&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">tsses</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">merge_overlapping</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">slop</span><span class="p">(</span><span class="n">l</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">genome</span><span class="o">=</span><span class="s1">&#39;dm3&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  
 <span class="go">chr2L       6528    8029    FBgn0031208     .       +</span>
 <span class="go">chr2L       10499   12000   Fk_gene_1       .       -</span>
 <span class="go">chr2L       11999   13500   Fk_gene_2       .       -</span>
@@ -321,7 +324,7 @@ specified, we must add <code class="docutils literal"><span class="pre">as_bed6=
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.8.7.1',
+            VERSION:'0.8.8',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

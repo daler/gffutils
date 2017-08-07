@@ -1,0 +1,6 @@
+gffutils\.helpers\.sanitize\_gff\_db
+====================================
+
+.. currentmodule:: gffutils.helpers
+
+.. autofunction:: sanitize_gff_db

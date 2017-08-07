@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Attributes &mdash; gffutils 0.8.7.1 documentation</title>
+  <title>Attributes &mdash; gffutils 0.8.8 documentation</title>
   
 
   
@@ -30,7 +30,10 @@
   
 
   
-    <link rel="top" title="gffutils 0.8.7.1 documentation" href="index.html"/>
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="gffutils 0.8.8 documentation" href="index.html"/>
         <link rel="next" title="Examples" href="examples.html"/>
         <link rel="prev" title="Dialects" href="dialect.html"/> 
 
@@ -60,7 +63,7 @@
             
             
               <div class="version">
-                0.8.7.1
+                0.8.8
               </div>
             
           
@@ -89,7 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="database-ids.html">Database IDs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gtf.html">GTF files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dialect.html">Dialects</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Attributes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Change log</a></li>
@@ -117,7 +120,7 @@
         <div class="rst-content">
           
 
-
+ 
 
 
 
@@ -129,7 +132,7 @@
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/attributes.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/attributes.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -142,7 +145,7 @@
   <div class="section" id="attributes">
 <h1>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h1>
 <p>The last field of a GFF or GTF file contains attributes.  As described in
-<a class="reference internal" href="dialect.html#dialects"><span>Dialects</span></a>, these can be inconsistently formatted, but we try to the best
+<a class="reference internal" href="dialect.html#dialects"><span class="std std-ref">Dialects</span></a>, these can be inconsistently formatted, but we try to the best
 we can.  Once the attributes have been parsed, they can be accessed via
 <code class="xref py py-attr docutils literal"><span class="pre">Feature.attributes</span></code> or using getitem syntax on the <code class="xref py py-class docutils literal"><span class="pre">Feature</span></code>
 itself.</p>
@@ -152,55 +155,55 @@ attribute values are returned as lists, even 1-item lists.  However, this can
 be changed using the <code class="docutils literal"><span class="pre">constants.always_return_list</span></code> setting.</p>
 <p>Let&#8217;s get an example <code class="xref py py-class docutils literal"><span class="pre">Attributes</span></code> object to work with, by parsing a GFF
 line:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">gffutils</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">feature_from_line</span><span class="p">(</span>
-<span class="gp">... </span><span class="s">&#39;chr2L</span><span class="se">\t</span><span class="s">FlyBase</span><span class="se">\t</span><span class="s">exon</span><span class="se">\t</span><span class="s">8193</span><span class="se">\t</span><span class="s">8589</span><span class="se">\t</span><span class="s">.</span><span class="se">\t</span><span class="s">+</span><span class="se">\t</span><span class="s">.</span><span class="se">\t</span><span class="s">ID=exon1; Parent=FBtr0300689,FBtr0300690&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">gffutils</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">feature_from_line</span><span class="p">(</span>
+<span class="gp">... </span><span class="s1">&#39;chr2L</span><span class="se">\t</span><span class="s1">FlyBase</span><span class="se">\t</span><span class="s1">exon</span><span class="se">\t</span><span class="s1">8193</span><span class="se">\t</span><span class="s1">8589</span><span class="se">\t</span><span class="s1">.</span><span class="se">\t</span><span class="s1">+</span><span class="se">\t</span><span class="s1">.</span><span class="se">\t</span><span class="s1">ID=exon1; Parent=FBtr0300689,FBtr0300690&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The <code class="xref py py-class docutils literal"><span class="pre">attributes.Attributes</span></code> object is accessed like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">attributes</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">attributes</span>
 <span class="go">&lt;gffutils.attributes.Attributes object at ...&gt;</span>
 </pre></div>
 </div>
 <p>It behaves like a dictionary of lists:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s">&#39;{i[0]}: {i[1]}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">))</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{i[0]}</span><span class="s1">: </span><span class="si">{i[1]}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">))</span>
 <span class="go">ID: [&#39;exon1&#39;]</span>
 <span class="go">Parent: [&#39;FBtr0300689&#39;, &#39;FBtr0300690&#39;]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s">&#39;ID&#39;</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s1">&#39;ID&#39;</span><span class="p">]</span>
 <span class="go">[&#39;exon1&#39;]</span>
 </pre></div>
 </div>
 <p>Usually it&#8217;s more convenient to access the attributes directly from the
 feature, like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">[</span><span class="s">&#39;ID&#39;</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;ID&#39;</span><span class="p">]</span>
 <span class="go">[&#39;exon1&#39;]</span>
 </pre></div>
 </div>
 <p>We can add attributes, again directly from the feature:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">[</span><span class="s">&#39;parent_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;mRNA&#39;</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;parent_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;mRNA&#39;</span>
 </pre></div>
 </div>
 <p id="always-return-list">By default, a list is always returned, even for 1-item lists:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">[</span><span class="s">&#39;parent_type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">f</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s">&#39;parent_type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="p">[</span><span class="s">&#39;mRNA&#39;</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;parent_type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">f</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s1">&#39;parent_type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;mRNA&#39;</span><span class="p">]</span>
 <span class="go">True</span>
 </pre></div>
 </div>
 <p>However, we can change this behavior like so:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">gffutils</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">always_return_list</span> <span class="o">=</span> <span class="bp">False</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gffutils</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">always_return_list</span> <span class="o">=</span> <span class="kc">False</span>
 </pre></div>
 </div>
 <p>Now the single values are returned as strings rather than 1-item lists:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="s">&#39;{i[0]}: {i[1]}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">))</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{i[0]}</span><span class="s1">: </span><span class="si">{i[1]}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">))</span>
 <span class="go">ID: exon1</span>
 <span class="go">Parent: [&#39;FBtr0300689&#39;, &#39;FBtr0300690&#39;]</span>
 <span class="go">parent_type: mRNA</span>
 </pre></div>
 </div>
 <p>Reset back to the original behavior:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">gffutils</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">always_return_list</span> <span class="o">=</span> <span class="bp">True</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gffutils</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">always_return_list</span> <span class="o">=</span> <span class="kc">True</span>
 </pre></div>
 </div>
 </div>
@@ -246,7 +249,7 @@ feature, like this:</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.8.7.1',
+            VERSION:'0.8.8',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

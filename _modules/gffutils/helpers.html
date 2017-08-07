@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gffutils.helpers &mdash; gffutils 0.8.7.1 documentation</title>
+  <title>gffutils.helpers &mdash; gffutils 0.8.8 documentation</title>
   
 
   
@@ -30,7 +30,10 @@
   
 
   
-    <link rel="top" title="gffutils 0.8.7.1 documentation" href="../../index.html"/>
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="gffutils 0.8.8 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -59,7 +62,7 @@
             
             
               <div class="version">
-                0.8.7.1
+                0.8.8
               </div>
             
           
@@ -139,19 +142,19 @@
            <div itemprop="articleBody">
             
   <h1>Source code for gffutils.helpers</h1><div class="highlight"><pre>
-<span class="kn">import</span> <span class="nn">copy</span>
+<span></span><span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">simplejson</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">tempfile</span>
 <span class="kn">import</span> <span class="nn">six</span>
-<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">constants</span>
-<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">bins</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="k">import</span> <span class="n">constants</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="k">import</span> <span class="n">bins</span>
 <span class="kn">import</span> <span class="nn">gffutils</span>
-<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">gffwriter</span>
-<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">parser</span>
-<span class="kn">from</span> <span class="nn">gffutils.attributes</span> <span class="kn">import</span> <span class="n">dict_class</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="k">import</span> <span class="n">gffwriter</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="k">import</span> <span class="n">parser</span>
+<span class="kn">from</span> <span class="nn">gffutils.attributes</span> <span class="k">import</span> <span class="n">dict_class</span>
 
 <span class="n">HERE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span>
 
@@ -160,9 +163,9 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the full path of a data file that ships with gffutils.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">HERE</span><span class="p">,</span> <span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="s">&#39;data&#39;</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">HERE</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="infer_dialect"><a class="viewcode-back" href="../../autodocs/gffutils.helpers.infer_dialect.html#gffutils.helpers.infer_dialect">[docs]</a><span class="k">def</span> <span class="nf">infer_dialect</span><span class="p">(</span><span class="n">attributes</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Infer the dialect based on the attributes.</span>
@@ -180,9 +183,9 @@
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attributes</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
         <span class="n">attributes</span> <span class="o">=</span> <span class="p">[</span><span class="n">attributes</span><span class="p">]</span>
     <span class="n">dialects</span> <span class="o">=</span> <span class="p">[</span><span class="n">parser</span><span class="o">.</span><span class="n">_split_keyvals</span><span class="p">(</span><span class="n">i</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">attributes</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">_choose_dialect</span><span class="p">(</span><span class="n">dialects</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_choose_dialect</span><span class="p">(</span><span class="n">dialects</span><span class="p">)</span></div>
 
-</div>
+
 <span class="k">def</span> <span class="nf">_choose_dialect</span><span class="p">(</span><span class="n">dialects</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given a list of dialects, choose the one to use as the &quot;canonical&quot; version.</span>
@@ -198,27 +201,27 @@
 <span class="sd">    -------</span>
 <span class="sd">    dict</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c"># NOTE: can use helpers.dialect_compare if you need to make this more</span>
-    <span class="c"># complex....</span>
+    <span class="c1"># NOTE: can use helpers.dialect_compare if you need to make this more</span>
+    <span class="c1"># complex....</span>
 
-    <span class="c"># For now, this function favors the first dialect, and then appends the</span>
-    <span class="c"># order of additional fields seen in the attributes of other lines giving</span>
-    <span class="c"># priority to dialects that come first in the iterable.</span>
+    <span class="c1"># For now, this function favors the first dialect, and then appends the</span>
+    <span class="c1"># order of additional fields seen in the attributes of other lines giving</span>
+    <span class="c1"># priority to dialects that come first in the iterable.</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dialects</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">constants</span><span class="o">.</span><span class="n">dialect</span>
     <span class="n">final_order</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">dialect</span> <span class="ow">in</span> <span class="n">dialects</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">dialect</span><span class="p">[</span><span class="s">&#39;order&#39;</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">dialect</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="n">o</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">final_order</span><span class="p">:</span>
                 <span class="n">final_order</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
     <span class="n">dialect</span> <span class="o">=</span> <span class="n">dialects</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">dialect</span><span class="p">[</span><span class="s">&#39;order&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">final_order</span>
+    <span class="n">dialect</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">final_order</span>
     <span class="k">return</span> <span class="n">dialect</span>
 
 
-<span class="k">def</span> <span class="nf">make_query</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">strand</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-               <span class="n">extra</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">order_by</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-               <span class="n">completely_within</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">make_query</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">strand</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+               <span class="n">extra</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">order_by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+               <span class="n">completely_within</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Multi-purpose, bare-bones ORM function.</span>
 
@@ -250,132 +253,132 @@
 <span class="sd">    `args` can be pre-filled with args that are passed to `other` and `extra`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">_QUERY</span> <span class="o">=</span> <span class="p">(</span><span class="s">&quot;{_SELECT} {OTHER} {EXTRA} {FEATURETYPE} &quot;</span>
-              <span class="s">&quot;{LIMIT} {STRAND} {ORDER_BY}&quot;</span><span class="p">)</span>
+    <span class="n">_QUERY</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">{_SELECT}</span><span class="s2"> </span><span class="si">{OTHER}</span><span class="s2"> </span><span class="si">{EXTRA}</span><span class="s2"> </span><span class="si">{FEATURETYPE}</span><span class="s2"> &quot;</span>
+              <span class="s2">&quot;</span><span class="si">{LIMIT}</span><span class="s2"> </span><span class="si">{STRAND}</span><span class="s2"> </span><span class="si">{ORDER_BY}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-    <span class="c"># Construct a dictionary `d` that will be used later as _QUERY.format(**d).</span>
-    <span class="c"># Default is just _SELECT, which returns all records in the features table.</span>
-    <span class="c"># (Recall that constants._SELECT gets the fields in the order needed to</span>
-    <span class="c"># reconstruct a Feature)</span>
-    <span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">_SELECT</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">_SELECT</span><span class="p">,</span> <span class="n">OTHER</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">FEATURETYPE</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">LIMIT</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span>
-             <span class="n">STRAND</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">ORDER_BY</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">EXTRA</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">)</span>
+    <span class="c1"># Construct a dictionary `d` that will be used later as _QUERY.format(**d).</span>
+    <span class="c1"># Default is just _SELECT, which returns all records in the features table.</span>
+    <span class="c1"># (Recall that constants._SELECT gets the fields in the order needed to</span>
+    <span class="c1"># reconstruct a Feature)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">_SELECT</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">_SELECT</span><span class="p">,</span> <span class="n">OTHER</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">FEATURETYPE</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">LIMIT</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+             <span class="n">STRAND</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ORDER_BY</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">EXTRA</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">other</span><span class="p">:</span>
-        <span class="n">d</span><span class="p">[</span><span class="s">&#39;OTHER&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">other</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;OTHER&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">other</span>
     <span class="k">if</span> <span class="n">extra</span><span class="p">:</span>
-        <span class="n">d</span><span class="p">[</span><span class="s">&#39;EXTRA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">extra</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;EXTRA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">extra</span>
 
-    <span class="c"># If `other` and `extra` take args (that is, they have &quot;?&quot; in them), then</span>
-    <span class="c"># they should have been provided in `args`.</span>
-    <span class="n">required_args</span> <span class="o">=</span> <span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s">&#39;EXTRA&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;OTHER&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">&#39;?&#39;</span><span class="p">)</span>
+    <span class="c1"># If `other` and `extra` take args (that is, they have &quot;?&quot; in them), then</span>
+    <span class="c1"># they should have been provided in `args`.</span>
+    <span class="n">required_args</span> <span class="o">=</span> <span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;EXTRA&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;OTHER&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;?&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">!=</span> <span class="n">required_args</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Not enough args (</span><span class="si">%s</span><span class="s">) for subquery&#39;</span> <span class="o">%</span> <span class="n">args</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Not enough args (</span><span class="si">%s</span><span class="s1">) for subquery&#39;</span> <span class="o">%</span> <span class="n">args</span><span class="p">)</span>
 
-    <span class="c"># Below, if a kwarg is specified, then we create sections of the query --</span>
-    <span class="c"># appending to args as necessary.</span>
-    <span class="c">#</span>
-    <span class="c"># IMPORTANT: the order in which things are processed here is the same as</span>
-    <span class="c"># the order of the placeholders in _QUERY.  That is, we need to build the</span>
-    <span class="c"># args in parallel with the query to avoid putting the wrong args in the</span>
-    <span class="c"># wrong place.</span>
+    <span class="c1"># Below, if a kwarg is specified, then we create sections of the query --</span>
+    <span class="c1"># appending to args as necessary.</span>
+    <span class="c1">#</span>
+    <span class="c1"># IMPORTANT: the order in which things are processed here is the same as</span>
+    <span class="c1"># the order of the placeholders in _QUERY.  That is, we need to build the</span>
+    <span class="c1"># args in parallel with the query to avoid putting the wrong args in the</span>
+    <span class="c1"># wrong place.</span>
 
     <span class="k">if</span> <span class="n">featuretype</span><span class="p">:</span>
-        <span class="c"># Handle single or iterables of featuretypes.</span>
-        <span class="c">#</span>
-        <span class="c"># e.g., &quot;featuretype = &#39;exon&#39;&quot;</span>
-        <span class="c">#</span>
-        <span class="c"># or, &quot;featuretype IN (&#39;exon&#39;, &#39;CDS&#39;)&quot;</span>
+        <span class="c1"># Handle single or iterables of featuretypes.</span>
+        <span class="c1">#</span>
+        <span class="c1"># e.g., &quot;featuretype = &#39;exon&#39;&quot;</span>
+        <span class="c1">#</span>
+        <span class="c1"># or, &quot;featuretype IN (&#39;exon&#39;, &#39;CDS&#39;)&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">featuretype</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
-            <span class="n">d</span><span class="p">[</span><span class="s">&#39;FEATURETYPE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;features.featuretype = ?&quot;</span>
+            <span class="n">d</span><span class="p">[</span><span class="s1">&#39;FEATURETYPE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;features.featuretype = ?&quot;</span>
             <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">featuretype</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="s">&#39;FEATURETYPE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s">&quot;features.featuretype IN  (</span><span class="si">%s</span><span class="s">)&quot;</span>
-                <span class="o">%</span> <span class="p">(</span><span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&quot;?&quot;</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">featuretype</span><span class="p">]))</span>
+            <span class="n">d</span><span class="p">[</span><span class="s1">&#39;FEATURETYPE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;features.featuretype IN  (</span><span class="si">%s</span><span class="s2">)&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;?&quot;</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">featuretype</span><span class="p">]))</span>
             <span class="p">)</span>
             <span class="n">args</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">featuretype</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">limit</span><span class="p">:</span>
-        <span class="c"># Restrict to a genomic region.  Makes use of the UCSC binning strategy</span>
-        <span class="c"># for performance.</span>
-        <span class="c">#</span>
-        <span class="c"># `limit` is a string or a tuple of (chrom, start, stop)</span>
-        <span class="c">#</span>
-        <span class="c"># e.g., &quot;seqid = &#39;chr2L&#39; AND start &gt; 1000 AND end &lt; 5000&quot;</span>
+        <span class="c1"># Restrict to a genomic region.  Makes use of the UCSC binning strategy</span>
+        <span class="c1"># for performance.</span>
+        <span class="c1">#</span>
+        <span class="c1"># `limit` is a string or a tuple of (chrom, start, stop)</span>
+        <span class="c1">#</span>
+        <span class="c1"># e.g., &quot;seqid = &#39;chr2L&#39; AND start &gt; 1000 AND end &lt; 5000&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">limit</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
-            <span class="n">seqid</span><span class="p">,</span> <span class="n">startstop</span> <span class="o">=</span> <span class="n">limit</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)</span>
-            <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">startstop</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)</span>
+            <span class="n">seqid</span><span class="p">,</span> <span class="n">startstop</span> <span class="o">=</span> <span class="n">limit</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+            <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">startstop</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">seqid</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">limit</span>
 
-        <span class="c"># Identify possible bins</span>
-        <span class="n">_bins</span> <span class="o">=</span> <span class="n">bins</span><span class="o">.</span><span class="n">bins</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">start</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">end</span><span class="p">),</span> <span class="n">one</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="c1"># Identify possible bins</span>
+        <span class="n">_bins</span> <span class="o">=</span> <span class="n">bins</span><span class="o">.</span><span class="n">bins</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">start</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">end</span><span class="p">),</span> <span class="n">one</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-        <span class="c"># Use different overlap conditions</span>
+        <span class="c1"># Use different overlap conditions</span>
         <span class="k">if</span> <span class="n">completely_within</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="s">&#39;LIMIT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s">&quot;features.seqid = ? AND features.start &gt;= ? &quot;</span>
-                <span class="s">&quot;AND features.end &lt;= ?&quot;</span>
+            <span class="n">d</span><span class="p">[</span><span class="s1">&#39;LIMIT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;features.seqid = ? AND features.start &gt;= ? &quot;</span>
+                <span class="s2">&quot;AND features.end &lt;= ?&quot;</span>
             <span class="p">)</span>
             <span class="n">args</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">seqid</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">])</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="s">&#39;LIMIT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s">&quot;features.seqid = ? AND features.start &lt;= ? &quot;</span>
-                <span class="s">&quot;AND features.end &gt;= ?&quot;</span>
+            <span class="n">d</span><span class="p">[</span><span class="s1">&#39;LIMIT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;features.seqid = ? AND features.start &lt;= ? &quot;</span>
+                <span class="s2">&quot;AND features.end &gt;= ?&quot;</span>
             <span class="p">)</span>
-            <span class="c"># Note order (end, start)</span>
+            <span class="c1"># Note order (end, start)</span>
             <span class="n">args</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">seqid</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">start</span><span class="p">])</span>
 
-        <span class="c"># Add bin clause. See issue #45.</span>
+        <span class="c1"># Add bin clause. See issue #45.</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_bins</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">900</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="s">&#39;LIMIT&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="s">&quot; AND features.bin IN (</span><span class="si">%s</span><span class="s">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">_bins</span><span class="p">)))</span>
+            <span class="n">d</span><span class="p">[</span><span class="s1">&#39;LIMIT&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="s2">&quot; AND features.bin IN (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">_bins</span><span class="p">)))</span>
 
     <span class="k">if</span> <span class="n">strand</span><span class="p">:</span>
-        <span class="c"># e.g., &quot;strand = &#39;+&#39;&quot;</span>
-        <span class="n">d</span><span class="p">[</span><span class="s">&#39;STRAND&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;features.strand = ?&quot;</span>
+        <span class="c1"># e.g., &quot;strand = &#39;+&#39;&quot;</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;STRAND&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;features.strand = ?&quot;</span>
         <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">strand</span><span class="p">)</span>
 
-    <span class="c"># TODO: implement file_order!</span>
-    <span class="n">valid_order_by</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">_gffkeys_extra</span> <span class="o">+</span> <span class="p">[</span><span class="s">&#39;file_order&#39;</span><span class="p">,</span> <span class="s">&#39;length&#39;</span><span class="p">]</span>
+    <span class="c1"># TODO: implement file_order!</span>
+    <span class="n">valid_order_by</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">_gffkeys_extra</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;file_order&#39;</span><span class="p">,</span> <span class="s1">&#39;length&#39;</span><span class="p">]</span>
     <span class="n">_order_by</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">if</span> <span class="n">order_by</span><span class="p">:</span>
-        <span class="c"># Default is essentially random order.</span>
-        <span class="c">#</span>
-        <span class="c"># e.g. &quot;ORDER BY seqid, start DESC&quot;</span>
+        <span class="c1"># Default is essentially random order.</span>
+        <span class="c1">#</span>
+        <span class="c1"># e.g. &quot;ORDER BY seqid, start DESC&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">order_by</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
             <span class="n">_order_by</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">order_by</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">order_by</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_order_by</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> not a valid order-by value in </span><span class="si">%s</span><span class="s">&quot;</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> not a valid order-by value in </span><span class="si">%s</span><span class="s2">&quot;</span>
                                      <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">valid_order_by</span><span class="p">))</span>
 
-                <span class="c"># There&#39;s no length field, so order by end - start</span>
-                <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s">&#39;length&#39;</span><span class="p">:</span>
-                    <span class="n">k</span> <span class="o">=</span> <span class="s">&#39;(end - start)&#39;</span>
+                <span class="c1"># There&#39;s no length field, so order by end - start</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">&#39;length&#39;</span><span class="p">:</span>
+                    <span class="n">k</span> <span class="o">=</span> <span class="s1">&#39;(end - start)&#39;</span>
 
                 <span class="n">_order_by</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
 
-        <span class="n">_order_by</span> <span class="o">=</span> <span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_order_by</span><span class="p">)</span>
+        <span class="n">_order_by</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_order_by</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">reverse</span><span class="p">:</span>
-            <span class="n">direction</span> <span class="o">=</span> <span class="s">&#39;DESC&#39;</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="s1">&#39;DESC&#39;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">direction</span> <span class="o">=</span> <span class="s">&#39;ASC&#39;</span>
-        <span class="n">d</span><span class="p">[</span><span class="s">&#39;ORDER_BY&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;ORDER BY </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_order_by</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="s1">&#39;ASC&#39;</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;ORDER_BY&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;ORDER BY </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_order_by</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
 
-    <span class="c"># Ensure only one &quot;WHERE&quot; is included; the rest get &quot;AND &quot;.  This is ugly.</span>
-    <span class="n">where</span> <span class="o">=</span> <span class="bp">False</span>
-    <span class="k">if</span> <span class="s">&quot;where&quot;</span> <span class="ow">in</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;OTHER&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
-        <span class="n">where</span> <span class="o">=</span> <span class="bp">True</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;EXTRA&#39;</span><span class="p">,</span> <span class="s">&#39;FEATURETYPE&#39;</span><span class="p">,</span> <span class="s">&#39;LIMIT&#39;</span><span class="p">,</span> <span class="s">&#39;STRAND&#39;</span><span class="p">]:</span>
+    <span class="c1"># Ensure only one &quot;WHERE&quot; is included; the rest get &quot;AND &quot;.  This is ugly.</span>
+    <span class="n">where</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="s2">&quot;where&quot;</span> <span class="ow">in</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;OTHER&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+        <span class="n">where</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;EXTRA&#39;</span><span class="p">,</span> <span class="s1">&#39;FEATURETYPE&#39;</span><span class="p">,</span> <span class="s1">&#39;LIMIT&#39;</span><span class="p">,</span> <span class="s1">&#39;STRAND&#39;</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">where</span><span class="p">:</span>
-                <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;WHERE &quot;</span> <span class="o">+</span> <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="n">where</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;WHERE &quot;</span> <span class="o">+</span> <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">where</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;AND &quot;</span> <span class="o">+</span> <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;AND &quot;</span> <span class="o">+</span> <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">_QUERY</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">d</span><span class="p">),</span> <span class="n">args</span>
 
@@ -385,23 +388,23 @@
 <span class="sd">    Given a dictionary yielded by the parser, return the genomic &quot;UCSC&quot; bin</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s">&#39;start&#39;</span><span class="p">])</span>
-        <span class="n">end</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s">&#39;end&#39;</span><span class="p">])</span>
-        <span class="k">return</span> <span class="n">bins</span><span class="o">.</span><span class="n">bins</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">one</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">])</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;end&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">bins</span><span class="o">.</span><span class="n">bins</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">one</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="c"># e.g., if &quot;.&quot;</span>
+    <span class="c1"># e.g., if &quot;.&quot;</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="kc">None</span>
 
 
 <span class="k">def</span> <span class="nf">_jsonify</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Use most compact form of JSON&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dict_class</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">simplejson</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">_d</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">,</span> <span class="s">&#39;:&#39;</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">simplejson</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">,</span> <span class="s">&#39;:&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">simplejson</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">_d</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">simplejson</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">))</span>
 
 
-<span class="k">def</span> <span class="nf">_unjsonify</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">isattributes</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_unjsonify</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">isattributes</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Convert JSON string to an ordered defaultdict.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">isattributes</span><span class="p">:</span>
         <span class="n">obj</span> <span class="o">=</span> <span class="n">simplejson</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -409,28 +412,28 @@
     <span class="k">return</span> <span class="n">simplejson</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_feature_to_fields</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">jsonify</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_feature_to_fields</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">jsonify</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert feature to tuple, for faster sqlite3 import</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">constants</span><span class="o">.</span><span class="n">_keys</span><span class="p">:</span>
         <span class="n">v</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">jsonify</span> <span class="ow">and</span> <span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;attributes&#39;</span><span class="p">,</span> <span class="s">&#39;extra&#39;</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">jsonify</span> <span class="ow">and</span> <span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;attributes&#39;</span><span class="p">,</span> <span class="s1">&#39;extra&#39;</span><span class="p">)):</span>
             <span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_jsonify</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_dict_to_fields</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">jsonify</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_dict_to_fields</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">jsonify</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert dict to tuple, for faster sqlite3 import</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">constants</span><span class="o">.</span><span class="n">_keys</span><span class="p">:</span>
         <span class="n">v</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">jsonify</span> <span class="ow">and</span> <span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;attributes&#39;</span><span class="p">,</span> <span class="s">&#39;extra&#39;</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">jsonify</span> <span class="ow">and</span> <span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;attributes&#39;</span><span class="p">,</span> <span class="s1">&#39;extra&#39;</span><span class="p">)):</span>
             <span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_jsonify</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
@@ -442,9 +445,9 @@
 <span class="sd">    Converts a gffutils.Feature to a pybedtools.Interval</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span> <span class="nn">pybedtools</span>
-    <span class="k">return</span> <span class="n">pybedtools</span><span class="o">.</span><span class="n">create_interval_from_list</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">pybedtools</span><span class="o">.</span><span class="n">create_interval_from_list</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">))</span></div>
 
-</div>
+
 <div class="viewcode-block" id="merge_attributes"><a class="viewcode-back" href="../../autodocs/gffutils.helpers.merge_attributes.html#gffutils.helpers.merge_attributes">[docs]</a><span class="k">def</span> <span class="nf">merge_attributes</span><span class="p">(</span><span class="n">attr1</span><span class="p">,</span> <span class="n">attr2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Merges two attribute dictionaries into a single dictionary.</span>
@@ -461,7 +464,7 @@
     <span class="n">new_d</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">attr1</span><span class="p">)</span>
     <span class="n">new_d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">attr2</span><span class="p">)</span>
 
-    <span class="c">#all of attr2 key : values just overwrote attr1, fix it</span>
+    <span class="c1">#all of attr2 key : values just overwrote attr1, fix it</span>
     <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">new_d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="n">new_d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="p">]</span>
@@ -471,9 +474,9 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
                 <span class="n">v</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="p">]</span>
             <span class="n">new_d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nb">dict</span><span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">v</span><span class="p">)))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">new_d</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">v</span><span class="p">)))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">new_d</span><span class="o">.</span><span class="n">items</span><span class="p">())</span></div>
 
-</div>
+
 <span class="k">def</span> <span class="nf">dialect_compare</span><span class="p">(</span><span class="n">dialect1</span><span class="p">,</span> <span class="n">dialect2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compares two dialects.</span>
@@ -486,7 +489,7 @@
     <span class="p">)</span>
 
 
-<div class="viewcode-block" id="sanitize_gff_db"><a class="viewcode-back" href="../../autodocs/gffutils.helpers.sanitize_gff_db.html#gffutils.helpers.sanitize_gff_db">[docs]</a><span class="k">def</span> <span class="nf">sanitize_gff_db</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">gid_field</span><span class="o">=</span><span class="s">&quot;gid&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="sanitize_gff_db"><a class="viewcode-back" href="../../autodocs/gffutils.helpers.sanitize_gff_db.html#gffutils.helpers.sanitize_gff_db">[docs]</a><span class="k">def</span> <span class="nf">sanitize_gff_db</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">gid_field</span><span class="o">=</span><span class="s2">&quot;gid&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Sanitize given GFF db. Returns a sanitized GFF db.</span>
 
@@ -499,39 +502,39 @@
 <span class="sd">    TODO: Do something with negative coordinates?</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">sanitized_iterator</span><span class="p">():</span>
-        <span class="c"># Iterate through the database by each gene&#39;s records</span>
+        <span class="c1"># Iterate through the database by each gene&#39;s records</span>
         <span class="k">for</span> <span class="n">gene_recs</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">iter_by_parent_childs</span><span class="p">():</span>
-            <span class="c"># The gene&#39;s ID</span>
+            <span class="c1"># The gene&#39;s ID</span>
             <span class="n">gene_id</span> <span class="o">=</span> <span class="n">gene_recs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">id</span>
             <span class="k">for</span> <span class="n">rec</span> <span class="ow">in</span> <span class="n">gene_recs</span><span class="p">:</span>
-                <span class="c"># Fixup coordinates if necessary</span>
+                <span class="c1"># Fixup coordinates if necessary</span>
                 <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">start</span> <span class="o">&gt;</span> <span class="n">rec</span><span class="o">.</span><span class="n">stop</span><span class="p">:</span>
                     <span class="n">rec</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">rec</span><span class="o">.</span><span class="n">stop</span> <span class="o">=</span> <span class="n">rec</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span> <span class="n">rec</span><span class="o">.</span><span class="n">start</span>
-                <span class="c"># Add a gene id field to each gene&#39;s records</span>
+                <span class="c1"># Add a gene id field to each gene&#39;s records</span>
                 <span class="n">rec</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">gid_field</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">gene_id</span><span class="p">]</span>
                 <span class="k">yield</span> <span class="n">rec</span>
-    <span class="c"># Return sanitized GFF database</span>
+    <span class="c1"># Return sanitized GFF database</span>
     <span class="n">sanitized_db</span> <span class="o">=</span> \
-        <span class="n">gffutils</span><span class="o">.</span><span class="n">create_db</span><span class="p">(</span><span class="n">sanitized_iterator</span><span class="p">(),</span> <span class="s">&quot;:memory:&quot;</span><span class="p">,</span>
-                           <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">sanitized_db</span>
+        <span class="n">gffutils</span><span class="o">.</span><span class="n">create_db</span><span class="p">(</span><span class="n">sanitized_iterator</span><span class="p">(),</span> <span class="s2">&quot;:memory:&quot;</span><span class="p">,</span>
+                           <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sanitized_db</span></div>
 
-</div>
+
 <span class="k">def</span> <span class="nf">sanitize_gff_file</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">,</span>
-                      <span class="n">in_memory</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-                      <span class="n">in_place</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+                      <span class="n">in_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                      <span class="n">in_place</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Sanitize a GFF file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">db</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">is_gff_db</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">):</span>
-        <span class="c"># It&#39;s a database filename, so load it</span>
+        <span class="c1"># It&#39;s a database filename, so load it</span>
         <span class="n">db</span> <span class="o">=</span> <span class="n">gffutils</span><span class="o">.</span><span class="n">FeatureDB</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="c"># Need to create a database for file</span>
+        <span class="c1"># Need to create a database for file</span>
         <span class="k">if</span> <span class="n">in_memory</span><span class="p">:</span>
-            <span class="n">db</span> <span class="o">=</span> <span class="n">gffutils</span><span class="o">.</span><span class="n">create_db</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">,</span> <span class="s">&quot;:memory:&quot;</span><span class="p">,</span>
-                                    <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="n">db</span> <span class="o">=</span> <span class="n">gffutils</span><span class="o">.</span><span class="n">create_db</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">,</span> <span class="s2">&quot;:memory:&quot;</span><span class="p">,</span>
+                                    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">db</span> <span class="o">=</span> <span class="n">get_gff_db</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">in_place</span><span class="p">:</span>
@@ -540,7 +543,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">gff_out</span> <span class="o">=</span> <span class="n">gffwriter</span><span class="o">.</span><span class="n">GFFWriter</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
     <span class="n">sanitized_db</span> <span class="o">=</span> <span class="n">sanitize_gff_db</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">gene_rec</span> <span class="ow">in</span> <span class="n">sanitized_db</span><span class="o">.</span><span class="n">all_features</span><span class="p">(</span><span class="n">featuretype</span><span class="o">=</span><span class="s">&quot;gene&quot;</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">gene_rec</span> <span class="ow">in</span> <span class="n">sanitized_db</span><span class="o">.</span><span class="n">all_features</span><span class="p">(</span><span class="n">featuretype</span><span class="o">=</span><span class="s2">&quot;gene&quot;</span><span class="p">):</span>
         <span class="n">gff_out</span><span class="o">.</span><span class="n">write_gene_recs</span><span class="p">(</span><span class="n">sanitized_db</span><span class="p">,</span> <span class="n">gene_rec</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
     <span class="n">gff_out</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
@@ -550,9 +553,9 @@
 <span class="sd">    Annotate a GFF file by cross-referencing it with another GFF</span>
 <span class="sd">    file, e.g. one containing gene models.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">pass</span>
+    <span class="k">pass</span></div>
 
-</div>
+
 <span class="k">def</span> <span class="nf">is_gff_db</span><span class="p">(</span><span class="n">db_fname</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return True if the given filename is a GFF database.</span>
@@ -560,13 +563,13 @@
 <span class="sd">    For now, rely on .db extension.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">db_fname</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">False</span>
-    <span class="k">if</span> <span class="n">db_fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&quot;.db&quot;</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">True</span>
-    <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">db_fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.db&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span>
 
 
-<span class="k">def</span> <span class="nf">to_unicode</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">to_unicode</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">text_type</span><span class="p">):</span>
             <span class="n">obj</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">text_type</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">encoding</span><span class="p">)</span>
@@ -575,10 +578,10 @@
 
 <span class="k">def</span> <span class="nf">canonical_transcripts</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">fasta_filename</span><span class="p">):</span>
     <span class="kn">import</span> <span class="nn">pyfaidx</span>
-    <span class="n">fasta</span> <span class="o">=</span> <span class="n">pyfaidx</span><span class="o">.</span><span class="n">Fasta</span><span class="p">(</span><span class="n">fasta_filename</span><span class="p">,</span> <span class="n">as_raw</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">gene</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">features_of_type</span><span class="p">(</span><span class="s">&#39;gene&#39;</span><span class="p">):</span>
+    <span class="n">fasta</span> <span class="o">=</span> <span class="n">pyfaidx</span><span class="o">.</span><span class="n">Fasta</span><span class="p">(</span><span class="n">fasta_filename</span><span class="p">,</span> <span class="n">as_raw</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">gene</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">features_of_type</span><span class="p">(</span><span class="s1">&#39;gene&#39;</span><span class="p">):</span>
 
-        <span class="c"># exons_list will contain (CDS_length, total_length, transcript, [exons]) tuples.</span>
+        <span class="c1"># exons_list will contain (CDS_length, total_length, transcript, [exons]) tuples.</span>
         <span class="n">exon_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">ti</span><span class="p">,</span> <span class="n">transcript</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="n">gene</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)):</span>
             <span class="n">cds_len</span> <span class="o">=</span> <span class="mi">0</span>
@@ -586,64 +589,64 @@
             <span class="n">exons</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="n">transcript</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">exon</span> <span class="ow">in</span> <span class="n">exons</span><span class="p">:</span>
                 <span class="n">exon_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">exon</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">exon</span><span class="o">.</span><span class="n">featuretype</span> <span class="o">==</span> <span class="s">&#39;CDS&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">exon</span><span class="o">.</span><span class="n">featuretype</span> <span class="o">==</span> <span class="s1">&#39;CDS&#39;</span><span class="p">:</span>
                     <span class="n">cds_len</span> <span class="o">+=</span> <span class="n">exon_length</span>
                 <span class="n">total_len</span> <span class="o">+=</span> <span class="n">exon_length</span>
 
             <span class="n">exon_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">cds_len</span><span class="p">,</span> <span class="n">total_len</span><span class="p">,</span> <span class="n">transcript</span><span class="p">,</span> <span class="n">exons</span><span class="p">))</span>
 
-        <span class="c"># If we have CDS, then use the longest coding transcript</span>
+        <span class="c1"># If we have CDS, then use the longest coding transcript</span>
         <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">exon_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">best</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">exon_list</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="c"># Otherwise, just choose the longest</span>
+        <span class="c1"># Otherwise, just choose the longest</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">best</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">exon_list</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="k">print</span><span class="p">(</span><span class="n">best</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">best</span><span class="p">)</span>
 
         <span class="n">canonical_exons</span> <span class="o">=</span> <span class="n">best</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">transcript</span> <span class="o">=</span> <span class="n">best</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
         <span class="n">seqs</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">sequence</span><span class="p">(</span><span class="n">fasta</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">canonical_exons</span><span class="p">]</span>
-        <span class="k">yield</span> <span class="n">transcript</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">seqs</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">transcript</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">seqs</span><span class="p">)</span>
 
 
 
-<span class="c">##</span>
-<span class="c">## Helpers for gffutils-cli</span>
-<span class="c">##</span>
-<span class="c">## TODO: move clean_gff here?</span>
-<span class="c">##</span>
+<span class="c1">##</span>
+<span class="c1">## Helpers for gffutils-cli</span>
+<span class="c1">##</span>
+<span class="c1">## TODO: move clean_gff here?</span>
+<span class="c1">##</span>
 <span class="k">def</span> <span class="nf">get_gff_db</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">,</span>
-               <span class="n">ext</span><span class="o">=</span><span class="s">&quot;.db&quot;</span><span class="p">):</span>
+               <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;.db&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get db for GFF file. If the database has a .db file,</span>
 <span class="sd">    load that. Otherwise, create a named temporary file,</span>
 <span class="sd">    serialize the db to that, and return the loaded database.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">):</span>
-        <span class="c"># Not sure how we should deal with errors normally in</span>
-        <span class="c"># gffutils -- Ryan?</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;GFF </span><span class="si">%s</span><span class="s"> does not exist.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">gff_fname</span><span class="p">))</span>
-    <span class="n">candidate_db_fname</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">gff_fname</span><span class="p">,</span> <span class="n">ext</span><span class="p">)</span>
+        <span class="c1"># Not sure how we should deal with errors normally in</span>
+        <span class="c1"># gffutils -- Ryan?</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;GFF </span><span class="si">%s</span><span class="s2"> does not exist.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">gff_fname</span><span class="p">))</span>
+    <span class="n">candidate_db_fname</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">gff_fname</span><span class="p">,</span> <span class="n">ext</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">candidate_db_fname</span><span class="p">):</span>
-        <span class="c"># Standard .db file found, so return it</span>
+        <span class="c1"># Standard .db file found, so return it</span>
         <span class="k">return</span> <span class="n">candidate_db_fname</span>
-    <span class="c"># Otherwise, we need to create a temporary but non-deleted</span>
-    <span class="c"># file to store the db in. It&#39;ll be up to the user</span>
-    <span class="c"># of the function the delete the file when done.</span>
-    <span class="c">## NOTE: Ryan must have a good scheme for dealing with this</span>
-    <span class="c">## since pybedtools does something similar under the hood, i.e.</span>
-    <span class="c">## creating temporary files as needed without over proliferation</span>
-    <span class="n">db_fname</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">delete</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-    <span class="c"># Create the database for the gff file (suppress output</span>
-    <span class="c"># when using function internally)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Creating db for </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">gff_fname</span><span class="p">))</span>
+    <span class="c1"># Otherwise, we need to create a temporary but non-deleted</span>
+    <span class="c1"># file to store the db in. It&#39;ll be up to the user</span>
+    <span class="c1"># of the function the delete the file when done.</span>
+    <span class="c1">## NOTE: Ryan must have a good scheme for dealing with this</span>
+    <span class="c1">## since pybedtools does something similar under the hood, i.e.</span>
+    <span class="c1">## creating temporary files as needed without over proliferation</span>
+    <span class="n">db_fname</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">delete</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="c1"># Create the database for the gff file (suppress output</span>
+    <span class="c1"># when using function internally)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Creating db for </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">gff_fname</span><span class="p">))</span>
     <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
     <span class="n">db</span> <span class="o">=</span> <span class="n">gffutils</span><span class="o">.</span><span class="n">create_db</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">,</span> <span class="n">db_fname</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-                            <span class="n">merge_strategy</span><span class="o">=</span><span class="s">&quot;merge&quot;</span><span class="p">,</span>
-                            <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+                            <span class="n">merge_strategy</span><span class="o">=</span><span class="s2">&quot;merge&quot;</span><span class="p">,</span>
+                            <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">t2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">&quot;  - Took </span><span class="si">%.2f</span><span class="s"> seconds&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t2</span> <span class="o">-</span> <span class="n">t1</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - Took </span><span class="si">%.2f</span><span class="s2"> seconds&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t2</span> <span class="o">-</span> <span class="n">t1</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">db</span>
 </pre></div>
 
@@ -678,7 +681,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.8.7.1',
+            VERSION:'0.8.8',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

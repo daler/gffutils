@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Change log &mdash; gffutils 0.8.7.1 documentation</title>
+  <title>Change log &mdash; gffutils 0.8.8 documentation</title>
   
 
   
@@ -30,7 +30,10 @@
   
 
   
-    <link rel="top" title="gffutils 0.8.7.1 documentation" href="index.html"/>
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="gffutils 0.8.8 documentation" href="index.html"/>
         <link rel="next" title="Developer’s docs" href="developers.html"/>
         <link rel="prev" title="gffutils.inspect.inspect" href="autodocs/gffutils.inspect.inspect.html"/> 
 
@@ -60,7 +63,7 @@
             
             
               <div class="version">
-                0.8.7.1
+                0.8.8
               </div>
             
           
@@ -92,7 +95,8 @@
 <li class="toctree-l1"><a class="reference internal" href="attributes.html">Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Change log</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Change log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#changes-in-v0-8-8">Changes in v0.8.8</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#changes-in-v0-8-7-1">Changes in v0.8.7.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#changes-in-v0-8-7">Changes in v0.8.7</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#changes-in-v0-8-6-1">Changes in v0.8.6.1</a></li>
@@ -129,7 +133,7 @@
         <div class="rst-content">
           
 
-
+ 
 
 
 
@@ -141,7 +145,7 @@
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/changelog.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/changelog.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -153,6 +157,36 @@
             
   <div class="section" id="change-log">
 <h1>Change log<a class="headerlink" href="#change-log" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="changes-in-v0-8-8">
+<h2>Changes in v0.8.8<a class="headerlink" href="#changes-in-v0-8-8" title="Permalink to this headline">¶</a></h2>
+<p>Long-overdue release with performance improvements and better handling of
+corner-case GFF and GTF files.</p>
+<ul class="simple">
+<li>performance tests (thanks Andrew Lando)</li>
+<li>performance improvements by building additional indexes (thanks Andrew Lando)</li>
+<li>performance improvments by running <code class="docutils literal"><span class="pre">analyze</span> <span class="pre">features</span></code> on created table
+(thanks Andrew Lando). Existing databases that have not had this run will
+trigger a warning suggesting that this should be run to speed up queries
+dramatically.</li>
+<li>add test for corner-case GTFs (<a class="reference external" href="https://github.com/daler/gffutils/issues/79">issue #79</a>)</li>
+<li>add fix for corner-case GFFs where <code class="docutils literal"><span class="pre">&quot;=&quot;</span></code> is both a separator between fields
+as well as part of a value inside a field even when not quoted (<a class="reference external" href="https://github.com/daler/gffutils/issues/82">issue #82</a>)</li>
+<li>fix handling of strandedness in <a class="reference internal" href="autodocs/gffutils.feature.Feature.sequence.html#gffutils.feature.Feature.sequence" title="gffutils.feature.Feature.sequence"><code class="xref py py-meth docutils literal"><span class="pre">gffutils.feature.Feature.sequence()</span></code></a>
+(<a class="reference external" href="https://github.com/daler/gffutils/issues/87">issue #87</a>)</li>
+<li>fix handling of corner-case GFFs that are completely missing a start or end
+position (<a class="reference external" href="https://github.com/daler/gffutils/issues/85">issue #85</a>)</li>
+<li>improvements to test framework</li>
+<li>All percent-encoded characters are decoded upon parsing (regardless of if the
+GFF3 spec says they should have been encoded in the first place), and then
+re-encoded when converting the Feature to a string (<a class="reference external" href="https://github.com/daler/gffutils/issues/98">issue #98</a>). Only characters specified
+in the GFF3 spec are re-encoded. Note that some GFF files have spaces encoded
+as <code class="docutils literal"><span class="pre">%20</span></code>, but spaces should not be encoded according to the GFF3 specs. In
+this case, they will be decoded into spaces upon parsing, but not re-encoded
+when converting to string. Set
+<code class="docutils literal"><span class="pre">gffutils.constants.ignore_url_escape_characters=True</span></code> to disable any
+encoding/decoding behavior.</li>
+</ul>
+</div>
 <div class="section" id="changes-in-v0-8-7-1">
 <h2>Changes in v0.8.7.1<a class="headerlink" href="#changes-in-v0-8-7-1" title="Permalink to this headline">¶</a></h2>
 <p>Fixes bug in <code class="docutils literal"><span class="pre">gffutils.pybedtools_integration.tsses</span></code> where iterating over large
@@ -286,7 +320,7 @@ ideas and testing)</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.8.7.1',
+            VERSION:'0.8.8',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

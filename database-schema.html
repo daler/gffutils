@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Database schema &mdash; gffutils 0.8.7.1 documentation</title>
+  <title>Database schema &mdash; gffutils 0.8.8 documentation</title>
   
 
   
@@ -30,7 +30,10 @@
   
 
   
-    <link rel="top" title="gffutils 0.8.7.1 documentation" href="index.html"/>
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="gffutils 0.8.8 documentation" href="index.html"/>
         <link rel="next" title="Database IDs" href="database-ids.html"/>
         <link rel="prev" title="Importing data into a database" href="database-import.html"/> 
 
@@ -60,7 +63,7 @@
             
             
               <div class="version">
-                0.8.7.1
+                0.8.8
               </div>
             
           
@@ -85,7 +88,7 @@
 <li class="toctree-l1"><a class="reference internal" href="index.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="database-import.html">Importing data into a database</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Database schema</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Database schema</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#schema">Schema</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#features-table"><code class="docutils literal"><span class="pre">features</span></code> table</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#relations-table"><code class="docutils literal"><span class="pre">relations</span></code> table</a></li>
@@ -125,7 +128,7 @@
         <div class="rst-content">
           
 
-
+ 
 
 
 
@@ -137,7 +140,7 @@
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/database-schema.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/database-schema.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -153,7 +156,7 @@
 <span id="id1"></span><h2>Schema<a class="headerlink" href="#schema" title="Permalink to this headline">¶</a></h2>
 <p>The following is the schema used for <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code></a>. Feel free to skip this if
 you&#8217;re not familiar with SQL. An explanation of each table can be found below.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">gffutils</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">SCHEMA</span><span class="p">)</span>  
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">gffutils</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">SCHEMA</span><span class="p">)</span>  
 
 
 <span class="go">CREATE TABLE features (</span>
@@ -216,13 +219,13 @@ original file (and any additional information added by the user).</p>
 user and the file format at creation time</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="database-ids.html"><em>Database IDs</em></a> has more information about how the contents of this
+<p class="last"><a class="reference internal" href="database-ids.html"><span class="doc">Database IDs</span></a> has more information about how the contents of this
 field are determined.</p>
 </div>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name" colspan="2">seqid, source, feature, start, end, score, strand, frame:</th></tr>
-<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first">These fields correspond exactly to the fields in the GFF/GTF lines</p>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first">These fields correspond exactly to the fields in the GFF/GTF lines</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">attributes:</th><td class="field-body"><p class="first">A JSON-serialized dictionary of attributes.  Note that the string
@@ -230,7 +233,7 @@ representation of attributes is not stored; rather, it is reconstructed as
 needed using the dialect</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last">See <a class="reference internal" href="dialect.html"><em>Dialects</em></a> for what dialects are and how they are constructed</p>
+<p class="last">See <a class="reference internal" href="dialect.html"><span class="doc">Dialects</span></a> for what dialects are and how they are constructed</p>
 </div>
 </td>
 </tr>
@@ -276,7 +279,7 @@ parent=gene and child=exon, then level=2.</td>
 parsing the original file.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="dialect.html"><em>Dialects</em></a></p>
+<p class="last"><a class="reference internal" href="dialect.html"><span class="doc">Dialects</span></a></p>
 </div>
 </td>
 </tr>
@@ -312,7 +315,7 @@ that when features are added later, autoincrementing can start at the correct
 integer (rather than 0).</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="database-ids.html"><em>Database IDs</em></a></p>
+<p class="last"><a class="reference internal" href="database-ids.html"><span class="doc">Database IDs</span></a></p>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -371,7 +374,7 @@ next time.</td>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.8.7.1',
+            VERSION:'0.8.8',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

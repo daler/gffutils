@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gffutils.biopython_integration &mdash; gffutils 0.8.7.1 documentation</title>
+  <title>gffutils.biopython_integration &mdash; gffutils 0.8.8 documentation</title>
   
 
   
@@ -30,7 +30,10 @@
   
 
   
-    <link rel="top" title="gffutils 0.8.7.1 documentation" href="../../index.html"/>
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="gffutils 0.8.8 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -59,7 +62,7 @@
             
             
               <div class="version">
-                0.8.7.1
+                0.8.8
               </div>
             
           
@@ -139,23 +142,23 @@
            <div itemprop="articleBody">
             
   <h1>Source code for gffutils.biopython_integration</h1><div class="highlight"><pre>
-<span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Module for integration with BioPython, specifically SeqRecords and SeqFeature</span>
 <span class="sd">objects.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">six</span>
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">Bio.SeqFeature</span> <span class="kn">import</span> <span class="n">SeqFeature</span><span class="p">,</span> <span class="n">FeatureLocation</span>
-    <span class="kn">from</span> <span class="nn">Bio</span> <span class="kn">import</span> <span class="n">SeqIO</span>
+    <span class="kn">from</span> <span class="nn">Bio.SeqFeature</span> <span class="k">import</span> <span class="n">SeqFeature</span><span class="p">,</span> <span class="n">FeatureLocation</span>
+    <span class="kn">from</span> <span class="nn">Bio</span> <span class="k">import</span> <span class="n">SeqIO</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">warnings</span>
-    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;BioPython must be installed to use this module&quot;</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">.feature</span> <span class="kn">import</span> <span class="n">Feature</span><span class="p">,</span> <span class="n">feature_from_line</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;BioPython must be installed to use this module&quot;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.feature</span> <span class="k">import</span> <span class="n">Feature</span><span class="p">,</span> <span class="n">feature_from_line</span>
 
 <span class="n">_biopython_strand</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s">&#39;+&#39;</span><span class="p">:</span>  <span class="mi">1</span><span class="p">,</span>
-    <span class="s">&#39;-&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
-    <span class="s">&#39;.&#39;</span><span class="p">:</span>  <span class="mi">0</span><span class="p">,</span>
+    <span class="s1">&#39;+&#39;</span><span class="p">:</span>  <span class="mi">1</span><span class="p">,</span>
+    <span class="s1">&#39;-&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="s1">&#39;.&#39;</span><span class="p">:</span>  <span class="mi">0</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="n">_feature_strand</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">v</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">_biopython_strand</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 
@@ -177,23 +180,23 @@
         <span class="n">feature</span> <span class="o">=</span> <span class="n">feature_from_line</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span>
 
     <span class="n">qualifiers</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s">&#39;source&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">feature</span><span class="o">.</span><span class="n">source</span><span class="p">],</span>
-        <span class="s">&#39;score&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">feature</span><span class="o">.</span><span class="n">score</span><span class="p">],</span>
-        <span class="s">&#39;seqid&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">feature</span><span class="o">.</span><span class="n">seqid</span><span class="p">],</span>
-        <span class="s">&#39;frame&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">feature</span><span class="o">.</span><span class="n">frame</span><span class="p">],</span>
+        <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">feature</span><span class="o">.</span><span class="n">source</span><span class="p">],</span>
+        <span class="s1">&#39;score&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">feature</span><span class="o">.</span><span class="n">score</span><span class="p">],</span>
+        <span class="s1">&#39;seqid&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">feature</span><span class="o">.</span><span class="n">seqid</span><span class="p">],</span>
+        <span class="s1">&#39;frame&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">feature</span><span class="o">.</span><span class="n">frame</span><span class="p">],</span>
     <span class="p">}</span>
     <span class="n">qualifiers</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">feature</span><span class="o">.</span><span class="n">attributes</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">SeqFeature</span><span class="p">(</span>
-        <span class="c"># Convert from GFF 1-based to standard Python 0-based indexing used by</span>
-        <span class="c"># BioPython</span>
+        <span class="c1"># Convert from GFF 1-based to standard Python 0-based indexing used by</span>
+        <span class="c1"># BioPython</span>
         <span class="n">FeatureLocation</span><span class="p">(</span><span class="n">feature</span><span class="o">.</span><span class="n">start</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">feature</span><span class="o">.</span><span class="n">stop</span><span class="p">),</span>
         <span class="nb">id</span><span class="o">=</span><span class="n">feature</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
         <span class="nb">type</span><span class="o">=</span><span class="n">feature</span><span class="o">.</span><span class="n">featuretype</span><span class="p">,</span>
         <span class="n">strand</span><span class="o">=</span><span class="n">_biopython_strand</span><span class="p">[</span><span class="n">feature</span><span class="o">.</span><span class="n">strand</span><span class="p">],</span>
         <span class="n">qualifiers</span><span class="o">=</span><span class="n">qualifiers</span>
-    <span class="p">)</span>
+    <span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="from_seqfeature"><a class="viewcode-back" href="../../autodocs/gffutils.biopython_integration.from_seqfeature.html#gffutils.biopython_integration.from_seqfeature">[docs]</a><span class="k">def</span> <span class="nf">from_seqfeature</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts a Bio.SeqFeature object to a gffutils.Feature object.</span>
@@ -202,23 +205,23 @@
 <span class="sd">    stored as qualifiers.  Any other qualifiers will be assumed to be GFF</span>
 <span class="sd">    attributes.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">source</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">qualifiers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">score</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">qualifiers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;score&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">seqid</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">qualifiers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;seqid&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">frame</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">qualifiers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;frame&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">qualifiers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">score</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">qualifiers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;score&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">seqid</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">qualifiers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;seqid&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">frame</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">qualifiers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;frame&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">strand</span> <span class="o">=</span> <span class="n">_feature_strand</span><span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">strand</span><span class="p">]</span>
 
-    <span class="c"># BioPython parses 1-based GenBank positions into 0-based for use within</span>
-    <span class="c"># Python.  We need to convert back to 1-based GFF format here.</span>
+    <span class="c1"># BioPython parses 1-based GenBank positions into 0-based for use within</span>
+    <span class="c1"># Python.  We need to convert back to 1-based GFF format here.</span>
     <span class="n">start</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">start</span><span class="o">.</span><span class="n">position</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="n">stop</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">end</span><span class="o">.</span><span class="n">position</span>
     <span class="n">featuretype</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">type</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">id</span>
     <span class="n">attributes</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">qualifiers</span><span class="p">)</span>
-    <span class="n">attributes</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">)</span>
-    <span class="n">attributes</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;score&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">)</span>
-    <span class="n">attributes</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;seqid&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">)</span>
-    <span class="n">attributes</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;frame&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">)</span>
+    <span class="n">attributes</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
+    <span class="n">attributes</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;score&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
+    <span class="n">attributes</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;seqid&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
+    <span class="n">attributes</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;frame&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">Feature</span><span class="p">(</span><span class="n">seqid</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">featuretype</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">score</span><span class="p">,</span> <span class="n">strand</span><span class="p">,</span>
                    <span class="n">frame</span><span class="p">,</span> <span class="n">attributes</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 </pre></div>
@@ -254,7 +257,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.8.7.1',
+            VERSION:'0.8.8',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

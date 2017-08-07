@@ -1,0 +1,6 @@
+gffutils\.feature\.feature\_from\_line
+======================================
+
+.. currentmodule:: gffutils.feature
+
+.. autofunction:: feature_from_line

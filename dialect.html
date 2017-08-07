@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Dialects &mdash; gffutils 0.8.7.1 documentation</title>
+  <title>Dialects &mdash; gffutils 0.8.8 documentation</title>
   
 
   
@@ -30,7 +30,10 @@
   
 
   
-    <link rel="top" title="gffutils 0.8.7.1 documentation" href="index.html"/>
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="gffutils 0.8.8 documentation" href="index.html"/>
         <link rel="next" title="Attributes" href="attributes.html"/>
         <link rel="prev" title="GTF files" href="gtf.html"/> 
 
@@ -60,7 +63,7 @@
             
             
               <div class="version">
-                0.8.7.1
+                0.8.8
               </div>
             
           
@@ -88,7 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="database-schema.html">Database schema</a></li>
 <li class="toctree-l1"><a class="reference internal" href="database-ids.html">Database IDs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gtf.html">GTF files</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Dialects</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Dialects</a></li>
 <li class="toctree-l1"><a class="reference internal" href="attributes.html">Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
@@ -117,7 +120,7 @@
         <div class="rst-content">
           
 
-
+ 
 
 
 
@@ -129,7 +132,7 @@
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/dialect.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/dialect.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -164,25 +167,25 @@ format, in <code class="xref py py-attr docutils literal"><span class="pre">gffu
 column 9.  In this case, the dialect would specify <code class="docutils literal"><span class="pre">dialect['trailing</span>
 <span class="pre">semicolon']</span> <span class="pre">=</span> <span class="pre">True</span></code>.</p>
 <p>A GTF dialect might look like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;field separator&#39;</span><span class="p">:</span> <span class="s">&#39;; &#39;</span><span class="p">,</span>
- <span class="s">&#39;fmt&#39;</span><span class="p">:</span> <span class="s">&#39;gtf&#39;</span><span class="p">,</span>
- <span class="s">&#39;keyval separator&#39;</span><span class="p">:</span> <span class="s">&#39; &#39;</span><span class="p">,</span>
- <span class="s">&#39;leading semicolon&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
- <span class="s">&#39;multival separator&#39;</span><span class="p">:</span> <span class="s">&#39;,&#39;</span><span class="p">,</span>
- <span class="s">&#39;quoted GFF2 values&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
- <span class="s">&#39;repeated keys&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
- <span class="s">&#39;trailing semicolon&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;field separator&#39;</span><span class="p">:</span> <span class="s1">&#39;; &#39;</span><span class="p">,</span>
+ <span class="s1">&#39;fmt&#39;</span><span class="p">:</span> <span class="s1">&#39;gtf&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;keyval separator&#39;</span><span class="p">:</span> <span class="s1">&#39; &#39;</span><span class="p">,</span>
+ <span class="s1">&#39;leading semicolon&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+ <span class="s1">&#39;multival separator&#39;</span><span class="p">:</span> <span class="s1">&#39;,&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;quoted GFF2 values&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+ <span class="s1">&#39;repeated keys&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+ <span class="s1">&#39;trailing semicolon&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>In contrast, a GFF dialect might look like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;field separator&#39;</span><span class="p">:</span> <span class="s">&#39;;&#39;</span><span class="p">,</span>
- <span class="s">&#39;fmt&#39;</span><span class="p">:</span> <span class="s">&#39;gff3&#39;</span><span class="p">,</span>
- <span class="s">&#39;keyval separator&#39;</span><span class="p">:</span> <span class="s">&#39;=&#39;</span><span class="p">,</span>
- <span class="s">&#39;leading semicolon&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
- <span class="s">&#39;multival separator&#39;</span><span class="p">:</span> <span class="s">&#39;,&#39;</span><span class="p">,</span>
- <span class="s">&#39;quoted GFF2 values&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
- <span class="s">&#39;repeated keys&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
- <span class="s">&#39;trailing semicolon&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">}</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;field separator&#39;</span><span class="p">:</span> <span class="s1">&#39;;&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;fmt&#39;</span><span class="p">:</span> <span class="s1">&#39;gff3&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;keyval separator&#39;</span><span class="p">:</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;leading semicolon&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+ <span class="s1">&#39;multival separator&#39;</span><span class="p">:</span> <span class="s1">&#39;,&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;quoted GFF2 values&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+ <span class="s1">&#39;repeated keys&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+ <span class="s1">&#39;trailing semicolon&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>As other real-world files are brought to the attention of the developers, it&#8217;s
@@ -230,7 +233,7 @@ likely that more entries will be added to the dialect.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.8.7.1',
+            VERSION:'0.8.8',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

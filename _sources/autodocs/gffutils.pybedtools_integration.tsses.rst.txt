@@ -1,0 +1,6 @@
+gffutils\.pybedtools\_integration\.tsses
+========================================
+
+.. currentmodule:: gffutils.pybedtools_integration
+
+.. autofunction:: tsses

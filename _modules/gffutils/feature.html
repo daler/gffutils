@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gffutils.feature &mdash; gffutils 0.8.7.1 documentation</title>
+  <title>gffutils.feature &mdash; gffutils 0.8.8 documentation</title>
   
 
   
@@ -30,7 +30,10 @@
   
 
   
-    <link rel="top" title="gffutils 0.8.7.1 documentation" href="../../index.html"/>
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="gffutils 0.8.8 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -59,7 +62,7 @@
             
             
               <div class="version">
-                0.8.7.1
+                0.8.8
               </div>
             
           
@@ -139,27 +142,27 @@
            <div itemprop="articleBody">
             
   <h1>Source code for gffutils.feature</h1><div class="highlight"><pre>
-<span class="kn">from</span> <span class="nn">pyfaidx</span> <span class="kn">import</span> <span class="n">Fasta</span>
+<span></span><span class="kn">from</span> <span class="nn">pyfaidx</span> <span class="k">import</span> <span class="n">Fasta</span>
 <span class="kn">import</span> <span class="nn">six</span>
 <span class="kn">import</span> <span class="nn">simplejson</span>
-<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">constants</span>
-<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">helpers</span>
-<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">parser</span>
-<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">bins</span>
-<span class="kn">from</span> <span class="nn">gffutils.attributes</span> <span class="kn">import</span> <span class="n">dict_class</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="k">import</span> <span class="n">constants</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="k">import</span> <span class="n">helpers</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="k">import</span> <span class="n">parser</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="k">import</span> <span class="n">bins</span>
+<span class="kn">from</span> <span class="nn">gffutils.attributes</span> <span class="k">import</span> <span class="n">dict_class</span>
 
 
-<span class="n">_position_lookup</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">([</span><span class="s">&#39;seqid&#39;</span><span class="p">,</span> <span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="s">&#39;featuretype&#39;</span><span class="p">,</span> <span class="s">&#39;start&#39;</span><span class="p">,</span>
-                                   <span class="s">&#39;end&#39;</span><span class="p">,</span> <span class="s">&#39;score&#39;</span><span class="p">,</span> <span class="s">&#39;strand&#39;</span><span class="p">,</span> <span class="s">&#39;frame&#39;</span><span class="p">,</span>
-                                   <span class="s">&#39;attributes&#39;</span><span class="p">]))</span>
+<span class="n">_position_lookup</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">([</span><span class="s1">&#39;seqid&#39;</span><span class="p">,</span> <span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="s1">&#39;featuretype&#39;</span><span class="p">,</span> <span class="s1">&#39;start&#39;</span><span class="p">,</span>
+                                   <span class="s1">&#39;end&#39;</span><span class="p">,</span> <span class="s1">&#39;score&#39;</span><span class="p">,</span> <span class="s1">&#39;strand&#39;</span><span class="p">,</span> <span class="s1">&#39;frame&#39;</span><span class="p">,</span>
+                                   <span class="s1">&#39;attributes&#39;</span><span class="p">]))</span>
 
 
 <div class="viewcode-block" id="Feature"><a class="viewcode-back" href="../../autodocs/gffutils.feature.Feature.html#gffutils.feature.Feature">[docs]</a><span class="k">class</span> <span class="nc">Feature</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<div class="viewcode-block" id="Feature.__init__"><a class="viewcode-back" href="../../autodocs/gffutils.feature.Feature.html#gffutils.feature.Feature.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seqid</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span>
-                 <span class="n">start</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span> <span class="n">score</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span> <span class="n">strand</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span>
-                 <span class="n">attributes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="nb">bin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-                 <span class="n">file_order</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">keep_order</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-                 <span class="n">sort_attribute_values</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Feature.__init__"><a class="viewcode-back" href="../../autodocs/gffutils.feature.Feature.html#gffutils.feature.Feature.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seqid</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span>
+                 <span class="n">start</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">score</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">strand</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span>
+                 <span class="n">attributes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">bin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">file_order</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">keep_order</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">sort_attribute_values</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Represents a feature from the database.</span>
 
@@ -215,6 +218,14 @@
 <span class="sd">            dictionary and the dialect -- except if the original attributes</span>
 <span class="sd">            string was provided, in which case that will be used directly.</span>
 
+<span class="sd">            Notes on encoding/decoding: the only time unquoting</span>
+<span class="sd">            (e.g., &quot;%2C&quot; becomes &quot;,&quot;) happens is if `attributes` is a string</span>
+<span class="sd">            and if `settings.ignore_url_escape_characters = False`. If dict or</span>
+<span class="sd">            JSON, the contents are used as-is.</span>
+
+<span class="sd">            Similarly, the only time characters are quoted (&quot;,&quot; becomes &quot;%2C&quot;)</span>
+<span class="sd">            is when the feature is printed (`__str__` method).</span>
+
 <span class="sd">        extra : string or list</span>
 <span class="sd">            Additional fields after the canonical 9 fields for GFF/GTF.</span>
 
@@ -253,47 +264,47 @@
 <span class="sd">            default, since it can be time-consuming over many features.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c"># start/end can be provided as int-like, &quot;.&quot;, or None, but will be</span>
-        <span class="c"># converted to int or None</span>
-        <span class="k">if</span> <span class="n">start</span> <span class="o">==</span> <span class="s">&quot;.&quot;</span><span class="p">:</span>
-            <span class="n">start</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="k">elif</span> <span class="n">start</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="c1"># start/end can be provided as int-like, &quot;.&quot;, or None, but will be</span>
+        <span class="c1"># converted to int or None</span>
+        <span class="k">if</span> <span class="n">start</span> <span class="o">==</span> <span class="s2">&quot;.&quot;</span> <span class="ow">or</span> <span class="n">start</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="n">start</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">end</span> <span class="o">==</span> <span class="s">&quot;.&quot;</span><span class="p">:</span>
-            <span class="n">end</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="k">elif</span> <span class="n">end</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">end</span> <span class="o">==</span> <span class="s2">&quot;.&quot;</span> <span class="ow">or</span> <span class="n">end</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="n">end</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">end</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">end</span><span class="p">)</span>
 
-        <span class="c"># Flexible handling of attributes:</span>
-        <span class="c"># If dict, then use that; otherwise assume JSON and convert to a dict;</span>
-        <span class="c"># otherwise assume original string and convert to a dict.</span>
-        <span class="c">#</span>
-        <span class="c"># dict_class is set at the module level above...this is so you can swap</span>
-        <span class="c"># in and out different dict implementations (ordered, defaultdict, etc)</span>
-        <span class="c"># for testing.</span>
+        <span class="c1"># Flexible handling of attributes:</span>
+        <span class="c1"># If dict, then use that; otherwise assume JSON and convert to a dict;</span>
+        <span class="c1"># otherwise assume original string and convert to a dict.</span>
+        <span class="c1">#</span>
+        <span class="c1"># dict_class is set at the module level above...this is so you can swap</span>
+        <span class="c1"># in and out different dict implementations (ordered, defaultdict, etc)</span>
+        <span class="c1"># for testing.</span>
         <span class="n">attributes</span> <span class="o">=</span> <span class="n">attributes</span> <span class="ow">or</span> <span class="n">dict_class</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attributes</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">attributes</span> <span class="o">=</span> <span class="n">helpers</span><span class="o">.</span><span class="n">_unjsonify</span><span class="p">(</span><span class="n">attributes</span><span class="p">,</span> <span class="n">isattributes</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="n">attributes</span> <span class="o">=</span> <span class="n">helpers</span><span class="o">.</span><span class="n">_unjsonify</span><span class="p">(</span><span class="n">attributes</span><span class="p">,</span> <span class="n">isattributes</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-            <span class="c"># it&#39;s a string but not JSON: assume original attributes string.</span>
+            <span class="c1"># it&#39;s a string but not JSON: assume original attributes string.</span>
             <span class="k">except</span> <span class="n">simplejson</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
 
-                <span class="c"># But Feature.attributes is still a dict</span>
+                <span class="c1"># But Feature.attributes is still a dict</span>
                 <span class="n">attributes</span><span class="p">,</span> <span class="n">_dialect</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">_split_keyvals</span><span class="p">(</span><span class="n">attributes</span><span class="p">)</span>
 
-                <span class="c"># Use this dialect if none provided.</span>
+                <span class="c1"># Use this dialect if none provided.</span>
                 <span class="n">dialect</span> <span class="o">=</span> <span class="n">dialect</span> <span class="ow">or</span> <span class="n">_dialect</span>
 
-        <span class="c"># If string, then try un-JSONifying it into a list; if that doesn&#39;t</span>
-        <span class="c"># work then assume it&#39;s tab-delimited and convert to a list.</span>
+        <span class="c1"># If string, then try un-JSONifying it into a list; if that doesn&#39;t</span>
+        <span class="c1"># work then assume it&#39;s tab-delimited and convert to a list.</span>
         <span class="n">extra</span> <span class="o">=</span> <span class="n">extra</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">extra</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">extra</span> <span class="o">=</span> <span class="n">helpers</span><span class="o">.</span><span class="n">_unjsonify</span><span class="p">(</span><span class="n">extra</span><span class="p">)</span>
             <span class="k">except</span> <span class="n">simplejson</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
-                <span class="n">extra</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">)</span>
+                <span class="n">extra</span> <span class="o">=</span> <span class="n">extra</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">seqid</span> <span class="o">=</span> <span class="n">seqid</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span>
@@ -310,40 +321,40 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">dialect</span> <span class="o">=</span> <span class="n">dialect</span> <span class="ow">or</span> <span class="n">constants</span><span class="o">.</span><span class="n">dialect</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">file_order</span> <span class="o">=</span> <span class="n">file_order</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">keep_order</span> <span class="o">=</span> <span class="n">keep_order</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sort_attribute_values</span> <span class="o">=</span> <span class="n">sort_attribute_values</span>
-</div>
-    <span class="k">def</span> <span class="nf">calc_bin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_bin</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sort_attribute_values</span> <span class="o">=</span> <span class="n">sort_attribute_values</span></div>
+
+    <span class="k">def</span> <span class="nf">calc_bin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_bin</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate the smallest UCSC genomic bin that will contain this feature.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">_bin</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">_bin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">_bin</span> <span class="o">=</span> <span class="n">bins</span><span class="o">.</span><span class="n">bins</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="p">,</span> <span class="n">one</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="n">_bin</span> <span class="o">=</span> <span class="n">bins</span><span class="o">.</span><span class="n">bins</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="p">,</span> <span class="n">one</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
-                <span class="n">_bin</span> <span class="o">=</span> <span class="bp">None</span>
+                <span class="n">_bin</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">return</span> <span class="n">_bin</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">memory_loc</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
 
-        <span class="c"># Reconstruct start/end as &quot;.&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">start</span> <span class="o">=</span> <span class="s">&#39;.&#39;</span>
+        <span class="c1"># Reconstruct start/end as &quot;.&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">end</span> <span class="o">=</span> <span class="s">&#39;.&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span>
 
         <span class="k">return</span> <span class="p">(</span>
-            <span class="s">&quot;&lt;Feature {x.featuretype} ({x.seqid}:{start}-{end}&quot;</span>
-            <span class="s">&quot;[{x.strand}]) at {loc}&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;Feature </span><span class="si">{x.featuretype}</span><span class="s2"> (</span><span class="si">{x.seqid}</span><span class="s2">:</span><span class="si">{start}</span><span class="s2">-</span><span class="si">{end}</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;[</span><span class="si">{x.strand}</span><span class="s2">]) at </span><span class="si">{loc}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span>
                                              <span class="n">loc</span><span class="o">=</span><span class="n">memory_loc</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-            <span class="c"># TODO: allow access to &quot;extra&quot; fields</span>
+            <span class="c1"># TODO: allow access to &quot;extra&quot; fields</span>
             <span class="n">attr</span> <span class="o">=</span> <span class="n">_position_lookup</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
             <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -351,7 +362,7 @@
 
     <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-            <span class="c"># TODO: allow setting of &quot;extra&quot; fields</span>
+            <span class="c1"># TODO: allow setting of &quot;extra&quot; fields</span>
             <span class="n">attr</span> <span class="o">=</span> <span class="n">_position_lookup</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
@@ -362,35 +373,36 @@
         <span class="k">if</span> <span class="n">six</span><span class="o">.</span><span class="n">PY3</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__unicode__</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="nb">unicode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">unicode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c"># All fields but attributes (and extra).</span>
+
+        <span class="c1"># All fields but attributes (and extra).</span>
         <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">constants</span><span class="o">.</span><span class="n">_gffkeys</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
 
-        <span class="c"># Handle start/stop, which are either None or int</span>
-        <span class="k">if</span> <span class="n">items</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">items</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;.&quot;</span>
+        <span class="c1"># Handle start/stop, which are either None or int</span>
+        <span class="k">if</span> <span class="n">items</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">items</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">items</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
 
-        <span class="k">if</span> <span class="n">items</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">items</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;.&quot;</span>
+        <span class="k">if</span> <span class="n">items</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">items</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">items</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
 
-        <span class="c"># Reconstruct from dict and dialect</span>
+        <span class="c1"># Reconstruct from dict and dialect</span>
         <span class="n">reconstructed_attributes</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">_reconstruct</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialect</span><span class="p">,</span> <span class="n">keep_order</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">keep_order</span><span class="p">,</span>
             <span class="n">sort_attribute_values</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sort_attribute_values</span><span class="p">)</span>
 
-        <span class="c"># Final line includes reconstructed as well as any previously-added</span>
-        <span class="c"># &quot;extra&quot; fields</span>
+        <span class="c1"># Final line includes reconstructed as well as any previously-added</span>
+        <span class="c1"># &quot;extra&quot; fields</span>
         <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reconstructed_attributes</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="p">:</span>
-            <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="p">))</span>
+            <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="p">))</span>
 
-        <span class="k">return</span> <span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
@@ -404,13 +416,13 @@
     <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">+</span> <span class="mi">1</span>
 
-    <span class="c"># aliases for official GFF field names; this way x.chrom == x.seqid; and</span>
-    <span class="c"># x.start == x.end.</span>
+    <span class="c1"># aliases for official GFF field names; this way x.chrom == x.seqid; and</span>
+    <span class="c1"># x.stop == x.end.</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">chrom</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">seqid</span>
 
-    <span class="nd">@chrom.setter</span>
+    <span class="nd">@chrom</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">chrom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">seqid</span> <span class="o">=</span> <span class="n">value</span>
 
@@ -418,11 +430,11 @@
     <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span>
 
-    <span class="nd">@stop.setter</span>
+    <span class="nd">@stop</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="n">value</span>
 
-    <span class="k">def</span> <span class="nf">astuple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">astuple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return a tuple suitable for import into a database.</span>
 
@@ -453,7 +465,7 @@
             <span class="n">helpers</span><span class="o">.</span><span class="n">_jsonify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoding</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_bin</span><span class="p">()</span>
         <span class="p">)</span>
 
-<div class="viewcode-block" id="Feature.sequence"><a class="viewcode-back" href="../../autodocs/gffutils.feature.Feature.sequence.html#gffutils.feature.Feature.sequence">[docs]</a>    <span class="k">def</span> <span class="nf">sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fasta</span><span class="p">,</span> <span class="n">use_strand</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Feature.sequence"><a class="viewcode-back" href="../../autodocs/gffutils.feature.Feature.sequence.html#gffutils.feature.Feature.sequence">[docs]</a>    <span class="k">def</span> <span class="nf">sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fasta</span><span class="p">,</span> <span class="n">use_strand</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieves the sequence of this feature as a string.</span>
 
@@ -475,14 +487,17 @@
 <span class="sd">        string</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fasta</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
-            <span class="n">fasta</span> <span class="o">=</span> <span class="n">Fasta</span><span class="p">(</span><span class="n">fasta</span><span class="p">,</span> <span class="n">as_raw</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">fasta</span> <span class="o">=</span> <span class="n">Fasta</span><span class="p">(</span><span class="n">fasta</span><span class="p">,</span> <span class="n">as_raw</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-        <span class="c"># recall GTF/GFF is 1-based closed;  pyfaidx uses Python slice notation</span>
-        <span class="c"># and is therefore 0-based half-open.</span>
-        <span class="k">return</span> <span class="n">fasta</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">chrom</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">]</span>
+        <span class="c1"># recall GTF/GFF is 1-based closed;  pyfaidx uses Python slice notation</span>
+        <span class="c1"># and is therefore 0-based half-open.</span>
+        <span class="n">seq</span> <span class="o">=</span> <span class="n">fasta</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">chrom</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">use_strand</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">strand</span> <span class="o">==</span> <span class="s1">&#39;-&#39;</span><span class="p">:</span>
+            <span class="n">seq</span> <span class="o">=</span> <span class="n">seq</span><span class="o">.</span><span class="n">reverse</span><span class="o">.</span><span class="n">complement</span>
+        <span class="k">return</span> <span class="n">seq</span><span class="o">.</span><span class="n">seq</span></div></div>
 
-</div></div>
-<div class="viewcode-block" id="feature_from_line"><a class="viewcode-back" href="../../autodocs/gffutils.feature.feature_from_line.html#gffutils.feature.feature_from_line">[docs]</a><span class="k">def</span> <span class="nf">feature_from_line</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">keep_order</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+
+<div class="viewcode-block" id="feature_from_line"><a class="viewcode-back" href="../../autodocs/gffutils.feature.feature_from_line.html#gffutils.feature.feature_from_line">[docs]</a><span class="k">def</span> <span class="nf">feature_from_line</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_order</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given a line from a GFF file, return a Feature object</span>
 
@@ -510,7 +525,7 @@
 <span class="sd">    A new :class:`Feature` object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">strict</span><span class="p">:</span>
-        <span class="n">lines</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">splitlines</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">splitlines</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">_lines</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
             <span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
@@ -520,22 +535,22 @@
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">_lines</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="n">_lines</span>
         <span class="n">line</span> <span class="o">=</span> <span class="n">_lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
-            <span class="n">fields</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n\r</span><span class="s">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\r</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">fields</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n\r</span><span class="s">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\r</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">fields</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n\r</span><span class="s">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\r</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">attr_string</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
-        <span class="n">attr_string</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="n">attr_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="n">attrs</span><span class="p">,</span> <span class="n">_dialect</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">_split_keyvals</span><span class="p">(</span><span class="n">attr_string</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="n">dialect</span><span class="p">)</span>
     <span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">_gffkeys</span><span class="p">,</span> <span class="n">fields</span><span class="p">)))</span>
-    <span class="n">d</span><span class="p">[</span><span class="s">&#39;attributes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">attrs</span>
-    <span class="n">d</span><span class="p">[</span><span class="s">&#39;extra&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="mi">9</span><span class="p">:]</span>
-    <span class="n">d</span><span class="p">[</span><span class="s">&#39;keep_order&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">keep_order</span>
-    <span class="k">if</span> <span class="n">dialect</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="n">d</span><span class="p">[</span><span class="s1">&#39;attributes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">attrs</span>
+    <span class="n">d</span><span class="p">[</span><span class="s1">&#39;extra&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="mi">9</span><span class="p">:]</span>
+    <span class="n">d</span><span class="p">[</span><span class="s1">&#39;keep_order&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">keep_order</span>
+    <span class="k">if</span> <span class="n">dialect</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">dialect</span> <span class="o">=</span> <span class="n">_dialect</span>
     <span class="k">return</span> <span class="n">Feature</span><span class="p">(</span><span class="n">dialect</span><span class="o">=</span><span class="n">dialect</span><span class="p">,</span> <span class="o">**</span><span class="n">d</span><span class="p">)</span></div>
 </pre></div>
@@ -571,7 +586,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.8.7.1',
+            VERSION:'0.8.8',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

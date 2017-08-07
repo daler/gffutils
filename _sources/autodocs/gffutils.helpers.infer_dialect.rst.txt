@@ -1,0 +1,6 @@
+gffutils\.helpers\.infer\_dialect
+=================================
+
+.. currentmodule:: gffutils.helpers
+
+.. autofunction:: infer_dialect
