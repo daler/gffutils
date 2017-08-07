@@ -111,7 +111,7 @@ class FeatureDB(object):
             if not os.path.exists(dbfn):
                 raise ValueError("Database file %s does not exist" % dbfn)
             self.dbfn = dbfn
-            self.conn = sqlite3.connect(self.dbfn, timeout=10)
+            self.conn = sqlite3.connect(self.dbfn)
 
         if text_factory is not None:
             self.conn.text_factory = text_factory
