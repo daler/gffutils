@@ -1104,6 +1104,64 @@ def test_issue_85():
     # or with "." placeholders
     f = feature.feature_from_line('\t'.join(['.'] * 9))
 
+
+def test_unquoting():
+    # incoming is encoded
+    s = (
+        'chr1\tAUGUSTUS\tgene\t6950084\t6951407\t0.26\t-\t.\t'
+        'ID=INIL01g00009;GeneSymbol=Ndufaf6;Note=NADH dehydrogenase '
+        '(ubiquinone) complex I%2C assembly factor 6;GO_Terms=GO:0005743|'
+        'GO:0016740|GO:0009058|GO:0032981;PFam=PF00494'
+    )
+    f = feature.feature_from_line(s, keep_order=True)
+
+    # string representation should be identical
+    assert str(f) == s
+
+    # accessing attribute should be decoded
+    n = f['Note']
+    assert n == ['NADH dehydrogenase (ubiquinone) complex I, assembly factor 6']
+
+
+def test_unreasonable_unquoting():
+    s = (
+        'chr1\t.\t.\t1\t2\t0.26\t-\t.\t'
+        'newline=%0A;'
+        'percent=%25;'
+        'null=%00;'
+        'comma=%2C;'
+
+        # The first parent is "A," (A with a comma), the second is "B%"
+        'Parent=A%2C,B%25,C;'
+    )
+    f = feature.feature_from_line(s, keep_order=True)
+    assert f.attributes['newline'][0] == '\n'
+    assert f.attributes['percent'][0] == '%'
+    assert f.attributes['null'][0] == '\x00'
+    assert f.attributes['comma'][0] == ','
+
+    # Commas indicate 
+    assert f.attributes['Parent'] == ['A,', 'B%', 'C']
+    assert str(f) == s
+
+
+def test_unquoting_iter():
+    s = 'chr1\t.\tgene\t1\t2\t.\t-\t.\tID=%2C;'
+    tmp = tempfile.NamedTemporaryFile(delete=False).name
+    with open(tmp, 'w') as fout:
+        fout.write(s + '\n')
+    assert list(gffutils.iterators.DataIterator(tmp))[0]['ID'][0] == ','
+
+def test_db_unquoting():
+    s = 'chr1\t.\tgene\t1\t2\t.\t-\t.\tID=%2C;'
+    tmp = tempfile.NamedTemporaryFile(delete=False).name
+    with open(tmp, 'w') as fout:
+        fout.write(s + '\n')
+    db = gffutils.create_db(tmp, ':memory:')
+    f = next(db.all_features())
+    n = f['ID']
+    assert n == [',']
+
 if __name__ == "__main__":
     # this test case fails
     #test_attributes_modify()

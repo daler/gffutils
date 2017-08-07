@@ -139,6 +139,7 @@ dialect = {
 }
 
 always_return_list = True
+ignore_url_escape_characters = False
 
 # these keyword args are used by iterators.
 _iterator_kwargs = (

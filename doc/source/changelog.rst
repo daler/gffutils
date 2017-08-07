@@ -22,6 +22,16 @@ corner-case GFF and GTF files.
 - fix handling of corner-case GFFs that are completely missing a start or end
   position (`issue #85 <https://github.com/daler/gffutils/issues/85>`_)
 - improvements to test framework
+- All percent-encoded characters are decoded upon parsing (regardless of if the
+  GFF3 spec says they should have been encoded in the first place), and then
+  re-encoded when converting the Feature to a string (`issue #98
+  <https://github.com/daler/gffutils/issues/98>`_). Only characters specified
+  in the GFF3 spec are re-encoded. Note that some GFF files have spaces encoded
+  as `%20`, but spaces should not be encoded according to the GFF3 specs. In
+  this case, they will be decoded into spaces upon parsing, but not re-encoded
+  when converting to string. Set
+  `gffutils.constants.ignore_url_escape_characters=True` to disable any
+  encoding/decoding behavior.
 
 
 

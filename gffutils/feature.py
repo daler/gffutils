@@ -74,6 +74,14 @@ class Feature(object):
             dictionary and the dialect -- except if the original attributes
             string was provided, in which case that will be used directly.
 
+            Notes on encoding/decoding: the only time unquoting
+            (e.g., "%2C" becomes ",") happens is if `attributes` is a string
+            and if `settings.ignore_url_escape_characters = False`. If dict or
+            JSON, the contents are used as-is.
+
+            Similarly, the only time characters are quoted ("," becomes "%2C")
+            is when the feature is printed (`__str__` method).
+
         extra : string or list
             Additional fields after the canonical 9 fields for GFF/GTF.
 
@@ -224,6 +232,7 @@ class Feature(object):
             return unicode(self).encode('utf-8')
 
     def __unicode__(self):
+
         # All fields but attributes (and extra).
         items = [getattr(self, k) for k in constants._gffkeys[:-1]]
 
@@ -342,7 +351,6 @@ class Feature(object):
         if use_strand and self.strand == '-':
             seq = seq.reverse.complement
         return seq.seq
-
 
 
 def feature_from_line(line, dialect=None, strict=True, keep_order=False):

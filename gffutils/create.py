@@ -57,6 +57,7 @@ class _DBCreator(object):
                  force_merge_fields=None,
                  text_factory=sqlite3.OptimizedUnicode,
                  pragmas=constants.default_pragmas, _keep_tempfiles=False,
+                 directives=None,
                  **kwargs):
         """
         Base class for _GFFDBCreator and _GTFDBCreator; see create_db()
@@ -80,6 +81,9 @@ class _DBCreator(object):
         self.pragmas = pragmas
         self.merge_strategy = merge_strategy
         self.default_encoding = default_encoding
+        if directives is None:
+            directives = []
+        self.directives = directives
 
         if not infer_gene_extent:
             warnings.warn("'infer_gene_extent' will be deprecated. For now, "
@@ -120,6 +124,7 @@ class _DBCreator(object):
             force_dialect_check=force_dialect_check, from_string=from_string,
             dialect=dialect
         )
+
 
     def set_verbose(self, verbose=None):
         if verbose == 'debug':
@@ -439,9 +444,10 @@ class _DBCreator(object):
         In general, if you'll be adding stuff to the meta table, do it here.
         """
         c = self.conn.cursor()
+        directives = self.directives + self.iterator.directives
         c.executemany('''
                       INSERT INTO directives VALUES (?)
-                      ''', ((i,) for i in self.iterator.directives))
+                      ''', ((i,) for i in directives))
         c.execute(
             '''
             INSERT INTO meta (version, dialect)
@@ -1226,7 +1232,6 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
     -------
     New :class:`FeatureDB` object.
     """
-
     _locals = locals()
 
     # Check if any older kwargs made it in
@@ -1245,16 +1250,16 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
     if dialect is None:
         dialect = iterator.dialect
 
-    if isinstance(iterator, iterators._FeatureIterator):
-        # However, a side-effect of this is that  if `data` was a generator,
-        # then we've just consumed `checklines` items (see
-        # iterators.BaseIterator.__init__, which calls iterators.peek).
-        #
-        # But it also chains those consumed items back onto the beginning, and
-        # the result is available as as iterator._iter.
-        #
-        # That's what we should be using now for `data:
-        kwargs['data'] = iterator._iter
+    # However, a side-effect of this is that  if `data` was a generator, then
+    # we've just consumed `checklines` items (see
+    # iterators.BaseIterator.__init__, which calls iterators.peek).
+    #
+    # But it also chains those consumed items back onto the beginning, and the
+    # result is available as as iterator._iter.
+    #
+    # That's what we should be using now for `data:
+    kwargs['data'] = iterator._iter
+    kwargs['directives'] = iterator.directives
 
     # Since we've already checked lines, we don't want to do it again
     kwargs['checklines'] = 0

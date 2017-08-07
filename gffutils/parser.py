@@ -2,6 +2,8 @@
 
 import re
 import copy
+import collections
+from six.moves import urllib
 from gffutils import constants
 from gffutils.exceptions import AttributeStringError
 
@@ -15,6 +17,45 @@ ch.setFormatter(formatter)
 logger.addHandler(ch)
 
 gff3_kw_pat = re.compile('\w+=')
+
+# From GFF specs, the following characters should be encoded:
+#
+#           tab (%09)
+#           newline (%0A)
+#           carriage return (%0D)
+#           % percent (%25)
+#           control characters (%00 through %1F, %7F)
+#
+#       In addition, the following characters have reserved meanings in
+#       column 9 and must be escaped when used in other contexts:
+#
+#           ; semicolon (%3B)
+#           = equals (%3D)
+#           & ampersand (%26)
+#           , comma (%2C)
+#
+#
+# Note that spaces are NOT encoded. Some GFF files have spaces encoded; in
+# these cases round-trip invariance will not hold since the %20 will be decoded
+# but not re-encoded.
+_to_quote = '\n\t\r%;=&,'
+_to_quote += ''.join([chr(i) for i in range(32)])
+_to_quote += chr(127)
+
+
+# Caching idea from urllib.parse.Quoter, which uses a defaultdict for
+# efficiency. Here we're sort of doing the reverse of the "reserved" idea used
+# there.
+class Quoter(collections.defaultdict):
+    def __missing__(self, b):
+        if b in _to_quote:
+            res = '%{:02X}'.format(ord(b))
+        else:
+            res = b
+        self[b] = res
+        return res
+
+quoter = Quoter()
 
 
 def _reconstruct(keyvals, dialect, keep_order=False,
@@ -46,17 +87,27 @@ def _reconstruct(keyvals, dialect, keep_order=False,
         return ""
     parts = []
 
+    # Re-encode when reconstructing attributes
+    if constants.ignore_url_escape_characters or dialect['fmt'] != 'gff3':
+        attributes = keyvals
+    else:
+        attributes = {}
+        for k, v in keyvals.items():
+            attributes[k] = []
+            for i in v:
+                attributes[k].append(''.join([quoter[j] for j in i]))
+
     # May need to split multiple values into multiple key/val pairs
     if dialect['repeated keys']:
         items = []
-        for key, val in keyvals.items():
+        for key, val in attributes.items():
             if len(val) > 1:
                 for v in val:
                     items.append((key, [v]))
             else:
                 items.append((key, val))
     else:
-        items = list(keyvals.items())
+        items = list(attributes.items())
 
     def sort_key(x):
         # sort keys by their order in the dialect; anything not in there will
@@ -240,7 +291,7 @@ def _split_keyvals(keyval_str, dialect=None):
                 val = ''
 
         # Pathological cases where values of a key have within them the key-val
-        # separator, e.g., 
+        # separator, e.g.,
         #  Alias=SGN-M1347;ID=T0028;Note=marker name(s): T0028 SGN-M1347 |identity=99.58|escore=2e-126
         else:
             key = item[0]
@@ -270,29 +321,56 @@ def _split_keyvals(keyval_str, dialect=None):
         # keep track of the order of keys
         dialect['order'].append(key)
 
-    #for key, vals in quals.items():
-    #
-        # TODO: urllib.unquote breaks round trip invariance for "hybrid1.gff3"
-        # test file.  This is because the "Note" field has %xx escape chars,
-        # but "Dbxref" has ":" which, if everything were consistent, should
-        # have also been escaped.
-        #
-        # (By the way, GFF3 spec says only literal use of \t, \n, \r, %, and
-        # control characters should be encoded)
-        #
-        # Solution 1: don't unquote
-        # Solution 2: store, along with each attribute, whether or not it
-        #             should be quoted later upon reconstruction
-        # Solution 3: don't care about invariance
-
-        # unquoted = [urllib.unquote(v) for v in vals]
-
-        #quals[key] = vals
-
     if (
         (dialect['keyval separator'] == ' ') and
         (dialect['quoted GFF2 values'])
     ):
         dialect['fmt'] = 'gtf'
+
+    # NOTE: urllib.unquote breaks round trip invariance for "hybrid1.gff3"
+    # test file.  This is because the "Note" field has %xx escape chars,
+    # but "Dbxref" has ":" which, if everything were consistent, should
+    # have also been escaped.
+    #
+    # Solution 1: don't unquote
+    # Solution 2: store, along with each attribute, whether or not it
+    #             should be quoted later upon reconstruction
+    # Solution 3: don't care about invariance
+    # Solution 4: set a global flag for unquoting
+    #
+    # From
+    # https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md#description-of-the-format:
+    #
+    #       GFF3 files are nine-column, tab-delimited, plain text files.
+    #       Literal use of tab, newline, carriage return, the percent (%) sign,
+    #       and control characters must be encoded using RFC 3986
+    #       Percent-Encoding; no other characters may be encoded. Backslash and
+    #       other ad-hoc escaping conventions that have been added to the GFF
+    #       format are not allowed. The file contents may include any character
+    #       in the set supported by the operating environment, although for
+    #       portability with other systems, use of Latin-1 or Unicode are
+    #       recommended.
+    #
+    #           tab (%09)
+    #           newline (%0A)
+    #           carriage return (%0D)
+    #           % percent (%25)
+    #           control characters (%00 through %1F, %7F)
+    #
+    #       In addition, the following characters have reserved meanings in
+    #       column 9 and must be escaped when used in other contexts:
+    #
+    #           ; semicolon (%3B)
+    #           = equals (%3D)
+    #           & ampersand (%26)
+    #           , comma (%2C)
+    #
+    #
+    # See also issue #98.
+
+    if not constants.ignore_url_escape_characters and dialect['fmt'] == 'gff3':
+        for key, vals in quals.items():
+            unquoted = [urllib.parse.unquote(v) for v in vals]
+            quals[key] = unquoted
 
     return quals, dialect
