@@ -2,8 +2,8 @@
 
 Change log
 ==========
-Changes in v0.8.8
------------------
+Changes in v0.9
+---------------
 Long-overdue release with performance improvements and better handling of
 corner-case GFF and GTF files.
 
