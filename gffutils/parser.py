@@ -18,7 +18,7 @@ logger.addHandler(ch)
 
 gff3_kw_pat = re.compile('\w+=')
 
-# From GFF specs:
+# From GFF specs, the following characters should be encoded:
 #
 #           tab (%09)
 #           newline (%0A)
@@ -33,12 +33,19 @@ gff3_kw_pat = re.compile('\w+=')
 #           = equals (%3D)
 #           & ampersand (%26)
 #           , comma (%2C)
+#
+#
+# Note that spaces are NOT encoded. Some GFF files have spaces encoded; in
+# these cases round-trip invariance will not hold since the %20 will be decoded
+# but not re-encoded.
 _to_quote = '\n\t\r%;=&,'
 _to_quote += ''.join([chr(i) for i in range(32)])
 _to_quote += chr(127)
 
 
-# Idea from urllib.parse.Quoter, which uses a defaultdict for efficiency
+# Caching idea from urllib.parse.Quoter, which uses a defaultdict for
+# efficiency. Here we're sort of doing the reverse of the "reserved" idea used
+# there.
 class Quoter(collections.defaultdict):
     def __missing__(self, b):
         if b in _to_quote:
@@ -49,7 +56,6 @@ class Quoter(collections.defaultdict):
         return res
 
 quoter = Quoter()
-print(quoter)
 
 
 def _reconstruct(keyvals, dialect, keep_order=False,
@@ -81,6 +87,7 @@ def _reconstruct(keyvals, dialect, keep_order=False,
         return ""
     parts = []
 
+    # Re-encode when reconstructing attributes
     if constants.ignore_url_escape_characters or dialect['fmt'] != 'gff3':
         attributes = keyvals
     else:
