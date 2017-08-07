@@ -6,6 +6,7 @@
 # to the repo.
 HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 rm -rf /tmp/gffutils
-git clone $HERE/.. /tmp/gffutils
+git clone $HERE /tmp/gffutils
 cd /tmp/gffutils
-python setup.py sdist upload
+python setup.py sdist
+twine upload dist/*
