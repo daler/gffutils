@@ -92,7 +92,9 @@ attrs = [
          'Note': ['growth hormone 1'],
          'Alias': ['GH1']},
 
-        None,
+        'ID=A00469;Dbxref=AFFX-U133:205840_x_at,Locuslink:2688,Genbank-mRNA:'
+        'A00469,Swissprot:P01241,PFAM:PF00103,AFFX-U95:1332_f_at,Swissprot:'
+        'SOMA_HUMAN;Note=growth hormone 1;Alias=GH1',
     ),
 
     # jgi_gff2.txt
@@ -167,7 +169,12 @@ attrs = [
          'exon_number': ['1'],
          },
 
-        None,
+        'ID=NC_008596.1:speB:unknown_transcript_1;Parent=NC_008596.1:speB;'
+        'locus_tag=MSMEG_1072;EC_number=3.5.3.11;note=identified by mat'
+        'ch to protein family HMM PF00491%3B match to prote'
+        'in family HMM TIGR01230;transl_table=11;product=agmatinase;p'
+        'rotein_id=YP_885468.1;db_xref=GI:118469242;db_xref=GeneID:4535378;'
+        'exon_number=1',
     ),
 
     # wormbase_gff2_alt.txt
