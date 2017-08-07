@@ -33,7 +33,7 @@ gff3_kw_pat = re.compile('\w+=')
 #           = equals (%3D)
 #           & ampersand (%26)
 #           , comma (%2C)
-_to_quote = ' \n\t\r%;=&,'
+_to_quote = '\n\t\r%;=&,'
 _to_quote += ''.join([chr(i) for i in range(32)])
 _to_quote += chr(127)
 
