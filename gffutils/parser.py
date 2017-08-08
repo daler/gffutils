@@ -18,7 +18,20 @@ logger.addHandler(ch)
 
 gff3_kw_pat = re.compile('\w+=')
 
-# From GFF specs, the following characters should be encoded:
+# Encoding/decoding notes
+# -----------------------
+# From
+# https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md#description-of-the-format:
+#
+#       GFF3 files are nine-column, tab-delimited, plain text files.
+#       Literal use of tab, newline, carriage return, the percent (%) sign,
+#       and control characters must be encoded using RFC 3986
+#       Percent-Encoding; no other characters may be encoded. Backslash and
+#       other ad-hoc escaping conventions that have been added to the GFF
+#       format are not allowed. The file contents may include any character
+#       in the set supported by the operating environment, although for
+#       portability with other systems, use of Latin-1 or Unicode are
+#       recommended.
 #
 #           tab (%09)
 #           newline (%0A)
@@ -34,6 +47,8 @@ gff3_kw_pat = re.compile('\w+=')
 #           & ampersand (%26)
 #           , comma (%2C)
 #
+#
+# See also issue #98.
 #
 # Note that spaces are NOT encoded. Some GFF files have spaces encoded; in
 # these cases round-trip invariance will not hold since the %20 will be decoded
@@ -170,6 +185,19 @@ def _split_keyvals(keyval_str, dialect=None):
 
     Otherwise, use the provided dialect (and return it at the end).
     """
+
+    def _unquote_quals(quals, dialect):
+        """
+        Handles the unquoting (decoding) of percent-encoded characters.
+
+        See notes on encoding/decoding above.
+        """
+        if not constants.ignore_url_escape_characters and dialect['fmt'] == 'gff3':
+            for key, vals in quals.items():
+                unquoted = [urllib.parse.unquote(v) for v in vals]
+                quals[key] = unquoted
+        return quals
+
     infer_dialect = False
     if dialect is None:
         # Make a copy of default dialect so it can be modified as needed
@@ -238,6 +266,7 @@ def _split_keyvals(keyval_str, dialect=None):
                 vals = val.split(',')
                 quals[key].extend(vals)
 
+        quals = _unquote_quals(quals, dialect)
         return quals, dialect
 
     # If we got here, then we need to infer the dialect....
@@ -327,50 +356,5 @@ def _split_keyvals(keyval_str, dialect=None):
     ):
         dialect['fmt'] = 'gtf'
 
-    # NOTE: urllib.unquote breaks round trip invariance for "hybrid1.gff3"
-    # test file.  This is because the "Note" field has %xx escape chars,
-    # but "Dbxref" has ":" which, if everything were consistent, should
-    # have also been escaped.
-    #
-    # Solution 1: don't unquote
-    # Solution 2: store, along with each attribute, whether or not it
-    #             should be quoted later upon reconstruction
-    # Solution 3: don't care about invariance
-    # Solution 4: set a global flag for unquoting
-    #
-    # From
-    # https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md#description-of-the-format:
-    #
-    #       GFF3 files are nine-column, tab-delimited, plain text files.
-    #       Literal use of tab, newline, carriage return, the percent (%) sign,
-    #       and control characters must be encoded using RFC 3986
-    #       Percent-Encoding; no other characters may be encoded. Backslash and
-    #       other ad-hoc escaping conventions that have been added to the GFF
-    #       format are not allowed. The file contents may include any character
-    #       in the set supported by the operating environment, although for
-    #       portability with other systems, use of Latin-1 or Unicode are
-    #       recommended.
-    #
-    #           tab (%09)
-    #           newline (%0A)
-    #           carriage return (%0D)
-    #           % percent (%25)
-    #           control characters (%00 through %1F, %7F)
-    #
-    #       In addition, the following characters have reserved meanings in
-    #       column 9 and must be escaped when used in other contexts:
-    #
-    #           ; semicolon (%3B)
-    #           = equals (%3D)
-    #           & ampersand (%26)
-    #           , comma (%2C)
-    #
-    #
-    # See also issue #98.
-
-    if not constants.ignore_url_escape_characters and dialect['fmt'] == 'gff3':
-        for key, vals in quals.items():
-            unquoted = [urllib.parse.unquote(v) for v in vals]
-            quals[key] = unquoted
-
+    quals = _unquote_quals(quals, dialect)
     return quals, dialect
