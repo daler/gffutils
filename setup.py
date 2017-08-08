@@ -19,7 +19,7 @@ setup(
     description="Work with GFF and GTF files in a flexible "
     "database framework",
     author_email='dalerr@niddk.nih.gov',
-    url='none',
+    url='https://github.com/daler/gffutils',
     classifiers=[
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: MIT License',

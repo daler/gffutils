@@ -1,4 +1,5 @@
 import warnings
+from textwrap import dedent
 from . import expected
 from gffutils import example_filename, create, parser, feature
 import gffutils
@@ -1153,14 +1154,25 @@ def test_unquoting_iter():
     assert list(gffutils.iterators.DataIterator(tmp))[0]['ID'][0] == ','
 
 def test_db_unquoting():
-    s = 'chr1\t.\tgene\t1\t2\t.\t-\t.\tID=%2C;'
+    s = dedent(
+        '''
+        chr1\t.\tgene\t1\t2\t.\t-\t.\tID=a;Note=%2C;
+        chr1\t.\tgene\t1\t2\t.\t-\t.\tID=b;Note=%2C;
+        chr1\t.\tgene\t1\t2\t.\t-\t.\tID=c;Note=%2C;
+        chr1\t.\tgene\t1\t2\t.\t-\t.\tID=d;Note=%2C;
+        chr1\t.\tgene\t1\t2\t.\t-\t.\tID=e;Note=%2C;
+        chr1\t.\tgene\t1\t2\t.\t-\t.\tID=f;Note=%2C;
+        ''')
     tmp = tempfile.NamedTemporaryFile(delete=False).name
     with open(tmp, 'w') as fout:
         fout.write(s + '\n')
-    db = gffutils.create_db(tmp, ':memory:')
-    f = next(db.all_features())
-    n = f['ID']
-    assert n == [',']
+    db = gffutils.create_db(tmp, ':memory:', checklines=1)
+    assert db['a']['Note'] == [',']
+    assert db['b']['Note'] == [',']
+    assert db['c']['Note'] == [',']
+    assert db['d']['Note'] == [',']
+    assert db['e']['Note'] == [',']
+    assert db['f']['Note'] == [',']
 
 if __name__ == "__main__":
     # this test case fails
