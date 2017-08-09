@@ -2,8 +2,9 @@
 
 Change log
 ==========
-Changes in v0.8.8
------------------
+
+Changes in v0.9
+---------------
 Long-overdue release with performance improvements and better handling of
 corner-case GFF and GTF files.
 
@@ -32,8 +33,7 @@ corner-case GFF and GTF files.
   when converting to string. Set
   `gffutils.constants.ignore_url_escape_characters=True` to disable any
   encoding/decoding behavior.
-
-
+- improved testing framework
 
 Changes in v0.8.7.1
 -------------------
