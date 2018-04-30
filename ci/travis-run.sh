@@ -4,6 +4,7 @@ set -eo pipefail
 set -x
 
 # Full test suite after conda-installing deps
+source activate tmp$PY
 HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 nosetests -x --with-doctest -a '!slow'
 conda install -y --file $HERE/../docs-requirements.txt
