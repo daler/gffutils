@@ -7,6 +7,7 @@ from pybedtools import featurefuncs
 from gffutils import helpers
 import six
 
+
 def to_bedtool(iterator):
     """
     Convert any iterator into a pybedtools.BedTool object.
@@ -22,7 +23,7 @@ def to_bedtool(iterator):
 
 
 def tsses(db, merge_overlapping=False, attrs=None, attrs_sep=":",
-          merge_kwargs=dict(o='distinct', s=True, c=4), as_bed6=False):
+          merge_kwargs=None, as_bed6=False, bedtools_227_or_later=True):
     """
     Create 1-bp transcription start sites for all transcripts in the database
     and return as a sorted pybedtools.BedTool object pointing to a temporary
@@ -74,12 +75,16 @@ def tsses(db, merge_overlapping=False, attrs=None, attrs_sep=":",
         attributes is supplied, e.g. ["gene_id", "transcript_id"], then these
         will be joined by `attr_join_sep` and then placed in the name field.
 
-
     attrs_sep: str
         If `as_bed6=True` or `merge_overlapping=True`, then use this character
         to separate attributes in the name field of the output BED. If also
         using `merge_overlapping=True`, you'll probably want this to be
         different than `merge_sep` in order to parse things out later.
+
+    bedtools_227_or_later : bool
+        In version 2.27, BEDTools changed the output for merge. By default,
+        this function expects BEDTools version 2.27 or later, but set this to
+        False to assume the older behavior.
 
     Examples
     --------
@@ -146,7 +151,11 @@ def tsses(db, merge_overlapping=False, attrs=None, attrs_sep=":",
 
 
     """
-    _merge_kwargs = dict(o='distinct', s=True, c=4)
+    if bedtools_227_or_later:
+        _merge_kwargs = dict(o='distinct', s=True, c='4,5,6')
+    else:
+        _merge_kwargs = dict(o='distinct', s=True, c='4')
+
     if merge_kwargs is not None:
         _merge_kwargs.update(merge_kwargs)
 
@@ -195,18 +204,18 @@ def tsses(db, merge_overlapping=False, attrs=None, attrs_sep=":",
         x = x.each(to_bed).saveas()
 
     if merge_overlapping:
-
-        def fix_merge(f):
-            f = featurefuncs.extend_fields(f, 6)
-            return pybedtools.Interval(
-                f.chrom,
-                f.start,
-                f.stop,
-                f[4],
-                '.',
-                f[3])
-
-        x = x.merge(**_merge_kwargs).each(fix_merge).saveas()
-
+        if bedtools_227_or_later:
+            x = x.merge(**_merge_kwargs)
+        else:
+            def fix_merge(f):
+                f = featurefuncs.extend_fields(f, 6)
+                return pybedtools.Interval(
+                    f.chrom,
+                    f.start,
+                    f.stop,
+                    f[4],
+                    '.',
+                    f[3])
+            x = x.merge(**_merge_kwargs).saveas().each(fix_merge).saveas()
 
     return x
