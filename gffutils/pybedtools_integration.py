@@ -2,6 +2,7 @@
 Module for integration with pybedtools
 """
 
+import os
 import pybedtools
 from pybedtools import featurefuncs
 from gffutils import helpers
@@ -86,6 +87,10 @@ def tsses(db, merge_overlapping=False, attrs=None, attrs_sep=":",
         this function expects BEDTools version 2.27 or later, but set this to
         False to assume the older behavior.
 
+        For testing purposes, the environment variable
+        GFFUTILS_USES_BEDTOOLS_227_OR_LATER is set to either "true" or "false"
+        and is used to override this argument.
+
     Examples
     --------
 
@@ -151,6 +156,17 @@ def tsses(db, merge_overlapping=False, attrs=None, attrs_sep=":",
 
 
     """
+    _override = os.environ.get('GFFUTILS_USES_BEDTOOLS_227_OR_LATER', None)
+    if _override is not None:
+        if _override == 'true':
+            bedtools_227_or_later = True
+        elif _override == 'false':
+            bedtools_227_or_later = False
+        else:
+            raise ValueError(
+                "Unknown value for GFFUTILS_USES_BEDTOOLS_227_OR_LATER "
+                "environment variable: {0}".format(_override))
+
     if bedtools_227_or_later:
         _merge_kwargs = dict(o='distinct', s=True, c='4,5,6')
     else:
