@@ -115,6 +115,7 @@ class _FileIterator(_BaseIterator):
     Subclass for iterating over features provided as a filename
     """
     def open_function(self, data):
+        data = os.path.expanduser(data)
         if data.endswith('.gz'):
             import gzip
             return gzip.open(data)

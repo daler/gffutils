@@ -1174,6 +1174,18 @@ def test_db_unquoting():
     assert db['e']['Note'] == [',']
     assert db['f']['Note'] == [',']
 
+
+def test_issue_105():
+    fn = gffutils.example_filename('FBgn0031208.gtf')
+    home = os.path.expanduser('~')
+    newfn = os.path.join(home, '.gffutils.test')
+    with open(newfn, 'w') as fout:
+        fout.write(open(fn).read())
+    f = gffutils.iterators.DataIterator(newfn)
+    for i in f:
+        pass
+    os.unlink(newfn)
+
 if __name__ == "__main__":
     # this test case fails
     #test_attributes_modify()
