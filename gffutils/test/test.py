@@ -880,7 +880,7 @@ def test_tempfiles():
     assert len(filelist) == 1, filelist
     assert filelist[0].endswith('.gffutils')
 
-    #...and another one for gff. This time, make sure the suffix 
+    #...and another one for gff. This time, make sure the suffix
     db = gffutils.create_db(
         gffutils.example_filename('FBgn0031208.gff'), ':memory:', _keep_tempfiles=True)
     filelist = os.listdir(tempdir)
@@ -1006,7 +1006,7 @@ def test_disable_infer():
 
 
 def test_deprecation_handler():
-    return 
+    return
 
     # TODO: when infer_gene_extent actually gets deprecated, test here.
     assert_raises(ValueError, gffutils.create_db,
@@ -1141,7 +1141,7 @@ def test_unreasonable_unquoting():
     assert f.attributes['null'][0] == '\x00'
     assert f.attributes['comma'][0] == ','
 
-    # Commas indicate 
+    # Commas indicate
     assert f.attributes['Parent'] == ['A,', 'B%', 'C']
     assert str(f) == s
 
@@ -1173,6 +1173,18 @@ def test_db_unquoting():
     assert db['d']['Note'] == [',']
     assert db['e']['Note'] == [',']
     assert db['f']['Note'] == [',']
+
+
+def test_issue_105():
+    fn = gffutils.example_filename('FBgn0031208.gtf')
+    home = os.path.expanduser('~')
+    newfn = os.path.join(home, '.gffutils.test')
+    with open(newfn, 'w') as fout:
+        fout.write(open(fn).read())
+    f = gffutils.iterators.DataIterator(newfn)
+    for i in f:
+        pass
+    os.unlink(newfn)
 
 if __name__ == "__main__":
     # this test case fails
