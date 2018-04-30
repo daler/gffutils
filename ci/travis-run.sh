@@ -10,7 +10,7 @@ conda install -y --file $HERE/../docs-requirements.txt
 (cd doc && make clean && make doctest)
 
 # Fresh environment, pip-installed from just-created sdist tarball
-conda create -y -n new python=$TRAVIS_PYTHON_VERSION
+conda create -y -n new python=$PY
 source activate new
 python setup.py clean sdist
 pip install dist/gffutils-*.tar.gz

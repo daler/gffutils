@@ -13,6 +13,6 @@ conda install -y \
     --file $HERE/../requirements.txt \
     --file $HERE/../optional-requirements.txt \
     nose \
-    python=$TRAVIS_PYTHON_VERSION
+    python=$PY
 
 python setup.py install
