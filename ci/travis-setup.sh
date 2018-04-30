@@ -10,10 +10,12 @@ conda config --add channels defaults
 conda config --add channels conda-forge
 conda config --add channels bioconda
 
-conda install -y \
+conda create -n tmp$PY -y \
     --file $HERE/../requirements.txt \
     --file $HERE/../optional-requirements.txt \
     nose \
     python=$PY
 
+source activate tmp$PY
 python setup.py install
+source deactivate
