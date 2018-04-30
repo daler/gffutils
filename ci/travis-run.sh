@@ -12,9 +12,9 @@ nosetests -x --with-doctest -a '!slow'
 # module
 
 conda install -y "bedtools<2.27"
-GFFUTILS_USES_BEDTOOLS_227_OR_LATER="false" nosetests --with-doctest pybedtools/pybedtools_integration.py
+GFFUTILS_USES_BEDTOOLS_227_OR_LATER="false" nosetests --with-doctest gffutils/pybedtools_integration.py
 conda install -y "bedtools>=2.27"
-GFFUTILS_USES_BEDTOOLS_227_OR_LATER="true" nosetests --with-doctest pybedtools/pybedtools_integration.py
+GFFUTILS_USES_BEDTOOLS_227_OR_LATER="true" nosetests --with-doctest gffutilss/pybedtools_integration.py
 
 conda install -y --file $HERE/../docs-requirements.txt
 (cd doc && make clean && make doctest)
