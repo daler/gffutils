@@ -1201,11 +1201,9 @@ def test_issue_107():
     db = gffutils.create_db(tmp, ':memory:')
     interfeatures = list(db.interfeatures(
         db.features_of_type('gene', order_by=('seqid', 'start'))))
-    assert interfeatures == [
-        gffutils.feature.feature_from_line(
-            'chr1\tgffutils_derived\tinter_gene_gene\t6\t9\t.\t.\t.\tID=b,a;'),
-        gffutils.feature.feature_from_line(
-            'chr2\tgffutils_derived\tinter_gene_gene\t16\t54\t.\t-\t.\tID=d,c;'),
+    assert [str(i) for i in interfeatures] == [
+            'chr1\tgffutils_derived\tinter_gene_gene\t6\t9\t.\t.\t.\tID=a,b;',
+            'chr2\tgffutils_derived\tinter_gene_gene\t16\t54\t.\t-\t.\tID=c,d;',
     ]
 
 if __name__ == "__main__":
