@@ -645,29 +645,29 @@ class _GFFDBCreator(_DBCreator):
         else:
             suffix = '.gffutils'
         tmp = tempfile.NamedTemporaryFile(delete=False, suffix=suffix).name
-        fout = open(tmp, 'w')
+        with open(tmp, 'w') as fout:
 
-        # Here we look for "grandchildren" -- for each ID, get the child
-        # (parenthetical subquery below); then for each of those get *its*
-        # child (main query below).
-        #
-        # Results are written to temp file so that we don't read and write at
-        # the same time, which would slow things down considerably.
+            # Here we look for "grandchildren" -- for each ID, get the child
+            # (parenthetical subquery below); then for each of those get *its*
+            # child (main query below).
+            #
+            # Results are written to temp file so that we don't read and write at
+            # the same time, which would slow things down considerably.
 
-        c.execute('SELECT id FROM features')
-        for parent in c:
-            c2.execute('''
-                       SELECT child FROM relations WHERE parent IN
-                       (SELECT child FROM relations WHERE parent = ?)
-                       ''', tuple(parent))
-            for grandchild in c2:
-                fout.write('\t'.join((parent[0], grandchild[0])) + '\n')
-        fout.close()
+            c.execute('SELECT id FROM features')
+            for parent in c:
+                c2.execute('''
+                           SELECT child FROM relations WHERE parent IN
+                           (SELECT child FROM relations WHERE parent = ?)
+                           ''', tuple(parent))
+                for grandchild in c2:
+                    fout.write('\t'.join((parent[0], grandchild[0])) + '\n')
 
         def relations_generator():
-            for line in open(fout.name):
-                parent, child = line.strip().split('\t')
-                yield dict(parent=parent, child=child, level=2)
+            with open(fout.name) as fin:
+                for line in fin:
+                    parent, child = line.strip().split('\t')
+                    yield dict(parent=parent, child=child, level=2)
 
         c.executemany(
             '''
@@ -838,101 +838,64 @@ class _GTFDBCreator(_DBCreator):
             suffix = self._keep_tempfiles
         else:
             suffix = '.gffutils'
+
         tmp = tempfile.NamedTemporaryFile(delete=False, suffix=suffix).name
-        fout = open(tmp, 'w')
+        with open(tmp, 'w') as fout:
+            self._tmpfile = tmp
 
-        self._tmpfile = tmp
+            # This takes some explanation...
+            #
+            # First, the nested subquery gets the level-1 parents of
+            # self.subfeature featuretypes.  For an on-spec GTF file,
+            # self.subfeature = "exon". So this subquery translates to getting the
+            # distinct level-1 parents of exons -- which are transcripts.
+            #
+            # OK, so this first subquery is now a list of transcripts; call it
+            # "firstlevel".
+            #
+            # Then join firstlevel on relations, but the trick is to now consider
+            # each transcript a *child* -- so that relations.parent (on the first
+            # line of the query) will be the first-level parent of the transcript
+            # (the gene).
+            #
+            #
+            # The result is something like:
+            #
+            #   transcript1     gene1
+            #   transcript2     gene1
+            #   transcript3     gene2
+            #
+            # Note that genes are repeated; below we need to ensure that only one
+            # is added.  To ensure this, the results are ordered by the gene ID.
+            #
+            # By the way, we do this even if we're only looking for transcripts or
+            # only looking for genes.
 
-        # This takes some explanation...
-        #
-        # First, the nested subquery gets the level-1 parents of
-        # self.subfeature featuretypes.  For an on-spec GTF file,
-        # self.subfeature = "exon". So this subquery translates to getting the
-        # distinct level-1 parents of exons -- which are transcripts.
-        #
-        # OK, so this first subquery is now a list of transcripts; call it
-        # "firstlevel".
-        #
-        # Then join firstlevel on relations, but the trick is to now consider
-        # each transcript a *child* -- so that relations.parent (on the first
-        # line of the query) will be the first-level parent of the transcript
-        # (the gene).
-        #
-        #
-        # The result is something like:
-        #
-        #   transcript1     gene1
-        #   transcript2     gene1
-        #   transcript3     gene2
-        #
-        # Note that genes are repeated; below we need to ensure that only one
-        # is added.  To ensure this, the results are ordered by the gene ID.
-        #
-        # By the way, we do this even if we're only looking for transcripts or
-        # only looking for genes.
+            c.execute(
+                '''
+                SELECT DISTINCT firstlevel.parent, relations.parent
+                FROM (
+                    SELECT DISTINCT parent
+                    FROM relations
+                    JOIN features ON features.id = relations.child
+                    WHERE features.featuretype = ?
+                    AND relations.level = 1
+                )
+                AS firstlevel
+                JOIN relations ON firstlevel.parent = child
+                WHERE relations.level = 1
+                ORDER BY relations.parent
+                ''', (self.subfeature,))
 
-        c.execute(
-            '''
-            SELECT DISTINCT firstlevel.parent, relations.parent
-            FROM (
-                SELECT DISTINCT parent
-                FROM relations
-                JOIN features ON features.id = relations.child
-                WHERE features.featuretype = ?
-                AND relations.level = 1
-            )
-            AS firstlevel
-            JOIN relations ON firstlevel.parent = child
-            WHERE relations.level = 1
-            ORDER BY relations.parent
-            ''', (self.subfeature,))
+            # Now we iterate through those results (using a new cursor) to infer
+            # the extent of transcripts and/or genes.
 
-        # Now we iterate through those results (using a new cursor) to infer
-        # the extent of transcripts and/or genes.
+            last_gene_id = None
+            n_features = 0
+            for transcript_id, gene_id in c:
 
-        last_gene_id = None
-        n_features = 0
-        for transcript_id, gene_id in c:
-
-            if not self.disable_infer_transcripts:
-                # transcript extent
-                c2.execute(
-                    '''
-                    SELECT MIN(start), MAX(end), strand, seqid
-                    FROM features
-                    JOIN relations ON
-                    features.id = relations.child
-                    WHERE parent = ? AND featuretype == ?
-                    ''', (transcript_id, self.subfeature))
-                transcript_start, transcript_end, strand, seqid = c2.fetchone()
-                transcript_attributes = {
-                    self.transcript_key: [transcript_id],
-                    self.gene_key: [gene_id]
-                }
-                transcript_bin = bins.bins(
-                    transcript_start, transcript_end, one=True)
-
-                # Write out to file; we'll be reading it back in shortly.  Omit
-                # score, frame, source, and extra since they will always have
-                # the same default values (".", ".", "gffutils_derived", and []
-                # respectively)
-
-                fout.write('\t'.join(map(str, [
-                    transcript_id,
-                    seqid,
-                    transcript_start,
-                    transcript_end,
-                    strand,
-                    'transcript',
-                    transcript_bin,
-                    helpers._jsonify(transcript_attributes)
-                ])) + '\n')
-
-                n_features += 1
-
-            if not self.disable_infer_genes:
-                # Infer gene extent, but only if we haven't done so already
-                if gene_id != last_gene_id:
+                if not self.disable_infer_transcripts:
+                    # transcript extent
                     c2.execute(
                         '''
                         SELECT MIN(start), MAX(end), strand, seqid
@@ -940,26 +903,61 @@ class _GTFDBCreator(_DBCreator):
                         JOIN relations ON
                         features.id = relations.child
                         WHERE parent = ? AND featuretype == ?
-                        ''', (gene_id, self.subfeature))
-                    gene_start, gene_end, strand, seqid = c2.fetchone()
-                    gene_attributes = {self.gene_key: [gene_id]}
-                    gene_bin = bins.bins(gene_start, gene_end, one=True)
+                        ''', (transcript_id, self.subfeature))
+                    transcript_start, transcript_end, strand, seqid = c2.fetchone()
+                    transcript_attributes = {
+                        self.transcript_key: [transcript_id],
+                        self.gene_key: [gene_id]
+                    }
+                    transcript_bin = bins.bins(
+                        transcript_start, transcript_end, one=True)
+
+                    # Write out to file; we'll be reading it back in shortly.  Omit
+                    # score, frame, source, and extra since they will always have
+                    # the same default values (".", ".", "gffutils_derived", and []
+                    # respectively)
 
                     fout.write('\t'.join(map(str, [
-                        gene_id,
+                        transcript_id,
                         seqid,
-                        gene_start,
-                        gene_end,
+                        transcript_start,
+                        transcript_end,
                         strand,
-                        'gene',
-                        gene_bin,
-                        helpers._jsonify(gene_attributes)
+                        'transcript',
+                        transcript_bin,
+                        helpers._jsonify(transcript_attributes)
                     ])) + '\n')
 
-                last_gene_id = gene_id
-                n_features += 1
+                    n_features += 1
 
-        fout.close()
+                if not self.disable_infer_genes:
+                    # Infer gene extent, but only if we haven't done so already
+                    if gene_id != last_gene_id:
+                        c2.execute(
+                            '''
+                            SELECT MIN(start), MAX(end), strand, seqid
+                            FROM features
+                            JOIN relations ON
+                            features.id = relations.child
+                            WHERE parent = ? AND featuretype == ?
+                            ''', (gene_id, self.subfeature))
+                        gene_start, gene_end, strand, seqid = c2.fetchone()
+                        gene_attributes = {self.gene_key: [gene_id]}
+                        gene_bin = bins.bins(gene_start, gene_end, one=True)
+
+                        fout.write('\t'.join(map(str, [
+                            gene_id,
+                            seqid,
+                            gene_start,
+                            gene_end,
+                            strand,
+                            'gene',
+                            gene_bin,
+                            helpers._jsonify(gene_attributes)
+                        ])) + '\n')
+
+                    last_gene_id = gene_id
+                    n_features += 1
 
         def derived_feature_generator():
             """
@@ -967,17 +965,18 @@ class _GTFDBCreator(_DBCreator):
             """
             keys = ['parent', 'seqid', 'start', 'end', 'strand',
                     'featuretype', 'bin', 'attributes']
-            for line in open(fout.name):
-                d = dict(list(zip(keys, line.strip().split('\t'))))
-                d.pop('parent')
-                d['score'] = '.'
-                d['source'] = 'gffutils_derived'
-                d['frame'] = '.'
-                d['extra'] = []
-                d['attributes'] = helpers._unjsonify(d['attributes'])
-                f = feature.Feature(**d)
-                f.id = self._id_handler(f)
-                yield f
+            with open(fout.name) as fin:
+                for line in fin:
+                    d = dict(list(zip(keys, line.strip().split('\t'))))
+                    d.pop('parent')
+                    d['score'] = '.'
+                    d['source'] = 'gffutils_derived'
+                    d['frame'] = '.'
+                    d['extra'] = []
+                    d['attributes'] = helpers._unjsonify(d['attributes'])
+                    f = feature.Feature(**d)
+                    f.id = self._id_handler(f)
+                    yield f
 
         # Drop the indexes so the inserts are faster
         c.execute('DROP INDEX IF EXISTS relationsparent')
