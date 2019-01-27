@@ -53,6 +53,7 @@ OFFSETS = [
 # for BED (0-based, half-open) or GFF (1-based, closed intervals)
 COORD_OFFSETS = {'bed': 0, 'gff': 1}
 
+MAX_CHROM_SIZE = 2 ** 29
 
 def bins(start, stop, fmt='gff', one=True):
     """
@@ -72,6 +73,12 @@ def bins(start, stop, fmt='gff', one=True):
     fmt : 'gff' | 'bed'
         This specifies 1-based start coords (gff) or 0-based start coords (bed)
     """
+
+    # For very large coordinates, return 1 which is "somewhere on the
+    # chromosome".
+    if start >= MAX_CHROM_SIZE or stop >= MAX_CHROM_SIZE:
+        return 1
+
     # Jump to highest resolution bin that will fit these coords (depending on
     # whether we have a BED or GFF-style coordinate).
     #
@@ -115,12 +122,6 @@ def bins(start, stop, fmt='gff', one=True):
         start >>= NEXT_SHIFT
         stop >>= NEXT_SHIFT
 
-    # If the coords are outside ~512Mb (536870912), then we may get multiple
-    # bins due to overflow. In that case, set to the largest bin. This will result
-    # in a performance hit for features that are >512Mb from the beginning of
-    # a chromosome.
-    if one and len(bins) > 1:
-        return min(bins)
     return bins
 
 
@@ -221,7 +222,11 @@ def test():
     assert bins(1, -1000, one=True) == 1
     assert bins(1, -1000, one=False) == set([1])
 
-    assert bins(536870912, 536870913, one=True) == 1
+    # Juuuust fits inside the max chrom size
+    assert bins(536870910, 536870911, one=True) == 8776
+
+    # Too big; falls back to 1.
+    assert bins(536870911, 536870912, one=True) == 1
 
 if __name__ == "__main__":
     print_bin_sizes()
