@@ -77,7 +77,10 @@ def bins(start, stop, fmt='gff', one=True):
     # For very large coordinates, return 1 which is "somewhere on the
     # chromosome".
     if start >= MAX_CHROM_SIZE or stop >= MAX_CHROM_SIZE:
-        return 1
+        if one:
+            return 1
+        else:
+            return set([1])
 
     # Jump to highest resolution bin that will fit these coords (depending on
     # whether we have a BED or GFF-style coordinate).
