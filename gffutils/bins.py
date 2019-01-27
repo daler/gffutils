@@ -114,6 +114,13 @@ def bins(start, stop, fmt='gff', one=True):
         # larger bin size)
         start >>= NEXT_SHIFT
         stop >>= NEXT_SHIFT
+
+    # If the coords are outside ~512Mb (536870912), then we may get multiple
+    # bins due to overflow. In that case, set to the largest bin. This will result
+    # in a performance hit for features that are >512Mb from the beginning of
+    # a chromosome.
+    if one and len(bins) > 1:
+        return min(bins)
     return bins
 
 
@@ -213,6 +220,8 @@ def test():
     assert bins(-1, -1000, one=False) == set([1])
     assert bins(1, -1000, one=True) == 1
     assert bins(1, -1000, one=False) == set([1])
+
+    assert bins(536870912, 536870913, one=True) == 1
 
 if __name__ == "__main__":
     print_bin_sizes()
