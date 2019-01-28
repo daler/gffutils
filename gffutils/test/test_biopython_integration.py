@@ -14,5 +14,6 @@ def test_roundtrip():
     s = bp.to_seqfeature(feature)
     assert s.location.start.position == feature.start - 1
     assert s.location.end.position == feature.stop
+    assert s.id == feature.id
     f = bp.from_seqfeature(s, dialect=dialect, keep_order=True)
     assert feature == f
