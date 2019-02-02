@@ -604,17 +604,15 @@ class FeatureDB(object):
         # Only use bins if we have defined boundaries and completely_within is
         # True. Otherwise you can't know how far away a feature stretches
         # (which means bins are not computable ahead of time)
+        _bin_clause = ''
         if (start is not None) and (end is not None) and completely_within:
-            _bins = list(bins.bins(start, end, one=False))
-            # See issue #45
-            if len(_bins) < 900:
-                _bin_clause = ' or ' .join(['bin = ?' for _ in _bins])
-                _bin_clause = 'AND ( %s )' % _bin_clause
-                args += _bins
-            else:
-                _bin_clause = ''
-        else:
-            _bin_clause = ''
+            if start <= bins.MAX_CHROM_SIZE and end <= bins.MAX_CHROM_SIZE:
+                _bins = list(bins.bins(start, end, one=False))
+                # See issue #45
+                if len(_bins) < 900:
+                    _bin_clause = ' or ' .join(['bin = ?' for _ in _bins])
+                    _bin_clause = 'AND ( %s )' % _bin_clause
+                    args += _bins
 
         query = ' '.join([
             constants._SELECT,
