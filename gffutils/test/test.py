@@ -1186,6 +1186,26 @@ def test_issue_105():
         pass
     os.unlink(newfn)
 
+
+def test_issue_107():
+    s = dedent(
+        '''
+        chr1\t.\tgene\t10\t15\t.\t+\t.\tID=b;
+        chr1\t.\tgene\t1\t5\t.\t-\t.\tID=a;
+        chr2\t.\tgene\t25\t50\t.\t-\t.\tID=c;
+        chr2\t.\tgene\t55\t60\t.\t-\t.\tID=d;
+        ''')
+    tmp = tempfile.NamedTemporaryFile(delete=False).name
+    with open(tmp, 'w') as fout:
+        fout.write(s + '\n')
+    db = gffutils.create_db(tmp, ':memory:')
+    interfeatures = list(db.interfeatures(
+        db.features_of_type('gene', order_by=('seqid', 'start'))))
+    assert [str(i) for i in interfeatures] == [
+            'chr1\tgffutils_derived\tinter_gene_gene\t6\t9\t.\t.\t.\tID=a,b;',
+            'chr2\tgffutils_derived\tinter_gene_gene\t16\t54\t.\t-\t.\tID=c,d;',
+    ]
+
 if __name__ == "__main__":
     # this test case fails
     #test_attributes_modify()

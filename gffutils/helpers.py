@@ -330,7 +330,7 @@ def merge_attributes(attr1, attr2):
             if not isinstance(v, list):
                 v = [v]
             new_d[k].extend(v)
-    return dict((k, list(set(v))) for k, v in new_d.items())
+    return dict((k, sorted(set(v))) for k, v in new_d.items())
 
 
 def dialect_compare(dialect1, dialect2):
