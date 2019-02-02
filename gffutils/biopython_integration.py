@@ -5,7 +5,6 @@ objects.
 import six
 try:
     from Bio.SeqFeature import SeqFeature, FeatureLocation
-    from Bio import SeqIO
 except ImportError:
     import warnings
     warnings.warn("BioPython must be installed to use this module")
@@ -79,4 +78,4 @@ def from_seqfeature(s, **kwargs):
     attributes.pop('seqid', '.')
     attributes.pop('frame', '.')
     return Feature(seqid, source, featuretype, start, stop, score, strand,
-                   frame, attributes, **kwargs)
+                   frame, attributes, id=id, **kwargs)
