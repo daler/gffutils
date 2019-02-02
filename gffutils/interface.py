@@ -662,11 +662,9 @@ class FeatureDB(object):
         Providing N features will return N - 1 new features.
 
         This method purposefully does *not* do any merging or sorting of
-        coordinates, so you may want to use :meth:`FeatureDB.merge` first.
-
-        The new features' attributes will be a merge of the neighboring
-        features' attributes.  This is useful if you have provided a list of
-        exons; the introns will then retain the transcript and/or gene parents.
+        coordinates, so you may want to use :meth:`FeatureDB.merge` first, or
+        when selecting features use the `order_by` kwarg, e.g.,
+        `db.features_of_type('gene', order_by=('seqid', 'start'))`.
 
         Parameters
         ----------
@@ -677,6 +675,14 @@ class FeatureDB(object):
             The new features will all be of this type, or, if None (default)
             then the featuretypes will be constructed from the neighboring
             features, e.g., `inter_exon_exon`.
+
+        merge_attributes : bool
+            If True, new features' attributes will be a merge of the neighboring
+            features' attributes.  This is useful if you have provided a list of
+            exons; the introns will then retain the transcript and/or gene
+            parents as a single item. Otherwise, if False, the attribute will
+            be a comma-separated list of values, potentially listing the same
+            gene ID twice.
 
         attribute_func : callable or None
             If None, then nothing special is done to the attributes.  If
@@ -705,9 +711,21 @@ class FeatureDB(object):
             if new_featuretype is None:
                 new_featuretype = 'inter_%s_%s' % (
                     last_feature.featuretype, f.featuretype)
-            assert last_feature.strand == f.strand
-            assert last_feature.chrom == f.chrom
-            strand = last_feature.strand
+            if last_feature.strand != f.strand:
+                new_strand = '.'
+            else:
+                new_strand = f.strand
+
+            if last_feature.chrom != f.chrom:
+                # We've moved to a new chromosome.  For example, if we're
+                # getting intergenic regions from all genes, they will be on
+                # different chromosomes. We still assume sorted features, but
+                # don't complain if they're on different chromosomes -- just
+                # move on.
+                last_feature = f
+                continue
+
+            strand = new_strand
             chrom = last_feature.chrom
 
             # Shrink
