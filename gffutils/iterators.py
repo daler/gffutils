@@ -131,7 +131,7 @@ class _FileIterator(_BaseIterator):
             self.current_item_number = i
 
             if line == '##FASTA' or line.startswith('>'):
-                raise StopIteration
+                return
 
             if line.startswith('##'):
                 self._directive_handler(line)
