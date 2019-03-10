@@ -97,7 +97,6 @@ class _DBCreator(object):
         self.disable_infer_genes = disable_infer_genes
         self.disable_infer_transcripts = disable_infer_transcripts
 
-        self._autoincrements = collections.defaultdict(int)
         if force:
             if os.path.exists(dbfn):
                 os.unlink(dbfn)
@@ -124,6 +123,18 @@ class _DBCreator(object):
             force_dialect_check=force_dialect_check, from_string=from_string,
             dialect=dialect
         )
+        self._autoincrements = self._create_autoincrements()
+
+    def _create_autoincrements(self):
+        autoincrements = collections.defaultdict(int)
+        c = self.conn.cursor()
+        c.execute('SELECT name FROM sqlite_master WHERE type=\'table\' AND name=\'autoincrements\'')
+        records =  c.fetchall()
+        if len(records) >0:
+            c.execute('SELECT * FROM autoincrements')
+            for record in c.fetchall():
+                autoincrements[record[0]] = record[1]
+        return autoincrements
 
 
     def set_verbose(self, verbose=None):
