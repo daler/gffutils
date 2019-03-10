@@ -1206,13 +1206,29 @@ def test_issue_107():
             'chr2\tgffutils_derived\tinter_gene_gene\t16\t54\t.\t-\t.\tID=c,d;',
     ]
 
+
 def test_issue_119():
     db  = gffutils.create_db(gffutils.example_filename('FBgn0031208.gff'),':memory:')
     db1 = gffutils.create_db(gffutils.example_filename('F3-unique-3.v2.gff'),':memory:')
     db2 = db1.update(db)
     assert list(db2._autoincrements.keys()) == ['read', 'exon']
 
-    
+    # More isolated test, merging two databases each created from the same file
+    # which itself contains only a single feature with no ID.
+    tmp = tempfile.NamedTemporaryFile(delete=False).name
+    with open(tmp, 'w') as fout:
+        fout.write('chr1\t.\tgene\t10\t15\t.\t+\t.\t\n')
+
+    db3 = gffutils.create_db(tmp, ':memory:')
+    assert db3._autoincrements == {'gene': 1}
+
+    db4 = gffutils.create_db(tmp, ':memory:')
+    assert db4._autoincrements == {'gene': 1}
+
+    db5 = db3.update(db4)
+    assert db5._autoincrements == {'gene': 2}
+
+
 if __name__ == "__main__":
     # this test case fails
     #test_attributes_modify()
