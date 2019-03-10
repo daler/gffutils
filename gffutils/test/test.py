@@ -1211,7 +1211,8 @@ def test_issue_119():
     db  = gffutils.create_db(gffutils.example_filename('FBgn0031208.gff'),':memory:')
     db1 = gffutils.create_db(gffutils.example_filename('F3-unique-3.v2.gff'),':memory:')
     db2 = db1.update(db)
-    assert list(db2._autoincrements.keys()) == ['read', 'exon']
+    obs = sorted(db2._autoincrements.keys())
+    assert obs == ['exon', 'read'], obs
 
     # More isolated test, merging two databases each created from the same file
     # which itself contains only a single feature with no ID.
