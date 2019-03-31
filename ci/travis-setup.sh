@@ -10,11 +10,17 @@ conda config --add channels defaults
 conda config --add channels conda-forge
 conda config --add channels bioconda
 
+if [[ $PY == 3 ]]; then
+  pyver="python>=3.7"
+else
+  pyver="python=2"
+fi
+
 conda create -n tmp$PY -y \
     --file $HERE/../requirements.txt \
     --file $HERE/../optional-requirements.txt \
     nose \
-    python=$PY
+    "$pyver"
 
 source activate tmp$PY
 python setup.py install
