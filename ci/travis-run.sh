@@ -20,6 +20,12 @@ conda install -y --file $HERE/../docs-requirements.txt
 (cd doc && make clean && make doctest)
 
 # Fresh environment, pip-installed from just-created sdist tarball
+if [[ $PY == 3 ]]; then
+  pyver="python>=3.7"
+else
+  pyver="python=2"
+fi
+
 conda create -y -n new python=$PY
 source activate new
 python setup.py clean sdist
