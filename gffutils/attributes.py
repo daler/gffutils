@@ -1,11 +1,16 @@
 import six
 import collections
+
+try:
+    collectionsAbc = collections.abc
+except AttributeError:
+    collectionsAbc = collections
 from gffutils import constants
 
 
 # collections.MutableMapping is apparently the best way to provide dict-like
 # interface (http://stackoverflow.com/a/3387975)
-class Attributes(collections.MutableMapping):
+class Attributes(collectionsAbc.MutableMapping):
     def __init__(self, *args, **kwargs):
         """
         An Attributes object acts much like a dictionary.  However, values are
