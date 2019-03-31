@@ -1,7 +1,7 @@
 import copy
 import sys
 import os
-import simplejson
+import simplejson as json
 import time
 import tempfile
 import six
@@ -256,16 +256,16 @@ def _bin_from_dict(d):
 def _jsonify(x):
     """Use most compact form of JSON"""
     if isinstance(x, dict_class):
-        return simplejson.dumps(x._d, separators=(',', ':'))
-    return simplejson.dumps(x, separators=(',', ':'))
+        return json.dumps(x._d, separators=(',', ':'))
+    return json.dumps(x, separators=(',', ':'))
 
 
 def _unjsonify(x, isattributes=False):
     """Convert JSON string to an ordered defaultdict."""
     if isattributes:
-        obj = simplejson.loads(x)
+        obj = json.loads(x)
         return dict_class(obj)
-    return simplejson.loads(x)
+    return json.loads(x)
 
 
 def _feature_to_fields(f, jsonify=True):
