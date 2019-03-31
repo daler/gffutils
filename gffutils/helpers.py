@@ -1,7 +1,7 @@
 import copy
 import sys
 import os
-import json as json
+import simplejson as json
 import time
 import tempfile
 import six

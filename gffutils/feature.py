@@ -1,6 +1,6 @@
 from pyfaidx import Fasta
 import six
-import json as json
+import simplejson as json
 from gffutils import constants
 from gffutils import helpers
 from gffutils import parser
