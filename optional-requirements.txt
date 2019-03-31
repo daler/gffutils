@@ -1,5 +1,3 @@
-# use conda install -c bioconda
-biopython
-bedtools
-pybedtools
-bedtools
+biopython>=1.73
+bedtools>=2.27.1
+pybedtools>=0.8.0
