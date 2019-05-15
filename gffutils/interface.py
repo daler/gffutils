@@ -1111,6 +1111,113 @@ class FeatureDB(object):
             attributes='')
         yield self._feature_returner(**merged_feature)
 
+    def merge2(self, features, exact_only=False, ignore_strand=False, ignore_featuretype=False):
+        """
+        Merge overlapping features together.
+
+        Parameters
+        ----------
+
+        features : iterator of Feature instances
+
+        exact_only : bool
+            If True, will only merge features with identical coordinates;
+            otherwise will merge any overlapping or contiguous features.
+
+        ignore_strand : bool
+            If True, features on multiple strands will be merged, and the final
+            strand will be set to '.'
+
+        ignore_feauretype : bool
+            If True, features of multiple types will be merged, and the final
+            type will be set to 'sequence_feature'.
+
+        Returns
+        -------
+        A generator object that yields :class:`Feature` objects representing
+        the newly merged features and a list of the features that compose it.
+        """
+
+        # To start, we create a merged feature of just the first feature.
+        features = iter(features)
+        try:
+            feature = next(features)
+        except StopIteration:
+            return
+        current_merged_start = feature.start
+        current_merged_stop = feature.stop
+        current_merged_seqid = feature.seqid
+        strand = feature.strand
+        frame = feature.frame
+        featuretype = feature.featuretype
+        feature_components = [feature]
+        if exact_only:
+            coordinate_criteria = \
+                lambda seqid, start, stop: \
+                    start == current_merged_start and stop == current_merged_stop and seqid == current_merged_seqid
+        else:
+            coordinate_criteria = \
+                lambda seqid, start, stop: start <= current_merged_stop + 1 and seqid == current_merged_seqid
+
+        for feature in features:
+            # Does this feature start within the currently merged feature?...
+            if coordinate_criteria(feature.seqid, feature.start, feature.stop) and (
+                    ignore_strand or feature.strand == strand) and (
+                    ignore_featuretype or feature.featuretype == featuretype):
+                feature_components.append(feature)
+                if feature.strand != strand: strand = '.'
+                if feature.frame != frame: frame = '.'
+                if feature.featuretype != featuretype: featuretype = "sequence_feature"
+                # ...It starts within, so leave current_merged_start where it
+                # is.  Does it extend any farther?
+                if feature.stop >= current_merged_stop:
+                    # Extends further, so set a new stop position
+                    current_merged_stop = feature.stop
+                else:
+                    # If feature.stop < current_merged_stop, it's completely
+                    # within the previous feature.  Nothing more to do.
+                    continue
+            else:
+                # The start position is outside the merged feature, so we're
+                # done with the current merged feature.  Prepare for output...
+                attributes = {}
+                for component in feature_components: attributes = helpers.merge_attributes(attributes, component.attributes)
+                yield self._feature_returner(
+                    seqid=current_merged_seqid,
+                    source=",".join(set(component.source for component in feature_components)),
+                    featuretype=featuretype,
+                    start=current_merged_start,
+                    end=current_merged_stop,
+                    score='.',
+                    strand=strand,
+                    frame=frame,
+                    attributes=attributes), feature_components
+
+                # and we start a new one, initializing with this feature's
+                # start and stop.
+                current_merged_start = feature.start
+                current_merged_stop = feature.stop
+                current_merged_seqid = feature.seqid
+                strand = feature.strand
+                frame = feature.frame
+                featuretype = feature.featuretype
+                feature_components = [feature]
+
+        attributes = {}
+        for component in feature_components:
+            attributes = helpers.merge_attributes(attributes, component.attributes)
+
+        yield self._feature_returner(
+            seqid=current_merged_seqid,
+            source=",".join(set(component.source for component in feature_components)),
+            featuretype=featuretype,
+            start=current_merged_start,
+            end=current_merged_stop,
+            score='.',
+            strand=strand,
+            frame=frame,
+            attributes=attributes), feature_components
+
     def children_bp(self, feature, child_featuretype='exon', merge=False,
                     ignore_strand=False):
         """
