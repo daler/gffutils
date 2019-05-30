@@ -318,7 +318,7 @@ def merge_attributes(attr1, attr2):
     """
 
     new_d = copy.deepcopy(attr1)
-    new_d.update(attr2)
+    new_d.update(copy.deepcopy(attr2))
 
     #all of attr2 key : values just overwrote attr1, fix it
     for k, v in new_d.items():
