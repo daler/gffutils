@@ -1187,7 +1187,7 @@ class FeatureDB(object):
                 # The start position is outside the merged feature, so we're
                 # done with the current merged feature.  Prepare for output...
                 attributes = {}
-                for component in feature_components: attributes = helpers.merge_attributes(attributes, component.attributes)
+                for component in feature_components: attributes = helpers.merge_attributes(component.attributes, attributes)
                 yield self._feature_returner(
                     seqid=current_merged_seqid,
                     source=",".join(set(component.source for component in feature_components)),
@@ -1211,7 +1211,7 @@ class FeatureDB(object):
 
         attributes = {}
         for component in feature_components:
-            attributes = helpers.merge_attributes(attributes, component.attributes)
+            attributes = helpers.merge_attributes(component.attributes, attributes)
 
         yield self._feature_returner(
             seqid=current_merged_seqid,
