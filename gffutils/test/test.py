@@ -1239,6 +1239,24 @@ def test_pr_133():
     assert d2 == d2a, d2
 
 
+def test_pr_131():
+    db  = gffutils.create_db(gffutils.example_filename('FBgn0031208.gff'),':memory:')
+
+    # previously would raise ValueError("No lines parsed -- was an empty
+    # file provided?")
+    db2 = db.update([])
+
+
+def test_pr_133():
+    d1 = {'a': [1]}
+    d2 = {'a': [2]}
+    d1a = {'a': [1]}
+    d2a = {'a': [2]}
+    d3 = gffutils.helpers.merge_attributes(d1, d2)
+    assert d1 == d1a, d1
+    assert d2 == d2a, d2
+
+
 if __name__ == "__main__":
     # this test case fails
     #test_attributes_modify()
