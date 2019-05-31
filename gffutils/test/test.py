@@ -1229,6 +1229,12 @@ def test_issue_119():
     db5 = db3.update(db4)
     assert db5._autoincrements == {'gene': 2}
 
+def test_pr_131():
+    db  = gffutils.create_db(gffutils.example_filename('FBgn0031208.gff'),':memory:')
+
+    # previously would raise ValueError("No lines parsed -- was an empty
+    # file provided?")
+    db2 = db.update([])
 
 if __name__ == "__main__":
     # this test case fails
