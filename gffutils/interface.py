@@ -865,6 +865,9 @@ class FeatureDB(object):
         else:
             raise ValueError
 
+        peek, data._iter = iterators.peek(data._iter, 1)
+        if len(peek) == 0: return db  # If the file is empty then do nothing
+
         db._populate_from_lines(data)
         db._update_relations()
         db._finalize()
