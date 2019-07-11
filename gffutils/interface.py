@@ -1,3 +1,4 @@
+import collections
 import os
 import six
 import sqlite3
@@ -147,7 +148,7 @@ class FeatureDB(object):
             '''
             SELECT base, n FROM autoincrements
             ''')
-        self._autoincrements = dict(c)
+        self._autoincrements = collections.defaultdict(int, c)
 
         self.set_pragmas(pragmas)
 
