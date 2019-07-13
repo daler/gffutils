@@ -3,12 +3,26 @@ import os
 import six
 import sqlite3
 import shutil
+from typing import Sequence, Set, Callable
 import warnings
 from gffutils import bins
 from gffutils import helpers
 from gffutils import constants
+from gffutils import merge_criteria as mc
 from gffutils.feature import Feature
 from gffutils.exceptions import FeatureNotFoundError
+
+
+def assign_child(parent, child):
+    """
+    Helper for add_relation()
+    Sets 'Parent' attribute to parent['ID']
+    :param parent: parent Feature
+    :param child: child Feature
+    :return: child
+    """
+    child.attributes['Parent'] = parent['ID']
+    return child
 
 
 class FeatureDB(object):
@@ -1022,127 +1036,38 @@ class FeatureDB(object):
             ):
                 yield intron
 
-    def merge(self, features, ignore_strand=False):
+    def merge(self, features, ignore_strand=False,
+              merge_criteria: [Callable] = (mc.seqid, mc.overlap_end_inclusive, mc.strand, mc.feature_type),
+              multiline: bool = False):
         """
-        Merge overlapping features together.
+        Merge features matching criteria together
 
-        Parameters
-        ----------
+        Criteria callback interface:
+        callback(acc: gffutils.Feature, cur: gffutils.Feature, components: [gffutils.Feature]) -> bool
+        acc: current accumulated feature
+        cur: candidate feature to merge
+        components: list of features that compose acc
+        return: true to merge cur into acc, false to set cur to acc (start a new merged feature)
+        If merge criteria allows different feature types then the merged features feature types should have their
+        feature_type property reassigned to a more specific ontology value.
 
-        features : iterator of Feature instances
+        Returned Features have a special property called 'children' that is a list of the component features.
+        This only exists for the lifetime of the Feature instance.
 
-        ignore_strand : bool
-            If True, features on multiple strands will be merged, and the final
-            strand will be set to '.'.  Otherwise, ValueError will be raised if
-            trying to merge features on differnt strands.
-
-        Returns
-        -------
-        A generator object that yields :class:`Feature` objects representing
-        the newly merged features.
+        :param features: Iterable of Feature instances to merge
+        :param ignore_strand: DEPRECIATED remove 'strand' from criteria if true
+        :param merge_criteria: List of merge criteria callbacks
+        :param multiline: True to emit multiple features with the same ID attribute, False otherwise
+        :return: generator emitting merged Feature instances
         """
+        if not isinstance(merge_criteria, list):
+            try:
+                merge_criteria = list(merge_criteria)
+            except TypeError:
+                merge_criteria = [merge_criteria]
 
-        # Consume iterator up front...
-        features = list(features)
-
-        if len(features) == 0:
-            raise StopIteration
-
-        # Either set all strands to '+' or check for strand-consistency.
-        if ignore_strand:
-            strand = '.'
-        else:
-            strands = [i.strand for i in features]
-            if len(set(strands)) > 1:
-                raise ValueError('Specify ignore_strand=True to force merging '
-                                 'of multiple strands')
-            strand = strands[0]
-
-        # Sanity check to make sure all features are from the same chromosome.
-        chroms = [i.chrom for i in features]
-        if len(set(chroms)) > 1:
-            raise NotImplementedError('Merging multiple chromosomes not '
-                                      'implemented')
-        chrom = chroms[0]
-
-        # To start, we create a merged feature of just the first feature.
-        current_merged_start = features[0].start
-        current_merged_stop = features[0].stop
-
-        # We don't need to check the first one, so start at feature #2.
-        for feature in features[1:]:
-            # Does this feature start within the currently merged feature?...
-            if feature.start <= current_merged_stop + 1:
-                # ...It starts within, so leave current_merged_start where it
-                # is.  Does it extend any farther?
-                if feature.stop >= current_merged_stop:
-                    # Extends further, so set a new stop position
-                    current_merged_stop = feature.stop
-                else:
-                    # If feature.stop < current_merged_stop, it's completely
-                    # within the previous feature.  Nothing more to do.
-                    continue
-            else:
-                # The start position is outside the merged feature, so we're
-                # done with the current merged feature.  Prepare for output...
-                merged_feature = dict(
-                    seqid=feature.chrom,
-                    source='.',
-                    featuretype=feature.featuretype,
-                    start=current_merged_start,
-                    end=current_merged_stop,
-                    score='.',
-                    strand=strand,
-                    frame='.',
-                    attributes='')
-                yield self._feature_returner(**merged_feature)
-
-                # and we start a new one, initializing with this feature's
-                # start and stop.
-                current_merged_start = feature.start
-                current_merged_stop = feature.stop
-
-        # need to yield the last one.
-        if len(features) == 1:
-            feature = features[0]
-        merged_feature = dict(
-            seqid=feature.chrom,
-            source='.',
-            featuretype=feature.featuretype,
-            start=current_merged_start,
-            end=current_merged_stop,
-            score='.',
-            strand=strand,
-            frame='.',
-            attributes='')
-        yield self._feature_returner(**merged_feature)
-
-    def merge2(self, features, exact_only=False, ignore_strand=False, ignore_featuretype=False):
-        """
-        Merge overlapping features together.
-
-        Parameters
-        ----------
-
-        features : iterator of Feature instances
-
-        exact_only : bool
-            If True, will only merge features with identical coordinates;
-            otherwise will merge any overlapping or contiguous features.
-
-        ignore_strand : bool
-            If True, features on multiple strands will be merged, and the final
-            strand will be set to '.'
-
-        ignore_feauretype : bool
-            If True, features of multiple types will be merged, and the final
-            type will be set to 'sequence_feature'.
-
-        Returns
-        -------
-        A generator object that yields :class:`Feature` objects representing
-        the newly merged features and a list of the features that compose it.
-        """
+        if ignore_strand and mc.strand in merge_criteria:
+            merge_criteria.remove(mc.strand)
 
         # To start, we create a merged feature of just the first feature.
         features = iter(features)
@@ -1150,79 +1075,124 @@ class FeatureDB(object):
             feature = next(features)
         except StopIteration:
             return
-        current_merged_start = feature.start
-        current_merged_stop = feature.stop
-        current_merged_seqid = feature.seqid
-        strand = feature.strand
-        frame = feature.frame
-        featuretype = feature.featuretype
-        feature_components = [feature]
-        if exact_only:
-            coordinate_criteria = \
-                lambda seqid, start, stop: \
-                    start == current_merged_start and stop == current_merged_stop and seqid == current_merged_seqid
-        else:
-            coordinate_criteria = \
-                lambda seqid, start, stop: start <= current_merged_stop + 1 and seqid == current_merged_seqid
+        current_merged = feature
+        feature_children = [feature]
+        last_id = None
+        no_children = tuple()
 
         for feature in features:
-            # Does this feature start within the currently merged feature?...
-            if coordinate_criteria(feature.seqid, feature.start, feature.stop) and (
-                    ignore_strand or feature.strand == strand) and (
-                    ignore_featuretype or feature.featuretype == featuretype):
-                feature_components.append(feature)
-                if feature.strand != strand: strand = '.'
-                if feature.frame != frame: frame = '.'
-                if feature.featuretype != featuretype: featuretype = "sequence_feature"
-                # ...It starts within, so leave current_merged_start where it
-                # is.  Does it extend any farther?
-                if feature.stop >= current_merged_stop:
+            if all(criteria(current_merged, feature, feature_children) for criteria in merge_criteria):
+                # Criteria satisfied, merge
+                if multiline and (feature.start > current_merged.end + 1 or feature.end + 1 < current_merged.start):
+                    # Feature is possibly multiline, keep ID but start new record
+                    if len(feature_children) > 1:
+                        current_merged.children = feature_children
+                        current_merged.source = ','.join(set(child.source for child in feature_children))
+                    else:
+                        current_merged.children = no_children
+                    yield current_merged
+                    current_merged = feature
+                    feature_children = [feature]
+
+                if len(feature_children) == 1:
+                    # Current merged is first child, make copy
+                    current_merged = vars(feature_children[0]).copy()
+                    del current_merged['attributes']
+                    del current_merged['extra']
+                    del current_merged['dialect']
+                    del current_merged['keep_order']
+                    del current_merged['sort_attribute_values']
+                    current_merged = self._feature_returner(**current_merged)
+                    if not last_id:
+                        # Generate unique ID for new Feature
+                        self._autoincrements[current_merged.featuretype] += 1
+                        last_id = current_merged.featuretype + '_' + str(
+                            self._autoincrements[current_merged.featuretype])
+                    current_merged['ID'] = last_id
+                    current_merged.id = last_id
+
+                feature_children.append(feature)
+
+                # Merge attributes. Removed as it doesn't make sence to collect attributes in an aggrigate feature when
+                # Parent relationships present
+                # current_merged.attributes = gffutils.helpers.merge_attributes(feature.attributes, current_merged.attributes)
+                # Preserve ID
+                # current_merged['ID'] = last_id
+
+                # Set mismatched properties to ambiguous values
+                if feature.seqid not in current_merged.seqid.split(','): current_merged.seqid += ',' + feature.seqid
+                if feature.strand != current_merged.strand: current_merged.strand = '.'
+                if feature.frame != current_merged.frame: current_merged.frame = '.'
+                if feature.featuretype != current_merged.featuretype: current_merged.featuretype = "sequence_feature"
+
+                if feature.start < current_merged.start:
+                    # Extends prior, so set a new start position
+                    current_merged.start = feature.start
+
+                if feature.end > current_merged.end:
                     # Extends further, so set a new stop position
-                    current_merged_stop = feature.stop
-                else:
-                    # If feature.stop < current_merged_stop, it's completely
-                    # within the previous feature.  Nothing more to do.
-                    continue
+                    current_merged.end = feature.end
+
             else:
-                # The start position is outside the merged feature, so we're
-                # done with the current merged feature.  Prepare for output...
-                attributes = {}
-                for component in feature_components: attributes = helpers.merge_attributes(component.attributes, attributes)
-                yield self._feature_returner(
-                    seqid=current_merged_seqid,
-                    source=",".join(set(component.source for component in feature_components)),
-                    featuretype=featuretype,
-                    start=current_merged_start,
-                    end=current_merged_stop,
-                    score='.',
-                    strand=strand,
-                    frame=frame,
-                    attributes=attributes), feature_components
+                if len(feature_children) > 1:
+                    current_merged.children = feature_children
+                    current_merged.source = ','.join(set(child.source for child in feature_children))
+                else:
+                    current_merged.children = no_children
+                yield current_merged
+                current_merged = feature
+                feature_children = [feature]
+                last_id = None
 
-                # and we start a new one, initializing with this feature's
-                # start and stop.
-                current_merged_start = feature.start
-                current_merged_stop = feature.stop
-                current_merged_seqid = feature.seqid
-                strand = feature.strand
-                frame = feature.frame
-                featuretype = feature.featuretype
-                feature_components = [feature]
+        if len(feature_children) > 1:
+            current_merged.children = feature_children
+            current_merged.source = ','.join(set(child.source for child in feature_children))
+        else:
+            current_merged.children = no_children
+        yield current_merged
 
-        attributes = {}
-        for component in feature_components:
-            attributes = helpers.merge_attributes(component.attributes, attributes)
+    def merge_all(self,
+                  merge_order: (str,) = ('seqid', 'featuretype', 'strand', 'start'),
+                  merge_criteria: '[Callable]' = (mc.seqid, mc.overlap_end_inclusive, mc.strand, mc.feature_type),
+                  featuretypes_groups: 'Sequence[Set[str]]' = (None,),
+                  exclude_components: bool = False):
+        """
+        Merge all features in database according to criteria.
+        Merged features will be assigned as children of the merged record.
+        The resulting records are added to the database.
 
-        yield self._feature_returner(
-            seqid=current_merged_seqid,
-            source=",".join(set(component.source for component in feature_components)),
-            featuretype=featuretype,
-            start=current_merged_start,
-            end=current_merged_stop,
-            score='.',
-            strand=strand,
-            frame=frame,
-            attributes=attributes), feature_components
+        :param merge_order: Ordered list of columns with which to group features before evaluating criteria
+        :param merge_criteria: List of merge criteria callbacks. See merge().
+        :param featuretypes_groups: iterable of sets of featuretypes to merge together
+        :param exclude_components: True: child features will be discarded. False to keep them.
+        :return: list of merge features
+        """
+
+        if not len(featuretypes_groups):
+            # Can't be empty
+            featuretypes_groups = (None,)
+
+        result_features = []
+
+        # Merge features per featuregroup
+        for featuregroup in featuretypes_groups:
+            for merged in self.merge(self.all_features(featuretype=featuregroup, order_by=merge_order),
+                                merge_criteria=merge_criteria):
+                # If feature is result of merge
+                if merged.children:
+                    if exclude_components:
+                        # Remove child features from DB
+                        self.delete(merged.children)
+                    else:
+                        # Add child relations to DB
+                        for child in merged.children:
+                            self.add_relation(merged, child, 1, child_func=assign_child)
+                    self._insert(merged, self.conn.cursor())
+                    result_features.append(merged)
+                else:
+                    pass  # Do nothing, feature is already in DB
+
+        return result_features
 
     def children_bp(self, feature, child_featuretype='exon', merge=False,
                     ignore_strand=False):
