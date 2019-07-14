@@ -6,7 +6,7 @@ num_synthetic_overlap = 13
 
 
 class TestWithSynthDB(TestCase):
-    def setUp(self) -> None:
+    def setUp(self):
         self.db = gffutils.create_db(synthetic_path, ":memory:", merge_strategy='create_unique')  # type: gffutils.FeatureDB
         self.assertEqual(num_synthetic_features, self.db.count_features_of_type())
 
