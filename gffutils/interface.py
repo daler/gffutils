@@ -3,7 +3,6 @@ import os
 import six
 import sqlite3
 import shutil
-from typing import Sequence, Set, Callable
 import warnings
 from gffutils import bins
 from gffutils import helpers
@@ -1037,8 +1036,8 @@ class FeatureDB(object):
                 yield intron
 
     def merge(self, features, ignore_strand=False,
-              merge_criteria: [Callable] = (mc.seqid, mc.overlap_end_inclusive, mc.strand, mc.feature_type),
-              multiline: bool = False):
+              merge_criteria=(mc.seqid, mc.overlap_end_inclusive, mc.strand, mc.feature_type),
+              multiline=False):
         """
         Merge features matching criteria together
 
@@ -1152,10 +1151,10 @@ class FeatureDB(object):
         yield current_merged
 
     def merge_all(self,
-                  merge_order: (str,) = ('seqid', 'featuretype', 'strand', 'start'),
-                  merge_criteria: '[Callable]' = (mc.seqid, mc.overlap_end_inclusive, mc.strand, mc.feature_type),
-                  featuretypes_groups: 'Sequence[Set[str]]' = (None,),
-                  exclude_components: bool = False):
+                  merge_order=('seqid', 'featuretype', 'strand', 'start'),
+                  merge_criteria=(mc.seqid, mc.overlap_end_inclusive, mc.strand, mc.feature_type),
+                  featuretypes_groups=(None,),
+                  exclude_components=False):
         """
         Merge all features in database according to criteria.
         Merged features will be assigned as children of the merged record.
