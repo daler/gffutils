@@ -1,7 +1,6 @@
 from unittest import TestCase
 import gffutils
-
-synthetic_path = 'data/synthetic.gff3'
+synthetic_path = gffutils.example_filename('synthetic.gff3')
 num_synthetic_features = 18
 num_synthetic_overlap = 13
 
