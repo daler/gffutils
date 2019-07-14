@@ -1,7 +1,7 @@
 """
 Merge criteria used by FeatureDB merge() and merge_all()
 """
-from gffutils import Feature
+from gffutils.feature import Feature
 
 
 def seqid(acc, cur, components):
