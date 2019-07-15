@@ -1230,7 +1230,6 @@ def test_issue_119():
     assert db5._autoincrements == {'gene': 2}
     assert db3._autoincrements == db5._autoincrements
 
-    assert db3._autoincrements == db5._autoincrements
 
 def test_pr_133():
     d1 = {'a': [1]}
