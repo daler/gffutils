@@ -1228,6 +1228,7 @@ def test_issue_119():
 
     db5 = db3.update(db4)
     assert db5._autoincrements == {'gene': 2}
+    assert db3._autoincrements == db5._autoincrements
 
 def test_pr_133():
     d1 = {'a': [1]}
@@ -1255,7 +1256,6 @@ def test_pr_133():
     d3 = gffutils.helpers.merge_attributes(d1, d2)
     assert d1 == d1a, d1
     assert d2 == d2a, d2
-
 
 if __name__ == "__main__":
     # this test case fails
