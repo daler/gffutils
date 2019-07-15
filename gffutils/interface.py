@@ -1048,7 +1048,7 @@ class FeatureDB(object):
         components: list of features that compose acc
         return: true to merge cur into acc, false to set cur to acc (start a new merged feature)
         If merge criteria allows different feature types then the merged features feature types should have their
-        feature_type property reassigned to a more specific ontology value.
+        featuretype property reassigned to a more specific ontology value.
 
         Returned Features have a special property called 'children' that is a list of the component features.
         This only exists for the lifetime of the Feature instance.
@@ -1121,7 +1121,7 @@ class FeatureDB(object):
 
                 feature_children.append(feature)
 
-                # Merge attributes. Removed as it doesn't make sence to collect attributes in an aggrigate feature when
+                # Merge attributes. Removed as it doesn't make sense to collect attributes in an aggregate feature when
                 # Parent relationships present
                 # current_merged.attributes = gffutils.helpers.merge_attributes(feature.attributes, current_merged.attributes)
                 # Preserve ID
