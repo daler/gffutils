@@ -1259,6 +1259,26 @@ def test_pr_133():
     assert d1 == d1a, d1
     assert d2 == d2a, d2
 
+
+def test_backwards_compatibility():
+    """
+    Work out the arguments that correspond to the old behavior.
+    """
+    fn = gffutils.example_filename('synthetic.gff3')
+    db = gffutils.create_db(fn, ':memory:', merge_strategy='warning')
+    to_merge = list(db.region(('seq1', 0, 1e12)))
+
+
+    if hasattr(db, 'merge_all'):
+        from gffutils import merge_criteria as mc
+        features = db.merge(to_merge, merge_criteria=(mc.seqid, mc.overlap_end_inclusive, mc.strand))
+    else:
+        features = db.merge(to_merge, ignore_strand=True)
+    print('\n'.join([str(i) for i in features]))
+    1/0
+
+
+
 if __name__ == "__main__":
     # this test case fails
     #test_attributes_modify()
@@ -1266,3 +1286,6 @@ if __name__ == "__main__":
     #test_random_chr()
     #test_nonascii()
     test_iterator_update()
+
+
+
