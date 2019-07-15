@@ -1041,32 +1041,58 @@ class FeatureDB(object):
         """
         Merge features matching criteria together
 
-        Criteria callback interface:
-        callback(acc: gffutils.Feature, cur: gffutils.Feature, components: [gffutils.Feature]) -> bool
-        acc: current accumulated feature
-        cur: candidate feature to merge
-        components: list of features that compose acc
-        return: true to merge cur into acc, false to set cur to acc (start a new merged feature)
-        If merge criteria allows different feature types then the merged features feature types should have their
-        featuretype property reassigned to a more specific ontology value.
 
-        Returned Features have a special property called 'children' that is a list of the component features.
-        This only exists for the lifetime of the Feature instance.
+        Returned Features have a special property called 'children' that is
+        a list of the component features.  This only exists for the lifetime of
+        the Feature instance.
 
         Parameters
         ----------
         features : list
             Iterable of Feature instances to merge
+
         ignore_strand: bool
             DEPRECIATED remove 'strand' from criteria if true
+
         merge_criteria : list
-            List of merge criteria callbacks
+            List of merge criteria callbacks. All must evaluate to True in
+            order for a feature to be merged. See notes below on callback
+            signature.
+
         multiline : bool
-            True to emit multiple features with the same ID attribute, False otherwise
+            True to emit multiple features with the same ID attribute, False
+            otherwise.
 
         Returns
         -------
-        generator emitting merged Feature instances
+        Generator yielding merged Features
+
+        Notes
+        -----
+
+        See the `gffutils.merge_criteria` module (imported here as `mc`) for
+        existing callback functions. For writing custom callbacks, functions
+        must have the following signature::
+
+            callback(
+                acc: gffutils.Feature,
+                cur: gffutils.Feature,
+                components: [gffutils.Feature]
+            ) -> bool
+
+        Where:
+
+            - `acc`: current accumulated feature
+            - `cur`: candidate feature to merge
+            - `components`: list of features that compose acc
+
+        The function should return True to merge `cur` into `acc`, False to set
+        `cur` to `acc` (that is, start a new merged feature).
+
+
+        If merge criteria allows different feature types then the merged
+        features' feature types should have their featuretype property
+        reassigned to a more specific ontology value.
         """
         if not isinstance(merge_criteria, list):
             try:
@@ -1121,8 +1147,9 @@ class FeatureDB(object):
 
                 feature_children.append(feature)
 
-                # Merge attributes. Removed as it doesn't make sense to collect attributes in an aggregate feature when
-                # Parent relationships present
+                # Merge attributes. Removed as it doesn't make sense to collect
+                # attributes in an aggregate feature when Parent relationships
+                # present
                 # current_merged.attributes = gffutils.helpers.merge_attributes(feature.attributes, current_merged.attributes)
                 # Preserve ID
                 # current_merged['ID'] = last_id
