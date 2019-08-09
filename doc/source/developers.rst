@@ -1,7 +1,7 @@
 Developer's docs
 ================
 This section serves as an entry point for learning about the internals of
-:mod:`gffutils`.
+:mod:`gffutils`. The github repository can be found `here <https://github.com/daler/gffutils>`_
 
 Package modules
 ---------------
