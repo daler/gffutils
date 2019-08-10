@@ -1,6 +1,6 @@
 from pyfaidx import Fasta
 import six
-import simplejson
+import simplejson as json
 from gffutils import constants
 from gffutils import helpers
 from gffutils import parser
@@ -145,7 +145,7 @@ class Feature(object):
                 attributes = helpers._unjsonify(attributes, isattributes=True)
 
             # it's a string but not JSON: assume original attributes string.
-            except simplejson.JSONDecodeError:
+            except json.JSONDecodeError:
 
                 # But Feature.attributes is still a dict
                 attributes, _dialect = parser._split_keyvals(attributes)
@@ -159,7 +159,7 @@ class Feature(object):
         if isinstance(extra, six.string_types):
             try:
                 extra = helpers._unjsonify(extra)
-            except simplejson.JSONDecodeError:
+            except json.JSONDecodeError:
                 extra = extra.split('\t')
 
         self.seqid = seqid
