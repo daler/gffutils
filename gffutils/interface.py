@@ -850,6 +850,7 @@ class FeatureDB(object):
 
         # Handle all sorts of input
         data = iterators.DataIterator(data, **_iterator_kwargs)
+        kwargs['_autoincrements'] = self._autoincrements
 
         if self.dialect['fmt'] == 'gtf':
             if 'id_spec' not in kwargs:

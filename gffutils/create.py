@@ -123,18 +123,11 @@ class _DBCreator(object):
             force_dialect_check=force_dialect_check, from_string=from_string,
             dialect=dialect
         )
-        self._autoincrements = self._create_autoincrements()
+        if '_autoincrements' in kwargs:
+            self._autoincrements = kwargs['_autoincrements']
+        else:
+            self._autoincrements = collections.defaultdict(int)
 
-    def _create_autoincrements(self):
-        autoincrements = collections.defaultdict(int)
-        c = self.conn.cursor()
-        c.execute('SELECT name FROM sqlite_master WHERE type=\'table\' AND name=\'autoincrements\'')
-        records =  c.fetchall()
-        if len(records) >0:
-            c.execute('SELECT * FROM autoincrements')
-            for record in c.fetchall():
-                autoincrements[record[0]] = record[1]
-        return autoincrements
 
 
     def set_verbose(self, verbose=None):
