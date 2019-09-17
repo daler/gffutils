@@ -187,7 +187,10 @@ class _FeatureIterator(_BaseIterator):
         for i, feature in enumerate(self.data):
             self.current_item = feature
             self.current_item_number = i
-            yield feature
+            try:
+                yield feature
+            except StopIteration:
+                return
 
 
 class _StringIterator(_FileIterator):
