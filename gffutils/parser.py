@@ -145,13 +145,14 @@ def _reconstruct(keyvals, dialect, keep_order=False,
             val_str = dialect['multival separator'].join(val)
 
             if val_str:
-
                 # Surround with quotes if needed
                 if dialect['quoted GFF2 values']:
                     val_str = '"%s"' % val_str
 
                 # Typically "=" for GFF3 or " " otherwise
                 part = dialect['keyval separator'].join([key, val_str])
+            else:
+                part = key
         else:
             if dialect['fmt'] == 'gtf':
                 part = dialect['keyval separator'].join([key, '""'])
