@@ -621,6 +621,7 @@ def test_create_db_from_url():
 
     # Serving test/data folder
     served_folder = gffutils.example_filename('')
+    savedir = os.getcwd()
     os.chdir(served_folder)
 
     print("Starting SimpleHTTPServer in thread")
@@ -654,6 +655,7 @@ def test_create_db_from_url():
         print('Server shutdown.')
         httpd.shutdown()
         server_thread.join()
+        os.chdir(savedir)
 
 
 def test_empty_files():
