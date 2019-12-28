@@ -48,7 +48,7 @@ def deprecation_handler(kwargs):
 
 class _DBCreator(object):
     def __init__(self, data, dbfn, force=False, verbose=False, id_spec=None,
-                 merge_strategy='merge', checklines=10, transform=None,
+                 merge_strategy='error', checklines=10, transform=None,
                  force_dialect_check=False, from_string=False, dialect=None,
                  default_encoding='utf-8',
                  disable_infer_genes=False,
