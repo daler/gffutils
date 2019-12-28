@@ -1259,6 +1259,17 @@ def test_pr_133():
     assert d1 == d1a, d1
     assert d2 == d2a, d2
 
+def test_pr_139():
+    db  = gffutils.create_db(gffutils.example_filename('FBgn0031208.gff'),':memory:')
+    exons = list(db.features_of_type('exon'))
+    inter = list(db.interfeatures(exons))
+
+    # previously, the first exon's attributes would show up in subsequent merged features
+    assert exons[0].attributes['Name'][0] not in inter[1].attributes['Name']
+    assert exons[0].attributes['Name'][0] not in inter[2].attributes['Name']
+    assert exons[0].attributes['Name'][0] not in inter[3].attributes['Name']
+
+
 if __name__ == "__main__":
     # this test case fails
     #test_attributes_modify()
