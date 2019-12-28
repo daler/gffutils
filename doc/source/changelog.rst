@@ -3,6 +3,20 @@
 Change log
 ==========
 
+Changes in v0.10
+----------------
+
+- improved handling with older versions of bedtools 
+- support very large chromosomes (fixed issues `#94
+  <https://github.com/daler/gffutils/issues/94>`_ and `#112
+  <https://github.com/daler/gffutils/issues/112>`_)
+- use a proper context manager for open files, fixes `issue #110
+  <https://github.com/daler/gffutils/issues/110>`_.
+- when merging, make merging attributes optional (issue `#107
+  <https://github.com/daler/gffutils/issues/107>`_)
+- expand `~` to user's home directory for filenames (issue `#105
+  <https://github.com/daler/gffutils/issues/105>`_).
+
 Changes in v0.9
 ---------------
 Long-overdue release with performance improvements and better handling of
