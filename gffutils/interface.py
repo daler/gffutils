@@ -897,7 +897,7 @@ class FeatureDB(object):
 
         # Read it back in directly from the stored autoincrements table
         self._autoincrements.update(db._autoincrements)
-        return db
+        return self
 
     def add_relation(self, parent, child, level, parent_func=None,
                      child_func=None):
