@@ -765,6 +765,7 @@ class FeatureDB(object):
                     dialect = None
             yield self._feature_returner(**fields)
             interfeature_start = f.stop
+            last_feature = f
 
     def delete(self, features, make_backup=True, **kwargs):
         """
