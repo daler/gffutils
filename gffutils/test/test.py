@@ -621,6 +621,7 @@ def test_create_db_from_url():
 
     # Serving test/data folder
     served_folder = gffutils.example_filename('')
+    savedir = os.getcwd()
     os.chdir(served_folder)
 
     print("Starting SimpleHTTPServer in thread")
@@ -654,6 +655,7 @@ def test_create_db_from_url():
         print('Server shutdown.')
         httpd.shutdown()
         server_thread.join()
+        os.chdir(savedir)
 
 
 def test_empty_files():
@@ -1256,6 +1258,17 @@ def test_pr_133():
     d3 = gffutils.helpers.merge_attributes(d1, d2)
     assert d1 == d1a, d1
     assert d2 == d2a, d2
+
+def test_pr_139():
+    db  = gffutils.create_db(gffutils.example_filename('FBgn0031208.gff'),':memory:')
+    exons = list(db.features_of_type('exon'))
+    inter = list(db.interfeatures(exons))
+
+    # previously, the first exon's attributes would show up in subsequent merged features
+    assert exons[0].attributes['Name'][0] not in inter[1].attributes['Name']
+    assert exons[0].attributes['Name'][0] not in inter[2].attributes['Name']
+    assert exons[0].attributes['Name'][0] not in inter[3].attributes['Name']
+
 
 if __name__ == "__main__":
     # this test case fails

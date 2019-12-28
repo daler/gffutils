@@ -765,6 +765,7 @@ class FeatureDB(object):
                     dialect = None
             yield self._feature_returner(**fields)
             interfeature_start = f.stop
+            last_feature = f
 
     def delete(self, features, make_backup=True, **kwargs):
         """
@@ -814,7 +815,19 @@ class FeatureDB(object):
 
     def update(self, data, make_backup=True, **kwargs):
         """
-        Update database with features in `data`.
+        Update the on-disk database with features in `data`.
+
+        WARNING: If you used any non-default kwargs for gffutils.create_db when
+        creating the database in the first place (especially
+        `disable_infer_transcripts` or `disable_infer_genes`) then you should
+        use those same arguments here.
+
+        The returned object is the same FeatureDB, but since it is pointing to
+        the same database and that has been just updated, the new features can
+        now be accessed.
+
+        Parameters
+        ----------
 
         data : str, iterable, FeatureDB instance
             If FeatureDB, all data will be used. If string, assume it's
@@ -827,15 +840,15 @@ class FeatureDB(object):
             makes a copy of the existing database and saves it with a .bak
             extension.
 
-        Notes
-        -----
-        Other kwargs are used in the same way as in gffutils.create_db; see the
-        help for that function for details.
+        kwargs :
+            Additional kwargs are passed to gffutils.create_db; see the help
+            for that function for details.
 
         Returns
         -------
-        FeatureDB with updated features.
+        Returns self but with the underlying database updated.
         """
+
         from gffutils import create
         from gffutils import iterators
         if make_backup:
@@ -872,9 +885,13 @@ class FeatureDB(object):
 
         db._populate_from_lines(data)
         db._update_relations()
+
+        # Note that the autoincrements gets updated here
         db._finalize()
+
+        # Read it back in directly from the stored autoincrements table
         self._autoincrements.update(db._autoincrements)
-        return db
+        return self
 
     def add_relation(self, parent, child, level, parent_func=None,
                      child_func=None):
