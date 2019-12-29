@@ -1,0 +1,19 @@
+##gff-version 3
+seq1	synthetic1	sequence_feature	5	15	.	.	.	ID=basic1
+seq1	synthetic1	sequence_feature	5	15	.	.	.	ID=discontig1
+seq1	synthetic1	sequence_feature	20	30	.	.	.	ID=discontig1
+seq1	synthetic1	sequence_feature	5	15	.	.	.	ID=perfect_overlap1
+seq1	synthetic1	sequence_feature	16	20	.	.	.	ID=adjacent1
+seq1	synthetic1	sequence_feature	16	16	.	.	.	ID=adjacent2
+seq1	synthetic1	sequence_feature	1	4	.	.	.	ID=adjacent3
+seq1	synthetic1	sequence_feature	4	4	.	.	.	ID=adjacent4
+seq1	synthetic1	sequence_feature	15	20	.	.	.	ID=overlap_end1
+seq1	synthetic1	sequence_feature	1	5	.	.	.	ID=overlap_start1
+seq1	synthetic1	sequence_feature	10	20	.	.	.	ID=overlap_past_end1
+seq1	synthetic1	sequence_feature	10	20	.	+	.	ID=strand_plus1
+seq1	synthetic1	sequence_feature	10	20	.	-	.	ID=strand_minus1
+seq1	synthetic1	sequence_feature	35	40	.	.	.	ID=no_overlap1
+seq1	synthetic1	sequence_feature	21	29	.	.	.	ID=no_overlap2
+seq1	synthetic1	misc_feature	1	10	.	.	.	ID=different_type1
+seq1	synthetic2	sequence_feature	1	10	.	.	.	ID=different_source1
+seq2	synthetic1	sequence_feature	1	10	.	.	.	ID=different_seqid1

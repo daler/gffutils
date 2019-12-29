@@ -48,7 +48,7 @@ def deprecation_handler(kwargs):
 
 class _DBCreator(object):
     def __init__(self, data, dbfn, force=False, verbose=False, id_spec=None,
-                 merge_strategy='merge', checklines=10, transform=None,
+                 merge_strategy='error', checklines=10, transform=None,
                  force_dialect_check=False, from_string=False, dialect=None,
                  default_encoding='utf-8',
                  disable_infer_genes=False,
@@ -123,19 +123,10 @@ class _DBCreator(object):
             force_dialect_check=force_dialect_check, from_string=from_string,
             dialect=dialect
         )
-        self._autoincrements = self._create_autoincrements()
-
-    def _create_autoincrements(self):
-        autoincrements = collections.defaultdict(int)
-        c = self.conn.cursor()
-        c.execute('SELECT name FROM sqlite_master WHERE type=\'table\' AND name=\'autoincrements\'')
-        records =  c.fetchall()
-        if len(records) >0:
-            c.execute('SELECT * FROM autoincrements')
-            for record in c.fetchall():
-                autoincrements[record[0]] = record[1]
-        return autoincrements
-
+        if '_autoincrements' in kwargs:
+            self._autoincrements = kwargs['_autoincrements']
+        else:
+            self._autoincrements = collections.defaultdict(int)
 
     def set_verbose(self, verbose=None):
         if verbose == 'debug':
@@ -218,11 +209,12 @@ class _DBCreator(object):
             Raise error
 
         "warning"
-            Log a warning
+            Log a warning, which indicates that all future instances of the
+            same ID will be ignored
 
         "merge":
             Combine old and new attributes -- but only if everything else
-            matches; otherwise error.  This can be slow, but is thorough.
+            matches; otherwise error. This can be slow, but is thorough.
 
         "create_unique":
             Autoincrement based on the ID, always creating a new ID.
@@ -259,8 +251,8 @@ class _DBCreator(object):
                              % ([i.id for i in self._candidate_merges(f)]))
 
             # If force_merge_fields was provided, don't pay attention to these
-            # fields if they're different.  We are assuming attributes will be
-            # different, hence the [:-1]
+            # fields if they're different. We are assuming the attributes field
+            # will be different, hence the [:-1]
             _gffkeys_to_check = list(
                 set(constants._gffkeys[:-1])
                 .difference(self.force_merge_fields))
@@ -390,7 +382,7 @@ class _DBCreator(object):
     def _candidate_merges(self, f):
         """
         Identifies those features that originally had the same ID as `f`
-        (according to the id_spec),  but were modified because of duplicate
+        (according to the id_spec), but were modified because of duplicate
         IDs.
         """
         candidates = [self._get_feature(f.id)]
@@ -497,7 +489,7 @@ class _DBCreator(object):
         c.execute('CREATE INDEX seqidstartendstrand ON features (seqid, start, end, strand)')
 
         # speeds computation 1000x in some cases
-        logger.info("Running ANALYSE features")
+        logger.info("Running ANALYZE features")
         c.execute('ANALYZE features')
 
         self.conn.commit()
@@ -516,6 +508,7 @@ class _DBCreator(object):
         self._update_relations()
         self._finalize()
 
+    # TODO: not sure this is used anywhere
     def update(self, iterator):
         self._populate_from_lines(iterator)
         self._update_relations()
@@ -731,7 +724,7 @@ class _GTFDBCreator(_DBCreator):
                     warnings.warn(
                         "It appears you have a transcript feature in your GTF "
                         "file. You may want to use the "
-                        "`disable_infer_transcripts` "
+                        "`disable_infer_transcripts=True` "
                         "option to speed up database creation")
                 elif (
                     f.featuretype == 'gene' and
@@ -740,7 +733,7 @@ class _GTFDBCreator(_DBCreator):
                     warnings.warn(
                         "It appears you have a gene feature in your GTF "
                         "file. You may want to use the "
-                        "`disable_infer_genes` "
+                        "`disable_infer_genes=True` "
                         "option to speed up database creation")
 
             lines_seen = i + 1
@@ -1019,7 +1012,8 @@ class _GTFDBCreator(_DBCreator):
         if not self._keep_tempfiles:
             os.unlink(fout.name)
 
-        # TODO: recreate indexes?
+        # TODO: recreate indexes? Typically the _finalize() method will be
+        # called after this one, and indexes are created in _finalize().
 
 
 def create_db(data, dbfn, id_spec=None, force=False, verbose=False,

@@ -152,6 +152,8 @@ def _reconstruct(keyvals, dialect, keep_order=False,
 
                 # Typically "=" for GFF3 or " " otherwise
                 part = dialect['keyval separator'].join([key, val_str])
+            else:
+                part = key
         else:
             if dialect['fmt'] == 'gtf':
                 part = dialect['keyval separator'].join([key, '""'])
@@ -322,6 +324,7 @@ def _split_keyvals(keyval_str, dialect=None):
         # Pathological cases where values of a key have within them the key-val
         # separator, e.g.,
         #  Alias=SGN-M1347;ID=T0028;Note=marker name(s): T0028 SGN-M1347 |identity=99.58|escore=2e-126
+        #                                                                         ^            ^
         else:
             key = item[0]
             val = dialect['keyval separator'].join(item[1:])
