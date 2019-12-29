@@ -1303,6 +1303,17 @@ def test_pr_139():
     assert exons[0].attributes['Name'][0] not in inter[3].attributes['Name']
 
 
+def test_pr_144():
+    # previously this would fail with:
+    #   UnboundLocalError: local variable 'part' referenced before assignment
+    f = gffutils.Feature(attributes={'a': ['']})
+
+    # Make sure everything got converted correctly
+    assert f.attributes['a'] == ['']
+    assert str(f) == ".	.	.	.	.	.	.	.	a"
+    g = gffutils.feature.feature_from_line(str(f))
+    assert g == f
+
 if __name__ == "__main__":
     # this test case fails
     #test_attributes_modify()
