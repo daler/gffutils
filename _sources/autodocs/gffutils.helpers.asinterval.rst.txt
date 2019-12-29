@@ -1,5 +1,5 @@
-gffutils\.helpers\.asinterval
-=============================
+gffutils.helpers.asinterval
+===========================
 
 .. currentmodule:: gffutils.helpers
 

@@ -1,5 +1,5 @@
-gffutils\.helpers\.sanitize\_gff\_db
-====================================
+gffutils.helpers.sanitize\_gff\_db
+==================================
 
 .. currentmodule:: gffutils.helpers
 

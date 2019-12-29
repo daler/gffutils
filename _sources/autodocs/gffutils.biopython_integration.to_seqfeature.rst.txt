@@ -1,5 +1,5 @@
-gffutils\.biopython\_integration\.to\_seqfeature
-================================================
+gffutils.biopython\_integration.to\_seqfeature
+==============================================
 
 .. currentmodule:: gffutils.biopython_integration
 

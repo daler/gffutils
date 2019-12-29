@@ -8,48 +8,45 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>GTF files &mdash; gffutils 0.8.8 documentation</title>
+  <title>GTF files &mdash; gffutils 0.10 documentation</title>
   
 
   
   
+  
+  
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="gffutils 0.8.8 documentation" href="index.html"/>
-        <link rel="next" title="Dialects" href="dialect.html"/>
-        <link rel="prev" title="Database IDs" href="database-ids.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Dialects" href="dialect.html" />
+    <link rel="prev" title="Database IDs" href="database-ids.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -63,7 +60,7 @@
             
             
               <div class="version">
-                0.8.8
+                0.10
               </div>
             
           
@@ -84,15 +81,18 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="index.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="database-import.html">Importing data into a database</a></li>
 <li class="toctree-l1"><a class="reference internal" href="database-schema.html">Database schema</a></li>
 <li class="toctree-l1"><a class="reference internal" href="database-ids.html">Database IDs</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">GTF files</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#transcript-key-and-gene-key"><code class="docutils literal"><span class="pre">transcript_key</span></code> and <code class="docutils literal"><span class="pre">gene_key</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#subfeature"><code class="docutils literal"><span class="pre">subfeature</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transcript-key-and-gene-key"><code class="docutils literal notranslate"><span class="pre">transcript_key</span></code> and <code class="docutils literal notranslate"><span class="pre">gene_key</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#subfeature"><code class="docutils literal notranslate"><span class="pre">subfeature</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="dialect.html">Dialects</a></li>
@@ -100,7 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Change log</a></li>
-<li class="toctree-l1"><a class="reference internal" href="developers.html">Developer&#8217;s docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">Developer’s docs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="meta.html">Meta-docs (docs about the docs)</a></li>
 </ul>
 
@@ -113,34 +113,54 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="contents.html">gffutils</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="contents.html">gffutils</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="contents.html">Docs</a> &raquo;</li>
-      
-    <li>GTF files</li>
+    
+      <li><a href="contents.html">Docs</a> &raquo;</li>
+        
+      <li>GTF files</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="_sources/gtf.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -150,47 +170,48 @@
 <span id="gtf"></span><h1>GTF files<a class="headerlink" href="#gtf-files" title="Permalink to this headline">¶</a></h1>
 <p>From the <a class="reference external" href="http://mblab.wustl.edu/GTF22.html">GTF definition</a>:</p>
 <blockquote>
-<div><em>The following feature types are required: &#8216;CDS&#8217;, &#8216;start_codon&#8217;,
-&#8216;stop_codon&#8217;. The features &#8216;5UTR&#8217;, &#8216;3UTR&#8217;, &#8216;inter&#8217;, &#8216;inter_CNS&#8217;,
-&#8216;intron_CNS&#8217; and &#8216;exon&#8217; are optional. All other features will be ignored.</em></div></blockquote>
+<div><p><em>The following feature types are required: ‘CDS’, ‘start_codon’,
+‘stop_codon’. The features ‘5UTR’, ‘3UTR’, ‘inter’, ‘inter_CNS’,
+‘intron_CNS’ and ‘exon’ are optional. All other features will be ignored.</em></p>
+</div></blockquote>
 <p>So genes and transcript are not explicitly defined.  The transcript extent, is,
-after all, implied by all exons with a single <code class="docutils literal"><span class="pre">transcript_id</span></code>, and the extent
-of a gene is implied by all exons with a single <code class="docutils literal"><span class="pre">gene_id</span></code>.  However, this can
+after all, implied by all exons with a single <code class="docutils literal notranslate"><span class="pre">transcript_id</span></code>, and the extent
+of a gene is implied by all exons with a single <code class="docutils literal notranslate"><span class="pre">gene_id</span></code>.  However, this can
 be tedious to calculate by hand.</p>
-<p><a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code></a> <strong>infers the gene and transcript extents when the file is
-imported into a database</strong>, and adds new &#8220;derived&#8221; features for each gene and
+<p><a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a> <strong>infers the gene and transcript extents when the file is
+imported into a database</strong>, and adds new “derived” features for each gene and
 transcript.  That way, a gene can be easily accessed by its ID, just like for
 GFF files.</p>
 <p>However, not all files meet the official GTF specifications where each feature
-has <code class="docutils literal"><span class="pre">transcript_id</span></code> to indicate its parent feature and <code class="docutils literal"><span class="pre">gene_id</span></code> to indicate
-its &#8220;grandparent&#8221; feature.  To accommodate this, <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code></a> provides some
-extra options for the <code class="xref py py-func docutils literal"><span class="pre">gffutils.create_db()</span></code> function:</p>
+has <code class="docutils literal notranslate"><span class="pre">transcript_id</span></code> to indicate its parent feature and <code class="docutils literal notranslate"><span class="pre">gene_id</span></code> to indicate
+its “grandparent” feature.  To accommodate this, <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a> provides some
+extra options for the <code class="xref py py-func docutils literal notranslate"><span class="pre">gffutils.create_db()</span></code> function:</p>
 <div class="section" id="transcript-key-and-gene-key">
-<h2><code class="docutils literal"><span class="pre">transcript_key</span></code> and <code class="docutils literal"><span class="pre">gene_key</span></code><a class="headerlink" href="#transcript-key-and-gene-key" title="Permalink to this headline">¶</a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">transcript_key</span></code> and <code class="docutils literal notranslate"><span class="pre">gene_key</span></code><a class="headerlink" href="#transcript-key-and-gene-key" title="Permalink to this headline">¶</a></h2>
 <div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p>Example that shows the use of <code class="docutils literal"><span class="pre">transcript_key</span></code>:</p>
-<ul class="last simple">
-<li><a class="reference internal" href="examples.html#jgi-gff2-txt"><span class="std std-ref">jgi_gff2.txt</span></a></li>
+<p class="admonition-title">See also</p>
+<p>Example that shows the use of <code class="docutils literal notranslate"><span class="pre">transcript_key</span></code>:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="examples.html#jgi-gff2-txt"><span class="std std-ref">jgi_gff2.txt</span></a></p></li>
 </ul>
 </div>
 <p>These kwargs are used to extract the parent and grandparent feature
 respectively.</p>
-<p>By default, <code class="docutils literal"><span class="pre">transcript_key=&quot;transcript_id&quot;</span></code> and <code class="docutils literal"><span class="pre">gene_key=&quot;gene_id&quot;</span></code>.  But if
+<p>By default, <code class="docutils literal notranslate"><span class="pre">transcript_key=&quot;transcript_id&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">gene_key=&quot;gene_id&quot;</span></code>.  But if
 your particular data file does not conform to this, then they can be changed.</p>
 </div>
 <div class="section" id="subfeature">
-<h2><code class="docutils literal"><span class="pre">subfeature</span></code><a class="headerlink" href="#subfeature" title="Permalink to this headline">¶</a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">subfeature</span></code><a class="headerlink" href="#subfeature" title="Permalink to this headline">¶</a></h2>
 <div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p>Examples that show the use of <code class="docutils literal"><span class="pre">subfeature</span></code>:</p>
-<ul class="last simple">
-<li><a class="reference internal" href="examples.html#wormbase-gff2-alt-txt"><span class="std std-ref">wormbase_gff2_alt.txt</span></a></li>
+<p class="admonition-title">See also</p>
+<p>Examples that show the use of <code class="docutils literal notranslate"><span class="pre">subfeature</span></code>:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="examples.html#wormbase-gff2-alt-txt"><span class="std std-ref">wormbase_gff2_alt.txt</span></a></p></li>
 </ul>
 </div>
-<p>Genes and transcripts are inferred from their component &#8220;exon&#8221; features.  If
+<p>Genes and transcripts are inferred from their component “exon” features.  If
 your particular data file does not conform to the GTF standard, you can use the
-<code class="docutils literal"><span class="pre">subfeature</span></code> kwarg to change this.  By default, <code class="docutils literal"><span class="pre">subfeature=&quot;exon&quot;</span></code>, but see
+<code class="docutils literal notranslate"><span class="pre">subfeature</span></code> kwarg to change this.  By default, <code class="docutils literal notranslate"><span class="pre">subfeature=&quot;exon&quot;</span></code>, but see
 the example <a class="reference internal" href="examples.html#wormbase-gff2-alt-txt"><span class="std std-ref">wormbase_gff2_alt.txt</span></a> for an instance of where this needs to
 be changed.</p>
 </div>
@@ -198,15 +219,16 @@ be changed.</p>
 
 
            </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="dialect.html" class="btn btn-neutral float-right" title="Dialects" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="dialect.html" class="btn btn-neutral float-right" title="Dialects" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="database-ids.html" class="btn btn-neutral" title="Database IDs" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="database-ids.html" class="btn btn-neutral float-left" title="Database IDs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -215,11 +237,11 @@ be changed.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2013, Ryan Dale.
+        &copy; Copyright 2013, Ryan Dale
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -232,35 +254,15 @@ be changed.</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.8.8',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

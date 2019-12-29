@@ -8,49 +8,45 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gffutils.interface.FeatureDB.interfeatures &mdash; gffutils 0.8.8 documentation</title>
+  <title>gffutils.interface.FeatureDB.interfeatures &mdash; gffutils 0.10 documentation</title>
   
 
   
   
+  
+  
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="gffutils 0.8.8 documentation" href="../index.html"/>
-        <link rel="up" title="API" href="../api.html"/>
-        <link rel="next" title="gffutils.interface.FeatureDB.children_bp" href="gffutils.interface.FeatureDB.children_bp.html"/>
-        <link rel="prev" title="gffutils.interface.FeatureDB.set_pragmas" href="gffutils.interface.FeatureDB.set_pragmas.html"/> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="gffutils.interface.FeatureDB.children_bp" href="gffutils.interface.FeatureDB.children_bp.html" />
+    <link rel="prev" title="gffutils.interface.FeatureDB.set_pragmas" href="gffutils.interface.FeatureDB.set_pragmas.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -64,7 +60,7 @@
             
             
               <div class="version">
-                0.8.8
+                0.10
               </div>
             
           
@@ -85,7 +81,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../database-import.html">Importing data into a database</a></li>
@@ -96,7 +95,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../attributes.html">Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../api.html#module-gffutils"><code class="docutils literal"><span class="pre">gffutils</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-gffutils"><code class="docutils literal notranslate"><span class="pre">gffutils</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#create-a-database">Create a database</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../api.html#interact-with-a-database">Interact with a database</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="gffutils.interface.FeatureDB.html">gffutils.interface.FeatureDB</a></li>
@@ -127,7 +126,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Change log</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../developers.html">Developer&#8217;s docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developers.html">Developer’s docs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../meta.html">Meta-docs (docs about the docs)</a></li>
 </ul>
 
@@ -140,36 +139,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../contents.html">gffutils</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../contents.html">gffutils</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../contents.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../contents.html">Docs</a> &raquo;</li>
+        
           <li><a href="../api.html">API</a> &raquo;</li>
-      
-    <li>gffutils.interface.FeatureDB.interfeatures</li>
+        
+      <li>gffutils.interface.FeatureDB.interfeatures</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/autodocs/gffutils.interface.FeatureDB.interfeatures.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -179,67 +198,66 @@
 <h1>gffutils.interface.FeatureDB.interfeatures<a class="headerlink" href="#gffutils-interface-featuredb-interfeatures" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="gffutils.interface.FeatureDB.interfeatures">
-<code class="descclassname">FeatureDB.</code><code class="descname">interfeatures</code><span class="sig-paren">(</span><em>features</em>, <em>new_featuretype=None</em>, <em>merge_attributes=True</em>, <em>dialect=None</em>, <em>attribute_func=None</em>, <em>update_attributes=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/interface.html#FeatureDB.interfeatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gffutils.interface.FeatureDB.interfeatures" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">FeatureDB.</code><code class="sig-name descname">interfeatures</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">features</em>, <em class="sig-param">new_featuretype=None</em>, <em class="sig-param">merge_attributes=True</em>, <em class="sig-param">dialect=None</em>, <em class="sig-param">attribute_func=None</em>, <em class="sig-param">update_attributes=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/interface.html#FeatureDB.interfeatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gffutils.interface.FeatureDB.interfeatures" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct new features representing the space between features.</p>
-<p>For example, if <code class="docutils literal"><span class="pre">features</span></code> is a list of exons, then this method will
-return the introns.  If <code class="docutils literal"><span class="pre">features</span></code> is a list of genes, then this method
+<p>For example, if <code class="docutils literal notranslate"><span class="pre">features</span></code> is a list of exons, then this method will
+return the introns.  If <code class="docutils literal notranslate"><span class="pre">features</span></code> is a list of genes, then this method
 will return the intergenic regions.</p>
 <p>Providing N features will return N - 1 new features.</p>
 <p>This method purposefully does <em>not</em> do any merging or sorting of
-coordinates, so you may want to use <a class="reference internal" href="gffutils.interface.FeatureDB.merge.html#gffutils.interface.FeatureDB.merge" title="gffutils.interface.FeatureDB.merge"><code class="xref py py-meth docutils literal"><span class="pre">FeatureDB.merge()</span></code></a> first.</p>
-<p>The new features&#8217; attributes will be a merge of the neighboring
-features&#8217; attributes.  This is useful if you have provided a list of
-exons; the introns will then retain the transcript and/or gene parents.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>features</strong> : iterable of <code class="xref py py-class docutils literal"><span class="pre">feature.Feature</span></code> instances</p>
-<blockquote>
-<div><p>Sorted, merged iterable</p>
-</div></blockquote>
-<p><strong>new_featuretype</strong> : string or None</p>
-<blockquote>
-<div><p>The new features will all be of this type, or, if None (default)
+coordinates, so you may want to use <a class="reference internal" href="gffutils.interface.FeatureDB.merge.html#gffutils.interface.FeatureDB.merge" title="gffutils.interface.FeatureDB.merge"><code class="xref py py-meth docutils literal notranslate"><span class="pre">FeatureDB.merge()</span></code></a> first, or
+when selecting features use the <code class="docutils literal notranslate"><span class="pre">order_by</span></code> kwarg, e.g.,
+<code class="docutils literal notranslate"><span class="pre">db.features_of_type('gene',</span> <span class="pre">order_by=('seqid',</span> <span class="pre">'start'))</span></code>.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>features</strong><span class="classifier">iterable of <code class="xref py py-class docutils literal notranslate"><span class="pre">feature.Feature</span></code> instances</span></dt><dd><p>Sorted, merged iterable</p>
+</dd>
+<dt><strong>new_featuretype</strong><span class="classifier">string or None</span></dt><dd><p>The new features will all be of this type, or, if None (default)
 then the featuretypes will be constructed from the neighboring
-features, e.g., <code class="docutils literal"><span class="pre">inter_exon_exon</span></code>.</p>
-</div></blockquote>
-<p><strong>attribute_func</strong> : callable or None</p>
-<blockquote>
-<div><p>If None, then nothing special is done to the attributes.  If
+features, e.g., <code class="docutils literal notranslate"><span class="pre">inter_exon_exon</span></code>.</p>
+</dd>
+<dt><strong>merge_attributes</strong><span class="classifier">bool</span></dt><dd><p>If True, new features’ attributes will be a merge of the neighboring
+features’ attributes.  This is useful if you have provided a list of
+exons; the introns will then retain the transcript and/or gene
+parents as a single item. Otherwise, if False, the attribute will
+be a comma-separated list of values, potentially listing the same
+gene ID twice.</p>
+</dd>
+<dt><strong>attribute_func</strong><span class="classifier">callable or None</span></dt><dd><p>If None, then nothing special is done to the attributes.  If
 callable, then the callable accepts two attribute dictionaries and
-returns a single attribute dictionary.  If <code class="docutils literal"><span class="pre">merge_attributes</span></code> is
-True, then <code class="docutils literal"><span class="pre">attribute_func</span></code> is called before <code class="docutils literal"><span class="pre">merge_attributes</span></code>.
+returns a single attribute dictionary.  If <code class="docutils literal notranslate"><span class="pre">merge_attributes</span></code> is
+True, then <code class="docutils literal notranslate"><span class="pre">attribute_func</span></code> is called before <code class="docutils literal notranslate"><span class="pre">merge_attributes</span></code>.
 This could be useful for manually managing IDs for the new
 features.</p>
-</div></blockquote>
-<p><strong>update_attributes</strong> : dict</p>
-<blockquote>
-<div><p>After attributes have been modified and merged, this dictionary can
+</dd>
+<dt><strong>update_attributes</strong><span class="classifier">dict</span></dt><dd><p>After attributes have been modified and merged, this dictionary can
 be used to replace parts of the attributes dictionary.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A generator that yields <code class="xref py py-class docutils literal"><span class="pre">Feature</span></code> objects</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>A generator that yields <code class="xref py py-class docutils literal notranslate"><span class="pre">Feature</span></code> objects</dt><dd></dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
 
 
            </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="gffutils.interface.FeatureDB.children_bp.html" class="btn btn-neutral float-right" title="gffutils.interface.FeatureDB.children_bp" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="gffutils.interface.FeatureDB.children_bp.html" class="btn btn-neutral float-right" title="gffutils.interface.FeatureDB.children_bp" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="gffutils.interface.FeatureDB.set_pragmas.html" class="btn btn-neutral" title="gffutils.interface.FeatureDB.set_pragmas" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="gffutils.interface.FeatureDB.set_pragmas.html" class="btn btn-neutral float-left" title="gffutils.interface.FeatureDB.set_pragmas" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -248,11 +266,11 @@ be used to replace parts of the attributes dictionary.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2013, Ryan Dale.
+        &copy; Copyright 2013, Ryan Dale
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -265,35 +283,15 @@ be used to replace parts of the attributes dictionary.</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'0.8.8',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

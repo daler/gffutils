@@ -8,48 +8,45 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Dialects &mdash; gffutils 0.8.8 documentation</title>
+  <title>Dialects &mdash; gffutils 0.10 documentation</title>
   
 
   
   
+  
+  
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="gffutils 0.8.8 documentation" href="index.html"/>
-        <link rel="next" title="Attributes" href="attributes.html"/>
-        <link rel="prev" title="GTF files" href="gtf.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Attributes" href="attributes.html" />
+    <link rel="prev" title="GTF files" href="gtf.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -63,7 +60,7 @@
             
             
               <div class="version">
-                0.8.8
+                0.10
               </div>
             
           
@@ -84,7 +81,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="index.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="database-import.html">Importing data into a database</a></li>
@@ -96,7 +96,7 @@
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Change log</a></li>
-<li class="toctree-l1"><a class="reference internal" href="developers.html">Developer&#8217;s docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">Developer’s docs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="meta.html">Meta-docs (docs about the docs)</a></li>
 </ul>
 
@@ -109,34 +109,54 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="contents.html">gffutils</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="contents.html">gffutils</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="contents.html">Docs</a> &raquo;</li>
-      
-    <li>Dialects</li>
+    
+      <li><a href="contents.html">Docs</a> &raquo;</li>
+        
+      <li>Dialects</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="_sources/dialect.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -144,10 +164,10 @@
             
   <div class="section" id="dialects">
 <span id="id1"></span><h1>Dialects<a class="headerlink" href="#dialects" title="Permalink to this headline">¶</a></h1>
-<p><a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code></a> borrows the idea of &#8220;dialects&#8221; from Python&#8217;s <code class="xref py py-mod docutils literal"><span class="pre">csv</span></code> module.
+<p><a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a> borrows the idea of “dialects” from Python’s <code class="xref py py-mod docutils literal notranslate"><span class="pre">csv</span></code> module.
 In this context, a dialect is a dictionary that specifies details about the
 format. For GFF and GTF files, most variation in formatting occurs in the
-attributes field (column 9), so currently <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code></a> dialects only
+attributes field (column 9), so currently <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a> dialects only
 describe details in how the attributes are formatted.</p>
 <p>The advantage to using dialects is that the lines that are imported into
 a database can be exactly reconstructed after being retrieved from the
@@ -155,19 +175,19 @@ database.</p>
 <p>While the <a class="reference external" href="http://www.sequenceontology.org/gff3.shtml">GFF3 specification</a>
 and <a class="reference external" href="http://mblab.wustl.edu/GTF22.html">GTF specification</a> documents make
 recommendations about how files should be formatted, in practice there is wide
-variation.  <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code></a> tries to accomodate real-world GFF and GTF files by
-examining the first N lines of a file and figuring out what &#8220;dialect&#8221; the file
-is using (N=10 by default, but can be changed with the <code class="docutils literal"><span class="pre">checklines</span></code> kwarg to
-<code class="xref py py-func docutils literal"><span class="pre">gffutils.create_db()</span></code>).</p>
+variation.  <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a> tries to accomodate real-world GFF and GTF files by
+examining the first N lines of a file and figuring out what “dialect” the file
+is using (N=10 by default, but can be changed with the <code class="docutils literal notranslate"><span class="pre">checklines</span></code> kwarg to
+<code class="xref py py-func docutils literal notranslate"><span class="pre">gffutils.create_db()</span></code>).</p>
 <p>The dialect is simply a dictionary of various attributes that have been
 empirically found to differ among real-world files.   You can find the current
 version of the dialect dictionary, which is used by default and mimics the GFF3
-format, in <code class="xref py py-attr docutils literal"><span class="pre">gffutils.constants.dialect</span></code>.</p>
+format, in <code class="xref py py-attr docutils literal notranslate"><span class="pre">gffutils.constants.dialect</span></code>.</p>
 <p>For example, some files have a trailing semicolon after the last attribute in
-column 9.  In this case, the dialect would specify <code class="docutils literal"><span class="pre">dialect['trailing</span>
+column 9.  In this case, the dialect would specify <code class="docutils literal notranslate"><span class="pre">dialect['trailing</span>
 <span class="pre">semicolon']</span> <span class="pre">=</span> <span class="pre">True</span></code>.</p>
 <p>A GTF dialect might look like this:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;field separator&#39;</span><span class="p">:</span> <span class="s1">&#39;; &#39;</span><span class="p">,</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;field separator&#39;</span><span class="p">:</span> <span class="s1">&#39;; &#39;</span><span class="p">,</span>
  <span class="s1">&#39;fmt&#39;</span><span class="p">:</span> <span class="s1">&#39;gtf&#39;</span><span class="p">,</span>
  <span class="s1">&#39;keyval separator&#39;</span><span class="p">:</span> <span class="s1">&#39; &#39;</span><span class="p">,</span>
  <span class="s1">&#39;leading semicolon&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
@@ -178,7 +198,7 @@ column 9.  In this case, the dialect would specify <code class="docutils literal
 </pre></div>
 </div>
 <p>In contrast, a GFF dialect might look like this:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;field separator&#39;</span><span class="p">:</span> <span class="s1">&#39;;&#39;</span><span class="p">,</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;field separator&#39;</span><span class="p">:</span> <span class="s1">&#39;;&#39;</span><span class="p">,</span>
  <span class="s1">&#39;fmt&#39;</span><span class="p">:</span> <span class="s1">&#39;gff3&#39;</span><span class="p">,</span>
  <span class="s1">&#39;keyval separator&#39;</span><span class="p">:</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span>
  <span class="s1">&#39;leading semicolon&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
@@ -188,21 +208,22 @@ column 9.  In this case, the dialect would specify <code class="docutils literal
  <span class="s1">&#39;trailing semicolon&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
 </pre></div>
 </div>
-<p>As other real-world files are brought to the attention of the developers, it&#8217;s
+<p>As other real-world files are brought to the attention of the developers, it’s
 likely that more entries will be added to the dialect.</p>
 </div>
 
 
            </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="attributes.html" class="btn btn-neutral float-right" title="Attributes" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="attributes.html" class="btn btn-neutral float-right" title="Attributes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="gtf.html" class="btn btn-neutral" title="GTF files" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="gtf.html" class="btn btn-neutral float-left" title="GTF files" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -211,11 +232,11 @@ likely that more entries will be added to the dialect.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2013, Ryan Dale.
+        &copy; Copyright 2013, Ryan Dale
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -228,35 +249,15 @@ likely that more entries will be added to the dialect.</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.8.8',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

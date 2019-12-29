@@ -1,5 +1,5 @@
-gffutils\.create\.create\_db
-============================
+gffutils.create.create\_db
+==========================
 
 .. currentmodule:: gffutils.create
 

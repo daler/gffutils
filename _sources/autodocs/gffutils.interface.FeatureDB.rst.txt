@@ -1,5 +1,5 @@
-gffutils\.interface\.FeatureDB
-==============================
+gffutils.interface.FeatureDB
+============================
 
 .. currentmodule:: gffutils.interface
 
@@ -29,6 +29,7 @@ gffutils\.interface\.FeatureDB
       ~FeatureDB.interfeatures
       ~FeatureDB.iter_by_parent_childs
       ~FeatureDB.merge
+      ~FeatureDB.merge_all
       ~FeatureDB.method
       ~FeatureDB.parents
       ~FeatureDB.region

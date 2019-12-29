@@ -1,5 +1,5 @@
-gffutils\.interface\.FeatureDB\.children\_bp
-============================================
+gffutils.interface.FeatureDB.children\_bp
+=========================================
 
 .. currentmodule:: gffutils.interface
 

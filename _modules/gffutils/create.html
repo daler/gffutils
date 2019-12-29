@@ -8,47 +8,43 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gffutils.create &mdash; gffutils 0.8.8 documentation</title>
+  <title>gffutils.create &mdash; gffutils 0.10 documentation</title>
   
 
   
   
+  
+  
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="gffutils 0.8.8 documentation" href="../../index.html"/>
-        <link rel="up" title="Module code" href="../index.html"/> 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -62,7 +58,7 @@
             
             
               <div class="version">
-                0.8.8
+                0.10
               </div>
             
           
@@ -83,7 +79,10 @@
           
             
             
-                <ul>
+              
+            
+            
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../database-import.html">Importing data into a database</a></li>
@@ -95,7 +94,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Change log</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../developers.html">Developer&#8217;s docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developers.html">Developer’s docs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../meta.html">Meta-docs (docs about the docs)</a></li>
 </ul>
 
@@ -108,34 +107,52 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../contents.html">gffutils</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../contents.html">gffutils</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../contents.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../contents.html">Docs</a> &raquo;</li>
+        
           <li><a href="../index.html">Module code</a> &raquo;</li>
-      
-    <li>gffutils.create</li>
+        
+      <li>gffutils.create</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -150,19 +167,19 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sqlite3</span>
 <span class="kn">import</span> <span class="nn">six</span>
-<span class="kn">from</span> <span class="nn">textwrap</span> <span class="k">import</span> <span class="n">dedent</span>
-<span class="kn">from</span> <span class="nn">gffutils</span> <span class="k">import</span> <span class="n">constants</span>
-<span class="kn">from</span> <span class="nn">gffutils</span> <span class="k">import</span> <span class="n">version</span>
-<span class="kn">from</span> <span class="nn">gffutils</span> <span class="k">import</span> <span class="n">bins</span>
-<span class="kn">from</span> <span class="nn">gffutils</span> <span class="k">import</span> <span class="n">helpers</span>
-<span class="kn">from</span> <span class="nn">gffutils</span> <span class="k">import</span> <span class="n">feature</span>
-<span class="kn">from</span> <span class="nn">gffutils</span> <span class="k">import</span> <span class="n">interface</span>
-<span class="kn">from</span> <span class="nn">gffutils</span> <span class="k">import</span> <span class="n">iterators</span>
+<span class="kn">from</span> <span class="nn">textwrap</span> <span class="kn">import</span> <span class="n">dedent</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">constants</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">version</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">bins</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">helpers</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">feature</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">interface</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">iterators</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> - </span><span class="si">%(levelname)s</span><span class="s1"> - </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 <span class="n">ch</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
 <span class="n">ch</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
 <span class="n">ch</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
@@ -191,8 +208,8 @@
 
 
 <span class="k">class</span> <span class="nc">_DBCreator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">dbfn</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">id_spec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">merge_strategy</span><span class="o">=</span><span class="s1">&#39;merge&#39;</span><span class="p">,</span> <span class="n">checklines</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">dbfn</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">id_spec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">merge_strategy</span><span class="o">=</span><span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="n">checklines</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">force_dialect_check</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">from_string</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">default_encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span>
                  <span class="n">disable_infer_genes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -241,7 +258,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">disable_infer_genes</span> <span class="o">=</span> <span class="n">disable_infer_genes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">disable_infer_transcripts</span> <span class="o">=</span> <span class="n">disable_infer_transcripts</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_autoincrements</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">force</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dbfn</span><span class="p">):</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">dbfn</span><span class="p">)</span>
@@ -268,7 +284,10 @@
             <span class="n">force_dialect_check</span><span class="o">=</span><span class="n">force_dialect_check</span><span class="p">,</span> <span class="n">from_string</span><span class="o">=</span><span class="n">from_string</span><span class="p">,</span>
             <span class="n">dialect</span><span class="o">=</span><span class="n">dialect</span>
         <span class="p">)</span>
-
+        <span class="k">if</span> <span class="s1">&#39;_autoincrements&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_autoincrements</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;_autoincrements&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_autoincrements</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">set_verbose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">verbose</span> <span class="o">==</span> <span class="s1">&#39;debug&#39;</span><span class="p">:</span>
@@ -351,11 +370,12 @@
 <span class="sd">            Raise error</span>
 
 <span class="sd">        &quot;warning&quot;</span>
-<span class="sd">            Log a warning</span>
+<span class="sd">            Log a warning, which indicates that all future instances of the</span>
+<span class="sd">            same ID will be ignored</span>
 
 <span class="sd">        &quot;merge&quot;:</span>
 <span class="sd">            Combine old and new attributes -- but only if everything else</span>
-<span class="sd">            matches; otherwise error.  This can be slow, but is thorough.</span>
+<span class="sd">            matches; otherwise error. This can be slow, but is thorough.</span>
 
 <span class="sd">        &quot;create_unique&quot;:</span>
 <span class="sd">            Autoincrement based on the ID, always creating a new ID.</span>
@@ -392,8 +412,8 @@
                              <span class="o">%</span> <span class="p">([</span><span class="n">i</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_candidate_merges</span><span class="p">(</span><span class="n">f</span><span class="p">)]))</span>
 
             <span class="c1"># If force_merge_fields was provided, don&#39;t pay attention to these</span>
-            <span class="c1"># fields if they&#39;re different.  We are assuming attributes will be</span>
-            <span class="c1"># different, hence the [:-1]</span>
+            <span class="c1"># fields if they&#39;re different. We are assuming the attributes field</span>
+            <span class="c1"># will be different, hence the [:-1]</span>
             <span class="n">_gffkeys_to_check</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
                 <span class="nb">set</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">_gffkeys</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
                 <span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">force_merge_fields</span><span class="p">))</span>
@@ -523,7 +543,7 @@
     <span class="k">def</span> <span class="nf">_candidate_merges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Identifies those features that originally had the same ID as `f`</span>
-<span class="sd">        (according to the id_spec),  but were modified because of duplicate</span>
+<span class="sd">        (according to the id_spec), but were modified because of duplicate</span>
 <span class="sd">        IDs.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_feature</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="p">)]</span>
@@ -630,7 +650,7 @@
         <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;CREATE INDEX seqidstartendstrand ON features (seqid, start, end, strand)&#39;</span><span class="p">)</span>
 
         <span class="c1"># speeds computation 1000x in some cases</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Running ANALYSE features&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Running ANALYZE features&quot;</span><span class="p">)</span>
         <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;ANALYZE features&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
@@ -649,6 +669,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_update_relations</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_finalize</span><span class="p">()</span>
 
+    <span class="c1"># TODO: not sure this is used anywhere</span>
     <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterator</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_populate_from_lines</span><span class="p">(</span><span class="n">iterator</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_update_relations</span><span class="p">()</span>
@@ -687,13 +708,13 @@
 
 
 <span class="k">class</span> <span class="nc">_GFFDBCreator</span><span class="p">(</span><span class="n">_DBCreator</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        _DBCreator subclass specifically for working with GFF files.</span>
 
 <span class="sd">        create_db() delegates to this class -- see that function for docs</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">_GFFDBCreator</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">_GFFDBCreator</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_populate_from_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">):</span>
         <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
@@ -789,29 +810,29 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">suffix</span> <span class="o">=</span> <span class="s1">&#39;.gffutils&#39;</span>
         <span class="n">tmp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">delete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="n">suffix</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
-        <span class="n">fout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fout</span><span class="p">:</span>
 
-        <span class="c1"># Here we look for &quot;grandchildren&quot; -- for each ID, get the child</span>
-        <span class="c1"># (parenthetical subquery below); then for each of those get *its*</span>
-        <span class="c1"># child (main query below).</span>
-        <span class="c1">#</span>
-        <span class="c1"># Results are written to temp file so that we don&#39;t read and write at</span>
-        <span class="c1"># the same time, which would slow things down considerably.</span>
+            <span class="c1"># Here we look for &quot;grandchildren&quot; -- for each ID, get the child</span>
+            <span class="c1"># (parenthetical subquery below); then for each of those get *its*</span>
+            <span class="c1"># child (main query below).</span>
+            <span class="c1">#</span>
+            <span class="c1"># Results are written to temp file so that we don&#39;t read and write at</span>
+            <span class="c1"># the same time, which would slow things down considerably.</span>
 
-        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;SELECT id FROM features&#39;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="n">c</span><span class="p">:</span>
-            <span class="n">c2</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
-<span class="s1">                       SELECT child FROM relations WHERE parent IN</span>
-<span class="s1">                       (SELECT child FROM relations WHERE parent = ?)</span>
-<span class="s1">                       &#39;&#39;&#39;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">parent</span><span class="p">))</span>
-            <span class="k">for</span> <span class="n">grandchild</span> <span class="ow">in</span> <span class="n">c2</span><span class="p">:</span>
-                <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="n">parent</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">grandchild</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-        <span class="n">fout</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;SELECT id FROM features&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="n">c</span><span class="p">:</span>
+                <span class="n">c2</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">                           SELECT child FROM relations WHERE parent IN</span>
+<span class="s1">                           (SELECT child FROM relations WHERE parent = ?)</span>
+<span class="s1">                           &#39;&#39;&#39;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">parent</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">grandchild</span> <span class="ow">in</span> <span class="n">c2</span><span class="p">:</span>
+                    <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="n">parent</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">grandchild</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 
         <span class="k">def</span> <span class="nf">relations_generator</span><span class="p">():</span>
-            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="n">fout</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
-                <span class="n">parent</span><span class="p">,</span> <span class="n">child</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
-                <span class="k">yield</span> <span class="nb">dict</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="n">child</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fout</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="k">as</span> <span class="n">fin</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fin</span><span class="p">:</span>
+                    <span class="n">parent</span><span class="p">,</span> <span class="n">child</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="k">yield</span> <span class="nb">dict</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="n">child</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
         <span class="n">c</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span>
             <span class="sd">&#39;&#39;&#39;</span>
@@ -830,14 +851,14 @@
 
 
 <span class="k">class</span> <span class="nc">_GTFDBCreator</span><span class="p">(</span><span class="n">_DBCreator</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        create_db() delegates to this class -- see that function for docs</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">transcript_key</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;transcript_key&#39;</span><span class="p">,</span> <span class="s1">&#39;transcript_id&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gene_key</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;gene_key&#39;</span><span class="p">,</span> <span class="s1">&#39;gene_id&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">subfeature</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;subfeature&#39;</span><span class="p">,</span> <span class="s1">&#39;exon&#39;</span><span class="p">)</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">_GTFDBCreator</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">_GTFDBCreator</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_populate_from_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">):</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
@@ -864,7 +885,7 @@
                     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
                         <span class="s2">&quot;It appears you have a transcript feature in your GTF &quot;</span>
                         <span class="s2">&quot;file. You may want to use the &quot;</span>
-                        <span class="s2">&quot;`disable_infer_transcripts` &quot;</span>
+                        <span class="s2">&quot;`disable_infer_transcripts=True` &quot;</span>
                         <span class="s2">&quot;option to speed up database creation&quot;</span><span class="p">)</span>
                 <span class="k">elif</span> <span class="p">(</span>
                     <span class="n">f</span><span class="o">.</span><span class="n">featuretype</span> <span class="o">==</span> <span class="s1">&#39;gene&#39;</span> <span class="ow">and</span>
@@ -873,7 +894,7 @@
                     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
                         <span class="s2">&quot;It appears you have a gene feature in your GTF &quot;</span>
                         <span class="s2">&quot;file. You may want to use the &quot;</span>
-                        <span class="s2">&quot;`disable_infer_genes` &quot;</span>
+                        <span class="s2">&quot;`disable_infer_genes=True` &quot;</span>
                         <span class="s2">&quot;option to speed up database creation&quot;</span><span class="p">)</span>
 
             <span class="n">lines_seen</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
@@ -982,101 +1003,64 @@
             <span class="n">suffix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keep_tempfiles</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">suffix</span> <span class="o">=</span> <span class="s1">&#39;.gffutils&#39;</span>
+
         <span class="n">tmp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">delete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="n">suffix</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
-        <span class="n">fout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fout</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tmpfile</span> <span class="o">=</span> <span class="n">tmp</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_tmpfile</span> <span class="o">=</span> <span class="n">tmp</span>
+            <span class="c1"># This takes some explanation...</span>
+            <span class="c1">#</span>
+            <span class="c1"># First, the nested subquery gets the level-1 parents of</span>
+            <span class="c1"># self.subfeature featuretypes.  For an on-spec GTF file,</span>
+            <span class="c1"># self.subfeature = &quot;exon&quot;. So this subquery translates to getting the</span>
+            <span class="c1"># distinct level-1 parents of exons -- which are transcripts.</span>
+            <span class="c1">#</span>
+            <span class="c1"># OK, so this first subquery is now a list of transcripts; call it</span>
+            <span class="c1"># &quot;firstlevel&quot;.</span>
+            <span class="c1">#</span>
+            <span class="c1"># Then join firstlevel on relations, but the trick is to now consider</span>
+            <span class="c1"># each transcript a *child* -- so that relations.parent (on the first</span>
+            <span class="c1"># line of the query) will be the first-level parent of the transcript</span>
+            <span class="c1"># (the gene).</span>
+            <span class="c1">#</span>
+            <span class="c1">#</span>
+            <span class="c1"># The result is something like:</span>
+            <span class="c1">#</span>
+            <span class="c1">#   transcript1     gene1</span>
+            <span class="c1">#   transcript2     gene1</span>
+            <span class="c1">#   transcript3     gene2</span>
+            <span class="c1">#</span>
+            <span class="c1"># Note that genes are repeated; below we need to ensure that only one</span>
+            <span class="c1"># is added.  To ensure this, the results are ordered by the gene ID.</span>
+            <span class="c1">#</span>
+            <span class="c1"># By the way, we do this even if we&#39;re only looking for transcripts or</span>
+            <span class="c1"># only looking for genes.</span>
 
-        <span class="c1"># This takes some explanation...</span>
-        <span class="c1">#</span>
-        <span class="c1"># First, the nested subquery gets the level-1 parents of</span>
-        <span class="c1"># self.subfeature featuretypes.  For an on-spec GTF file,</span>
-        <span class="c1"># self.subfeature = &quot;exon&quot;. So this subquery translates to getting the</span>
-        <span class="c1"># distinct level-1 parents of exons -- which are transcripts.</span>
-        <span class="c1">#</span>
-        <span class="c1"># OK, so this first subquery is now a list of transcripts; call it</span>
-        <span class="c1"># &quot;firstlevel&quot;.</span>
-        <span class="c1">#</span>
-        <span class="c1"># Then join firstlevel on relations, but the trick is to now consider</span>
-        <span class="c1"># each transcript a *child* -- so that relations.parent (on the first</span>
-        <span class="c1"># line of the query) will be the first-level parent of the transcript</span>
-        <span class="c1"># (the gene).</span>
-        <span class="c1">#</span>
-        <span class="c1">#</span>
-        <span class="c1"># The result is something like:</span>
-        <span class="c1">#</span>
-        <span class="c1">#   transcript1     gene1</span>
-        <span class="c1">#   transcript2     gene1</span>
-        <span class="c1">#   transcript3     gene2</span>
-        <span class="c1">#</span>
-        <span class="c1"># Note that genes are repeated; below we need to ensure that only one</span>
-        <span class="c1"># is added.  To ensure this, the results are ordered by the gene ID.</span>
-        <span class="c1">#</span>
-        <span class="c1"># By the way, we do this even if we&#39;re only looking for transcripts or</span>
-        <span class="c1"># only looking for genes.</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">                SELECT DISTINCT firstlevel.parent, relations.parent</span>
+<span class="sd">                FROM (</span>
+<span class="sd">                    SELECT DISTINCT parent</span>
+<span class="sd">                    FROM relations</span>
+<span class="sd">                    JOIN features ON features.id = relations.child</span>
+<span class="sd">                    WHERE features.featuretype = ?</span>
+<span class="sd">                    AND relations.level = 1</span>
+<span class="sd">                )</span>
+<span class="sd">                AS firstlevel</span>
+<span class="sd">                JOIN relations ON firstlevel.parent = child</span>
+<span class="sd">                WHERE relations.level = 1</span>
+<span class="sd">                ORDER BY relations.parent</span>
+<span class="sd">                &#39;&#39;&#39;</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subfeature</span><span class="p">,))</span>
 
-        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">            SELECT DISTINCT firstlevel.parent, relations.parent</span>
-<span class="sd">            FROM (</span>
-<span class="sd">                SELECT DISTINCT parent</span>
-<span class="sd">                FROM relations</span>
-<span class="sd">                JOIN features ON features.id = relations.child</span>
-<span class="sd">                WHERE features.featuretype = ?</span>
-<span class="sd">                AND relations.level = 1</span>
-<span class="sd">            )</span>
-<span class="sd">            AS firstlevel</span>
-<span class="sd">            JOIN relations ON firstlevel.parent = child</span>
-<span class="sd">            WHERE relations.level = 1</span>
-<span class="sd">            ORDER BY relations.parent</span>
-<span class="sd">            &#39;&#39;&#39;</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subfeature</span><span class="p">,))</span>
+            <span class="c1"># Now we iterate through those results (using a new cursor) to infer</span>
+            <span class="c1"># the extent of transcripts and/or genes.</span>
 
-        <span class="c1"># Now we iterate through those results (using a new cursor) to infer</span>
-        <span class="c1"># the extent of transcripts and/or genes.</span>
+            <span class="n">last_gene_id</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">n_features</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">transcript_id</span><span class="p">,</span> <span class="n">gene_id</span> <span class="ow">in</span> <span class="n">c</span><span class="p">:</span>
 
-        <span class="n">last_gene_id</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">n_features</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">transcript_id</span><span class="p">,</span> <span class="n">gene_id</span> <span class="ow">in</span> <span class="n">c</span><span class="p">:</span>
-
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">disable_infer_transcripts</span><span class="p">:</span>
-                <span class="c1"># transcript extent</span>
-                <span class="n">c2</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-                    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">                    SELECT MIN(start), MAX(end), strand, seqid</span>
-<span class="sd">                    FROM features</span>
-<span class="sd">                    JOIN relations ON</span>
-<span class="sd">                    features.id = relations.child</span>
-<span class="sd">                    WHERE parent = ? AND featuretype == ?</span>
-<span class="sd">                    &#39;&#39;&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">transcript_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">subfeature</span><span class="p">))</span>
-                <span class="n">transcript_start</span><span class="p">,</span> <span class="n">transcript_end</span><span class="p">,</span> <span class="n">strand</span><span class="p">,</span> <span class="n">seqid</span> <span class="o">=</span> <span class="n">c2</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
-                <span class="n">transcript_attributes</span> <span class="o">=</span> <span class="p">{</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">transcript_key</span><span class="p">:</span> <span class="p">[</span><span class="n">transcript_id</span><span class="p">],</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">gene_key</span><span class="p">:</span> <span class="p">[</span><span class="n">gene_id</span><span class="p">]</span>
-                <span class="p">}</span>
-                <span class="n">transcript_bin</span> <span class="o">=</span> <span class="n">bins</span><span class="o">.</span><span class="n">bins</span><span class="p">(</span>
-                    <span class="n">transcript_start</span><span class="p">,</span> <span class="n">transcript_end</span><span class="p">,</span> <span class="n">one</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-                <span class="c1"># Write out to file; we&#39;ll be reading it back in shortly.  Omit</span>
-                <span class="c1"># score, frame, source, and extra since they will always have</span>
-                <span class="c1"># the same default values (&quot;.&quot;, &quot;.&quot;, &quot;gffutils_derived&quot;, and []</span>
-                <span class="c1"># respectively)</span>
-
-                <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="p">[</span>
-                    <span class="n">transcript_id</span><span class="p">,</span>
-                    <span class="n">seqid</span><span class="p">,</span>
-                    <span class="n">transcript_start</span><span class="p">,</span>
-                    <span class="n">transcript_end</span><span class="p">,</span>
-                    <span class="n">strand</span><span class="p">,</span>
-                    <span class="s1">&#39;transcript&#39;</span><span class="p">,</span>
-                    <span class="n">transcript_bin</span><span class="p">,</span>
-                    <span class="n">helpers</span><span class="o">.</span><span class="n">_jsonify</span><span class="p">(</span><span class="n">transcript_attributes</span><span class="p">)</span>
-                <span class="p">]))</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-
-                <span class="n">n_features</span> <span class="o">+=</span> <span class="mi">1</span>
-
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">disable_infer_genes</span><span class="p">:</span>
-                <span class="c1"># Infer gene extent, but only if we haven&#39;t done so already</span>
-                <span class="k">if</span> <span class="n">gene_id</span> <span class="o">!=</span> <span class="n">last_gene_id</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">disable_infer_transcripts</span><span class="p">:</span>
+                    <span class="c1"># transcript extent</span>
                     <span class="n">c2</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
                         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">                        SELECT MIN(start), MAX(end), strand, seqid</span>
@@ -1084,26 +1068,61 @@
 <span class="sd">                        JOIN relations ON</span>
 <span class="sd">                        features.id = relations.child</span>
 <span class="sd">                        WHERE parent = ? AND featuretype == ?</span>
-<span class="sd">                        &#39;&#39;&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">gene_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">subfeature</span><span class="p">))</span>
-                    <span class="n">gene_start</span><span class="p">,</span> <span class="n">gene_end</span><span class="p">,</span> <span class="n">strand</span><span class="p">,</span> <span class="n">seqid</span> <span class="o">=</span> <span class="n">c2</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
-                    <span class="n">gene_attributes</span> <span class="o">=</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gene_key</span><span class="p">:</span> <span class="p">[</span><span class="n">gene_id</span><span class="p">]}</span>
-                    <span class="n">gene_bin</span> <span class="o">=</span> <span class="n">bins</span><span class="o">.</span><span class="n">bins</span><span class="p">(</span><span class="n">gene_start</span><span class="p">,</span> <span class="n">gene_end</span><span class="p">,</span> <span class="n">one</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="sd">                        &#39;&#39;&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">transcript_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">subfeature</span><span class="p">))</span>
+                    <span class="n">transcript_start</span><span class="p">,</span> <span class="n">transcript_end</span><span class="p">,</span> <span class="n">strand</span><span class="p">,</span> <span class="n">seqid</span> <span class="o">=</span> <span class="n">c2</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+                    <span class="n">transcript_attributes</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">transcript_key</span><span class="p">:</span> <span class="p">[</span><span class="n">transcript_id</span><span class="p">],</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">gene_key</span><span class="p">:</span> <span class="p">[</span><span class="n">gene_id</span><span class="p">]</span>
+                    <span class="p">}</span>
+                    <span class="n">transcript_bin</span> <span class="o">=</span> <span class="n">bins</span><span class="o">.</span><span class="n">bins</span><span class="p">(</span>
+                        <span class="n">transcript_start</span><span class="p">,</span> <span class="n">transcript_end</span><span class="p">,</span> <span class="n">one</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+                    <span class="c1"># Write out to file; we&#39;ll be reading it back in shortly.  Omit</span>
+                    <span class="c1"># score, frame, source, and extra since they will always have</span>
+                    <span class="c1"># the same default values (&quot;.&quot;, &quot;.&quot;, &quot;gffutils_derived&quot;, and []</span>
+                    <span class="c1"># respectively)</span>
 
                     <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="p">[</span>
-                        <span class="n">gene_id</span><span class="p">,</span>
+                        <span class="n">transcript_id</span><span class="p">,</span>
                         <span class="n">seqid</span><span class="p">,</span>
-                        <span class="n">gene_start</span><span class="p">,</span>
-                        <span class="n">gene_end</span><span class="p">,</span>
+                        <span class="n">transcript_start</span><span class="p">,</span>
+                        <span class="n">transcript_end</span><span class="p">,</span>
                         <span class="n">strand</span><span class="p">,</span>
-                        <span class="s1">&#39;gene&#39;</span><span class="p">,</span>
-                        <span class="n">gene_bin</span><span class="p">,</span>
-                        <span class="n">helpers</span><span class="o">.</span><span class="n">_jsonify</span><span class="p">(</span><span class="n">gene_attributes</span><span class="p">)</span>
+                        <span class="s1">&#39;transcript&#39;</span><span class="p">,</span>
+                        <span class="n">transcript_bin</span><span class="p">,</span>
+                        <span class="n">helpers</span><span class="o">.</span><span class="n">_jsonify</span><span class="p">(</span><span class="n">transcript_attributes</span><span class="p">)</span>
                     <span class="p">]))</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 
-                <span class="n">last_gene_id</span> <span class="o">=</span> <span class="n">gene_id</span>
-                <span class="n">n_features</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">n_features</span> <span class="o">+=</span> <span class="mi">1</span>
 
-        <span class="n">fout</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">disable_infer_genes</span><span class="p">:</span>
+                    <span class="c1"># Infer gene extent, but only if we haven&#39;t done so already</span>
+                    <span class="k">if</span> <span class="n">gene_id</span> <span class="o">!=</span> <span class="n">last_gene_id</span><span class="p">:</span>
+                        <span class="n">c2</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                            <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">                            SELECT MIN(start), MAX(end), strand, seqid</span>
+<span class="sd">                            FROM features</span>
+<span class="sd">                            JOIN relations ON</span>
+<span class="sd">                            features.id = relations.child</span>
+<span class="sd">                            WHERE parent = ? AND featuretype == ?</span>
+<span class="sd">                            &#39;&#39;&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">gene_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">subfeature</span><span class="p">))</span>
+                        <span class="n">gene_start</span><span class="p">,</span> <span class="n">gene_end</span><span class="p">,</span> <span class="n">strand</span><span class="p">,</span> <span class="n">seqid</span> <span class="o">=</span> <span class="n">c2</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+                        <span class="n">gene_attributes</span> <span class="o">=</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gene_key</span><span class="p">:</span> <span class="p">[</span><span class="n">gene_id</span><span class="p">]}</span>
+                        <span class="n">gene_bin</span> <span class="o">=</span> <span class="n">bins</span><span class="o">.</span><span class="n">bins</span><span class="p">(</span><span class="n">gene_start</span><span class="p">,</span> <span class="n">gene_end</span><span class="p">,</span> <span class="n">one</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+                        <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="p">[</span>
+                            <span class="n">gene_id</span><span class="p">,</span>
+                            <span class="n">seqid</span><span class="p">,</span>
+                            <span class="n">gene_start</span><span class="p">,</span>
+                            <span class="n">gene_end</span><span class="p">,</span>
+                            <span class="n">strand</span><span class="p">,</span>
+                            <span class="s1">&#39;gene&#39;</span><span class="p">,</span>
+                            <span class="n">gene_bin</span><span class="p">,</span>
+                            <span class="n">helpers</span><span class="o">.</span><span class="n">_jsonify</span><span class="p">(</span><span class="n">gene_attributes</span><span class="p">)</span>
+                        <span class="p">]))</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+                    <span class="n">last_gene_id</span> <span class="o">=</span> <span class="n">gene_id</span>
+                    <span class="n">n_features</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="k">def</span> <span class="nf">derived_feature_generator</span><span class="p">():</span>
             <span class="sd">&quot;&quot;&quot;</span>
@@ -1111,17 +1130,18 @@
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;parent&#39;</span><span class="p">,</span> <span class="s1">&#39;seqid&#39;</span><span class="p">,</span> <span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="s1">&#39;end&#39;</span><span class="p">,</span> <span class="s1">&#39;strand&#39;</span><span class="p">,</span>
                     <span class="s1">&#39;featuretype&#39;</span><span class="p">,</span> <span class="s1">&#39;bin&#39;</span><span class="p">,</span> <span class="s1">&#39;attributes&#39;</span><span class="p">]</span>
-            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="n">fout</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
-                <span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">))))</span>
-                <span class="n">d</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;parent&#39;</span><span class="p">)</span>
-                <span class="n">d</span><span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span>
-                <span class="n">d</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;gffutils_derived&#39;</span>
-                <span class="n">d</span><span class="p">[</span><span class="s1">&#39;frame&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span>
-                <span class="n">d</span><span class="p">[</span><span class="s1">&#39;extra&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-                <span class="n">d</span><span class="p">[</span><span class="s1">&#39;attributes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">helpers</span><span class="o">.</span><span class="n">_unjsonify</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;attributes&#39;</span><span class="p">])</span>
-                <span class="n">f</span> <span class="o">=</span> <span class="n">feature</span><span class="o">.</span><span class="n">Feature</span><span class="p">(</span><span class="o">**</span><span class="n">d</span><span class="p">)</span>
-                <span class="n">f</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_id_handler</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-                <span class="k">yield</span> <span class="n">f</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fout</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="k">as</span> <span class="n">fin</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fin</span><span class="p">:</span>
+                    <span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">))))</span>
+                    <span class="n">d</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;parent&#39;</span><span class="p">)</span>
+                    <span class="n">d</span><span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span>
+                    <span class="n">d</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;gffutils_derived&#39;</span>
+                    <span class="n">d</span><span class="p">[</span><span class="s1">&#39;frame&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span>
+                    <span class="n">d</span><span class="p">[</span><span class="s1">&#39;extra&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="n">d</span><span class="p">[</span><span class="s1">&#39;attributes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">helpers</span><span class="o">.</span><span class="n">_unjsonify</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;attributes&#39;</span><span class="p">])</span>
+                    <span class="n">f</span> <span class="o">=</span> <span class="n">feature</span><span class="o">.</span><span class="n">Feature</span><span class="p">(</span><span class="o">**</span><span class="n">d</span><span class="p">)</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_id_handler</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                    <span class="k">yield</span> <span class="n">f</span>
 
         <span class="c1"># Drop the indexes so the inserts are faster</span>
         <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;DROP INDEX IF EXISTS relationsparent&#39;</span><span class="p">)</span>
@@ -1153,7 +1173,8 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keep_tempfiles</span><span class="p">:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">fout</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
-        <span class="c1"># TODO: recreate indexes?</span>
+        <span class="c1"># TODO: recreate indexes? Typically the _finalize() method will be</span>
+        <span class="c1"># called after this one, and indexes are created in _finalize().</span>
 
 
 <div class="viewcode-block" id="create_db"><a class="viewcode-back" href="../../autodocs/gffutils.create.create_db.html#gffutils.create.create_db">[docs]</a><span class="k">def</span> <span class="nf">create_db</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dbfn</span><span class="p">,</span> <span class="n">id_spec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -1409,14 +1430,14 @@
     <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;checklines&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="k">if</span> <span class="n">force_gff</span> <span class="ow">or</span> <span class="p">(</span><span class="n">dialect</span><span class="p">[</span><span class="s1">&#39;fmt&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;gff3&#39;</span><span class="p">):</span>
-        <span class="n">cls</span> <span class="o">=</span> <span class="n">_GFFDBCreator</span>
+        <span class="bp">cls</span> <span class="o">=</span> <span class="n">_GFFDBCreator</span>
         <span class="n">id_spec</span> <span class="o">=</span> <span class="n">id_spec</span> <span class="ow">or</span> <span class="s1">&#39;ID&#39;</span>
         <span class="n">add_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
             <span class="n">id_spec</span><span class="o">=</span><span class="n">id_spec</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="k">elif</span> <span class="n">dialect</span><span class="p">[</span><span class="s1">&#39;fmt&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;gtf&#39;</span><span class="p">:</span>
-        <span class="n">cls</span> <span class="o">=</span> <span class="n">_GTFDBCreator</span>
+        <span class="bp">cls</span> <span class="o">=</span> <span class="n">_GTFDBCreator</span>
         <span class="n">id_spec</span> <span class="o">=</span> <span class="n">id_spec</span> <span class="ow">or</span> <span class="p">{</span><span class="s1">&#39;gene&#39;</span><span class="p">:</span> <span class="s1">&#39;gene_id&#39;</span><span class="p">,</span> <span class="s1">&#39;transcript&#39;</span><span class="p">:</span> <span class="s1">&#39;transcript_id&#39;</span><span class="p">}</span>
         <span class="n">add_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
             <span class="n">transcript_key</span><span class="o">=</span><span class="n">gtf_transcript_key</span><span class="p">,</span>
@@ -1427,7 +1448,7 @@
 
     <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">add_kwargs</span><span class="p">)</span>
     <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;dialect&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dialect</span>
-    <span class="n">c</span> <span class="o">=</span> <span class="n">cls</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="n">c</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">dbfn</span> <span class="o">==</span> <span class="s1">&#39;:memory:&#39;</span><span class="p">:</span>
@@ -1447,6 +1468,7 @@
 </pre></div>
 
            </div>
+           
           </div>
           <footer>
   
@@ -1455,11 +1477,11 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2013, Ryan Dale.
+        &copy; Copyright 2013, Ryan Dale
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -1472,35 +1494,15 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'0.8.8',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

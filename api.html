@@ -8,48 +8,45 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>API &mdash; gffutils 0.8.8 documentation</title>
+  <title>API &mdash; gffutils 0.10 documentation</title>
   
 
   
   
+  
+  
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="gffutils 0.8.8 documentation" href="index.html"/>
-        <link rel="next" title="gffutils.create.create_db" href="autodocs/gffutils.create.create_db.html"/>
-        <link rel="prev" title="Examples" href="examples.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="gffutils.create.create_db" href="autodocs/gffutils.create.create_db.html" />
+    <link rel="prev" title="Examples" href="examples.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -63,7 +60,7 @@
             
             
               <div class="version">
-                0.8.8
+                0.10
               </div>
             
           
@@ -84,7 +81,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="index.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="database-import.html">Importing data into a database</a></li>
@@ -95,7 +95,7 @@
 <li class="toctree-l1"><a class="reference internal" href="attributes.html">Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-gffutils"><code class="docutils literal"><span class="pre">gffutils</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-gffutils"><code class="docutils literal notranslate"><span class="pre">gffutils</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#create-a-database">Create a database</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="autodocs/gffutils.create.create_db.html">gffutils.create.create_db</a></li>
 </ul>
@@ -149,7 +149,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Change log</a></li>
-<li class="toctree-l1"><a class="reference internal" href="developers.html">Developer&#8217;s docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">Developer’s docs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="meta.html">Meta-docs (docs about the docs)</a></li>
 </ul>
 
@@ -162,34 +162,54 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="contents.html">gffutils</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="contents.html">gffutils</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="contents.html">Docs</a> &raquo;</li>
-      
-    <li>API</li>
+    
+      <li><a href="contents.html">Docs</a> &raquo;</li>
+        
+      <li>API</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -198,18 +218,18 @@
   <div class="html-toggle section" id="api">
 <span id="id1"></span><h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-gffutils">
-<span id="gffutils"></span><h2><code class="docutils literal"><span class="pre">gffutils</span></code><a class="headerlink" href="#module-gffutils" title="Permalink to this headline">¶</a></h2>
+<span id="gffutils"></span><h2><code class="docutils literal notranslate"><span class="pre">gffutils</span></code><a class="headerlink" href="#module-gffutils" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="create-a-database">
 <h2>Create a database<a class="headerlink" href="#create-a-database" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="autodocs/gffutils.create.create_db.html#gffutils.create.create_db" title="gffutils.create.create_db"><code class="xref py py-obj docutils literal"><span class="pre">create_db</span></code></a></td>
-<td>Create a database from a GFF or GTF file.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.create.create_db.html#gffutils.create.create_db" title="gffutils.create.create_db"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_db</span></code></a></p></td>
+<td><p>Create a database from a GFF or GTF file.</p></td>
 </tr>
 </tbody>
 </table>
@@ -217,192 +237,192 @@
 <div class="section" id="interact-with-a-database">
 <h2>Interact with a database<a class="headerlink" href="#interact-with-a-database" title="Permalink to this headline">¶</a></h2>
 <p>First, connect to an existing database:</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.html#gffutils.interface.FeatureDB" title="gffutils.interface.FeatureDB"><code class="xref py py-obj docutils literal"><span class="pre">FeatureDB</span></code></a></td>
-<td></td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.html#gffutils.interface.FeatureDB" title="gffutils.interface.FeatureDB"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FeatureDB</span></code></a></p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
-<p>Then, use the methods of <a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.html#gffutils.interface.FeatureDB" title="gffutils.interface.FeatureDB"><code class="xref py py-class docutils literal"><span class="pre">FeatureDB</span></code></a> to interact:</p>
-<table border="1" class="longtable docutils">
+<p>Then, use the methods of <a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.html#gffutils.interface.FeatureDB" title="gffutils.interface.FeatureDB"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeatureDB</span></code></a> to interact:</p>
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.children.html#gffutils.interface.FeatureDB.children" title="gffutils.interface.FeatureDB.children"><code class="xref py py-obj docutils literal"><span class="pre">FeatureDB.children</span></code></a></td>
-<td>Return children of feature <code class="docutils literal"><span class="pre">id</span></code>.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.children.html#gffutils.interface.FeatureDB.children" title="gffutils.interface.FeatureDB.children"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FeatureDB.children</span></code></a></p></td>
+<td><p>Return children of feature <code class="docutils literal notranslate"><span class="pre">id</span></code>.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.parents.html#gffutils.interface.FeatureDB.parents" title="gffutils.interface.FeatureDB.parents"><code class="xref py py-obj docutils literal"><span class="pre">FeatureDB.parents</span></code></a></td>
-<td>Return parents of feature <code class="docutils literal"><span class="pre">id</span></code>.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.parents.html#gffutils.interface.FeatureDB.parents" title="gffutils.interface.FeatureDB.parents"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FeatureDB.parents</span></code></a></p></td>
+<td><p>Return parents of feature <code class="docutils literal notranslate"><span class="pre">id</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.schema.html#gffutils.interface.FeatureDB.schema" title="gffutils.interface.FeatureDB.schema"><code class="xref py py-obj docutils literal"><span class="pre">FeatureDB.schema</span></code></a></td>
-<td>Returns the database schema as a string.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.schema.html#gffutils.interface.FeatureDB.schema" title="gffutils.interface.FeatureDB.schema"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FeatureDB.schema</span></code></a></p></td>
+<td><p>Returns the database schema as a string.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.features_of_type.html#gffutils.interface.FeatureDB.features_of_type" title="gffutils.interface.FeatureDB.features_of_type"><code class="xref py py-obj docutils literal"><span class="pre">FeatureDB.features_of_type</span></code></a></td>
-<td>Returns an iterator of <code class="xref py py-class docutils literal"><span class="pre">gffutils.Feature</span></code> objects.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.features_of_type.html#gffutils.interface.FeatureDB.features_of_type" title="gffutils.interface.FeatureDB.features_of_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FeatureDB.features_of_type</span></code></a></p></td>
+<td><p>Returns an iterator of <code class="xref py py-class docutils literal notranslate"><span class="pre">gffutils.Feature</span></code> objects.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.count_features_of_type.html#gffutils.interface.FeatureDB.count_features_of_type" title="gffutils.interface.FeatureDB.count_features_of_type"><code class="xref py py-obj docutils literal"><span class="pre">FeatureDB.count_features_of_type</span></code></a></td>
-<td>Simple count of features.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.count_features_of_type.html#gffutils.interface.FeatureDB.count_features_of_type" title="gffutils.interface.FeatureDB.count_features_of_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FeatureDB.count_features_of_type</span></code></a></p></td>
+<td><p>Simple count of features.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.all_features.html#gffutils.interface.FeatureDB.all_features" title="gffutils.interface.FeatureDB.all_features"><code class="xref py py-obj docutils literal"><span class="pre">FeatureDB.all_features</span></code></a></td>
-<td>Iterate through the entire database.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.all_features.html#gffutils.interface.FeatureDB.all_features" title="gffutils.interface.FeatureDB.all_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FeatureDB.all_features</span></code></a></p></td>
+<td><p>Iterate through the entire database.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.execute.html#gffutils.interface.FeatureDB.execute" title="gffutils.interface.FeatureDB.execute"><code class="xref py py-obj docutils literal"><span class="pre">FeatureDB.execute</span></code></a></td>
-<td>Execute arbitrary queries on the db.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.execute.html#gffutils.interface.FeatureDB.execute" title="gffutils.interface.FeatureDB.execute"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FeatureDB.execute</span></code></a></p></td>
+<td><p>Execute arbitrary queries on the db.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.featuretypes.html#gffutils.interface.FeatureDB.featuretypes" title="gffutils.interface.FeatureDB.featuretypes"><code class="xref py py-obj docutils literal"><span class="pre">FeatureDB.featuretypes</span></code></a></td>
-<td>Iterate over feature types found in the database.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.featuretypes.html#gffutils.interface.FeatureDB.featuretypes" title="gffutils.interface.FeatureDB.featuretypes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FeatureDB.featuretypes</span></code></a></p></td>
+<td><p>Iterate over feature types found in the database.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.region.html#gffutils.interface.FeatureDB.region" title="gffutils.interface.FeatureDB.region"><code class="xref py py-obj docutils literal"><span class="pre">FeatureDB.region</span></code></a></td>
-<td>Return features within specified genomic coordinates.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.region.html#gffutils.interface.FeatureDB.region" title="gffutils.interface.FeatureDB.region"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FeatureDB.region</span></code></a></p></td>
+<td><p>Return features within specified genomic coordinates.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.iter_by_parent_childs.html#gffutils.interface.FeatureDB.iter_by_parent_childs" title="gffutils.interface.FeatureDB.iter_by_parent_childs"><code class="xref py py-obj docutils literal"><span class="pre">FeatureDB.iter_by_parent_childs</span></code></a></td>
-<td>For each parent of type <code class="docutils literal"><span class="pre">featuretype</span></code>, yield a list L of that parent and all of its children (<code class="docutils literal"><span class="pre">[parent]</span> <span class="pre">+</span> <span class="pre">list(children)</span></code>).</td>
+<tr class="row-even"><td><p><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.iter_by_parent_childs.html#gffutils.interface.FeatureDB.iter_by_parent_childs" title="gffutils.interface.FeatureDB.iter_by_parent_childs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FeatureDB.iter_by_parent_childs</span></code></a></p></td>
+<td><p>For each parent of type <code class="docutils literal notranslate"><span class="pre">featuretype</span></code>, yield a list L of that parent and all of its children (<code class="docutils literal notranslate"><span class="pre">[parent]</span> <span class="pre">+</span> <span class="pre">list(children)</span></code>).</p></td>
 </tr>
 </tbody>
 </table>
-<p>Modify a <a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.html#gffutils.interface.FeatureDB" title="gffutils.interface.FeatureDB"><code class="xref py py-class docutils literal"><span class="pre">FeatureDB</span></code></a>:</p>
-<table border="1" class="longtable docutils">
+<p>Modify a <a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.html#gffutils.interface.FeatureDB" title="gffutils.interface.FeatureDB"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeatureDB</span></code></a>:</p>
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.update.html#gffutils.interface.FeatureDB.update" title="gffutils.interface.FeatureDB.update"><code class="xref py py-obj docutils literal"><span class="pre">FeatureDB.update</span></code></a></td>
-<td>Update database with features in <code class="docutils literal"><span class="pre">data</span></code>.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.update.html#gffutils.interface.FeatureDB.update" title="gffutils.interface.FeatureDB.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FeatureDB.update</span></code></a></p></td>
+<td><p>Update the on-disk database with features in <code class="docutils literal notranslate"><span class="pre">data</span></code>.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.delete.html#gffutils.interface.FeatureDB.delete" title="gffutils.interface.FeatureDB.delete"><code class="xref py py-obj docutils literal"><span class="pre">FeatureDB.delete</span></code></a></td>
-<td>Delete features from database.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.delete.html#gffutils.interface.FeatureDB.delete" title="gffutils.interface.FeatureDB.delete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FeatureDB.delete</span></code></a></p></td>
+<td><p>Delete features from database.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.add_relation.html#gffutils.interface.FeatureDB.add_relation" title="gffutils.interface.FeatureDB.add_relation"><code class="xref py py-obj docutils literal"><span class="pre">FeatureDB.add_relation</span></code></a></td>
-<td>Manually add relations to the database.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.add_relation.html#gffutils.interface.FeatureDB.add_relation" title="gffutils.interface.FeatureDB.add_relation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FeatureDB.add_relation</span></code></a></p></td>
+<td><p>Manually add relations to the database.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.set_pragmas.html#gffutils.interface.FeatureDB.set_pragmas" title="gffutils.interface.FeatureDB.set_pragmas"><code class="xref py py-obj docutils literal"><span class="pre">FeatureDB.set_pragmas</span></code></a></td>
-<td>Set pragmas for the current database connection.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.set_pragmas.html#gffutils.interface.FeatureDB.set_pragmas" title="gffutils.interface.FeatureDB.set_pragmas"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FeatureDB.set_pragmas</span></code></a></p></td>
+<td><p>Set pragmas for the current database connection.</p></td>
 </tr>
 </tbody>
 </table>
 <p>Operate on features:</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.interfeatures.html#gffutils.interface.FeatureDB.interfeatures" title="gffutils.interface.FeatureDB.interfeatures"><code class="xref py py-obj docutils literal"><span class="pre">FeatureDB.interfeatures</span></code></a></td>
-<td>Construct new features representing the space between features.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.interfeatures.html#gffutils.interface.FeatureDB.interfeatures" title="gffutils.interface.FeatureDB.interfeatures"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FeatureDB.interfeatures</span></code></a></p></td>
+<td><p>Construct new features representing the space between features.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.children_bp.html#gffutils.interface.FeatureDB.children_bp" title="gffutils.interface.FeatureDB.children_bp"><code class="xref py py-obj docutils literal"><span class="pre">FeatureDB.children_bp</span></code></a></td>
-<td>Total bp of all children of a featuretype.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.children_bp.html#gffutils.interface.FeatureDB.children_bp" title="gffutils.interface.FeatureDB.children_bp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FeatureDB.children_bp</span></code></a></p></td>
+<td><p>Total bp of all children of a featuretype.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.merge.html#gffutils.interface.FeatureDB.merge" title="gffutils.interface.FeatureDB.merge"><code class="xref py py-obj docutils literal"><span class="pre">FeatureDB.merge</span></code></a></td>
-<td>Merge overlapping features together.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.merge.html#gffutils.interface.FeatureDB.merge" title="gffutils.interface.FeatureDB.merge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FeatureDB.merge</span></code></a></p></td>
+<td><p>Merge features matching criteria together</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.create_introns.html#gffutils.interface.FeatureDB.create_introns" title="gffutils.interface.FeatureDB.create_introns"><code class="xref py py-obj docutils literal"><span class="pre">FeatureDB.create_introns</span></code></a></td>
-<td>Create introns from existing annotations.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.create_introns.html#gffutils.interface.FeatureDB.create_introns" title="gffutils.interface.FeatureDB.create_introns"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FeatureDB.create_introns</span></code></a></p></td>
+<td><p>Create introns from existing annotations.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.bed12.html#gffutils.interface.FeatureDB.bed12" title="gffutils.interface.FeatureDB.bed12"><code class="xref py py-obj docutils literal"><span class="pre">FeatureDB.bed12</span></code></a></td>
-<td>Converts <code class="docutils literal"><span class="pre">feature</span></code> into a BED12 format.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.bed12.html#gffutils.interface.FeatureDB.bed12" title="gffutils.interface.FeatureDB.bed12"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FeatureDB.bed12</span></code></a></p></td>
+<td><p>Converts <code class="docutils literal notranslate"><span class="pre">feature</span></code> into a BED12 format.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="feature-objects">
 <h2>Feature objects<a class="headerlink" href="#feature-objects" title="Permalink to this headline">¶</a></h2>
-<p>Most <a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.html#gffutils.interface.FeatureDB" title="gffutils.interface.FeatureDB"><code class="xref py py-class docutils literal"><span class="pre">FeatureDB</span></code></a> methods return <code class="xref py py-class docutils literal"><span class="pre">Feature</span></code> objects:</p>
-<table border="1" class="longtable docutils">
+<p>Most <a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.html#gffutils.interface.FeatureDB" title="gffutils.interface.FeatureDB"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeatureDB</span></code></a> methods return <code class="xref py py-class docutils literal notranslate"><span class="pre">Feature</span></code> objects:</p>
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="autodocs/gffutils.feature.Feature.html#gffutils.feature.Feature" title="gffutils.feature.Feature"><code class="xref py py-obj docutils literal"><span class="pre">Feature</span></code></a></td>
-<td></td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.feature.Feature.html#gffutils.feature.Feature" title="gffutils.feature.Feature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Feature</span></code></a></p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
 <p>You can extract the sequence for a feature:</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="autodocs/gffutils.feature.Feature.sequence.html#gffutils.feature.Feature.sequence" title="gffutils.feature.Feature.sequence"><code class="xref py py-obj docutils literal"><span class="pre">Feature.sequence</span></code></a></td>
-<td>Retrieves the sequence of this feature as a string.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.feature.Feature.sequence.html#gffutils.feature.Feature.sequence" title="gffutils.feature.Feature.sequence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Feature.sequence</span></code></a></p></td>
+<td><p>Retrieves the sequence of this feature as a string.</p></td>
 </tr>
 </tbody>
 </table>
-<p>Creating a <a class="reference internal" href="autodocs/gffutils.feature.Feature.html#gffutils.feature.Feature" title="gffutils.feature.Feature"><code class="xref py py-class docutils literal"><span class="pre">Feature</span></code></a> object:</p>
-<table border="1" class="longtable docutils">
+<p>Creating a <a class="reference internal" href="autodocs/gffutils.feature.Feature.html#gffutils.feature.Feature" title="gffutils.feature.Feature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Feature</span></code></a> object:</p>
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="autodocs/gffutils.feature.feature_from_line.html#gffutils.feature.feature_from_line" title="gffutils.feature.feature_from_line"><code class="xref py py-obj docutils literal"><span class="pre">feature_from_line</span></code></a></td>
-<td>Given a line from a GFF file, return a Feature object</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.feature.feature_from_line.html#gffutils.feature.feature_from_line" title="gffutils.feature.feature_from_line"><code class="xref py py-obj docutils literal notranslate"><span class="pre">feature_from_line</span></code></a></p></td>
+<td><p>Given a line from a GFF file, return a Feature object</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="integration-with-other-tools">
 <h2>Integration with other tools<a class="headerlink" href="#integration-with-other-tools" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="autodocs/gffutils.biopython_integration.to_seqfeature.html#gffutils.biopython_integration.to_seqfeature" title="gffutils.biopython_integration.to_seqfeature"><code class="xref py py-obj docutils literal"><span class="pre">gffutils.biopython_integration.to_seqfeature</span></code></a></td>
-<td>Converts a gffutils.Feature object to a Bio.SeqFeature object.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.biopython_integration.to_seqfeature.html#gffutils.biopython_integration.to_seqfeature" title="gffutils.biopython_integration.to_seqfeature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gffutils.biopython_integration.to_seqfeature</span></code></a></p></td>
+<td><p>Converts a gffutils.Feature object to a Bio.SeqFeature object.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="autodocs/gffutils.biopython_integration.from_seqfeature.html#gffutils.biopython_integration.from_seqfeature" title="gffutils.biopython_integration.from_seqfeature"><code class="xref py py-obj docutils literal"><span class="pre">gffutils.biopython_integration.from_seqfeature</span></code></a></td>
-<td>Converts a Bio.SeqFeature object to a gffutils.Feature object.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="autodocs/gffutils.biopython_integration.from_seqfeature.html#gffutils.biopython_integration.from_seqfeature" title="gffutils.biopython_integration.from_seqfeature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gffutils.biopython_integration.from_seqfeature</span></code></a></p></td>
+<td><p>Converts a Bio.SeqFeature object to a gffutils.Feature object.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="autodocs/gffutils.pybedtools_integration.tsses.html#gffutils.pybedtools_integration.tsses" title="gffutils.pybedtools_integration.tsses"><code class="xref py py-obj docutils literal"><span class="pre">gffutils.pybedtools_integration.tsses</span></code></a></td>
-<td>Create 1-bp transcription start sites for all transcripts in the database and return as a sorted pybedtools.BedTool object pointing to a temporary file.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.pybedtools_integration.tsses.html#gffutils.pybedtools_integration.tsses" title="gffutils.pybedtools_integration.tsses"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gffutils.pybedtools_integration.tsses</span></code></a></p></td>
+<td><p>Create 1-bp transcription start sites for all transcripts in the database and return as a sorted pybedtools.BedTool object pointing to a temporary file.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="autodocs/gffutils.pybedtools_integration.to_bedtool.html#gffutils.pybedtools_integration.to_bedtool" title="gffutils.pybedtools_integration.to_bedtool"><code class="xref py py-obj docutils literal"><span class="pre">gffutils.pybedtools_integration.to_bedtool</span></code></a></td>
-<td>Convert any iterator into a pybedtools.BedTool object.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="autodocs/gffutils.pybedtools_integration.to_bedtool.html#gffutils.pybedtools_integration.to_bedtool" title="gffutils.pybedtools_integration.to_bedtool"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gffutils.pybedtools_integration.to_bedtool</span></code></a></p></td>
+<td><p>Convert any iterator into a pybedtools.BedTool object.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="utilities">
 <h2>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="autodocs/gffutils.helpers.asinterval.html#gffutils.helpers.asinterval" title="gffutils.helpers.asinterval"><code class="xref py py-obj docutils literal"><span class="pre">gffutils.helpers.asinterval</span></code></a></td>
-<td>Converts a gffutils.Feature to a pybedtools.Interval</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.helpers.asinterval.html#gffutils.helpers.asinterval" title="gffutils.helpers.asinterval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gffutils.helpers.asinterval</span></code></a></p></td>
+<td><p>Converts a gffutils.Feature to a pybedtools.Interval</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="autodocs/gffutils.helpers.merge_attributes.html#gffutils.helpers.merge_attributes" title="gffutils.helpers.merge_attributes"><code class="xref py py-obj docutils literal"><span class="pre">gffutils.helpers.merge_attributes</span></code></a></td>
-<td>Merges two attribute dictionaries into a single dictionary.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="autodocs/gffutils.helpers.merge_attributes.html#gffutils.helpers.merge_attributes" title="gffutils.helpers.merge_attributes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gffutils.helpers.merge_attributes</span></code></a></p></td>
+<td><p>Merges two attribute dictionaries into a single dictionary.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="autodocs/gffutils.helpers.sanitize_gff_db.html#gffutils.helpers.sanitize_gff_db" title="gffutils.helpers.sanitize_gff_db"><code class="xref py py-obj docutils literal"><span class="pre">gffutils.helpers.sanitize_gff_db</span></code></a></td>
-<td>Sanitize given GFF db.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.helpers.sanitize_gff_db.html#gffutils.helpers.sanitize_gff_db" title="gffutils.helpers.sanitize_gff_db"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gffutils.helpers.sanitize_gff_db</span></code></a></p></td>
+<td><p>Sanitize given GFF db.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="autodocs/gffutils.helpers.annotate_gff_db.html#gffutils.helpers.annotate_gff_db" title="gffutils.helpers.annotate_gff_db"><code class="xref py py-obj docutils literal"><span class="pre">gffutils.helpers.annotate_gff_db</span></code></a></td>
-<td>Annotate a GFF file by cross-referencing it with another GFF file, e.g.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="autodocs/gffutils.helpers.annotate_gff_db.html#gffutils.helpers.annotate_gff_db" title="gffutils.helpers.annotate_gff_db"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gffutils.helpers.annotate_gff_db</span></code></a></p></td>
+<td><p>Annotate a GFF file by cross-referencing it with another GFF file, e.g.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="autodocs/gffutils.helpers.infer_dialect.html#gffutils.helpers.infer_dialect" title="gffutils.helpers.infer_dialect"><code class="xref py py-obj docutils literal"><span class="pre">gffutils.helpers.infer_dialect</span></code></a></td>
-<td>Infer the dialect based on the attributes.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.helpers.infer_dialect.html#gffutils.helpers.infer_dialect" title="gffutils.helpers.infer_dialect"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gffutils.helpers.infer_dialect</span></code></a></p></td>
+<td><p>Infer the dialect based on the attributes.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="autodocs/gffutils.helpers.example_filename.html#gffutils.helpers.example_filename" title="gffutils.helpers.example_filename"><code class="xref py py-obj docutils literal"><span class="pre">gffutils.helpers.example_filename</span></code></a></td>
-<td>Return the full path of a data file that ships with gffutils.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="autodocs/gffutils.helpers.example_filename.html#gffutils.helpers.example_filename" title="gffutils.helpers.example_filename"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gffutils.helpers.example_filename</span></code></a></p></td>
+<td><p>Return the full path of a data file that ships with gffutils.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="autodocs/gffutils.inspect.inspect.html#gffutils.inspect.inspect" title="gffutils.inspect.inspect"><code class="xref py py-obj docutils literal"><span class="pre">gffutils.inspect.inspect</span></code></a></td>
-<td>Inspect a GFF or GTF data source.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.inspect.inspect.html#gffutils.inspect.inspect" title="gffutils.inspect.inspect"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gffutils.inspect.inspect</span></code></a></p></td>
+<td><p>Inspect a GFF or GTF data source.</p></td>
 </tr>
 </tbody>
 </table>
@@ -411,15 +431,16 @@
 
 
            </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="autodocs/gffutils.create.create_db.html" class="btn btn-neutral float-right" title="gffutils.create.create_db" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="autodocs/gffutils.create.create_db.html" class="btn btn-neutral float-right" title="gffutils.create.create_db" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="examples.html" class="btn btn-neutral" title="Examples" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="examples.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -428,11 +449,11 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2013, Ryan Dale.
+        &copy; Copyright 2013, Ryan Dale
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -445,35 +466,15 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.8.8',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

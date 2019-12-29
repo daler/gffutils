@@ -8,47 +8,43 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gffutils.pybedtools_integration &mdash; gffutils 0.8.8 documentation</title>
+  <title>gffutils.pybedtools_integration &mdash; gffutils 0.10 documentation</title>
   
 
   
   
+  
+  
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="gffutils 0.8.8 documentation" href="../../index.html"/>
-        <link rel="up" title="Module code" href="../index.html"/> 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -62,7 +58,7 @@
             
             
               <div class="version">
-                0.8.8
+                0.10
               </div>
             
           
@@ -83,7 +79,10 @@
           
             
             
-                <ul>
+              
+            
+            
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../database-import.html">Importing data into a database</a></li>
@@ -95,7 +94,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Change log</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../developers.html">Developer&#8217;s docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developers.html">Developer’s docs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../meta.html">Meta-docs (docs about the docs)</a></li>
 </ul>
 
@@ -108,34 +107,52 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../contents.html">gffutils</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../contents.html">gffutils</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../contents.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../contents.html">Docs</a> &raquo;</li>
+        
           <li><a href="../index.html">Module code</a> &raquo;</li>
-      
-    <li>gffutils.pybedtools_integration</li>
+        
+      <li>gffutils.pybedtools_integration</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
-        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -146,10 +163,12 @@
 <span class="sd">Module for integration with pybedtools</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">pybedtools</span>
-<span class="kn">from</span> <span class="nn">pybedtools</span> <span class="k">import</span> <span class="n">featurefuncs</span>
-<span class="kn">from</span> <span class="nn">gffutils</span> <span class="k">import</span> <span class="n">helpers</span>
+<span class="kn">from</span> <span class="nn">pybedtools</span> <span class="kn">import</span> <span class="n">featurefuncs</span>
+<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">helpers</span>
 <span class="kn">import</span> <span class="nn">six</span>
+
 
 <div class="viewcode-block" id="to_bedtool"><a class="viewcode-back" href="../../autodocs/gffutils.pybedtools_integration.to_bedtool.html#gffutils.pybedtools_integration.to_bedtool">[docs]</a><span class="k">def</span> <span class="nf">to_bedtool</span><span class="p">(</span><span class="n">iterator</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -166,7 +185,7 @@
 
 
 <div class="viewcode-block" id="tsses"><a class="viewcode-back" href="../../autodocs/gffutils.pybedtools_integration.tsses.html#gffutils.pybedtools_integration.tsses">[docs]</a><span class="k">def</span> <span class="nf">tsses</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">merge_overlapping</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">attrs_sep</span><span class="o">=</span><span class="s2">&quot;:&quot;</span><span class="p">,</span>
-          <span class="n">merge_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">o</span><span class="o">=</span><span class="s1">&#39;distinct&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span> <span class="n">as_bed6</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+          <span class="n">merge_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">as_bed6</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bedtools_227_or_later</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create 1-bp transcription start sites for all transcripts in the database</span>
 <span class="sd">    and return as a sorted pybedtools.BedTool object pointing to a temporary</span>
@@ -218,12 +237,20 @@
 <span class="sd">        attributes is supplied, e.g. [&quot;gene_id&quot;, &quot;transcript_id&quot;], then these</span>
 <span class="sd">        will be joined by `attr_join_sep` and then placed in the name field.</span>
 
-
 <span class="sd">    attrs_sep: str</span>
 <span class="sd">        If `as_bed6=True` or `merge_overlapping=True`, then use this character</span>
 <span class="sd">        to separate attributes in the name field of the output BED. If also</span>
 <span class="sd">        using `merge_overlapping=True`, you&#39;ll probably want this to be</span>
 <span class="sd">        different than `merge_sep` in order to parse things out later.</span>
+
+<span class="sd">    bedtools_227_or_later : bool</span>
+<span class="sd">        In version 2.27, BEDTools changed the output for merge. By default,</span>
+<span class="sd">        this function expects BEDTools version 2.27 or later, but set this to</span>
+<span class="sd">        False to assume the older behavior.</span>
+
+<span class="sd">        For testing purposes, the environment variable</span>
+<span class="sd">        GFFUTILS_USES_BEDTOOLS_227_OR_LATER is set to either &quot;true&quot; or &quot;false&quot;</span>
+<span class="sd">        and is used to override this argument.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -290,7 +317,22 @@
 
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">_merge_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">o</span><span class="o">=</span><span class="s1">&#39;distinct&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+    <span class="n">_override</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;GFFUTILS_USES_BEDTOOLS_227_OR_LATER&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_override</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">_override</span> <span class="o">==</span> <span class="s1">&#39;true&#39;</span><span class="p">:</span>
+            <span class="n">bedtools_227_or_later</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">_override</span> <span class="o">==</span> <span class="s1">&#39;false&#39;</span><span class="p">:</span>
+            <span class="n">bedtools_227_or_later</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Unknown value for GFFUTILS_USES_BEDTOOLS_227_OR_LATER &quot;</span>
+                <span class="s2">&quot;environment variable: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_override</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">bedtools_227_or_later</span><span class="p">:</span>
+        <span class="n">_merge_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">o</span><span class="o">=</span><span class="s1">&#39;distinct&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;4,5,6&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_merge_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">o</span><span class="o">=</span><span class="s1">&#39;distinct&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;4&#39;</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="n">merge_kwargs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">_merge_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">merge_kwargs</span><span class="p">)</span>
 
@@ -339,24 +381,25 @@
         <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">each</span><span class="p">(</span><span class="n">to_bed</span><span class="p">)</span><span class="o">.</span><span class="n">saveas</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">merge_overlapping</span><span class="p">:</span>
-
-        <span class="k">def</span> <span class="nf">fix_merge</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-            <span class="n">f</span> <span class="o">=</span> <span class="n">featurefuncs</span><span class="o">.</span><span class="n">extend_fields</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">pybedtools</span><span class="o">.</span><span class="n">Interval</span><span class="p">(</span>
-                <span class="n">f</span><span class="o">.</span><span class="n">chrom</span><span class="p">,</span>
-                <span class="n">f</span><span class="o">.</span><span class="n">start</span><span class="p">,</span>
-                <span class="n">f</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span>
-                <span class="n">f</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
-                <span class="s1">&#39;.&#39;</span><span class="p">,</span>
-                <span class="n">f</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
-
-        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="o">**</span><span class="n">_merge_kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">each</span><span class="p">(</span><span class="n">fix_merge</span><span class="p">)</span><span class="o">.</span><span class="n">saveas</span><span class="p">()</span>
-
+        <span class="k">if</span> <span class="n">bedtools_227_or_later</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="o">**</span><span class="n">_merge_kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">def</span> <span class="nf">fix_merge</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+                <span class="n">f</span> <span class="o">=</span> <span class="n">featurefuncs</span><span class="o">.</span><span class="n">extend_fields</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">pybedtools</span><span class="o">.</span><span class="n">Interval</span><span class="p">(</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">chrom</span><span class="p">,</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">start</span><span class="p">,</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span>
+                    <span class="n">f</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+                    <span class="s1">&#39;.&#39;</span><span class="p">,</span>
+                    <span class="n">f</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="o">**</span><span class="n">_merge_kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">saveas</span><span class="p">()</span><span class="o">.</span><span class="n">each</span><span class="p">(</span><span class="n">fix_merge</span><span class="p">)</span><span class="o">.</span><span class="n">saveas</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">x</span></div>
 </pre></div>
 
            </div>
+           
           </div>
           <footer>
   
@@ -365,11 +408,11 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2013, Ryan Dale.
+        &copy; Copyright 2013, Ryan Dale
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -382,35 +425,15 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'0.8.8',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

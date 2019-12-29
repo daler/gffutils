@@ -2,8 +2,57 @@
 
 Change log
 ==========
-Changes in v0.8.8
------------------
+
+Changes in v0.10
+----------------
+
+- support very large chromosomes (fixed issues `#94
+  <https://github.com/daler/gffutils/issues/94>`_ and `#112
+  <https://github.com/daler/gffutils/issues/112>`_)
+
+- expand `~` to user's home directory for filenames
+  (issue `#105 <https://github.com/daler/gffutils/issues/105>`_).
+
+- when merging, make merging attributes optional (issue `#107
+  <https://github.com/daler/gffutils/issues/107>`_)
+
+- use a proper context manager for open files, fixes `issue #110
+  <https://github.com/daler/gffutils/issues/110>`_.
+
+- Update code to reflect changes in later Python versions (`#121
+  <https://github.com/daler/gffutils/pull/121>`_ and  `#123
+  <https://github.com/daler/gffutils/pull/123>`_ thanks @abhishekkumaresan)
+
+- Dramatically improved merging routine -- many thanks to Nolan Wood
+  @innovate-invent (`#130 <https://github.com/daler/gffutils/pull/130>`_).
+
+- Previously, when merging the second feature's attributes were not
+  deep-copied, resulting in unintended changes to the underlying dict (`#133
+  <https://github.com/daler/gffutils/pull/133>`_, thanks Nolan Wood
+  @innovate-invent)
+
+- Fixed an issue that when imputing intron features, attributes were being
+  pulled from the first (or last) exon (`#139
+  <https://github.com/daler/gffutils/pull/139>`_, thanks @stekaz).
+
+- Support creating Feature objects using empty values for attributes (`#144
+  <https://github.com/daler/gffutils/pull/144>`_).
+
+- Ensure that tests work post-installation (`#145
+  <https://github.com/daler/gffutils/pull/145`_, thanks Michael Crusoe @mr-c)
+
+- removed redundant ``inspection.py`` module (`#147
+  <https://github.com/daler/gffutils/pull/147>`_).
+
+- improvements to ``FeatureDB.update``, especially with respect to handling
+  autoincrementing feature IDs. Previously, upon updating a db with another,
+  autoincrement integers would restart at 1. Thanks Nolan Wood
+  (@innovate-invent) and @abhishekkumaresan (`#149
+  <https://github.com/daler/gffutils/pull/149>`_)
+
+
+Changes in v0.9
+---------------
 Long-overdue release with performance improvements and better handling of
 corner-case GFF and GTF files.
 
@@ -32,8 +81,7 @@ corner-case GFF and GTF files.
   when converting to string. Set
   `gffutils.constants.ignore_url_escape_characters=True` to disable any
   encoding/decoding behavior.
-
-
+- improved testing framework
 
 Changes in v0.8.7.1
 -------------------

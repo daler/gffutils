@@ -1,5 +1,5 @@
-gffutils\.interface\.FeatureDB\.update
-======================================
+gffutils.interface.FeatureDB.update
+===================================
 
 .. currentmodule:: gffutils.interface
 

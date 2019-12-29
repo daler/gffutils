@@ -8,48 +8,45 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Database IDs &mdash; gffutils 0.8.8 documentation</title>
+  <title>Database IDs &mdash; gffutils 0.10 documentation</title>
   
 
   
   
+  
+  
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="gffutils 0.8.8 documentation" href="index.html"/>
-        <link rel="next" title="GTF files" href="gtf.html"/>
-        <link rel="prev" title="Database schema" href="database-schema.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="GTF files" href="gtf.html" />
+    <link rel="prev" title="Database schema" href="database-schema.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -63,7 +60,7 @@
             
             
               <div class="version">
-                0.8.8
+                0.10
               </div>
             
           
@@ -84,15 +81,18 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="index.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="database-import.html">Importing data into a database</a></li>
 <li class="toctree-l1"><a class="reference internal" href="database-schema.html">Database schema</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Database IDs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id-spec"><code class="docutils literal"><span class="pre">id_spec</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#transform"><code class="docutils literal"><span class="pre">transform</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#merge-strategy"><code class="docutils literal"><span class="pre">merge_strategy</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id-spec"><code class="docutils literal notranslate"><span class="pre">id_spec</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transform"><code class="docutils literal notranslate"><span class="pre">transform</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#merge-strategy"><code class="docutils literal notranslate"><span class="pre">merge_strategy</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="gtf.html">GTF files</a></li>
@@ -101,7 +101,7 @@
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Change log</a></li>
-<li class="toctree-l1"><a class="reference internal" href="developers.html">Developer&#8217;s docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">Developer’s docs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="meta.html">Meta-docs (docs about the docs)</a></li>
 </ul>
 
@@ -114,34 +114,54 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="contents.html">gffutils</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="contents.html">gffutils</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="contents.html">Docs</a> &raquo;</li>
-      
-    <li>Database IDs</li>
+    
+      <li><a href="contents.html">Docs</a> &raquo;</li>
+        
+      <li>Database IDs</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="_sources/database-ids.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -150,202 +170,199 @@
   <div class="section" id="database-ids">
 <span id="id1"></span><h1>Database IDs<a class="headerlink" href="#database-ids" title="Permalink to this headline">¶</a></h1>
 <p>A primary key is a unique identifier used in a database.  When
-importing a GFF or GTF file with <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code></a> into a database, each unique
+importing a GFF or GTF file with <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a> into a database, each unique
 feature in the file should have its own primary key.</p>
 <p>Primary keys are important because they are used to retrieve information from
 the database using dictionary syntax.  For example in the <a class="reference internal" href="index.html#introduction"><span class="std std-ref">Introduction</span></a>,
 the example file has a line like this:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">chr2L</span>   <span class="n">FlyBase</span> <span class="n">gene</span>    <span class="mi">7529</span>    <span class="mi">9484</span>    <span class="o">.</span>       <span class="o">+</span>       <span class="o">.</span>       <span class="n">ID</span><span class="o">=</span><span class="n">FBgn0031208</span><span class="p">;</span><span class="n">Name</span><span class="o">=</span><span class="n">CG11023</span><span class="p">;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">chr2L</span>   <span class="n">FlyBase</span> <span class="n">gene</span>    <span class="mi">7529</span>    <span class="mi">9484</span>    <span class="o">.</span>       <span class="o">+</span>       <span class="o">.</span>       <span class="n">ID</span><span class="o">=</span><span class="n">FBgn0031208</span><span class="p">;</span><span class="n">Name</span><span class="o">=</span><span class="n">CG11023</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>By default, the primary key GFF3 features (like this one) is the &#8220;ID&#8221; field of
+<p>By default, the primary key GFF3 features (like this one) is the “ID” field of
 the attributes.  So the unique key used for the database for this feature is
-<code class="docutils literal"><span class="pre">FBgn0031208</span></code>.  This means we can access the gene from the database like this:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">gene</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="s1">&#39;FBgn0031208&#39;</span><span class="p">]</span>
+<code class="docutils literal notranslate"><span class="pre">FBgn0031208</span></code>.  This means we can access the gene from the database like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gene</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="s1">&#39;FBgn0031208&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>Now, imagine we wanted to get the 5&#8217; UTRs for the gene.  Looking at the
+<p>Now, imagine we wanted to get the 5’ UTRs for the gene.  Looking at the
 example file in the <a class="reference internal" href="index.html#introduction"><span class="std std-ref">Introduction</span></a>, we actually do
 have an ID.  So we could access it like this:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">utr</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="s1">&#39;five_prime_UTR_FBgn0031208:1_737&#39;</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">utr</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="s1">&#39;five_prime_UTR_FBgn0031208:1_737&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>This is quite awkward to type.  Plus, using this method we would have to type
 all the unique IDs for each of the UTRs we wanted!</p>
-<p>In a sense, we only need one good &#8220;hook&#8221; into the database by meaningful IDs,
+<p>In a sense, we only need one good “hook” into the database by meaningful IDs,
 and then we can access the other features based on parents and children.  That
-is, we could get <em>all</em> the 5&#8217;UTRs for the gene without knowing their individual
+is, we could get <em>all</em> the 5’UTRs for the gene without knowing their individual
 IDs like this:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">utrs</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="s1">&#39;FBgn0031208&#39;</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="s1">&#39;five_prime_UTR&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">utrs</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="s1">&#39;FBgn0031208&#39;</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="s1">&#39;five_prime_UTR&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This works because 1) we have a unique ID for the gene, 2) we have unique IDs
-for each 5&#8217;UTR, and 3) the relationships in the database are constructed using
+for each 5’UTR, and 3) the relationships in the database are constructed using
 these unique IDs.</p>
 <p>If your input GFF or GTF file is formatted in the canonical way, the default
 settings should work fine.  The rest of this section details strategies for
-instructing <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code></a> to use the most meaningful primary key for your
+instructing <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a> to use the most meaningful primary key for your
 particular input file.</p>
 <div class="section" id="id-spec">
-<span id="id2"></span><h2><code class="docutils literal"><span class="pre">id_spec</span></code><a class="headerlink" href="#id-spec" title="Permalink to this headline">¶</a></h2>
+<span id="id2"></span><h2><code class="docutils literal notranslate"><span class="pre">id_spec</span></code><a class="headerlink" href="#id-spec" title="Permalink to this headline">¶</a></h2>
 <div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p>Examples that show the use of <code class="docutils literal"><span class="pre">id_spec</span></code>:</p>
-<ul class="last simple">
-<li><a class="reference internal" href="examples.html#f3-unique-3-v2-gff"><span class="std std-ref">F3-unique-3.v2.gff</span></a> (uses <code class="docutils literal"><span class="pre">id_spec=:seqid:</span></code>)</li>
-<li><a class="reference internal" href="examples.html#jgi-gff2-txt"><span class="std std-ref">jgi_gff2.txt</span></a></li>
-<li><a class="reference internal" href="examples.html#ncbi-gff3-txt"><span class="std std-ref">ncbi_gff3.txt</span></a></li>
-<li><a class="reference internal" href="examples.html#wormbase-gff2-txt"><span class="std std-ref">wormbase_gff2.txt</span></a></li>
+<p class="admonition-title">See also</p>
+<p>Examples that show the use of <code class="docutils literal notranslate"><span class="pre">id_spec</span></code>:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="examples.html#f3-unique-3-v2-gff"><span class="std std-ref">F3-unique-3.v2.gff</span></a> (uses <code class="docutils literal notranslate"><span class="pre">id_spec=:seqid:</span></code>)</p></li>
+<li><p><a class="reference internal" href="examples.html#jgi-gff2-txt"><span class="std std-ref">jgi_gff2.txt</span></a></p></li>
+<li><p><a class="reference internal" href="examples.html#ncbi-gff3-txt"><span class="std std-ref">ncbi_gff3.txt</span></a></p></li>
+<li><p><a class="reference internal" href="examples.html#wormbase-gff2-txt"><span class="std std-ref">wormbase_gff2.txt</span></a></p></li>
 </ul>
 </div>
-<p>The <code class="docutils literal"><span class="pre">id_spec</span></code> (ID specification) kwarg determines how to extract information
+<p>The <code class="docutils literal notranslate"><span class="pre">id_spec</span></code> (ID specification) kwarg determines how to extract information
 from each line in order to construct a primary key for the feature.  It can
-have several different forms &#8211; None, string, list, dictionary, or callable.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">None:</th><td class="field-body"><p class="first">The primary key for each feature will be an auto-incremented version of the
-feature type (e.g., &#8220;gene_1&#8221;, &#8220;gene_2&#8221;, etc).</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">string:</th><td class="field-body"><p class="first">Use the attribute value.</p>
-<p>For example, <code class="docutils literal"><span class="pre">id_spec=&quot;ID&quot;</span></code>. The primary key for each feature will be the
-value of the &#8220;ID&#8221; attribute.  If this is not found, then an
+have several different forms – None, string, list, dictionary, or callable.</p>
+<dl class="field-list">
+<dt class="field-odd">None</dt>
+<dd class="field-odd"><p>The primary key for each feature will be an auto-incremented version of the
+feature type (e.g., “gene_1”, “gene_2”, etc).</p>
+</dd>
+<dt class="field-even">string</dt>
+<dd class="field-even"><p>Use the attribute value.</p>
+<p>For example, <code class="docutils literal notranslate"><span class="pre">id_spec=&quot;ID&quot;</span></code>. The primary key for each feature will be the
+value of the “ID” attribute.  If this is not found, then an
 auto-incremented version of the feature type is used</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">list:</th><td class="field-body"><p class="first">Use the first available attribute value from the list.</p>
-<p>For example, <code class="docutils literal"><span class="pre">id_spec=[&quot;ID&quot;,</span> <span class="pre">&quot;Name&quot;]</span></code>: the primary key for each feature
-will be the value of the &#8220;ID&#8221; attribute.  If no &#8220;ID&#8221; attribute is found,
-then use the value of the &#8220;Name&#8221; field.  If this is not found, then an
+</dd>
+<dt class="field-odd">list</dt>
+<dd class="field-odd"><p>Use the first available attribute value from the list.</p>
+<p>For example, <code class="docutils literal notranslate"><span class="pre">id_spec=[&quot;ID&quot;,</span> <span class="pre">&quot;Name&quot;]</span></code>: the primary key for each feature
+will be the value of the “ID” attribute.  If no “ID” attribute is found,
+then use the value of the “Name” field.  If this is not found, then an
 auto-incremented version of the feature type is used.</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">dict:</th><td class="field-body"><p class="first">Use different strategies according to the featuretype.</p>
-<p>For example, <code class="docutils literal"><span class="pre">id_spec={&quot;gene&quot;:</span> <span class="pre">&quot;Name&quot;,</span> <span class="pre">&quot;mRNA&quot;:</span> <span class="pre">[&quot;ID&quot;,</span> <span class="pre">&quot;transcript_id&quot;]}</span></code>:</p>
+</dd>
+<dt class="field-even">dict</dt>
+<dd class="field-even"><p>Use different strategies according to the featuretype.</p>
+<p>For example, <code class="docutils literal notranslate"><span class="pre">id_spec={&quot;gene&quot;:</span> <span class="pre">&quot;Name&quot;,</span> <span class="pre">&quot;mRNA&quot;:</span> <span class="pre">[&quot;ID&quot;,</span> <span class="pre">&quot;transcript_id&quot;]}</span></code>:</p>
 <ul class="simple">
-<li>For &#8220;gene&#8221; features, the primary key will be the value of the &#8220;Name&#8221; attribute.
-If this is not found, then use an auto-incremented version of &#8220;gene&#8221;.</li>
-<li>For &#8220;mRNA&#8221; features, if the &#8220;ID&#8221; attribute exists, then use it as the
-primary key will be the value of the &#8220;ID&#8221; attribute.  If not, then use
-the &#8220;transcript_id&#8221; value.  If this is not found, then use an
-auto-incremented version of &#8220;mRNA&#8221;.</li>
-<li>For any other feature, the primary key will be the an auto-incremented version fo
-the feature type.</li>
+<li><p>For “gene” features, the primary key will be the value of the “Name” attribute.
+If this is not found, then use an auto-incremented version of “gene”.</p></li>
+<li><p>For “mRNA” features, if the “ID” attribute exists, then use it as the
+primary key will be the value of the “ID” attribute.  If not, then use
+the “transcript_id” value.  If this is not found, then use an
+auto-incremented version of “mRNA”.</p></li>
+<li><p>For any other feature, the primary key will be the an auto-incremented version fo
+the feature type.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">special string:</th><td class="field-body"><p class="first">Use a GFF field value (from the first 8 columns) rather than an attributes
-value.  Must be surrounded by <code class="docutils literal"><span class="pre">:</span></code>.  The options to use can be found in the
-list <code class="xref py py-obj docutils literal"><span class="pre">gffutils.constants._gffkeys</span></code> [:-1].</p>
-<p>For example, <code class="docutils literal"><span class="pre">id_spec=&quot;:seqid:&quot;</span></code>:  use the &#8220;seqid&#8221; field as the primary
+</dd>
+<dt class="field-odd">special string</dt>
+<dd class="field-odd"><p>Use a GFF field value (from the first 8 columns) rather than an attributes
+value.  Must be surrounded by <code class="docutils literal notranslate"><span class="pre">:</span></code>.  The options to use can be found in the
+list <code class="xref py py-obj docutils literal notranslate"><span class="pre">gffutils.constants._gffkeys</span></code> [:-1].</p>
+<p>For example, <code class="docutils literal notranslate"><span class="pre">id_spec=&quot;:seqid:&quot;</span></code>:  use the “seqid” field as the primary
 key.</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">function:</th><td class="field-body"><p class="first">Apply a custom function (or other callable object), and use its return
+</dd>
+<dt class="field-even">function</dt>
+<dd class="field-even"><p>Apply a custom function (or other callable object), and use its return
 value as the primary key.</p>
-<p>The function must accept a single <code class="xref py py-class docutils literal"><span class="pre">gffutils.Feature</span></code> object.  It can
+<p>The function must accept a single <code class="xref py py-class docutils literal notranslate"><span class="pre">gffutils.Feature</span></code> object.  It can
 return one of the following:</p>
-<ul class="last simple">
-<li>None, in which case the behavior is the same as <code class="docutils literal"><span class="pre">id_spec=None</span></code>.</li>
-<li>A special string starting with <code class="docutils literal"><span class="pre">autoincrement:X</span></code>, which will
-auto-increment based on the value of <code class="docutils literal"><span class="pre">X</span></code>.  That is, if a function returns
-<code class="docutils literal"><span class="pre">autoincrement:chr21</span></code>, then the primary key of the first feature will be
-<code class="docutils literal"><span class="pre">chr21_1</span></code>, the second will be <code class="docutils literal"><span class="pre">chr21_2</span></code>, and so on.</li>
-<li>A string to be used as the primary key.</li>
+<ul class="simple">
+<li><p>None, in which case the behavior is the same as <code class="docutils literal notranslate"><span class="pre">id_spec=None</span></code>.</p></li>
+<li><p>A special string starting with <code class="docutils literal notranslate"><span class="pre">autoincrement:X</span></code>, which will
+auto-increment based on the value of <code class="docutils literal notranslate"><span class="pre">X</span></code>.  That is, if a function returns
+<code class="docutils literal notranslate"><span class="pre">autoincrement:chr21</span></code>, then the primary key of the first feature will be
+<code class="docutils literal notranslate"><span class="pre">chr21_1</span></code>, the second will be <code class="docutils literal notranslate"><span class="pre">chr21_2</span></code>, and so on.</p></li>
+<li><p>A string to be used as the primary key.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
-<p>The default for GFF3 files is <code class="docutils literal"><span class="pre">id_spec=&quot;ID&quot;</span></code>.  If a feature has an &#8220;ID&#8221;
+</dd>
+</dl>
+<p>The default for GFF3 files is <code class="docutils literal notranslate"><span class="pre">id_spec=&quot;ID&quot;</span></code>.  If a feature has an “ID”
 attribute, it will be used for the primary key.  If not, then an
 auto-incremented key, based on the featuretype, will be used.</p>
-<p>The default for GTF files is <code class="docutils literal"><span class="pre">id_spec={&quot;gene&quot;:</span> <span class="pre">&quot;gene_id&quot;,</span> <span class="pre">&quot;transcript&quot;:</span>
-<span class="pre">&quot;transcript_id&quot;}</span></code>.  Even though &#8220;gene&#8221; and &#8220;transcript&#8221; features do not exist
-in the original file, <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal"><span class="pre">gffutils</span></code></a> infers the gene and transcript boundaries
-(as described in <a class="reference internal" href="gtf.html#gtf"><span class="std std-ref">GTF files</span></a>, and will use this <code class="docutils literal"><span class="pre">id_spec</span></code> for those inferred
+<p>The default for GTF files is <code class="docutils literal notranslate"><span class="pre">id_spec={&quot;gene&quot;:</span> <span class="pre">&quot;gene_id&quot;,</span> <span class="pre">&quot;transcript&quot;:</span>
+<span class="pre">&quot;transcript_id&quot;}</span></code>.  Even though “gene” and “transcript” features do not exist
+in the original file, <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a> infers the gene and transcript boundaries
+(as described in <a class="reference internal" href="gtf.html#gtf"><span class="std std-ref">GTF files</span></a>, and will use this <code class="docutils literal notranslate"><span class="pre">id_spec</span></code> for those inferred
 regions.</p>
 </div>
 <div class="section" id="transform">
-<span id="id3"></span><h2><code class="docutils literal"><span class="pre">transform</span></code><a class="headerlink" href="#transform" title="Permalink to this headline">¶</a></h2>
+<span id="id3"></span><h2><code class="docutils literal notranslate"><span class="pre">transform</span></code><a class="headerlink" href="#transform" title="Permalink to this headline">¶</a></h2>
 <div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p>Examples that show the use of <code class="docutils literal"><span class="pre">transform</span></code>:</p>
-<ul class="last simple">
-<li><a class="reference internal" href="examples.html#ensembl-gtf-txt"><span class="std std-ref">ensembl_gtf.txt</span></a></li>
-<li><a class="reference internal" href="examples.html#glimmer-nokeyval-gff3"><span class="std std-ref">glimmer_nokeyval.gff3</span></a></li>
-<li><a class="reference internal" href="examples.html#wormbase-gff2-alt-txt"><span class="std std-ref">wormbase_gff2_alt.txt</span></a></li>
-<li><a class="reference internal" href="examples.html#wormbase-gff2-txt"><span class="std std-ref">wormbase_gff2.txt</span></a></li>
+<p class="admonition-title">See also</p>
+<p>Examples that show the use of <code class="docutils literal notranslate"><span class="pre">transform</span></code>:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="examples.html#ensembl-gtf-txt"><span class="std std-ref">ensembl_gtf.txt</span></a></p></li>
+<li><p><a class="reference internal" href="examples.html#glimmer-nokeyval-gff3"><span class="std std-ref">glimmer_nokeyval.gff3</span></a></p></li>
+<li><p><a class="reference internal" href="examples.html#wormbase-gff2-alt-txt"><span class="std std-ref">wormbase_gff2_alt.txt</span></a></p></li>
+<li><p><a class="reference internal" href="examples.html#wormbase-gff2-txt"><span class="std std-ref">wormbase_gff2.txt</span></a></p></li>
 </ul>
 </div>
-<p>The <code class="docutils literal"><span class="pre">transform</span></code> kwarg is a function that accepts single
-<code class="xref py py-class docutils literal"><span class="pre">gffutils.Feature</span></code> object and that returns a (possibly modified)
-<code class="xref py py-class docutils literal"><span class="pre">gffutils.Feature</span></code> object.  It is used to modify, on-the-fly, items as
+<p>The <code class="docutils literal notranslate"><span class="pre">transform</span></code> kwarg is a function that accepts single
+<code class="xref py py-class docutils literal notranslate"><span class="pre">gffutils.Feature</span></code> object and that returns a (possibly modified)
+<code class="xref py py-class docutils literal notranslate"><span class="pre">gffutils.Feature</span></code> object.  It is used to modify, on-the-fly, items as
 they are being imported into the database.  It is generally used for files that
-don&#8217;t fit the standard GFF3 or GTF specs.</p>
-<p>One example use-case is that FlyBase GFF3 files do have have a leading &#8220;chr&#8221;
+don’t fit the standard GFF3 or GTF specs.</p>
+<p>One example use-case is that FlyBase GFF3 files do have have a leading “chr”
 for the seqid GFF field.  If we wanted to add this to each feature as it is
 imported into the database, then we could use the following function:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">add_chr</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">add_chr</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
     <span class="n">d</span><span class="p">[</span><span class="s1">&#39;seqid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;chr&quot;</span> <span class="o">+</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;seqid&#39;</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">d</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="merge-strategy">
-<h2><code class="docutils literal"><span class="pre">merge_strategy</span></code><a class="headerlink" href="#merge-strategy" title="Permalink to this headline">¶</a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">merge_strategy</span></code><a class="headerlink" href="#merge-strategy" title="Permalink to this headline">¶</a></h2>
 <div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p>Examples that show the use of <code class="docutils literal"><span class="pre">merge_strategy</span></code>:</p>
-<ul class="last simple">
-<li><a class="reference internal" href="examples.html#c-elegans-ws199-shortened-gff-txt"><span class="std std-ref">c_elegans_WS199_shortened_gff.txt</span></a></li>
-<li><a class="reference internal" href="examples.html#mouse-extra-comma-gff3"><span class="std std-ref">mouse_extra_comma.gff3</span></a></li>
+<p class="admonition-title">See also</p>
+<p>Examples that show the use of <code class="docutils literal notranslate"><span class="pre">merge_strategy</span></code>:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="examples.html#c-elegans-ws199-shortened-gff-txt"><span class="std std-ref">c_elegans_WS199_shortened_gff.txt</span></a></p></li>
+<li><p><a class="reference internal" href="examples.html#mouse-extra-comma-gff3"><span class="std std-ref">mouse_extra_comma.gff3</span></a></p></li>
 </ul>
 </div>
 <p>This parameter specifies the behavior when two items have an identical
 primary key.</p>
 <p>For example, consider the following attribute strings for two
-consecutive lines.  Assume that <code class="docutils literal"><span class="pre">id_spec=&quot;ID&quot;</span></code>, in which case these two
+consecutive lines.  Assume that <code class="docutils literal notranslate"><span class="pre">id_spec=&quot;ID&quot;</span></code>, in which case these two
 lines have the same primary key:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ID</span><span class="o">=</span><span class="s2">&quot;exon_1&quot;</span><span class="p">;</span> <span class="n">Parent</span><span class="o">=</span><span class="s2">&quot;transcript_1&quot;</span><span class="p">;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ID</span><span class="o">=</span><span class="s2">&quot;exon_1&quot;</span><span class="p">;</span> <span class="n">Parent</span><span class="o">=</span><span class="s2">&quot;transcript_1&quot;</span><span class="p">;</span>
 <span class="n">ID</span><span class="o">=</span><span class="s2">&quot;exon_1&quot;</span><span class="p">;</span> <span class="n">Parent</span><span class="o">=</span><span class="s2">&quot;transcript_2&quot;</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>Using <code class="docutils literal"><span class="pre">merge_strategy=&quot;merge&quot;</span></code>, then there will be a single entry in
-the database for <code class="docutils literal"><span class="pre">&quot;exon_1&quot;</span></code>, but the attributes will be merged and only
+<p>Using <code class="docutils literal notranslate"><span class="pre">merge_strategy=&quot;merge&quot;</span></code>, then there will be a single entry in
+the database for <code class="docutils literal notranslate"><span class="pre">&quot;exon_1&quot;</span></code>, but the attributes will be merged and only
 unique values will be retained.  The new, edited feature will end up
 looking like this:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ID</span><span class="o">=</span><span class="s2">&quot;exon_1&quot;</span><span class="p">;</span> <span class="n">Parent</span><span class="o">=</span><span class="s2">&quot;transcript_1,transcript_2&quot;</span><span class="p">;</span>  <span class="c1"># db key: &quot;exon_1&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ID</span><span class="o">=</span><span class="s2">&quot;exon_1&quot;</span><span class="p">;</span> <span class="n">Parent</span><span class="o">=</span><span class="s2">&quot;transcript_1,transcript_2&quot;</span><span class="p">;</span>  <span class="c1"># db key: &quot;exon_1&quot;</span>
 </pre></div>
 </div>
-<p>Using <code class="docutils literal"><span class="pre">merge_strategy=&quot;create_unique&quot;</span></code>, then the second entry will have
+<p>Using <code class="docutils literal notranslate"><span class="pre">merge_strategy=&quot;create_unique&quot;</span></code>, then the second entry will have
 a unique, autoincremented primary key assigned to it, and both lines
 will be in the database, accessible by two different keys:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ID</span><span class="o">=</span><span class="s2">&quot;exon_1&quot;</span><span class="p">;</span> <span class="n">Parent</span><span class="o">=</span><span class="s2">&quot;transcript_1&quot;</span><span class="p">;</span>  <span class="c1"># database key: &quot;exon_1&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ID</span><span class="o">=</span><span class="s2">&quot;exon_1&quot;</span><span class="p">;</span> <span class="n">Parent</span><span class="o">=</span><span class="s2">&quot;transcript_1&quot;</span><span class="p">;</span>  <span class="c1"># database key: &quot;exon_1&quot;</span>
 <span class="n">ID</span><span class="o">=</span><span class="s2">&quot;exon_1&quot;</span><span class="p">;</span> <span class="n">Parent</span><span class="o">=</span><span class="s2">&quot;transcript_2&quot;</span><span class="p">;</span>  <span class="c1"># database key: &quot;exon_1_1&quot;</span>
 </pre></div>
 </div>
-<p>Using <code class="docutils literal"><span class="pre">merge_strategy=&quot;error&quot;</span></code>, a <code class="xref py py-class docutils literal"><span class="pre">gffutils.DuplicateIDError</span></code>
+<p>Using <code class="docutils literal notranslate"><span class="pre">merge_strategy=&quot;error&quot;</span></code>, a <code class="xref py py-class docutils literal notranslate"><span class="pre">gffutils.DuplicateIDError</span></code>
 exception will be raised.  This means you will have to edit the file
 yourself to fix the duplicated IDs.</p>
-<p>Using <code class="docutils literal"><span class="pre">merge_strategy=&quot;warning&quot;</span></code>, a warning will be printed to the
+<p>Using <code class="docutils literal notranslate"><span class="pre">merge_strategy=&quot;warning&quot;</span></code>, a warning will be printed to the
 logger, and the feature will be skipped.</p>
 </div>
 </div>
 
 
            </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="gtf.html" class="btn btn-neutral float-right" title="GTF files" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="gtf.html" class="btn btn-neutral float-right" title="GTF files" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="database-schema.html" class="btn btn-neutral" title="Database schema" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="database-schema.html" class="btn btn-neutral float-left" title="Database schema" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -354,11 +371,11 @@ logger, and the feature will be skipped.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2013, Ryan Dale.
+        &copy; Copyright 2013, Ryan Dale
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -371,35 +388,15 @@ logger, and the feature will be skipped.</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.8.8',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

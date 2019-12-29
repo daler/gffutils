@@ -1,5 +1,5 @@
-gffutils\.pybedtools\_integration\.tsses
-========================================
+gffutils.pybedtools\_integration.tsses
+======================================
 
 .. currentmodule:: gffutils.pybedtools_integration
 

@@ -1,5 +1,5 @@
-gffutils\.helpers\.infer\_dialect
-=================================
+gffutils.helpers.infer\_dialect
+===============================
 
 .. currentmodule:: gffutils.helpers
 

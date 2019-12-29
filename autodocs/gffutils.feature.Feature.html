@@ -8,49 +8,45 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gffutils.feature.Feature &mdash; gffutils 0.8.8 documentation</title>
+  <title>gffutils.feature.Feature &mdash; gffutils 0.10 documentation</title>
   
 
   
   
+  
+  
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="gffutils 0.8.8 documentation" href="../index.html"/>
-        <link rel="up" title="API" href="../api.html"/>
-        <link rel="next" title="gffutils.feature.Feature.sequence" href="gffutils.feature.Feature.sequence.html"/>
-        <link rel="prev" title="gffutils.interface.FeatureDB.bed12" href="gffutils.interface.FeatureDB.bed12.html"/> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="gffutils.feature.Feature.sequence" href="gffutils.feature.Feature.sequence.html" />
+    <link rel="prev" title="gffutils.interface.FeatureDB.bed12" href="gffutils.interface.FeatureDB.bed12.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
+   
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -64,7 +60,7 @@
             
             
               <div class="version">
-                0.8.8
+                0.10
               </div>
             
           
@@ -85,7 +81,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../database-import.html">Importing data into a database</a></li>
@@ -96,7 +95,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../attributes.html">Attributes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../api.html#module-gffutils"><code class="docutils literal"><span class="pre">gffutils</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-gffutils"><code class="docutils literal notranslate"><span class="pre">gffutils</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#create-a-database">Create a database</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#interact-with-a-database">Interact with a database</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../api.html#feature-objects">Feature objects</a><ul class="current">
@@ -110,7 +109,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Change log</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../developers.html">Developer&#8217;s docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developers.html">Developer’s docs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../meta.html">Meta-docs (docs about the docs)</a></li>
 </ul>
 
@@ -123,36 +122,56 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../contents.html">gffutils</a>
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../contents.html">gffutils</a>
+        
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../contents.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../contents.html">Docs</a> &raquo;</li>
+        
           <li><a href="../api.html">API</a> &raquo;</li>
-      
-    <li>gffutils.feature.Feature</li>
+        
+      <li>gffutils.feature.Feature</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="../_sources/autodocs/gffutils.feature.Feature.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -162,154 +181,122 @@
 <h1>gffutils.feature.Feature<a class="headerlink" href="#gffutils-feature-feature" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="gffutils.feature.Feature">
-<em class="property">class </em><code class="descclassname">gffutils.feature.</code><code class="descname">Feature</code><span class="sig-paren">(</span><em>seqid='.'</em>, <em>source='.'</em>, <em>featuretype='.'</em>, <em>start='.'</em>, <em>end='.'</em>, <em>score='.'</em>, <em>strand='.'</em>, <em>frame='.'</em>, <em>attributes=None</em>, <em>extra=None</em>, <em>bin=None</em>, <em>id=None</em>, <em>dialect=None</em>, <em>file_order=None</em>, <em>keep_order=False</em>, <em>sort_attribute_values=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/feature.html#Feature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gffutils.feature.Feature" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">gffutils.feature.</code><code class="sig-name descname">Feature</code><span class="sig-paren">(</span><em class="sig-param">seqid='.'</em>, <em class="sig-param">source='.'</em>, <em class="sig-param">featuretype='.'</em>, <em class="sig-param">start='.'</em>, <em class="sig-param">end='.'</em>, <em class="sig-param">score='.'</em>, <em class="sig-param">strand='.'</em>, <em class="sig-param">frame='.'</em>, <em class="sig-param">attributes=None</em>, <em class="sig-param">extra=None</em>, <em class="sig-param">bin=None</em>, <em class="sig-param">id=None</em>, <em class="sig-param">dialect=None</em>, <em class="sig-param">file_order=None</em>, <em class="sig-param">keep_order=False</em>, <em class="sig-param">sort_attribute_values=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/feature.html#Feature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gffutils.feature.Feature" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
 <dt id="gffutils.feature.Feature.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>seqid='.'</em>, <em>source='.'</em>, <em>featuretype='.'</em>, <em>start='.'</em>, <em>end='.'</em>, <em>score='.'</em>, <em>strand='.'</em>, <em>frame='.'</em>, <em>attributes=None</em>, <em>extra=None</em>, <em>bin=None</em>, <em>id=None</em>, <em>dialect=None</em>, <em>file_order=None</em>, <em>keep_order=False</em>, <em>sort_attribute_values=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/feature.html#Feature.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gffutils.feature.Feature.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">seqid='.'</em>, <em class="sig-param">source='.'</em>, <em class="sig-param">featuretype='.'</em>, <em class="sig-param">start='.'</em>, <em class="sig-param">end='.'</em>, <em class="sig-param">score='.'</em>, <em class="sig-param">strand='.'</em>, <em class="sig-param">frame='.'</em>, <em class="sig-param">attributes=None</em>, <em class="sig-param">extra=None</em>, <em class="sig-param">bin=None</em>, <em class="sig-param">id=None</em>, <em class="sig-param">dialect=None</em>, <em class="sig-param">file_order=None</em>, <em class="sig-param">keep_order=False</em>, <em class="sig-param">sort_attribute_values=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/feature.html#Feature.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gffutils.feature.Feature.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents a feature from the database.</p>
-<p>Usually you won&#8217;t want to use this directly, since it has various
+<p>Usually you won’t want to use this directly, since it has various
 implementation details needed for operating in the context of FeatureDB
-objects.  Instead, try the <a class="reference internal" href="gffutils.feature.feature_from_line.html#gffutils.feature.feature_from_line" title="gffutils.feature.feature_from_line"><code class="xref py py-func docutils literal"><span class="pre">gffutils.feature.feature_from_line()</span></code></a>
+objects.  Instead, try the <a class="reference internal" href="gffutils.feature.feature_from_line.html#gffutils.feature.feature_from_line" title="gffutils.feature.feature_from_line"><code class="xref py py-func docutils literal notranslate"><span class="pre">gffutils.feature.feature_from_line()</span></code></a>
 function.</p>
 <p>When printed, reproduces the original line from the file as faithfully
-as possible using <code class="docutils literal"><span class="pre">dialect</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>seqid</strong> : string</p>
-<blockquote>
-<div><p>Name of the sequence (often chromosome)</p>
-</div></blockquote>
-<p><strong>source</strong> : string</p>
-<blockquote>
-<div><p>Source of the feature; typically the originating database or
+as possible using <code class="docutils literal notranslate"><span class="pre">dialect</span></code>.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>seqid</strong><span class="classifier">string</span></dt><dd><p>Name of the sequence (often chromosome)</p>
+</dd>
+<dt><strong>source</strong><span class="classifier">string</span></dt><dd><p>Source of the feature; typically the originating database or
 program that predicted the feature</p>
-</div></blockquote>
-<p><strong>featuretype</strong> : string</p>
-<blockquote>
-<div><p>Type of feature.  For example &#8220;gene&#8221;, &#8220;exon&#8221;, &#8220;TSS&#8221;, etc</p>
-</div></blockquote>
-<p><strong>start, end</strong> : int or &#8221;.&#8221;</p>
-<blockquote>
-<div><p>1-based coordinates; start must be &lt;= end.  If &#8221;.&#8221; (the default
+</dd>
+<dt><strong>featuretype</strong><span class="classifier">string</span></dt><dd><p>Type of feature.  For example “gene”, “exon”, “TSS”, etc</p>
+</dd>
+<dt><strong>start, end</strong><span class="classifier">int or “.”</span></dt><dd><p>1-based coordinates; start must be &lt;= end.  If “.” (the default
 placeholder for GFF files), then the corresponding attribute will
 be None.</p>
-</div></blockquote>
-<p><strong>score</strong> : string</p>
-<blockquote>
-<div><p>Stored as a string.</p>
-</div></blockquote>
-<p><strong>strand</strong> : &#8220;+&#8221; | &#8220;-&#8221; | &#8221;.&#8221;</p>
-<blockquote>
-<div><p>Strand of the feature; &#8221;.&#8221; when strand is not relevant.</p>
-</div></blockquote>
-<p><strong>frame</strong> : &#8220;0&#8221; | &#8220;1&#8221; | &#8220;2&#8221;</p>
-<blockquote>
-<div><p>Coding frame.  0 means in-frame; 1 means there is one extra base at
+</dd>
+<dt><strong>score</strong><span class="classifier">string</span></dt><dd><p>Stored as a string.</p>
+</dd>
+<dt><strong>strand</strong><span class="classifier">“+” | “-” | “.”</span></dt><dd><p>Strand of the feature; “.” when strand is not relevant.</p>
+</dd>
+<dt><strong>frame</strong><span class="classifier">“0” | “1” | “2”</span></dt><dd><p>Coding frame.  0 means in-frame; 1 means there is one extra base at
 the beginning, so the first codon starts at the second base;
 2 means two extra bases at the beginning.  Interpretation is strand
-specific; &#8220;beginning&#8221; for a minus-strand feature is at the end
+specific; “beginning” for a minus-strand feature is at the end
 coordinate.</p>
-</div></blockquote>
-<p><strong>attributes</strong> : string or dict</p>
-<blockquote>
-<div><p>If a string, first assume it is serialized JSON; if this fails then
-assume it&#8217;s the original key/vals string.  If it&#8217;s a dictionary
+</dd>
+<dt><strong>attributes</strong><span class="classifier">string or dict</span></dt><dd><p>If a string, first assume it is serialized JSON; if this fails then
+assume it’s the original key/vals string.  If it’s a dictionary
 already, then use as-is.</p>
-<p>The end result is that this instance&#8217;s <code class="docutils literal"><span class="pre">attributes</span></code> attribute will
+<p>The end result is that this instance’s <code class="docutils literal notranslate"><span class="pre">attributes</span></code> attribute will
 always be a dictionary.</p>
 <p>Upon printing, the attributes will be reconstructed based on this
-dictionary and the dialect &#8211; except if the original attributes
+dictionary and the dialect – except if the original attributes
 string was provided, in which case that will be used directly.</p>
 <p>Notes on encoding/decoding: the only time unquoting
-(e.g., &#8220;%2C&#8221; becomes &#8221;,&#8221;) happens is if <code class="docutils literal"><span class="pre">attributes</span></code> is a string
-and if <code class="docutils literal"><span class="pre">settings.ignore_url_escape_characters</span> <span class="pre">=</span> <span class="pre">False</span></code>. If dict or
+(e.g., “%2C” becomes “,”) happens is if <code class="docutils literal notranslate"><span class="pre">attributes</span></code> is a string
+and if <code class="docutils literal notranslate"><span class="pre">settings.ignore_url_escape_characters</span> <span class="pre">=</span> <span class="pre">False</span></code>. If dict or
 JSON, the contents are used as-is.</p>
-<p>Similarly, the only time characters are quoted (&#8221;,&#8221; becomes &#8220;%2C&#8221;)
-is when the feature is printed (<code class="docutils literal"><span class="pre">__str__</span></code> method).</p>
-</div></blockquote>
-<p><strong>extra</strong> : string or list</p>
-<blockquote>
-<div><p>Additional fields after the canonical 9 fields for GFF/GTF.</p>
-<p>If a string, then first assume it&#8217;s serialized JSON; if this fails
-then assume it&#8217;s a tab-delimited string of additional fields.  If
-it&#8217;s a list already, then use as-is.</p>
-</div></blockquote>
-<p><strong>bin</strong> : int</p>
-<blockquote>
-<div><p>UCSC genomic bin. If None, will be created based on provided
-start/end; if start or end is &#8221;.&#8221; then bin will be None.</p>
-</div></blockquote>
-<p><strong>id</strong> : None or string</p>
-<blockquote>
-<div><p>Database-specific primary key for this feature.  The only time this
+<p>Similarly, the only time characters are quoted (“,” becomes “%2C”)
+is when the feature is printed (<code class="docutils literal notranslate"><span class="pre">__str__</span></code> method).</p>
+</dd>
+<dt><strong>extra</strong><span class="classifier">string or list</span></dt><dd><p>Additional fields after the canonical 9 fields for GFF/GTF.</p>
+<p>If a string, then first assume it’s serialized JSON; if this fails
+then assume it’s a tab-delimited string of additional fields.  If
+it’s a list already, then use as-is.</p>
+</dd>
+<dt><strong>bin</strong><span class="classifier">int</span></dt><dd><p>UCSC genomic bin. If None, will be created based on provided
+start/end; if start or end is “.” then bin will be None.</p>
+</dd>
+<dt><strong>id</strong><span class="classifier">None or string</span></dt><dd><p>Database-specific primary key for this feature.  The only time this
 should not be None is if this feature is coming from a database, in
 which case it will be filled in automatically.</p>
-</div></blockquote>
-<p><strong>dialect</strong> : dict or None</p>
-<blockquote>
-<div><p>The dialect to use when reconstructing attribute strings; defaults
-to the GFF3 spec.  <code class="xref py py-class docutils literal"><span class="pre">FeatureDB</span></code> objects will automatically
+</dd>
+<dt><strong>dialect</strong><span class="classifier">dict or None</span></dt><dd><p>The dialect to use when reconstructing attribute strings; defaults
+to the GFF3 spec.  <code class="xref py py-class docutils literal notranslate"><span class="pre">FeatureDB</span></code> objects will automatically
 attach the dialect from the original file.</p>
-</div></blockquote>
-<p><strong>file_order</strong> : int</p>
-<blockquote>
-<div><p>This is the <code class="docutils literal"><span class="pre">rowid</span></code> special field used in a sqlite3 database; this
+</dd>
+<dt><strong>file_order</strong><span class="classifier">int</span></dt><dd><p>This is the <code class="docutils literal notranslate"><span class="pre">rowid</span></code> special field used in a sqlite3 database; this
 is provided by FeatureDB.</p>
-</div></blockquote>
-<p><strong>keep_order</strong> : bool</p>
-<blockquote>
-<div><p>If True, then the attributes in the printed string will be in the
+</dd>
+<dt><strong>keep_order</strong><span class="classifier">bool</span></dt><dd><p>If True, then the attributes in the printed string will be in the
 order specified in the dialect.  Disabled by default, since this
 sorting step is time-consuming over many features.</p>
-</div></blockquote>
-<p><strong>sort_attribute_values</strong> : bool</p>
-<blockquote class="last">
-<div><p>If True, then the values of each attribute will be sorted when the
+</dd>
+<dt><strong>sort_attribute_values</strong><span class="classifier">bool</span></dt><dd><p>If True, then the values of each attribute will be sorted when the
 feature is printed.  Mostly useful for testing, where the order is
 important for checking against expected values. Disabled by
 default, since it can be time-consuming over many features.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#gffutils.feature.Feature.__init__" title="gffutils.feature.Feature.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>([seqid,&nbsp;source,&nbsp;featuretype,&nbsp;...])</td>
-<td>Represents a feature from the database.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#gffutils.feature.Feature.__init__" title="gffutils.feature.Feature.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(self[, seqid, source, featuretype, …])</p></td>
+<td><p>Represents a feature from the database.</p></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">astuple</span></code>([encoding])</td>
-<td>Return a tuple suitable for import into a database.</td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">astuple</span></code>(self[, encoding])</p></td>
+<td><p>Return a tuple suitable for import into a database.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">calc_bin</span></code>([_bin])</td>
-<td>Calculate the smallest UCSC genomic bin that will contain this feature.</td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_bin</span></code>(self[, _bin])</p></td>
+<td><p>Calculate the smallest UCSC genomic bin that will contain this feature.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="gffutils.feature.Feature.sequence.html#gffutils.feature.Feature.sequence" title="gffutils.feature.Feature.sequence"><code class="xref py py-obj docutils literal"><span class="pre">sequence</span></code></a>(fasta[,&nbsp;use_strand])</td>
-<td>Retrieves the sequence of this feature as a string.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="gffutils.feature.Feature.sequence.html#gffutils.feature.Feature.sequence" title="gffutils.feature.Feature.sequence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sequence</span></code></a>(self, fasta[, use_strand])</p></td>
+<td><p>Retrieves the sequence of this feature as a string.</p></td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Attributes</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">chrom</span></code></td>
-<td></td>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">chrom</span></code></p></td>
+<td><p></p></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">stop</span></code></td>
-<td></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">stop</span></code></p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -319,15 +306,16 @@ default, since it can be time-consuming over many features.</p>
 
 
            </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="gffutils.feature.Feature.sequence.html" class="btn btn-neutral float-right" title="gffutils.feature.Feature.sequence" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="gffutils.feature.Feature.sequence.html" class="btn btn-neutral float-right" title="gffutils.feature.Feature.sequence" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="gffutils.interface.FeatureDB.bed12.html" class="btn btn-neutral" title="gffutils.interface.FeatureDB.bed12" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="gffutils.interface.FeatureDB.bed12.html" class="btn btn-neutral float-left" title="gffutils.interface.FeatureDB.bed12" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -336,11 +324,11 @@ default, since it can be time-consuming over many features.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2013, Ryan Dale.
+        &copy; Copyright 2013, Ryan Dale
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -353,35 +341,15 @@ default, since it can be time-consuming over many features.</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'0.8.8',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>
