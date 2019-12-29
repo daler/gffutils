@@ -1167,9 +1167,6 @@ class FeatureDB(object):
         features : list
             Iterable of Feature instances to merge
 
-        ignore_strand: bool
-            DEPRECIATED remove 'strand' from criteria if true
-
         merge_criteria : list
             List of merge criteria callbacks. All must evaluate to True in
             order for a feature to be merged. See notes below on callback
@@ -1215,9 +1212,6 @@ class FeatureDB(object):
                 merge_criteria = list(merge_criteria)
             except TypeError:
                 merge_criteria = [merge_criteria]
-
-        if ignore_strand and mc.strand in merge_criteria:
-            merge_criteria.remove(mc.strand)
 
         # To start, we create a merged feature of just the first feature.
         features = iter(features)

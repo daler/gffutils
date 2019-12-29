@@ -95,14 +95,6 @@ class TestMerge(TestWithSynthDB):
     def test_end_overlap(self):
         self._merge_and_compare(['basic1', 'overlap_end1'], [['basic1', 'overlap_end1']])
 
-    def test_ignore_strand(self):
-        self._merge_and_compare(['basic1', 'strand_plus1'], [['basic1', 'strand_plus1']], ignore_strand=True)
-        self._merge_and_compare(['basic1', 'strand_minus1'], [['basic1', 'strand_minus1']], ignore_strand=True)
-        self._merge_and_compare(['basic1', 'strand_plus1', 'strand_minus1'], [['basic1', 'strand_plus1', 'strand_minus1']], ignore_strand=True)
-        self._merge_and_compare(['basic1', 'strand_plus1'], [['basic1', 'strand_plus1']], merge_criteria=(mc.seqid, mc.overlap_any_inclusive, mc.feature_type))
-        self._merge_and_compare(['basic1', 'strand_minus1'], [['basic1', 'strand_minus1']], merge_criteria=(mc.seqid, mc.overlap_any_inclusive, mc.feature_type))
-        self._merge_and_compare(['basic1', 'strand_plus1', 'strand_minus1'], [['basic1', 'strand_plus1', 'strand_minus1']], merge_criteria=(mc.seqid, mc.overlap_any_inclusive, mc.feature_type))
-
     # TODO test various feature orders
 
     # TODO test various merge criteria
