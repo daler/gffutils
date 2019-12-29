@@ -1344,6 +1344,7 @@ class FeatureDB(object):
                                 merge_criteria=merge_criteria):
                 # If feature is result of merge
                 if merged.children:
+                    self._insert(merged, self.conn.cursor())
                     if exclude_components:
                         # Remove child features from DB
                         self.delete(merged.children)
@@ -1351,7 +1352,6 @@ class FeatureDB(object):
                         # Add child relations to DB
                         for child in merged.children:
                             self.add_relation(merged, child, 1, child_func=assign_child)
-                    self._insert(merged, self.conn.cursor())
                     result_features.append(merged)
                 else:
                     pass  # Do nothing, feature is already in DB
