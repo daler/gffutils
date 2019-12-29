@@ -120,7 +120,7 @@ def test_update():
         # Add attribute to each gene record
         rec = gene_recs[0]
         rec.attributes["new"] = ["new_value"]
-        db.update([rec])
+        db.update([rec], merge_strategy='replace')
         num_entries += 1
     print(list(db.all_features()))
 
@@ -1210,11 +1210,39 @@ def test_issue_107():
 
 
 def test_issue_119():
-    db  = gffutils.create_db(gffutils.example_filename('FBgn0031208.gff'),':memory:')
+    # First file has these two exons with no ID:
+    #
+    #   chr2L FlyBase exon  8193  8589  .  +  .  Parent=FBtr0300690
+    #   chr2L FlyBase exon  7529  8116  .  +  .  Name=CG11023:1;Parent=FBtr0300689,FBtr0300690
+    #
+    db0  = gffutils.create_db(gffutils.example_filename('FBgn0031208.gff'),':memory:')
+
+    # And this one, a bunch of reads with no IDs anywhere
     db1 = gffutils.create_db(gffutils.example_filename('F3-unique-3.v2.gff'),':memory:')
-    db2 = db1.update(db)
-    obs = sorted(db2._autoincrements.keys())
-    assert obs == ['exon', 'read'], obs
+
+    # When db1 is updated by db0
+    db2 = db1.update(db0)
+    assert (
+        db2._autoincrements
+        == db1._autoincrements
+        == {'exon': 2, 'read': 112}
+    ), db2._autoincrements
+
+
+    assert len(list(db0.features_of_type('exon'))) == 6
+
+    # Now we update that with db0 again
+    db3 = db2.update(db0, merge_strategy='replace')
+
+    # Using the "replace" strategy, we should have only gotten another 2 exons
+    assert len(list(db3.features_of_type('exon'))) == 8
+
+    # Make sure that the autoincrements for exons jumped by 2
+    assert (
+        db2._autoincrements
+        == db3._autoincrements
+        == {'exon': 4, 'read': 112}
+    ), db2._autoincrements
 
     # More isolated test, merging two databases each created from the same file
     # which itself contains only a single feature with no ID.
@@ -1222,35 +1250,40 @@ def test_issue_119():
     with open(tmp, 'w') as fout:
         fout.write('chr1\t.\tgene\t10\t15\t.\t+\t.\t\n')
 
-    db3 = gffutils.create_db(tmp, ':memory:')
-    assert db3._autoincrements == {'gene': 1}
+    db4 = gffutils.create_db(tmp, tmp + '.db')
+    db5 = gffutils.create_db(tmp, ':memory:')
 
-    db4 = gffutils.create_db(tmp, ':memory:')
     assert db4._autoincrements == {'gene': 1}
+    assert db5._autoincrements == {'gene': 1}
 
-    db5 = db3.update(db4)
-    assert db5._autoincrements == {'gene': 2}
-    assert db3._autoincrements == db5._autoincrements
+    db6 = db4.update(db5)
 
-def test_pr_133():
-    d1 = {'a': [1]}
-    d2 = {'a': [2]}
-    d1a = {'a': [1]}
-    d2a = {'a': [2]}
-    d3 = gffutils.helpers.merge_attributes(d1, d2)
-    assert d1 == d1a, d1
-    assert d2 == d2a, d2
+    db7 = gffutils.FeatureDB(db4.dbfn)
 
+    # both db4 and db6 should now have the same, updated autoincrements because
+    # they both point to the same db.
+    assert db6._autoincrements == db4._autoincrements == {'gene': 2}
+
+    # But db5 was created independently and should have unchanged autoincrements
+    assert db5._autoincrements == {'gene': 1}
+
+    # db7 was created from the database pointed to by both db4 and db6. This
+    # tests that when a FeatureDB is created it should have the
+    # correctly-updated autoincrements read from the db
+    assert db7._autoincrements == {'gene': 2}
 
 def test_pr_131():
     db  = gffutils.create_db(gffutils.example_filename('FBgn0031208.gff'),':memory:')
 
     # previously would raise ValueError("No lines parsed -- was an empty
-    # file provided?")
+    # file provided?"); now just does nothing
     db2 = db.update([])
 
 
 def test_pr_133():
+    # Previously, merge_attributes would not deep-copy the values from the
+    # second dict, and when the values are then modified, the second dict is
+    # unintentionally modified.
     d1 = {'a': [1]}
     d2 = {'a': [2]}
     d1a = {'a': [1]}

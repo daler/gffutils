@@ -863,6 +863,7 @@ class FeatureDB(object):
 
         # Handle all sorts of input
         data = iterators.DataIterator(data, **_iterator_kwargs)
+        kwargs['_autoincrements'] = self._autoincrements
 
         if self.dialect['fmt'] == 'gtf':
             if 'id_spec' not in kwargs:
@@ -881,13 +882,6 @@ class FeatureDB(object):
 
         peek, data._iter = iterators.peek(data._iter, 1)
         if len(peek) == 0: return db  # If the file is empty then do nothing
-
-        # Instead of calling db.create(), we call the steps individually,
-        # skipping the initial _init_tables() call.
-        #
-        # Furthermore, for the autoincrements we need to ensure we start where
-        # we left off.
-        db._autoincrements.update(self._autoincrements)
 
         db._populate_from_lines(data)
         db._update_relations()
