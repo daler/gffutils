@@ -1292,6 +1292,7 @@ def test_pr_133():
     assert d1 == d1a, d1
     assert d2 == d2a, d2
 
+
 def test_pr_139():
     db  = gffutils.create_db(gffutils.example_filename('FBgn0031208.gff'),':memory:')
     exons = list(db.features_of_type('exon'))
@@ -1321,3 +1322,6 @@ if __name__ == "__main__":
     #test_random_chr()
     #test_nonascii()
     test_iterator_update()
+
+
+
