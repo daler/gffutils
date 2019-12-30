@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gffutils.interface &mdash; gffutils 0.10 documentation</title>
+  <title>gffutils.interface &mdash; gffutils 0.10.1 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.10
+                0.10.1
               </div>
             
           
@@ -177,13 +177,52 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Helper for add_relation()</span>
 <span class="sd">    Sets &#39;Parent&#39; attribute to parent[&#39;ID&#39;]</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    parent : Feature</span>
+<span class="sd">        Parent Feature</span>
+
 <span class="sd">    :param parent: parent Feature</span>
-<span class="sd">    :param child: child Feature</span>
-<span class="sd">    :return: child</span>
+
+<span class="sd">    child : Feature</span>
+<span class="sd">        Child Feature</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    Child Feature</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">child</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s1">&#39;Parent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">parent</span><span class="p">[</span><span class="s1">&#39;ID&#39;</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">child</span>
 
+
+<span class="c1"># Reusable constant for FeatureDB.merge()</span>
+<span class="n">no_children</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">_finalize_merge</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">feature_children</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Helper for FeatureDB.merge() to update source and assign children property</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    feature : Feature</span>
+<span class="sd">        feature to finalise</span>
+<span class="sd">    </span>
+<span class="sd">    feature_children</span>
+<span class="sd">        list of children to assign</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    feature, modified</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature_children</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">feature</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">source</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">feature_children</span><span class="p">))</span>
+        <span class="n">feature</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="n">feature_children</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">feature</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="n">no_children</span>
+    <span class="k">return</span> <span class="n">feature</span>
 
 <div class="viewcode-block" id="FeatureDB"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.html#gffutils.interface.FeatureDB">[docs]</a><span class="k">class</span> <span class="nc">FeatureDB</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="c1"># docstring to be filled in for methods that call out to</span>
@@ -1325,7 +1364,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        features : list</span>
+<span class="sd">        features : iterable</span>
 <span class="sd">            Iterable of Feature instances to merge</span>
 
 <span class="sd">        merge_criteria : list</span>
@@ -1376,32 +1415,41 @@
 
         <span class="c1"># To start, we create a merged feature of just the first feature.</span>
         <span class="n">features</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">feature</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
-            <span class="k">return</span>
-        <span class="n">current_merged</span> <span class="o">=</span> <span class="n">feature</span>
-        <span class="n">feature_children</span> <span class="o">=</span> <span class="p">[</span><span class="n">feature</span><span class="p">]</span>
         <span class="n">last_id</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">no_children</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">()</span>
+        <span class="n">current_merged</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">feature_children</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">features</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">criteria</span><span class="p">(</span><span class="n">current_merged</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">feature_children</span><span class="p">)</span> <span class="k">for</span> <span class="n">criteria</span> <span class="ow">in</span> <span class="n">merge_criteria</span><span class="p">):</span>
-                <span class="c1"># Criteria satisfied, merge</span>
-                <span class="k">if</span> <span class="n">multiline</span> <span class="ow">and</span> <span class="p">(</span><span class="n">feature</span><span class="o">.</span><span class="n">start</span> <span class="o">&gt;</span> <span class="n">current_merged</span><span class="o">.</span><span class="n">end</span> <span class="o">+</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">feature</span><span class="o">.</span><span class="n">end</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">current_merged</span><span class="o">.</span><span class="n">start</span><span class="p">):</span>
-                    <span class="c1"># Feature is possibly multiline, keep ID but start new record</span>
-                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature_children</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                        <span class="n">current_merged</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="n">feature_children</span>
-                        <span class="n">current_merged</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">source</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">feature_children</span><span class="p">))</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">current_merged</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="n">no_children</span>
-                    <span class="k">yield</span> <span class="n">current_merged</span>
+            <span class="k">if</span> <span class="n">current_merged</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">criteria</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">feature_children</span><span class="p">)</span> <span class="k">for</span> <span class="n">criteria</span> <span class="ow">in</span> <span class="n">merge_criteria</span><span class="p">):</span>
                     <span class="n">current_merged</span> <span class="o">=</span> <span class="n">feature</span>
                     <span class="n">feature_children</span> <span class="o">=</span> <span class="p">[</span><span class="n">feature</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="n">_finalize_merge</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">no_children</span><span class="p">)</span>
+                    <span class="n">last_id</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature_children</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># current_merged is last feature and unchecked</span>
+                <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">criteria</span><span class="p">(</span><span class="n">current_merged</span><span class="p">,</span> <span class="n">current_merged</span><span class="p">,</span> <span class="n">feature_children</span><span class="p">)</span> <span class="k">for</span> <span class="n">criteria</span> <span class="ow">in</span> <span class="n">merge_criteria</span><span class="p">):</span>
+                    <span class="n">feature_children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_merged</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="n">_finalize_merge</span><span class="p">(</span><span class="n">current_merged</span><span class="p">,</span> <span class="n">no_children</span><span class="p">)</span>
+                    <span class="n">current_merged</span> <span class="o">=</span> <span class="n">feature</span>
+                    <span class="n">last_id</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">criteria</span><span class="p">(</span><span class="n">current_merged</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">feature_children</span><span class="p">)</span> <span class="k">for</span> <span class="n">criteria</span> <span class="ow">in</span> <span class="n">merge_criteria</span><span class="p">):</span>
+                <span class="c1"># Criteria satisfied, merge</span>
+                <span class="c1"># TODO Test multiline records and iron out the following code</span>
+                <span class="c1"># if multiline and (feature.start &gt; current_merged.end + 1 or feature.end + 1 &lt; current_merged.start):</span>
+                <span class="c1">#    # Feature is possibly multiline (discontiguous), keep ID but start new record</span>
+                <span class="c1">#    yield _finalize_merge(current_merged, feature_children)</span>
+                <span class="c1">#    current_merged = feature</span>
+                <span class="c1">#    feature_children = [feature]</span>
 
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature_children</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="c1"># Current merged is first child, make copy</span>
-                    <span class="n">current_merged</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="n">feature_children</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    <span class="c1"># Current merged is only child and merge is going to occur, make copy</span>
+                    <span class="n">current_merged</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="n">current_merged</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
                     <span class="k">del</span> <span class="n">current_merged</span><span class="p">[</span><span class="s1">&#39;attributes&#39;</span><span class="p">]</span>
                     <span class="k">del</span> <span class="n">current_merged</span><span class="p">[</span><span class="s1">&#39;extra&#39;</span><span class="p">]</span>
                     <span class="k">del</span> <span class="n">current_merged</span><span class="p">[</span><span class="s1">&#39;dialect&#39;</span><span class="p">]</span>
@@ -1418,13 +1466,6 @@
 
                 <span class="n">feature_children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span>
 
-                <span class="c1"># Merge attributes. Removed as it doesn&#39;t make sense to collect</span>
-                <span class="c1"># attributes in an aggregate feature when Parent relationships</span>
-                <span class="c1"># present</span>
-                <span class="c1"># current_merged.attributes = gffutils.helpers.merge_attributes(feature.attributes, current_merged.attributes)</span>
-                <span class="c1"># Preserve ID</span>
-                <span class="c1"># current_merged[&#39;ID&#39;] = last_id</span>
-
                 <span class="c1"># Set mismatched properties to ambiguous values</span>
                 <span class="k">if</span> <span class="n">feature</span><span class="o">.</span><span class="n">seqid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">current_merged</span><span class="o">.</span><span class="n">seqid</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">):</span> <span class="n">current_merged</span><span class="o">.</span><span class="n">seqid</span> <span class="o">+=</span> <span class="s1">&#39;,&#39;</span> <span class="o">+</span> <span class="n">feature</span><span class="o">.</span><span class="n">seqid</span>
                 <span class="k">if</span> <span class="n">feature</span><span class="o">.</span><span class="n">strand</span> <span class="o">!=</span> <span class="n">current_merged</span><span class="o">.</span><span class="n">strand</span><span class="p">:</span> <span class="n">current_merged</span><span class="o">.</span><span class="n">strand</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span>
@@ -1440,22 +1481,13 @@
                     <span class="n">current_merged</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="n">feature</span><span class="o">.</span><span class="n">end</span>
 
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature_children</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="n">current_merged</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="n">feature_children</span>
-                    <span class="n">current_merged</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">source</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">feature_children</span><span class="p">))</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">current_merged</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="n">no_children</span>
-                <span class="k">yield</span> <span class="n">current_merged</span>
+                <span class="k">yield</span> <span class="n">_finalize_merge</span><span class="p">(</span><span class="n">current_merged</span><span class="p">,</span> <span class="n">feature_children</span><span class="p">)</span>
                 <span class="n">current_merged</span> <span class="o">=</span> <span class="n">feature</span>
-                <span class="n">feature_children</span> <span class="o">=</span> <span class="p">[</span><span class="n">feature</span><span class="p">]</span>
+                <span class="n">feature_children</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="n">last_id</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature_children</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">current_merged</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="n">feature_children</span>
-            <span class="n">current_merged</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">source</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">feature_children</span><span class="p">))</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">current_merged</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="n">no_children</span>
-        <span class="k">yield</span> <span class="n">current_merged</span></div>
+        <span class="k">if</span> <span class="n">current_merged</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">_finalize_merge</span><span class="p">(</span><span class="n">current_merged</span><span class="p">,</span> <span class="n">feature_children</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">merge_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                   <span class="n">merge_order</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;seqid&#39;</span><span class="p">,</span> <span class="s1">&#39;featuretype&#39;</span><span class="p">,</span> <span class="s1">&#39;strand&#39;</span><span class="p">,</span> <span class="s1">&#39;start&#39;</span><span class="p">),</span>
@@ -1495,6 +1527,7 @@
                                 <span class="n">merge_criteria</span><span class="o">=</span><span class="n">merge_criteria</span><span class="p">):</span>
                 <span class="c1"># If feature is result of merge</span>
                 <span class="k">if</span> <span class="n">merged</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_insert</span><span class="p">(</span><span class="n">merged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">())</span>
                     <span class="k">if</span> <span class="n">exclude_components</span><span class="p">:</span>
                         <span class="c1"># Remove child features from DB</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">merged</span><span class="o">.</span><span class="n">children</span><span class="p">)</span>
@@ -1502,7 +1535,6 @@
                         <span class="c1"># Add child relations to DB</span>
                         <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">merged</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">add_relation</span><span class="p">(</span><span class="n">merged</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">child_func</span><span class="o">=</span><span class="n">assign_child</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_insert</span><span class="p">(</span><span class="n">merged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">())</span>
                     <span class="n">result_features</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">merged</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">pass</span>  <span class="c1"># Do nothing, feature is already in DB</span>

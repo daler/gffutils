@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Change log &mdash; gffutils 0.10 documentation</title>
+  <title>Change log &mdash; gffutils 0.10.1 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.10
+                0.10.1
               </div>
             
           
@@ -96,6 +96,7 @@
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Change log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#changes-in-v0-10-1">Changes in v0.10.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#changes-in-v0-10">Changes in v0.10</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#changes-in-v0-9">Changes in v0.9</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#changes-in-v0-8-7-1">Changes in v0.8.7.1</a></li>
@@ -178,14 +179,20 @@
             
   <div class="section" id="change-log">
 <h1>Change log<a class="headerlink" href="#change-log" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="changes-in-v0-10-1">
+<h2>Changes in v0.10.1<a class="headerlink" href="#changes-in-v0-10-1" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Fix issue with new merge routine (<a class="reference external" href="https://github.com/daler/gffutils/issues/152">#152</a>)</p></li>
+</ul>
+</div>
 <div class="section" id="changes-in-v0-10">
 <h2>Changes in v0.10<a class="headerlink" href="#changes-in-v0-10" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>support very large chromosomes (fixed issues <a class="reference external" href="https://github.com/daler/gffutils/issues/94">#94</a> and <a class="reference external" href="https://github.com/daler/gffutils/issues/112">#112</a>)</p></li>
-<li><p>expand <code class="docutils literal notranslate"><span class="pre">~</span></code> to user’s home directory for filenames
+<li><p>Support very large chromosomes (fixed issues <a class="reference external" href="https://github.com/daler/gffutils/issues/94">#94</a> and <a class="reference external" href="https://github.com/daler/gffutils/issues/112">#112</a>)</p></li>
+<li><p>Expand <code class="docutils literal notranslate"><span class="pre">~</span></code> to user’s home directory for filenames
 (issue <a class="reference external" href="https://github.com/daler/gffutils/issues/105">#105</a>).</p></li>
-<li><p>when merging, make merging attributes optional (issue <a class="reference external" href="https://github.com/daler/gffutils/issues/107">#107</a>)</p></li>
-<li><p>use a proper context manager for open files, fixes <a class="reference external" href="https://github.com/daler/gffutils/issues/110">issue #110</a>.</p></li>
+<li><p>When merging, make merging attributes optional (issue <a class="reference external" href="https://github.com/daler/gffutils/issues/107">#107</a>)</p></li>
+<li><p>Use a proper context manager for open files, fixes <a class="reference external" href="https://github.com/daler/gffutils/issues/110">issue #110</a>.</p></li>
 <li><p>Update code to reflect changes in later Python versions (<a class="reference external" href="https://github.com/daler/gffutils/pull/121">#121</a> and  <a class="reference external" href="https://github.com/daler/gffutils/pull/123">#123</a> thanks &#64;abhishekkumaresan)</p></li>
 <li><p>Dramatically improved merging routine – many thanks to Nolan Wood
 &#64;innovate-invent (<a class="reference external" href="https://github.com/daler/gffutils/pull/130">#130</a>).</p></li>
@@ -195,10 +202,10 @@ deep-copied, resulting in unintended changes to the underlying dict (<a class="r
 <li><p>Fixed an issue that when imputing intron features, attributes were being
 pulled from the first (or last) exon (<a class="reference external" href="https://github.com/daler/gffutils/pull/139">#139</a>, thanks &#64;stekaz).</p></li>
 <li><p>Support creating Feature objects using empty values for attributes (<a class="reference external" href="https://github.com/daler/gffutils/pull/144">#144</a>).</p></li>
-<li><p>Ensure that tests work post-installation (<a href="#id15"><span class="problematic" id="id16">`#145
+<li><p>Ensure that tests work post-installation (<a href="#id16"><span class="problematic" id="id17">`#145
 &lt;https://github.com/daler/gffutils/pull/145`_</span></a>, thanks Michael Crusoe &#64;mr-c)</p></li>
-<li><p>removed redundant <code class="docutils literal notranslate"><span class="pre">inspection.py</span></code> module (<a class="reference external" href="https://github.com/daler/gffutils/pull/147">#147</a>).</p></li>
-<li><p>improvements to <code class="docutils literal notranslate"><span class="pre">FeatureDB.update</span></code>, especially with respect to handling
+<li><p>Removed redundant <code class="docutils literal notranslate"><span class="pre">inspection.py</span></code> module (<a class="reference external" href="https://github.com/daler/gffutils/pull/147">#147</a>).</p></li>
+<li><p>Improvements to <code class="docutils literal notranslate"><span class="pre">FeatureDB.update</span></code>, especially with respect to handling
 autoincrementing feature IDs. Previously, upon updating a db with another,
 autoincrement integers would restart at 1. Thanks Nolan Wood
 (&#64;innovate-invent) and &#64;abhishekkumaresan (<a class="reference external" href="https://github.com/daler/gffutils/pull/149">#149</a>)</p></li>

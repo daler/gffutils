@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gffutils.interface.FeatureDB.merge &mdash; gffutils 0.10 documentation</title>
+  <title>gffutils.interface.FeatureDB.merge &mdash; gffutils 0.10.1 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.10
+                0.10.1
               </div>
             
           
@@ -198,7 +198,7 @@
 <h1>gffutils.interface.FeatureDB.merge<a class="headerlink" href="#gffutils-interface-featuredb-merge" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="gffutils.interface.FeatureDB.merge">
-<code class="sig-prename descclassname">FeatureDB.</code><code class="sig-name descname">merge</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">features</em>, <em class="sig-param">merge_criteria=(&lt;function seqid at 0x7fe080ba6290&gt;</em>, <em class="sig-param">&lt;function overlap_end_inclusive at 0x7fe080ba69e0&gt;</em>, <em class="sig-param">&lt;function strand at 0x7fe080ba6830&gt;</em>, <em class="sig-param">&lt;function feature_type at 0x7fe080ba68c0&gt;)</em>, <em class="sig-param">multiline=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/interface.html#FeatureDB.merge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gffutils.interface.FeatureDB.merge" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">FeatureDB.</code><code class="sig-name descname">merge</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">features</em>, <em class="sig-param">merge_criteria=(&lt;function seqid at 0x7f8e944bf950&gt;</em>, <em class="sig-param">&lt;function overlap_end_inclusive at 0x7f8e944b4440&gt;</em>, <em class="sig-param">&lt;function strand at 0x7f8e944b4290&gt;</em>, <em class="sig-param">&lt;function feature_type at 0x7f8e944b4320&gt;)</em>, <em class="sig-param">multiline=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/interface.html#FeatureDB.merge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gffutils.interface.FeatureDB.merge" title="Permalink to this definition">¶</a></dt>
 <dd><p>Merge features matching criteria together</p>
 <p>Returned Features have a special property called ‘children’ that is
 a list of the component features.  This only exists for the lifetime of
@@ -206,7 +206,7 @@ the Feature instance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>features</strong><span class="classifier">list</span></dt><dd><p>Iterable of Feature instances to merge</p>
+<dt><strong>features</strong><span class="classifier">iterable</span></dt><dd><p>Iterable of Feature instances to merge</p>
 </dd>
 <dt><strong>merge_criteria</strong><span class="classifier">list</span></dt><dd><p>List of merge criteria callbacks. All must evaluate to True in
 order for a feature to be merged. See notes below on callback
