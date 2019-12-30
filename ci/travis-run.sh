@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -eo pipefail
-set -x
 
 # Full test suite after conda-installing deps
 source activate tmp$PY
