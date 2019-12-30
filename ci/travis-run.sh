@@ -1,12 +1,11 @@
 #!/bin/bash
 
 set -eo pipefail
-set -x
 
 # Full test suite after conda-installing deps
 source activate tmp$PY
 HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-nosetests -x --with-doctest -a '!slow'
+nosetests -v -x --with-doctest -a '!slow'
 
 # explicitly test two versions of bedtools for the pybedtools_integration
 # module
