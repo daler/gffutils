@@ -3,20 +3,26 @@
 Change log
 ==========
 
+Changes in v0.10.1
+------------------
+
+- Fix issue with new merge routine (`#152
+  <https://github.com/daler/gffutils/issues/152>`_)
+
 Changes in v0.10
 ----------------
 
-- support very large chromosomes (fixed issues `#94
+- Support very large chromosomes (fixed issues `#94
   <https://github.com/daler/gffutils/issues/94>`_ and `#112
   <https://github.com/daler/gffutils/issues/112>`_)
 
-- expand `~` to user's home directory for filenames
+- Expand `~` to user's home directory for filenames
   (issue `#105 <https://github.com/daler/gffutils/issues/105>`_).
 
-- when merging, make merging attributes optional (issue `#107
+- When merging, make merging attributes optional (issue `#107
   <https://github.com/daler/gffutils/issues/107>`_)
 
-- use a proper context manager for open files, fixes `issue #110
+- Use a proper context manager for open files, fixes `issue #110
   <https://github.com/daler/gffutils/issues/110>`_.
 
 - Update code to reflect changes in later Python versions (`#121
@@ -41,10 +47,10 @@ Changes in v0.10
 - Ensure that tests work post-installation (`#145
   <https://github.com/daler/gffutils/pull/145`_, thanks Michael Crusoe @mr-c)
 
-- removed redundant ``inspection.py`` module (`#147
+- Removed redundant ``inspection.py`` module (`#147
   <https://github.com/daler/gffutils/pull/147>`_).
 
-- improvements to ``FeatureDB.update``, especially with respect to handling
+- Improvements to ``FeatureDB.update``, especially with respect to handling
   autoincrementing feature IDs. Previously, upon updating a db with another,
   autoincrement integers would restart at 1. Thanks Nolan Wood
   (@innovate-invent) and @abhishekkumaresan (`#149
