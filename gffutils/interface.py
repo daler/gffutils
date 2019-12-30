@@ -16,9 +16,22 @@ def assign_child(parent, child):
     """
     Helper for add_relation()
     Sets 'Parent' attribute to parent['ID']
+
+    Parameters
+    ----------
+
+    parent : Feature
+        Parent Feature
+
     :param parent: parent Feature
-    :param child: child Feature
-    :return: child
+
+    child : Feature
+        Child Feature
+
+    Returns
+    -------
+
+    Child Feature
     """
     child.attributes['Parent'] = parent['ID']
     return child
@@ -30,9 +43,18 @@ no_children = tuple()
 def _finalize_merge(feature, feature_children):
     """
     Helper for FeatureDB.merge() to update source and assign children property
-    :param feature: feature to finalise
-    :param feature_children: list of children to assign
-    :return: feature, modified
+
+    Parameters
+    ----------
+    feature : Feature
+        feature to finalise
+    
+    feature_children
+        list of children to assign
+    
+    Returns
+    -------
+    feature, modified
     """
     if len(feature_children) > 1:
         feature.source = ','.join(set(child.source for child in feature_children))
