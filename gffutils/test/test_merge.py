@@ -100,3 +100,5 @@ class TestMerge(TestWithSynthDB):
     # TODO test various merge criteria
 
     # TODO test multiline, this doesn't really work until gffutils better supports multiline features
+
+    # TODO add test for PR #152
