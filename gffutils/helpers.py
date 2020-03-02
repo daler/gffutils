@@ -453,7 +453,7 @@ def canonical_transcripts(db, fasta_filename):
 
         # If we have CDS, then use the longest coding transcript
         if max(i[0] for i in exon_list) > 0:
-            best = sorted(exon_list)[0]
+            best = sorted(exon_list, key=lambda x: x[0], reverse=True)[0]
         # Otherwise, just choose the longest
         else:
             best = sorted(exon_list, lambda x: x[1])[0]
