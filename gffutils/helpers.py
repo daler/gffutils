@@ -434,7 +434,7 @@ def to_unicode(obj, encoding='utf-8'):
 
 def canonical_transcripts(db, fasta_filename):
     import pyfaidx
-    fasta = pyfaidx.Fasta(fasta_filename, as_raw=True)
+    fasta = pyfaidx.Fasta(fasta_filename, as_raw=False)
     for gene in db.features_of_type('gene'):
 
         # exons_list will contain (CDS_length, total_length, transcript, [exons]) tuples.
