@@ -449,7 +449,7 @@ def canonical_transcripts(db, fasta_filename):
                     cds_len += exon_length
                 total_len += exon_length
 
-            exon_list.append((cds_len, total_len, transcript, exons))
+            exon_list.append((cds_len, total_len, transcript, exons if cds_len == 0 else [e for e in exons if e.featuretype in ['CDS', 'five_prime_UTR', 'three_prime_UTR']] ))
 
         # If we have CDS, then use the longest coding transcript
         if max(i[0] for i in exon_list) > 0:
@@ -462,7 +462,7 @@ def canonical_transcripts(db, fasta_filename):
 
         canonical_exons = best[-1]
         transcript = best[-2]
-        seqs = [i.sequence(fasta) for i in canonical_exons]
+        seqs = [i.sequence(fasta) for i in sorted(canonical_exons, key=lambda x: x.start, reverse=transcript.strand != '+')]
         yield transcript, ''.join(seqs)
 
 
