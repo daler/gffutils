@@ -456,7 +456,7 @@ def canonical_transcripts(db, fasta_filename):
             best = sorted(exon_list, key=lambda x: x[0], reverse=True)[0]
         # Otherwise, just choose the longest
         else:
-            best = sorted(exon_list, lambda x: x[1])[0]
+            best = sorted(exon_list, key=lambda x: x[1])[0]
 
         print(best)
 
