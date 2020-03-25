@@ -776,6 +776,10 @@ class FeatureDB(object):
                 last_feature = f
                 continue
 
+            if last_feature.start > f.start or f.stop < last_feature.stop:
+                last_feature = f
+                continue
+
             strand = new_strand
             chrom = last_feature.chrom
 
