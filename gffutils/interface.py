@@ -776,7 +776,8 @@ class FeatureDB(object):
                 last_feature = f
                 continue
 
-            if last_feature.start > f.start or f.stop < last_feature.stop:
+            if last_feature.start > f.start or f.stop < last_feature.stop or last_feature.stop == f.start:
+                #overlapping features don't have anything inbetween
                 last_feature = f
                 continue
 
