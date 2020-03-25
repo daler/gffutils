@@ -751,11 +751,13 @@ class FeatureDB(object):
         -------
         A generator that yields :class:`Feature` objects
         """
+        contig_start=True
         for i, f in enumerate(features):
             # no inter-feature for the first one
-            if i == 0:
+            if contig_start:
                 interfeature_start = f.stop
                 last_feature = f
+                contig_start=False
                 continue
 
             interfeature_stop = f.start
@@ -774,6 +776,7 @@ class FeatureDB(object):
                 # don't complain if they're on different chromosomes -- just
                 # move on.
                 last_feature = f
+                contig_start=True
                 continue
 
             if last_feature.start > f.start or f.stop < last_feature.stop or last_feature.stop == f.start:
