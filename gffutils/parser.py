@@ -63,7 +63,7 @@ _to_quote += chr(127)
 # there.
 class Quoter(collections.defaultdict):
     def __missing__(self, b):
-        if b in _to_quote:
+        if b != "" and b in _to_quote:
             res = '%{:02X}'.format(ord(b))
         else:
             res = b
