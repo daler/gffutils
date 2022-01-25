@@ -63,7 +63,7 @@ jobs:
         run: |
           eval "$(conda shell.bash hook)"
           conda activate ./env
-          (cd docs && make html)
+          (cd doc && make html)
           conda deactivate
 
           # Clone the gh-pages branch to a temporary location
@@ -75,7 +75,7 @@ jobs:
 
           # clean it out and add newly-built docs
           rm -rf /tmp/docs/*
-          cp -r docs/build/html/* /tmp/docs
+          cp -r doc/build/html/* /tmp/docs
 
           # so that sphinx-built docs show up correctly on github.io
           touch /tmp/docs/.nojekyll
