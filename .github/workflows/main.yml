@@ -36,6 +36,7 @@ jobs:
           # TODO: run nosetests that exclude tests requiring optional packages
 
       - name: run unit tests
+        run: |
           eval "$(conda shell.bash hook)"
           conda install -y -p ./env \
             --channel conda-forge \
