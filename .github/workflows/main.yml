@@ -54,7 +54,7 @@ jobs:
           conda install -y -p ./env \
             --channel conda-forge \
             --channel bioconda \
-            sphinx make sphinx_rtd_theme
+            --file docs-requirements.txt
           conda activate ./env
           (cd doc && make clean doctest)
           conda deactivate
