@@ -921,8 +921,11 @@ def test_tempfiles():
     # .travis.yml sets the PROCESSES env var; otherwise use all available.
     PROCESSES = int(os.environ.get("PROCESSES", multiprocessing.cpu_count()))
     pool = multiprocessing.Pool(PROCESSES)
-    n = 100
-    res = pool.map(make_db, range(n))
+    try:
+        n = 100
+        res = pool.map(make_db, range(n))
+    finally:
+        pool.close()
     assert sorted(list(res)) == list(range(n))
     filelist = os.listdir(tempdir)
     assert len(filelist) == n, len(filelist)
