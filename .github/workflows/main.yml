@@ -1,0 +1,35 @@
+name: main
+on: [push]
+jobs:
+  build-and-test:
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v2
+    - name: git setup
+      id: git-setup
+      run: |
+        git config --global user.email "action@github.com"
+        git config --global user.name "GitHub Action"
+        echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
+        echo "WORKDIR=$(pwd)" >> $GITHUB_ENV
+
+    - name: conda env
+      run: |
+        eval "$(conda shell.bash hook)"
+        conda create -y -p ./env \
+          --channel conda-forge \
+          --channel bioconda \
+          --file requirements.txt
+
+        conda activate ./env
+        rm -r dist
+        python setup.py sdist
+        (cd dist && pip install gffutils-*.tar.gz && cd $TMPDIR && python -c "import gffutils")
+        conda deactivate
+
+
+
+
+
+
+
