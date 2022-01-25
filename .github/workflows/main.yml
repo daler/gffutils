@@ -59,4 +59,32 @@ jobs:
           (cd docs && make clean doctest)
           conda deactivate
 
+      - name: build docs
+        run: |
+          eval "$(conda shell.bash hook)"
+          conda activate ./env
+          (cd docs && make html)
+          conda deactivate
 
+          # Clone the gh-pages branch to a temporary location
+          git clone \
+            --single-branch \
+            --branch gh-pages "https://x-acess-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" \
+            /tmp/docs
+
+
+          # clean it out and add newly-built docs
+          rm -rf /tmp/docs/*
+          cp -r docs/build/html/* /tmp/docs
+
+          # so that sphinx-built docs show up correctly on github.io
+          touch /tmp/docs/.nojekyll
+
+          cd /tmp/docs
+          git add .
+          if git diff --cached --quiet; then
+            echo "no changes to docs, nothing to commit"
+          else
+            git commit -m "update docs"
+          fi
+          cd $WORKDIR
