@@ -16,7 +16,7 @@ ch.setLevel(logging.INFO)
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 
-gff3_kw_pat = re.compile('\w+=')
+gff3_kw_pat = re.compile(r'\w+=')
 
 # Encoding/decoding notes
 # -----------------------
