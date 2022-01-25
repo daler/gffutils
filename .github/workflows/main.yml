@@ -56,7 +56,7 @@ jobs:
             --channel bioconda \
             sphinx make
           conda activate ./env
-          (cd docs && make clean doctest)
+          (cd doc && make clean doctest)
           conda deactivate
 
       - name: build docs
