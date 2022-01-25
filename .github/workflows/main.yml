@@ -24,5 +24,7 @@ jobs:
           conda activate ./env
           rm -rf dist
           python setup.py sdist
-          (cd dist && pip install gffutils-*.tar.gz && cd $TMPDIR && python -c "import gffutils")
+          (cd dist && pip install gffutils-*.tar.gz)
+          cd $TMPDIR
+          python -c "import gffutils; print(gffutils.__file__)"
           conda deactivate
