@@ -22,7 +22,7 @@ jobs:
             --file requirements.txt
 
           conda activate ./env
-          rm -r dist
+          rm -rf dist
           python setup.py sdist
           (cd dist && pip install gffutils-*.tar.gz && cd $TMPDIR && python -c "import gffutils")
           conda deactivate
