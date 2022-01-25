@@ -46,5 +46,17 @@ jobs:
 
           conda activate ./env
           nosetests -v --with-doctest -a '!slow'
+          conda deactivate
+
+      - name: doctests
+        run: |
+          eval "$(conda shell.bash hook)"
+          conda install -y -p ./env \
+            --channel conda-forge \
+            --channel bioconda \
+            sphinx make
+          conda activate ./env
+          (cd docs && make clean doctest)
+          conda deactivate
 
 
