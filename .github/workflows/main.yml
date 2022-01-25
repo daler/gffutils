@@ -2,6 +2,9 @@ name: main
 on: [push]
 jobs:
   build-and-test:
+    strategy:
+      matrix:
+        python-version: [3.9]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -19,6 +22,7 @@ jobs:
           conda create -y -p ./env \
             --channel conda-forge \
             --channel bioconda \
+            python=${{ matrix.python-version }} \
             --file requirements.txt
 
           conda activate ./env
@@ -28,3 +32,16 @@ jobs:
           cd $TMPDIR
           python -c "import gffutils; print(gffutils.__file__)"
           conda deactivate
+
+          # TODO: run nosetests that exclude tests requiring optional packages
+
+      - name: run unit tests
+          eval "$(conda shell.bash hook)"
+          conda install -y -p ./env \
+            --channel conda-forge \
+            --channel bioconda \
+            --file optional-requirements.txt \
+            nose
+
+          conda activate ./env
+          nosetests -v --with-doctest -a '!slow'
