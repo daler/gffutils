@@ -1,0 +1,96 @@
+name: main
+on: [push]
+jobs:
+  build-and-test:
+    strategy:
+      matrix:
+        python-version: [3.6, 3.8, 3.9]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: git setup
+        id: git-setup
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
+          echo "WORKDIR=$(pwd)" >> $GITHUB_ENV
+
+      - name: conda env
+        run: |
+          eval "$(conda shell.bash hook)"
+          conda create -y -p ./env \
+            --channel conda-forge \
+            --channel bioconda \
+            python=${{ matrix.python-version }} \
+            --file requirements.txt
+
+          conda activate ./env
+          python setup.py clean sdist
+          (cd dist && pip install gffutils-*.tar.gz)
+          cd $TMPDIR
+          python -c "import gffutils; print(gffutils.__file__)"
+          conda deactivate
+
+      - name: run unit tests
+        run: |
+          eval "$(conda shell.bash hook)"
+          conda install -y -p ./env \
+            --channel conda-forge \
+            --channel bioconda \
+            --file optional-requirements.txt \
+            nose
+
+          conda activate ./env
+          nosetests -v --with-doctest -a '!slow'
+          conda deactivate
+
+      - name: doctests
+        run: |
+          eval "$(conda shell.bash hook)"
+          conda install -y -p ./env \
+            --channel conda-forge \
+            --channel bioconda \
+            --file docs-requirements.txt
+          conda activate ./env
+          (cd doc && make clean doctest)
+          conda deactivate
+
+      - name: build docs
+        run: |
+          eval "$(conda shell.bash hook)"
+          conda activate ./env
+          (cd doc && make html)
+          conda deactivate
+
+          # Clone the gh-pages branch to a temporary location
+          git clone \
+            --single-branch \
+            --branch gh-pages "https://x-acess-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" \
+            /tmp/docs
+
+
+          # clean it out and add newly-built docs
+          rm -rf /tmp/docs/*
+          cp -r doc/build/html/* /tmp/docs
+
+          # so that sphinx-built docs show up correctly on github.io
+          touch /tmp/docs/.nojekyll
+
+          cd /tmp/docs
+          git add .
+          if git diff --cached --quiet; then
+            echo "no changes to docs, nothing to commit"
+          else
+            git commit -m "update docs"
+          fi
+          cd $WORKDIR
+
+      - name: push docs to gh-pages branch
+        # Push docs to gh-pages if this test is running on master branch, and
+        # restrict to a single Python version.
+        if: ${{ (github.ref == 'refs/heads/master') && (matrix.python-version == 3.9) }}
+        run: |
+          cd /tmp/docs
+          git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" gh-pages
+          cd $WORKDIR

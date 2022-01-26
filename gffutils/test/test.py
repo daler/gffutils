@@ -921,8 +921,11 @@ def test_tempfiles():
     # .travis.yml sets the PROCESSES env var; otherwise use all available.
     PROCESSES = int(os.environ.get("PROCESSES", multiprocessing.cpu_count()))
     pool = multiprocessing.Pool(PROCESSES)
-    n = 100
-    res = pool.map(make_db, range(n))
+    try:
+        n = 100
+        res = pool.map(make_db, range(n))
+    finally:
+        pool.close()
     assert sorted(list(res)) == list(range(n))
     filelist = os.listdir(tempdir)
     assert len(filelist) == n, len(filelist)
@@ -1314,6 +1317,28 @@ def test_pr_144():
     assert str(f) == ".	.	.	.	.	.	.	.	a"
     g = gffutils.feature.feature_from_line(str(f))
     assert g == f
+
+
+def test_pr_172():
+    line = (
+        'NC_049222.1\tGnomon\tgene\t209085\t282880\t.\t-\t.\t'
+        'gene_id "ENPP1_3"; transcript_id ""; db_xref "GeneID:100856150";'
+        'db_xref "VGNC:VGNC:40374"; gbkey "Gene"; gene "ENPP1"; '
+        'gene_biotype "protein_coding";\n'
+    )
+    tmp = tempfile.NamedTemporaryFile(delete=False).name
+    with open(tmp, 'w') as fout:
+        fout.write(line)
+    db = gffutils.create_db(tmp, ':memory:')
+
+
+def test_pr_171():
+    q = gffutils.parser.Quoter()
+    assert q.__missing__("\n") == "%0A"
+    assert q.__missing__("a") == "a"
+
+    assert q.__missing__("") == ""
+
 
 if __name__ == "__main__":
     # this test case fails

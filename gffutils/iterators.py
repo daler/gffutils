@@ -11,6 +11,7 @@ important for figuring out how to construct the database.
 import os
 import tempfile
 import itertools
+from contextlib import contextmanager
 from gffutils.feature import feature_from_line
 from gffutils.interface import FeatureDB
 from gffutils import helpers
@@ -123,32 +124,34 @@ class _FileIterator(_BaseIterator):
 
     def _custom_iter(self):
         valid_lines = 0
-        for i, line in enumerate(self.open_function(self.data)):
-            if isinstance(line, six.binary_type):
-                line = line.decode('utf-8')
-            line = line.rstrip('\n\r')
-            self.current_item = line
-            self.current_item_number = i
+        with self.open_function(self.data) as fh:
+            for i, line in enumerate(fh):
+                if isinstance(line, six.binary_type):
+                    line = line.decode('utf-8')
+                line = line.rstrip('\n\r')
+                self.current_item = line
+                self.current_item_number = i
 
-            if line == '##FASTA' or line.startswith('>'):
-                return
+                if line == '##FASTA' or line.startswith('>'):
+                    return
 
-            if line.startswith('##'):
-                self._directive_handler(line)
-                continue
+                if line.startswith('##'):
+                    self._directive_handler(line)
+                    continue
 
-            if line.startswith(('#')) or len(line) == 0:
-                continue
+                if line.startswith(('#')) or len(line) == 0:
+                    continue
 
-            # (If we got here it should be a valid line)
-            valid_lines += 1
-            yield feature_from_line(line, dialect=self.dialect)
+                # (If we got here it should be a valid line)
+                valid_lines += 1
+                yield feature_from_line(line, dialect=self.dialect)
 
 
 class _UrlIterator(_FileIterator):
     """
     Subclass for iterating over features provided as a URL
     """
+    @contextmanager
     def open_function(self, data):
         response = urlopen(data)
 
@@ -173,11 +176,17 @@ class _UrlIterator(_FileIterator):
                     for line in lines:
                         yield line + '\n'
                 yield last_line
-            return _iter()
 
         else:
-            return response
-
+            def _iter():
+                for line in response.readlines():
+                    if not line:
+                        break
+                    yield line.decode() + '\n'
+        try:
+            yield _iter()
+        finally:
+            response.close()
 
 class _FeatureIterator(_BaseIterator):
     """
