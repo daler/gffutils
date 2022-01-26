@@ -1332,6 +1332,14 @@ def test_pr_172():
     db = gffutils.create_db(tmp, ':memory:')
 
 
+def test_pr_171():
+    q = gffutils.parser.Quoter()
+    assert q.__missing__("\n") == "%0A"
+    assert q.__missing__("a") == "a"
+
+    assert q.__missing__("") == ""
+
+
 if __name__ == "__main__":
     # this test case fails
     #test_attributes_modify()
