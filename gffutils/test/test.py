@@ -1318,6 +1318,13 @@ def test_pr_144():
     g = gffutils.feature.feature_from_line(str(f))
     assert g == f
 
+def test_pr_172():
+    line = ('NC_049222.1\tGnomon\tgene\t209085\t282880\t.\t-\t.\t'
+            'gene_id "ENPP1_3"; transcript_id ""; db_xref "GeneID:100856150"; db_xref "VGNC:VGNC:40374"; gbkey "Gene"; gene "ENPP1"; gene_biotype "protein_coding";\n'
+            )
+    f = feature.feature_from_line(line, keep_order=True)
+    f.attributes['transcript_id'][0]
+
 if __name__ == "__main__":
     # this test case fails
     #test_attributes_modify()
