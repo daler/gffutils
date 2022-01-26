@@ -11,6 +11,7 @@ important for figuring out how to construct the database.
 import os
 import tempfile
 import itertools
+from contextlib import contextmanager
 from gffutils.feature import feature_from_line
 from gffutils.interface import FeatureDB
 from gffutils import helpers
@@ -150,6 +151,7 @@ class _UrlIterator(_FileIterator):
     """
     Subclass for iterating over features provided as a URL
     """
+    @contextmanager
     def open_function(self, data):
         response = urlopen(data)
 
@@ -174,11 +176,17 @@ class _UrlIterator(_FileIterator):
                     for line in lines:
                         yield line + '\n'
                 yield last_line
-            return _iter()
 
         else:
-            return response
-
+            def _iter():
+                for line in response.readlines():
+                    if not line:
+                        break
+                    yield line.decode() + '\n'
+        try:
+            yield _iter()
+        finally:
+            response.close()
 
 class _FeatureIterator(_BaseIterator):
     """
