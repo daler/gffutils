@@ -784,7 +784,10 @@ class _GTFDBCreator(_DBCreator):
             relations = []
             parent = None
             grandparent = None
-            if self.transcript_key in f.attributes:
+            if (
+                self.transcript_key in f.attributes and
+                f.attributes[self.transcript_key]
+            ):
                 parent = f.attributes[self.transcript_key][0]
                 relations.append((parent, f.id, 1))
 
