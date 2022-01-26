@@ -1340,6 +1340,69 @@ def test_pr_171():
     assert q.__missing__("") == ""
 
 
+def test_issue_129():
+
+    # thanks @Brunox13 for the detailed notes on #129
+
+    line = 'chr1\tdemo\tstart_codon\t69091\t69093\t.\t+\t.\tgene_id "demo";\n'
+    tmp = tempfile.NamedTemporaryFile(delete=False).name
+    with open(tmp, 'w') as fout:
+        fout.write(line)
+    db = gffutils.create_db(tmp, ':memory:')
+
+    # ASCII art to visualize each test (coords are along the top, from 69087 to
+    # 69090). The tests slide a 4-bp region over the original 3-bp start codon.
+
+    # 7 8 9 0 1 2 3 4 5 6 7
+    #         | | |         Orig feature
+    # | | | |               Test feature
+    res = list(db.region(region=('chr1', 69087, 69090), featuretype='start_codon'))
+    assert len(res) == 0
+
+    # NOTE: prior to #162, this did not return anything
+    # 7 8 9 0 1 2 3 4 5 6 7
+    #         | | |         Orig feature
+    #   | | | |             Test feature
+    res = list(db.region(region=('chr1', 69088, 69091), featuretype='start_codon'))
+    assert len(res) == 1
+
+    # 7 8 9 0 1 2 3 4 5 6 7
+    #         | | |         Orig feature
+    #     | | | |           Test feature
+    res = list(db.region(region=('chr1', 69089, 69092), featuretype='start_codon'))
+    assert len(res) == 1
+
+    # 7 8 9 0 1 2 3 4 5 6 7
+    #         | | |         Orig feature
+    #       | | | |         Test feature
+    res = list(db.region(region=('chr1', 69090, 69093), featuretype='start_codon'))
+    assert len(res) == 1
+
+    # 7 8 9 0 1 2 3 4 5 6 7
+    #         | | |         Orig feature
+    #         | | | |       Test feature
+    res = list(db.region(region=('chr1', 69091, 69094), featuretype='start_codon'))
+    assert len(res) == 1
+
+    # 7 8 9 0 1 2 3 4 5 6 7
+    #         | | |         Orig feature
+    #           | | | |     Test feature
+    res = list(db.region(region=('chr1', 69092, 69095), featuretype='start_codon'))
+    assert len(res) == 1
+
+    # NOTE: priro to #162, this did not return anything
+    # 7 8 9 0 1 2 3 4 5 6 7
+    #         | | |         Orig feature
+    #             | | | |   Test feature
+    res = list(db.region(region=('chr1', 69093, 69096), featuretype='start_codon'))
+    assert len(res) == 1
+
+    # 7 8 9 0 1 2 3 4 5 6 7
+    #         | | |         Orig feature
+    #               | | | | Test feature
+    res = list(db.region(region=('chr1', 69094, 69097), featuretype='start_codon'))
+    assert len(res) == 0
+
 if __name__ == "__main__":
     # this test case fails
     #test_attributes_modify()
