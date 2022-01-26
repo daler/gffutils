@@ -48,10 +48,10 @@ def _finalize_merge(feature, feature_children):
     ----------
     feature : Feature
         feature to finalise
-    
+
     feature_children
         list of children to assign
-    
+
     Returns
     -------
     feature, modified
@@ -645,12 +645,23 @@ class FeatureDB(object):
             args.append(seqid)
         if start is not None:
             start = int(start)
-            position_clause.append('start %s ?' % start_op)
-            args.append(start)
         if end is not None:
             end = int(end)
-            position_clause.append('end %s ?' % end_op)
-            args.append(end)
+
+        # See #129
+        if start and end and not completely_within:
+            position_clause.append('''(
+                ({region_start} <= start AND {region_end} >= start) OR
+                ({region_start} >= start AND {region_end} <= end) OR
+                ({region_start} <= end AND {region_end} >= end)
+            )'''.format(region_start=start, region_end=end))
+        else:
+            if start:
+                position_clause.append('start %s ?' % start_op)
+                args.append(start)
+            if end:
+                position_clause.append('end %s ?' % end_op)
+                args.append(end)
 
         position_clause = ' AND '.join(position_clause)
 
