@@ -111,8 +111,7 @@ class _DBCreator(object):
         self.set_verbose(verbose)
 
         if text_factory is not None:
-            if self.verbose == 'debug':
-                logger.debug('setting text factory to %s' % text_factory)
+            logger.debug('setting text factory to %s' % text_factory)
             self.conn.text_factory = text_factory
         self._data = data
 
@@ -123,6 +122,9 @@ class _DBCreator(object):
             force_dialect_check=force_dialect_check, from_string=from_string,
             dialect=dialect
         )
+
+        # keys are featuretypes, values are integers. Results in unique,
+        # derived feature IDs like "exon_94".
         if '_autoincrements' in kwargs:
             self._autoincrements = kwargs['_autoincrements']
         else:
@@ -145,13 +147,12 @@ class _DBCreator(object):
         """
         Given a Feature from self.iterator, figure out what the ID should be.
 
-        This uses `self.id_spec` identify the ID.
+        This uses `self.id_spec` to identify the ID.
         """
 
-        # If id_spec is a string, convert to iterable for later
+        # If id_spec is a string or callable, convert to iterable for later
         if isinstance(self.id_spec, six.string_types):
             id_key = [self.id_spec]
-
         elif hasattr(self.id_spec, '__call__'):
             id_key = [self.id_spec]
 
@@ -184,8 +185,9 @@ class _DBCreator(object):
                 # use GFF fields rather than attributes for cases like :seqid:
                 # or :strand:
                 if (len(k) > 3) and (k[0] == ':') and (k[-1] == ':'):
-                    # No [0] here -- only attributes key/vals are forced into
-                    # lists, not standard GFF fields.
+                    # No trailing [0] here to get first item -- only attributes
+                    # key/vals are forced into lists, not standard GFF fields
+                    # like seqid or strand.
                     return getattr(f, k[1:-1])
                 else:
                     try:
@@ -250,9 +252,9 @@ class _DBCreator(object):
                 logger.debug('candidates with same idspec: %s'
                              % ([i.id for i in self._candidate_merges(f)]))
 
-            # If force_merge_fields was provided, don't pay attention to these
-            # fields if they're different. We are assuming the attributes field
-            # will be different, hence the [:-1]
+            # If force_merge_fields was provided, don't check them even if
+            # they're different. We are assuming the attributes field will be
+            # different, hence the [:-1]
             _gffkeys_to_check = list(
                 set(constants._gffkeys[:-1])
                 .difference(self.force_merge_fields))
@@ -267,22 +269,20 @@ class _DBCreator(object):
                         break
 
                 if other_attributes_same:
-                    # All the other GFF fields match.  So this existing feature
+                    # All the other GFF fields match. So this existing feature
                     # should be merged.
                     features_to_merge.append(existing_feature)
-                    if self.verbose == 'debug':
-                        logger.debug(
-                            'same attributes between:\nexisting: %s'
-                            '\nthis    : %s'
-                            % (existing_feature, f))
+                    logger.debug(
+                        'same attributes between:\nexisting: %s'
+                        '\nthis    : %s'
+                        % (existing_feature, f))
                 else:
                     # The existing feature's GFF fields don't match, so don't
                     # append anything.
-                    if self.verbose == 'debug':
-                        logger.debug(
-                            'different attributes between:\nexisting: %s\n'
-                            'this    : %s'
-                            % (existing_feature, f))
+                    logger.debug(
+                        'different attributes between:\nexisting: %s\n'
+                        'this    : %s'
+                        % (existing_feature, f))
 
             if (len(features_to_merge) == 0):
                 # No merge candidates found, so we should make a new ID for
@@ -298,8 +298,7 @@ class _DBCreator(object):
 
             # Whoo! Found some candidates to merge.
             else:
-                if self.verbose == 'debug':
-                    logger.debug('num candidates: %s' % len(features_to_merge))
+                logger.debug('num candidates: %s' % len(features_to_merge))
 
                 # This is the attributes dictionary we'll be modifying.
                 merged_attributes = copy.deepcopy(f.attributes)
@@ -312,9 +311,8 @@ class _DBCreator(object):
 
                 # Update the attributes
                 for existing_feature in features_to_merge:
-                    if self.verbose == 'debug':
-                        logger.debug(
-                            '\nmerging\n\n%s\n%s\n' % (f, existing_feature))
+                    logger.debug(
+                        '\nmerging\n\n%s\n%s\n' % (f, existing_feature))
                     for k in existing_feature.attributes.keys():
                         v = merged_attributes.setdefault(k, [])
                         v.extend(existing_feature[k])
@@ -334,8 +332,7 @@ class _DBCreator(object):
                 for k, v in final_fields.items():
                     setattr(existing_feature, k, ','.join(sorted(map(str, v))))
 
-                if self.verbose == 'debug':
-                    logger.debug('\nMERGED:\n%s' % existing_feature)
+                logger.debug('\nMERGED:\n%s' % existing_feature)
                 return existing_feature, merge_strategy
 
         elif merge_strategy == 'create_unique':
@@ -375,8 +372,7 @@ class _DBCreator(object):
                 (idspecid.decode(self.default_encoding),
                  newid.decode(self.default_encoding))
             )
-        if self.verbose == 'debug':
-            logger.debug('added id=%s; new=%s' % (idspecid, newid))
+        logger.debug('added id=%s; new=%s' % (idspecid, newid))
         self.conn.commit()
 
     def _candidate_merges(self, f):
@@ -939,6 +935,8 @@ class _GTFDBCreator(_DBCreator):
 
                 if not self.disable_infer_genes:
                     # Infer gene extent, but only if we haven't done so already
+                    # for this gene; recall we sorted by gene id so this check
+                    # works
                     if gene_id != last_gene_id:
                         c2.execute(
                             '''
@@ -1076,7 +1074,7 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
         what should be used as the ID.  For example, for GTF files, `{'gene':
         'gene_id', 'transcript': 'transcript_id'}` may be useful.  The values
         of this dictionary can also be a list, e.g., `{'gene': ['gene_id',
-        'geneID']}`
+        'geneID']}`.
 
         If `id_spec` is a callable object, then it accepts a dictionary from
         the iterator and returns one of the following:
@@ -1114,7 +1112,8 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
 
         Using `merge_strategy="merge"`, then there will be a single entry in
         the database, but the attributes of all features with the same primary
-        key will be merged.
+        key will be merged. WARNING: this can be quite slow when incorrectly
+        used.
 
         Using `merge_strategy="create_unique"`, then the first entry will use
         the original primary key, but the second entry will have a unique,
@@ -1132,8 +1131,10 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
 
     transform : callable
 
-        Function (or other callable object) that accepts a `Feature` object and
-        returns a (possibly modified) `Feature` object.
+        If not None, `transform` should accept a Feature object as its only
+        argument and return either a (possibly modified) Feature object or
+        a value that evaluates to False.  If the return value is False, the
+        feature will be skipped.
 
     gtf_transcript_key, gtf_gene_key : string
 
