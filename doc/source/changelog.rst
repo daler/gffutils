@@ -3,6 +3,25 @@
 Change log
 ==========
 
+Changes in v0.11
+----------------
+
+This is largely a bugfix release, many thanks to contributors Rory Kirchner,
+Stefano Rivera, Daniel Lowengrub, Nolan Woods, Stefen Moeller,  and Husen Umer.
+
+- Avoid deadlocks in tests under Python 3.8 (`#155 <https://github.com/daler/gffutils/pull/155>`_, thanks Stefano Rivera)
+- Fix deprecation warning for invalid escape sequence (`#168
+  <https://github.com/daler/gffutils/pull/168>`_, Stefen Moeller, and `#165 <https://github.com/daler/gffutils/pull/165>`_, thanks Rory Kirchner)
+- Fix ResourceWarning about unclosed file (`#169
+  <https://github.com/daler/gffutils/pull/169>`_, thanks Daniel Lowengrub)
+- Allow database creation when there is an empty string in the transcript ID
+  (`#171 <https://github.com/daler/gffutils/pull/171>`_, thanks Nolan Woods)
+- Fix off-by-one error in ``FeatureDB.region()`` when ``completely_within
+  = False`` (`#162 <https://github.com/daler/gffutils/pull/162>`_, thanks Husen
+  Umer and also @Brunox13 for the detailed reporting in `#126
+  <https://github.com/daler/gffutils/issues/129>`_)
+- Migrated tests to GitHub Actions
+
 Changes in v0.10.1
 ------------------
 
