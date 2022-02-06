@@ -21,6 +21,9 @@ Stefano Rivera, Daniel Lowengrub, Nolan Woods, Stefen Moeller,  and Husen Umer.
   Umer and also @Brunox13 for the detailed reporting in `#126
   <https://github.com/daler/gffutils/issues/129>`_)
 - Migrated tests to GitHub Actions
+- Refactored the :mod:`iterators` module to make it a bit easier to understand
+  the code, and to pave the way for supporting FASTA sequences at the end of
+  GFF files (see `PR #179 https://github.com/daler/gffutils/pull/179>`_)
 
 Changes in v0.10.1
 ------------------
