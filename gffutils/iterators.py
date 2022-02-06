@@ -199,22 +199,8 @@ class _FeatureIterator(_BaseIterator):
             yield feature
 
 
-class _StringIterator(_FileIterator):
-    """
-    Subclass for iterating over features provided as a string (e.g., from
-    file.read())
-    """
     def _custom_iter(self):
-        self.tmp = tempfile.NamedTemporaryFile(delete=False)
-        data = dedent(self.data)
-        if isinstance(data, six.text_type):
-            data = data.encode('utf-8')
-        self.tmp.write(data)
-        self.tmp.close()
-        self.data = self.tmp.name
-        for feature in super(_StringIterator, self)._custom_iter():
             yield feature
-        os.unlink(self.tmp.name)
 
 
 def is_url(url):
@@ -274,7 +260,14 @@ def DataIterator(data, checklines=10, transform=None,
                    force_dialect_check=force_dialect_check, **kwargs)
     if isinstance(data, six.string_types):
         if from_string:
-            return _StringIterator(**_kwargs)
+            tmp = tempfile.NamedTemporaryFile(delete=False)
+            data = dedent(data)
+            if isinstance(data, six.text_type):
+                data = data.encode('utf-8')
+            tmp.write(data)
+            tmp.close()
+            _kwargs['data'] = tmp.name
+            return _FileIterator(**_kwargs)
         else:
             if os.path.exists(data):
                 return _FileIterator(**_kwargs)
