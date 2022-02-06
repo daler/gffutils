@@ -31,8 +31,10 @@ def test_directives():
     """)
 
     it = iterators.DataIterator(data, from_string=True)
+    assert it.directives == ['directive1 example']
+
     db = create_db(data, dbfn=':memory:', from_string=True, verbose=False)
-    assert it.directives == db.directives == ['directive1 example'], (it.directives, db.directives)
+    assert db.directives == ['directive1 example'], db.directives
 
 def test_split_attrs():
     # nosetests generator for all the test cases in attr_test_cases.  (note no

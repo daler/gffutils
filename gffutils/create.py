@@ -443,7 +443,7 @@ class _DBCreator(object):
         In general, if you'll be adding stuff to the meta table, do it here.
         """
         c = self.conn.cursor()
-        directives = self.directives + self.iterator.directives
+        directives = self.directives
         c.executemany('''
                       INSERT INTO directives VALUES (?)
                       ''', ((i,) for i in directives))

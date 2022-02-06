@@ -122,6 +122,7 @@ class _FileIterator(_BaseIterator):
         return open(data)
 
     def _custom_iter(self):
+        self.directives = []
         valid_lines = 0
         with self.open_function(self.data) as fh:
             for i, line in enumerate(fh):
