@@ -1266,7 +1266,7 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
     # result is available as as iterator._iter.
     #
     # That's what we should be using now for `data:
-    kwargs['data'] = iterator._iter
+    kwargs['data'] = iterator
     kwargs['directives'] = iterator.directives
 
     # Since we've already checked lines, we don't want to do it again
