@@ -264,6 +264,9 @@ def DataIterator(data, checklines=10, transform=None,
         `checklines=0` but this is not enforced.
     """
 
+    if isinstance(data, _BaseIterator):
+        return data
+
     _kwargs = dict(data=data, checklines=checklines, transform=transform,
                    force_dialect_check=force_dialect_check, **kwargs)
     if isinstance(data, six.string_types):
