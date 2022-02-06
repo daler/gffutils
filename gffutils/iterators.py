@@ -24,16 +24,6 @@ else:
     import urlparse
 
 
-def peek(it, n):
-    _peek = []
-    for _ in range(n):
-        try:
-            _peek.append(six.next(it))
-        except StopIteration:
-            break
-    return _peek, itertools.chain(_peek, it)
-
-
 class Directive(object):
     def __init__(self, line):
         self.info = line
@@ -86,19 +76,19 @@ class _BaseIterator(object):
         elif dialect is not None:
             self._observed_dialects = [dialect]
             self.dialect = helpers._choose_dialect(self._observed_dialects)
-            self._iter = self._custom_iter()
         else:
             # Otherwise, check some lines to determine what the dialect should
             # be
-            self.peek, self._iter = peek(self._custom_iter(), checklines)
-            self._observed_dialects = [i.dialect for i in self.peek]
+            _peek = self.peek(checklines)
+            self._peek = _peek
+            self._observed_dialects = [i.dialect for i in _peek]
             self.dialect = helpers._choose_dialect(self._observed_dialects)
 
     def _custom_iter(self):
         raise NotImplementedError("Must define in subclasses")
 
     def __iter__(self):
-        for i in self._iter:
+        for i in self._custom_iter():
             i.dialect = self.dialect
             if self.transform:
                 i = self.transform(i)
@@ -115,6 +105,15 @@ class _FileIterator(_BaseIterator):
     """
     Subclass for iterating over features provided as a filename
     """
+
+    def peek(self, n):
+        initial = []
+        for i, feature in enumerate(self._custom_iter()):
+            initial.append(feature)
+            if i == n:
+                break
+        return initial
+
     def open_function(self, data):
         data = os.path.expanduser(data)
         if data.endswith('.gz'):
@@ -192,14 +191,22 @@ class _FeatureIterator(_BaseIterator):
     """
     Subclass for iterating over features that are already in an iterator
     """
+    def peek(self, n):
+        initial = []
+        for i, feature in enumerate(self.data):
+            initial.append(feature)
+            if i == n:
+                break
+
+        # If self.data is generator-like, we need to patch it back together.
+        if hasattr(self.data, '__next__'):
+            self.data = itertools.chain(initial, self.data)
+        return initial
+
     def _custom_iter(self):
         for i, feature in enumerate(self.data):
             self.current_item = feature
             self.current_item_number = i
-            yield feature
-
-
-    def _custom_iter(self):
             yield feature
 
 
