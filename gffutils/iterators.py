@@ -224,7 +224,7 @@ def is_url(url):
     True if `url` has a valid protocol False otherwise.
     """
     try:
-        return urlparse.urlparse(url).scheme in urlparse.uses_netloc
+        return urlparse.urlparse(url).scheme in set(urlparse.uses_netloc).difference([''])
     except:
         return False
 
@@ -281,6 +281,9 @@ def DataIterator(data, checklines=10, transform=None,
                 return _FileIterator(**_kwargs)
             elif is_url(data):
                 return _UrlIterator(**_kwargs)
+            else:
+                raise ValueError(f"{data} cannot be found and does not "
+                                 "appear to be a URL")
     elif isinstance(data, FeatureDB):
         _kwargs['data'] = data.all_features()
         return _FeatureIterator(**_kwargs)
