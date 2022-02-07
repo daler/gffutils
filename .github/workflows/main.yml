@@ -19,9 +19,10 @@ jobs:
       - name: conda env
         run: |
           eval "$(conda shell.bash hook)"
+          conda config --add channels defaults
+          conda config --add channels bioconda
+          conda config --add channels conda-forge
           conda create -y -p ./env \
-            --channel conda-forge \
-            --channel bioconda \
             python=${{ matrix.python-version }} \
             --file requirements.txt
 
@@ -35,11 +36,7 @@ jobs:
       - name: run unit tests
         run: |
           eval "$(conda shell.bash hook)"
-          conda install -y -p ./env \
-            --channel conda-forge \
-            --channel bioconda \
-            --file optional-requirements.txt \
-            nose
+          conda install -y -p ./env --file optional-requirements.txt nose
 
           conda activate ./env
           nosetests -v --with-doctest -a '!slow'
@@ -48,10 +45,7 @@ jobs:
       - name: doctests
         run: |
           eval "$(conda shell.bash hook)"
-          conda install -y -p ./env \
-            --channel conda-forge \
-            --channel bioconda \
-            --file docs-requirements.txt
+          conda install -y -p ./env --file docs-requirements.txt
           conda activate ./env
           (cd doc && make clean doctest)
           conda deactivate
