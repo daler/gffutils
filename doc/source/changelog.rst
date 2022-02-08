@@ -23,7 +23,11 @@ Stefano Rivera, Daniel Lowengrub, Nolan Woods, Stefen Moeller,  and Husen Umer.
 - Migrated tests to GitHub Actions
 - Refactored the :mod:`iterators` module to make it a bit easier to understand
   the code, and to pave the way for supporting FASTA sequences at the end of
-  GFF files (see `PR #179 https://github.com/daler/gffutils/pull/179>`_)
+  GFF files (see `PR #179 <https://github.com/daler/gffutils/pull/179>`_)
+- Empty input now raises ``EmptyInputError`` rather than ``ValueError``, making
+  it easier to catch cases where one might expect empty input (addresses `#17
+  <https://github.com/daler/gffutils/issues/17>`_)
+- PEP8 formatting in code
 
 Changes in v0.10.1
 ------------------

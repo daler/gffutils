@@ -750,7 +750,7 @@ def test_empty_files():
     fn = tempfile.NamedTemporaryFile(delete=False).name
     a = open(fn, "w")
     a.close()
-    assert_raises(ValueError, gffutils.create_db, fn, fn + ".db")
+    assert_raises(gffutils.exceptions.EmptyInputError, gffutils.create_db, fn, fn + ".db")
 
 
 def test_false_function():
@@ -790,7 +790,7 @@ def test_inspect():
             "chr2L": 27,
         },
         "attribute_keys": {
-            u"": 3,
+            "": 3,
             "Dbxref": 6,
             "Name": 19,
             "Parent": 20,
@@ -830,26 +830,26 @@ def test_inspect():
 
     expected = {
         "attribute_keys": {
-            u"Name": 9,
-            u"Parent": 9,
-            u"score_text": 2,
-            u"gbunit": 1,
-            u"derived_computed_cyto": 1,
-            u"score": 2,
-            u"Dbxref": 3,
-            u"ID": 8,
-            u"Ontology_term": 1,
+            "Name": 9,
+            "Parent": 9,
+            "score_text": 2,
+            "gbunit": 1,
+            "derived_computed_cyto": 1,
+            "score": 2,
+            "Dbxref": 3,
+            "ID": 8,
+            "Ontology_term": 1,
         },
         "feature_count": 10,
-        "chrom": {u"chr2L": 10},
-        "strand": {u"+": 10},
+        "chrom": {"chr2L": 10},
+        "strand": {"+": 10},
         "featuretype": {
-            u"five_prime_UTR": 1,
-            u"exon": 3,
-            u"mRNA": 2,
-            u"CDS": 1,
+            "five_prime_UTR": 1,
+            "exon": 3,
+            "mRNA": 2,
+            "CDS": 1,
             "intron": 2,
-            u"gene": 1,
+            "gene": 1,
         },
     }
     assert file_results == db_results == iter_results == expected

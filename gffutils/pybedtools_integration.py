@@ -17,14 +17,23 @@ def to_bedtool(iterator):
     to a temp file or to a known location, use the `.saveas()` method of the
     returned BedTool object.
     """
+
     def gen():
         for i in iterator:
             yield helpers.asinterval(i)
+
     return pybedtools.BedTool(gen())
 
 
-def tsses(db, merge_overlapping=False, attrs=None, attrs_sep=":",
-          merge_kwargs=None, as_bed6=False, bedtools_227_or_later=True):
+def tsses(
+    db,
+    merge_overlapping=False,
+    attrs=None,
+    attrs_sep=":",
+    merge_kwargs=None,
+    as_bed6=False,
+    bedtools_227_or_later=True,
+):
     """
     Create 1-bp transcription start sites for all transcripts in the database
     and return as a sorted pybedtools.BedTool object pointing to a temporary
@@ -156,21 +165,22 @@ def tsses(db, merge_overlapping=False, attrs=None, attrs_sep=":",
 
 
     """
-    _override = os.environ.get('GFFUTILS_USES_BEDTOOLS_227_OR_LATER', None)
+    _override = os.environ.get("GFFUTILS_USES_BEDTOOLS_227_OR_LATER", None)
     if _override is not None:
-        if _override == 'true':
+        if _override == "true":
             bedtools_227_or_later = True
-        elif _override == 'false':
+        elif _override == "false":
             bedtools_227_or_later = False
         else:
             raise ValueError(
                 "Unknown value for GFFUTILS_USES_BEDTOOLS_227_OR_LATER "
-                "environment variable: {0}".format(_override))
+                "environment variable: {0}".format(_override)
+            )
 
     if bedtools_227_or_later:
-        _merge_kwargs = dict(o='distinct', s=True, c='4,5,6')
+        _merge_kwargs = dict(o="distinct", s=True, c="4,5,6")
     else:
-        _merge_kwargs = dict(o='distinct', s=True, c='4')
+        _merge_kwargs = dict(o="distinct", s=True, c="4")
 
     if merge_kwargs is not None:
         _merge_kwargs.update(merge_kwargs)
@@ -179,13 +189,13 @@ def tsses(db, merge_overlapping=False, attrs=None, attrs_sep=":",
         """
         Generator of pybedtools.Intervals representing TSSes.
         """
-        for gene in db.features_of_type('gene'):
+        for gene in db.features_of_type("gene"):
             for transcript in db.children(gene, level=1):
-                if transcript.strand == '-':
+                if transcript.strand == "-":
                     transcript.start = transcript.stop
                 else:
                     transcript.stop = transcript.start
-                transcript.featuretype = transcript.featuretype + '_TSS'
+                transcript.featuretype = transcript.featuretype + "_TSS"
                 yield helpers.asinterval(transcript)
 
     # GFF/GTF format
@@ -193,10 +203,10 @@ def tsses(db, merge_overlapping=False, attrs=None, attrs_sep=":",
 
     # Figure out default attrs to use, depending on the original format.
     if attrs is None:
-        if db.dialect['fmt'] == 'gtf':
-            attrs = 'gene_id'
+        if db.dialect["fmt"] == "gtf":
+            attrs = "gene_id"
         else:
-            attrs = 'ID'
+            attrs = "ID"
 
     if merge_overlapping or as_bed6:
 
@@ -210,12 +220,8 @@ def tsses(db, merge_overlapping=False, attrs=None, attrs_sep=":",
             """
             name = attrs_sep.join([f.attrs[i] for i in attrs])
             return pybedtools.Interval(
-                f.chrom,
-                f.start,
-                f.stop,
-                name,
-                str(f.score),
-                f.strand)
+                f.chrom, f.start, f.stop, name, str(f.score), f.strand
+            )
 
         x = x.each(to_bed).saveas()
 
@@ -223,15 +229,11 @@ def tsses(db, merge_overlapping=False, attrs=None, attrs_sep=":",
         if bedtools_227_or_later:
             x = x.merge(**_merge_kwargs)
         else:
+
             def fix_merge(f):
                 f = featurefuncs.extend_fields(f, 6)
-                return pybedtools.Interval(
-                    f.chrom,
-                    f.start,
-                    f.stop,
-                    f[4],
-                    '.',
-                    f[3])
+                return pybedtools.Interval(f.chrom, f.start, f.stop, f[4], ".", f[3])
+
             x = x.merge(**_merge_kwargs).saveas().each(fix_merge).saveas()
 
     return x

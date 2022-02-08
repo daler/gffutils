@@ -44,18 +44,19 @@ FIRST_SHIFT = 17
 # print_bin_sizes() for more info on this.
 OFFSETS = [
     4096 + 512 + 64 + 8 + 1,  # bins 4681-585
-    512 + 64 + 8 + 1,         # bins 585-73
-    64 + 8 + 1,               # bins 73-9
-    8 + 1,                    # bins 9-1
-    1                         # bin  0
+    512 + 64 + 8 + 1,  # bins 585-73
+    64 + 8 + 1,  # bins 73-9
+    8 + 1,  # bins 9-1
+    1,  # bin  0
 ]
 
 # for BED (0-based, half-open) or GFF (1-based, closed intervals)
-COORD_OFFSETS = {'bed': 0, 'gff': 1}
+COORD_OFFSETS = {"bed": 0, "gff": 1}
 
-MAX_CHROM_SIZE = 2 ** 29
+MAX_CHROM_SIZE = 2**29
 
-def bins(start, stop, fmt='gff', one=True):
+
+def bins(start, stop, fmt="gff", one=True):
     """
     Uses the definition of a "genomic bin" described in Fig 7 of
     http://genome.cshlp.org/content/12/6/996.abstract.
@@ -143,78 +144,70 @@ def print_bin_sizes():
         actual_size = bin_size
 
         # nice formatting
-        bin_size, suffix = bin_size / 1024, 'Kb'
+        bin_size, suffix = bin_size / 1024, "Kb"
         if bin_size >= 1024:
-            bin_size, suffix = bin_size / 1024, 'Mb'
+            bin_size, suffix = bin_size / 1024, "Mb"
         if bin_size >= 1024:
-            bin_size, suffix = bin_size / 1024, 'Gb'
-        size = '(%s %s)' % (bin_size, suffix)
-        actual_size = '%s bp' % (actual_size)
+            bin_size, suffix = bin_size / 1024, "Gb"
+        size = "(%s %s)" % (bin_size, suffix)
+        actual_size = "%s bp" % (actual_size)
 
-        print('level: {i:1};  bins {binstart:<4} to {binstop:<4}; '
-              'size: {actual_size:<12} {size:<6}'.format(**locals()))
+        print(
+            "level: {i:1};  bins {binstart:<4} to {binstop:<4}; "
+            "size: {actual_size:<12} {size:<6}".format(**locals())
+        )
 
 
 def test():
     # These should obviously fit inside the first bin
-    assert bins(0, 1, fmt='bed') == 4681
-    assert bins(1, 1, fmt='gff') == 4681
+    assert bins(0, 1, fmt="bed") == 4681
+    assert bins(1, 1, fmt="gff") == 4681
 
     # All bins that overlap:
-    assert bins(0, 1, fmt='bed', one=False) == set([1, 73, 9, 585, 4681])
+    assert bins(0, 1, fmt="bed", one=False) == set([1, 73, 9, 585, 4681])
 
     # Or, more generally,
-    assert bins(0, 1, fmt='bed', one=False) == set(OFFSETS)
+    assert bins(0, 1, fmt="bed", one=False) == set(OFFSETS)
 
     # Since the smallest bin size is 2**17, this rather large feature should
     # fit completely inside the first bin, too
-    assert bins(2 ** 17 - 1, 2 ** 17 - 1, fmt='bed') == 4681
+    assert bins(2**17 - 1, 2**17 - 1, fmt="bed") == 4681
 
     # or, more generally,
-    assert bins(
-        2 ** FIRST_SHIFT - 1,
-        2 ** FIRST_SHIFT - 1,
-        fmt='bed') == OFFSETS[0]
+    assert bins(2**FIRST_SHIFT - 1, 2**FIRST_SHIFT - 1, fmt="bed") == OFFSETS[0]
 
     # At exactly 2**17 in BED coords it moves over to the next bin
-    assert bins(2 ** 17, 2 ** 17, fmt='bed') == 4682
+    assert bins(2**17, 2**17, fmt="bed") == 4682
 
     # or
-    assert bins(
-        2 ** FIRST_SHIFT,
-        2 ** FIRST_SHIFT,
-        fmt='bed') == OFFSETS[0] + 1
+    assert bins(2**FIRST_SHIFT, 2**FIRST_SHIFT, fmt="bed") == OFFSETS[0] + 1
 
     # The other bins it overlaps should be similar to before, with the
     # exception of 4682
-    assert bins(2 ** 17, 2 ** 17, fmt='bed', one=False) \
-        == set([1, 9, 73, 585, 4682])
+    assert bins(2**17, 2**17, fmt="bed", one=False) == set([1, 9, 73, 585, 4682])
 
-    assert bins(2 ** 17, 2 ** 17, fmt='bed', one=False)\
-        .difference(bins(2 ** 17 - 1, 2 ** 17 - 1, fmt='bed', one=False)) \
-        == set([4682])
+    assert bins(2**17, 2**17, fmt="bed", one=False).difference(
+        bins(2**17 - 1, 2**17 - 1, fmt="bed", one=False)
+    ) == set([4682])
 
     # Spanning the first and second smallest bins should cause it to bump up
     # a level
-    assert bins(2 ** 17 - 1, 2 ** 17, fmt='bed') == 585
+    assert bins(2**17 - 1, 2**17, fmt="bed") == 585
 
     # or
-    assert bins(
-        2 ** FIRST_SHIFT - 1,
-        2 ** FIRST_SHIFT,
-        fmt='bed') == OFFSETS[1]
+    assert bins(2**FIRST_SHIFT - 1, 2**FIRST_SHIFT, fmt="bed") == OFFSETS[1]
 
     # Make it as big as it can get in this bin:
-    assert bins(
-        2 ** FIRST_SHIFT - 1,
-        2 ** (FIRST_SHIFT + NEXT_SHIFT) - 1,
-        fmt='bed') == OFFSETS[1]
+    assert (
+        bins(2**FIRST_SHIFT - 1, 2 ** (FIRST_SHIFT + NEXT_SHIFT) - 1, fmt="bed")
+        == OFFSETS[1]
+    )
 
     # Then make it big enough to jump another level
-    assert bins(
-        2 ** FIRST_SHIFT - 1,
-        2 ** (FIRST_SHIFT + NEXT_SHIFT),
-        fmt='bed') == OFFSETS[2]
+    assert (
+        bins(2**FIRST_SHIFT - 1, 2 ** (FIRST_SHIFT + NEXT_SHIFT), fmt="bed")
+        == OFFSETS[2]
+    )
 
     # When start or stop or both are negative, bin should be the largest
     # possible.
@@ -230,6 +223,7 @@ def test():
 
     # Too big; falls back to 1.
     assert bins(536870911, 536870912, one=True) == 1
+
 
 if __name__ == "__main__":
     print_bin_sizes()
