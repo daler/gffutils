@@ -30,9 +30,11 @@ def test_directives():
     .	.	.	.	.	.	.	.
     """)
 
-    it = iterators._StringIterator(data)
+    it = iterators.DataIterator(data, from_string=True)
+    assert it.directives == ['directive1 example']
+
     db = create_db(data, dbfn=':memory:', from_string=True, verbose=False)
-    assert it.directives == db.directives == ['directive1 example'], (it.directives, db.directives)
+    assert db.directives == ['directive1 example'], db.directives
 
 def test_split_attrs():
     # nosetests generator for all the test cases in attr_test_cases.  (note no
@@ -101,22 +103,11 @@ def test_repeated_keys_conflict():
     #assert_raises(exceptions.AttributeStringError, parser._split_keyvals, "Parent=1,2,3", dialect)
 
 def test_parser_from_string():
-    """
-    make sure from string and from file return identical results
-    """
-    line = b"chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690"
-    tmp = tempfile.NamedTemporaryFile()
-    tmp.write(line)
-    tmp.seek(0)
-
-    p1 = iterators._StringIterator(
-        "chr2L	FlyBase	exon	7529	8116	.	+	.	Name=CG11023:1;Parent=FBtr0300689,FBtr0300690"
-    )
-    p2 = iterators._FileIterator(tmp.name)
-    lines = list(zip(p1, p2))
-    assert len(lines) == 1
-    assert p1.current_item_number == p2.current_item_number == 0
-    assert lines[0][0] == lines[0][1]
+    # DEPRECATED
+    #
+    # _StringIterator has been removed and is instead handled by DataIterator
+    # creating a temp file and returning a _FileIterator.
+    return True
 
 
 def test_valid_line_count():

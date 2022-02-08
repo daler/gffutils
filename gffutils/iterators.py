@@ -24,16 +24,6 @@ else:
     import urlparse
 
 
-def peek(it, n):
-    _peek = []
-    for _ in range(n):
-        try:
-            _peek.append(six.next(it))
-        except StopIteration:
-            break
-    return _peek, itertools.chain(_peek, it)
-
-
 class Directive(object):
     def __init__(self, line):
         self.info = line
@@ -86,19 +76,19 @@ class _BaseIterator(object):
         elif dialect is not None:
             self._observed_dialects = [dialect]
             self.dialect = helpers._choose_dialect(self._observed_dialects)
-            self._iter = self._custom_iter()
         else:
             # Otherwise, check some lines to determine what the dialect should
             # be
-            self.peek, self._iter = peek(self._custom_iter(), checklines)
-            self._observed_dialects = [i.dialect for i in self.peek]
+            _peek = self.peek(checklines)
+            self._peek = _peek
+            self._observed_dialects = [i.dialect for i in _peek]
             self.dialect = helpers._choose_dialect(self._observed_dialects)
 
     def _custom_iter(self):
         raise NotImplementedError("Must define in subclasses")
 
     def __iter__(self):
-        for i in self._iter:
+        for i in self._custom_iter():
             i.dialect = self.dialect
             if self.transform:
                 i = self.transform(i)
@@ -115,6 +105,15 @@ class _FileIterator(_BaseIterator):
     """
     Subclass for iterating over features provided as a filename
     """
+
+    def peek(self, n):
+        initial = []
+        for i, feature in enumerate(self._custom_iter()):
+            initial.append(feature)
+            if i == n:
+                break
+        return initial
+
     def open_function(self, data):
         data = os.path.expanduser(data)
         if data.endswith('.gz'):
@@ -123,6 +122,7 @@ class _FileIterator(_BaseIterator):
         return open(data)
 
     def _custom_iter(self):
+        self.directives = []
         valid_lines = 0
         with self.open_function(self.data) as fh:
             for i, line in enumerate(fh):
@@ -192,29 +192,23 @@ class _FeatureIterator(_BaseIterator):
     """
     Subclass for iterating over features that are already in an iterator
     """
+    def peek(self, n):
+        initial = []
+        for i, feature in enumerate(self.data):
+            initial.append(feature)
+            if i == n:
+                break
+
+        # If self.data is generator-like, we need to patch it back together.
+        if hasattr(self.data, '__next__'):
+            self.data = itertools.chain(initial, self.data)
+        return initial
+
     def _custom_iter(self):
         for i, feature in enumerate(self.data):
             self.current_item = feature
             self.current_item_number = i
             yield feature
-
-
-class _StringIterator(_FileIterator):
-    """
-    Subclass for iterating over features provided as a string (e.g., from
-    file.read())
-    """
-    def _custom_iter(self):
-        self.tmp = tempfile.NamedTemporaryFile(delete=False)
-        data = dedent(self.data)
-        if isinstance(data, six.text_type):
-            data = data.encode('utf-8')
-        self.tmp.write(data)
-        self.tmp.close()
-        self.data = self.tmp.name
-        for feature in super(_StringIterator, self)._custom_iter():
-            yield feature
-        os.unlink(self.tmp.name)
 
 
 def is_url(url):
@@ -230,7 +224,7 @@ def is_url(url):
     True if `url` has a valid protocol False otherwise.
     """
     try:
-        return urlparse.urlparse(url).scheme in urlparse.uses_netloc
+        return urlparse.urlparse(url).scheme in set(urlparse.uses_netloc).difference([''])
     except:
         return False
 
@@ -270,16 +264,29 @@ def DataIterator(data, checklines=10, transform=None,
         `checklines=0` but this is not enforced.
     """
 
+    if isinstance(data, _BaseIterator):
+        return data
+
     _kwargs = dict(data=data, checklines=checklines, transform=transform,
                    force_dialect_check=force_dialect_check, **kwargs)
     if isinstance(data, six.string_types):
         if from_string:
-            return _StringIterator(**_kwargs)
+            tmp = tempfile.NamedTemporaryFile(delete=False)
+            data = dedent(data)
+            if isinstance(data, six.text_type):
+                data = data.encode('utf-8')
+            tmp.write(data)
+            tmp.close()
+            _kwargs['data'] = tmp.name
+            return _FileIterator(**_kwargs)
         else:
             if os.path.exists(data):
                 return _FileIterator(**_kwargs)
             elif is_url(data):
                 return _UrlIterator(**_kwargs)
+            else:
+                raise ValueError(f"{data} cannot be found and does not "
+                                 "appear to be a URL")
     elif isinstance(data, FeatureDB):
         _kwargs['data'] = data.all_features()
         return _FeatureIterator(**_kwargs)
