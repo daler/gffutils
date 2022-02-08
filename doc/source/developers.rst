@@ -25,24 +25,23 @@ flexibility comes at the cost of code complexity.
 
 Any of these three kinds of input are provided to :class:`DataIterator`, which
 figures out the right iterator class it should delegate out to
-(:class:`FileIterator`, :class:`FeatureIterator`, :class:`StringIterator`).
-The iterator class must define a :class:`_custom_iter` method, which is
+(:class:`_FileIterator`, :class:`_FeatureIterator`, or :class:`_UrlIterator`).
+The iterator class must define a :meth:`_custom_iter` method, which is
 responsible for taking input in whatever form (filename, Feature objects,
-string of lines, respectively) and always yielding :class:`Feature` objects.
+string of lines, respectively) and always yielding :class:`Feature` objects. It
+must also define a :meth:`peek` method that returns the first ``n`` features.
+Importantly, both :meth:`peek` and :meth:`_custom_iter` must be written such
+that the act of "peeking" into the first items does not consume the underlying
+iterator.
 
-These iterator classes are subclasses of :class:`BaseIterator`.
+These iterator classes are subclasses of :class:`_BaseIterator`.
 
 Upon initialization, a :class:`BaseIterator` figures out what the dialect is.
-It does so by consuming `checklines` :class:`Feature` objects from
-:meth:`_custom_iter`. It uses the :func:`iterators.peek` function to do this,
-which returns a list of the first `checklines` objects, along with a new,
-re-wound iterator. This new iterator is stored as the
-:attr:`BaseIterator._iter` attribute.
-
-So now the :class:`BaseIterator` has figured out what dialect we're working
-with, and it has the `dialect` attribute set. Its :meth:`__iter__`
-method iterates over the :meth:`_custom_iter`, Upon iterating, it
-will add this dialect to every :class:`Feature`. This means that, no matter
+It does so by consuming `checklines` :class:`Feature` objects using
+:meth:`peek`. So now the :class:`BaseIterator` has figured out what dialect
+we're working with, and it has the `dialect` attribute set. Its
+:meth:`__iter__` method iterates over the :meth:`_custom_iter`, Upon iterating,
+it will add this dialect to every :class:`Feature`. This means that, no matter
 what format `data` is (filename, iterable of features, or a string with GFF
 lines), the following will print the lines correctly::
 
@@ -52,15 +51,14 @@ lines), the following will print the lines correctly::
 To summarize the path of data from a file: ``_FileIterator._custom_iter``
 configures how to read from the file, yielding features generated from lines.
 When instantiating the ``_FileIterator`` (see ``_BaseIterator.__init__``),
-``peek(_FileIterator._custom_iter)`` is run to get the dialect. This uses
-``_FileIterator._custom_iter`` to check the first few, then rewinds the
-iterator and stores it as ``self._iter``. Then whenever it is iterated over,
-``_BaseIterator.__iter__`` loops over ``self._iter``, setting the dialect of
-the feature, applying the transform if needed, and yielding the feature.
-This then goes to the DBCreator classes, who call
+:meth:`_FileIterator._peek()` is run to get the dialect. This uses
+:meth:`_FileIterator._custom_iter` to check the first lines. Then whenever the
+:class:`_FileIterator` is iterated over, :meth:`_FileIterator._custom_iter`
+re-opens the file and :meth:`_BaseIterator.__iter__` sets the dialect of the
+feature, applies any transform if needed, and yields the feature. This then
+goes to the DBCreator classes, who call
 ``self._populate_from_lines(self.iterator)``. ``self.iterator`` is whatever
 ``_BaseIterator`` subclass was delegated to.
-
 
 A dialect can be optionally provided, which will disable the automatic dialect
 inference. This makes it straightforward to sanitize input, or convert to
