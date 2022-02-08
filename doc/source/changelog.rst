@@ -27,6 +27,7 @@ Stefano Rivera, Daniel Lowengrub, Nolan Woods, Stefen Moeller,  and Husen Umer.
 - Empty input now raises ``EmptyInputError`` rather than ``ValueError``, making
   it easier to catch cases where one might expect empty input (addresses `#17
   <https://github.com/daler/gffutils/issues/17>`_)
+- PEP8 formatting in code
 
 Changes in v0.10.1
 ------------------
