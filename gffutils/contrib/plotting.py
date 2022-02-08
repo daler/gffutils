@@ -4,12 +4,21 @@ try:
     from pybedtools.contrib.plotting import Track
 except ImportError:
     import warnings
+
     warnings.warn("Please install pybedtools for plotting.")
 
 
 class Gene(object):
-    def __init__(self, db, gene_id, transcripts=['mRNA'], utrs=["3'UTR",
-        "5'UTR"], cds=['CDS'], ybase=0, **kwargs):
+    def __init__(
+        self,
+        db,
+        gene_id,
+        transcripts=["mRNA"],
+        utrs=["3'UTR", "5'UTR"],
+        cds=["CDS"],
+        ybase=0,
+        **kwargs
+    ):
         """
         Represents a gene, `gene_id`, as a collection of
         pybedtools.contrib.plotting.Track objects.
@@ -41,38 +50,35 @@ class Gene(object):
         (CDS, 0.9, by default).
         """
 
-        self.heights = {
-                'transcript': 0.2,
-                      'utrs': 0.5,
-                       'cds': 0.9,
-                      'full': 1.0}
+        self.heights = {"transcript": 0.2, "utrs": 0.5, "cds": 0.9, "full": 1.0}
         self.kwargs = kwargs
         self._transcripts = []
         for transcript in db.children(gene_id, level=1):
             if transcripts is None or transcript.featuretype in transcripts:
                 d = {}
-                d['transcript'] = [transcript]
-                d['utrs'] = []
-                d['cds'] = []
+                d["transcript"] = [transcript]
+                d["utrs"] = []
+                d["cds"] = []
                 for child in db.children(transcript, level=1):
                     _utrs = []
                     if child.featuretype in utrs:
-                        d['utrs'].append(child)
+                        d["utrs"].append(child)
                     if child.featuretype in cds:
-                        d['cds'].append(child)
+                        d["cds"].append(child)
                 self._transcripts.append(d)
 
         self.tracks = []
 
         self.ybase = ybase
-        for d in sorted(self._transcripts,
-                reverse=True, key=lambda x: len(x['transcript'])):
-            self.tracks.append(self._make_track(d, 'transcript'))
-            self.tracks.append(self._make_track(d, 'utrs'))
-            self.tracks.append(self._make_track(d, 'cds'))
-            self.ybase += self.heights['full']
+        for d in sorted(
+            self._transcripts, reverse=True, key=lambda x: len(x["transcript"])
+        ):
+            self.tracks.append(self._make_track(d, "transcript"))
+            self.tracks.append(self._make_track(d, "utrs"))
+            self.tracks.append(self._make_track(d, "cds"))
+            self.ybase += self.heights["full"]
 
-        self.max_y = ybase + self.heights['full']
+        self.max_y = ybase + self.heights["full"]
 
     def add_to_ax(self, ax):
         """
@@ -83,7 +89,7 @@ class Gene(object):
 
     def _make_track(self, d, cls):
         yheight = self.heights[cls]
-        ybase = self.ybase + (self.heights['full'] - yheight) * 0.5
+        ybase = self.ybase + (self.heights["full"] - yheight) * 0.5
         return Track(
-                (asinterval(i) for i in d[cls]),
-                ybase=ybase, yheight=yheight, **self.kwargs)
+            (asinterval(i) for i in d[cls]), ybase=ybase, yheight=yheight, **self.kwargs
+        )

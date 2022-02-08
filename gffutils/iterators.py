@@ -18,6 +18,7 @@ from gffutils import helpers
 from textwrap import dedent
 import six
 from six.moves.urllib.request import urlopen
+
 if six.PY3:
     from urllib import parse as urlparse
 else:
@@ -30,8 +31,14 @@ class Directive(object):
 
 
 class _BaseIterator(object):
-    def __init__(self, data, checklines=10, transform=None,
-                 force_dialect_check=False, dialect=None):
+    def __init__(
+        self,
+        data,
+        checklines=10,
+        transform=None,
+        force_dialect_check=False,
+        dialect=None,
+    ):
         """
         Base class for iterating over features.  In general, you should use
         DataIterator -- so see the docstring of class for argument
@@ -66,8 +73,9 @@ class _BaseIterator(object):
         self.warnings = []
 
         if force_dialect_check and dialect is not None:
-            raise ValueError("force_dialect_check is True, but a dialect "
-                             "is provided")
+            raise ValueError(
+                "force_dialect_check is True, but a dialect " "is provided"
+            )
         if force_dialect_check:
             # In this case, self.dialect remains None.  When
             # parser._split_keyvals gets None as a dialect, it tries to infer
@@ -116,8 +124,9 @@ class _FileIterator(_BaseIterator):
 
     def open_function(self, data):
         data = os.path.expanduser(data)
-        if data.endswith('.gz'):
+        if data.endswith(".gz"):
             import gzip
+
             return gzip.open(data)
         return open(data)
 
@@ -127,19 +136,19 @@ class _FileIterator(_BaseIterator):
         with self.open_function(self.data) as fh:
             for i, line in enumerate(fh):
                 if isinstance(line, six.binary_type):
-                    line = line.decode('utf-8')
-                line = line.rstrip('\n\r')
+                    line = line.decode("utf-8")
+                line = line.rstrip("\n\r")
                 self.current_item = line
                 self.current_item_number = i
 
-                if line == '##FASTA' or line.startswith('>'):
+                if line == "##FASTA" or line.startswith(">"):
                     return
 
-                if line.startswith('##'):
+                if line.startswith("##"):
                     self._directive_handler(line)
                     continue
 
-                if line.startswith(('#')) or len(line) == 0:
+                if line.startswith(("#")) or len(line) == 0:
                     continue
 
                 # (If we got here it should be a valid line)
@@ -151,6 +160,7 @@ class _UrlIterator(_FileIterator):
     """
     Subclass for iterating over features provided as a URL
     """
+
     @contextmanager
     def open_function(self, data):
         response = urlopen(data)
@@ -159,8 +169,9 @@ class _UrlIterator(_FileIterator):
         # http://stackoverflow.com/a/17537107
         # https://rationalpie.wordpress.com/2010/06/02/\
         #               python-streaming-gzip-decompression/
-        if data.endswith('.gz'):
+        if data.endswith(".gz"):
             import zlib
+
             d = zlib.decompressobj(16 + zlib.MAX_WBITS)
             READ_BLOCK_SIZE = 1024
 
@@ -171,27 +182,31 @@ class _UrlIterator(_FileIterator):
                     if not data:
                         break
                     data = "".join((last_line, d.decompress(data).decode()))
-                    lines = data.split('\n')
+                    lines = data.split("\n")
                     last_line = lines.pop()
                     for line in lines:
-                        yield line + '\n'
+                        yield line + "\n"
                 yield last_line
 
         else:
+
             def _iter():
                 for line in response.readlines():
                     if not line:
                         break
-                    yield line.decode() + '\n'
+                    yield line.decode() + "\n"
+
         try:
             yield _iter()
         finally:
             response.close()
 
+
 class _FeatureIterator(_BaseIterator):
     """
     Subclass for iterating over features that are already in an iterator
     """
+
     def peek(self, n):
         initial = []
         for i, feature in enumerate(self.data):
@@ -200,7 +215,7 @@ class _FeatureIterator(_BaseIterator):
                 break
 
         # If self.data is generator-like, we need to patch it back together.
-        if hasattr(self.data, '__next__'):
+        if hasattr(self.data, "__next__"):
             self.data = itertools.chain(initial, self.data)
         return initial
 
@@ -224,13 +239,21 @@ def is_url(url):
     True if `url` has a valid protocol False otherwise.
     """
     try:
-        return urlparse.urlparse(url).scheme in set(urlparse.uses_netloc).difference([''])
+        return urlparse.urlparse(url).scheme in set(urlparse.uses_netloc).difference(
+            [""]
+        )
     except:
         return False
 
 
-def DataIterator(data, checklines=10, transform=None,
-                 force_dialect_check=False, from_string=False, **kwargs):
+def DataIterator(
+    data,
+    checklines=10,
+    transform=None,
+    force_dialect_check=False,
+    from_string=False,
+    **kwargs,
+):
     """
     Iterate over features, no matter how they are provided.
 
@@ -267,17 +290,22 @@ def DataIterator(data, checklines=10, transform=None,
     if isinstance(data, _BaseIterator):
         return data
 
-    _kwargs = dict(data=data, checklines=checklines, transform=transform,
-                   force_dialect_check=force_dialect_check, **kwargs)
+    _kwargs = dict(
+        data=data,
+        checklines=checklines,
+        transform=transform,
+        force_dialect_check=force_dialect_check,
+        **kwargs,
+    )
     if isinstance(data, six.string_types):
         if from_string:
             tmp = tempfile.NamedTemporaryFile(delete=False)
             data = dedent(data)
             if isinstance(data, six.text_type):
-                data = data.encode('utf-8')
+                data = data.encode("utf-8")
             tmp.write(data)
             tmp.close()
-            _kwargs['data'] = tmp.name
+            _kwargs["data"] = tmp.name
             return _FileIterator(**_kwargs)
         else:
             if os.path.exists(data):
@@ -285,10 +313,11 @@ def DataIterator(data, checklines=10, transform=None,
             elif is_url(data):
                 return _UrlIterator(**_kwargs)
             else:
-                raise ValueError(f"{data} cannot be found and does not "
-                                 "appear to be a URL")
+                raise ValueError(
+                    f"{data} cannot be found and does not " "appear to be a URL"
+                )
     elif isinstance(data, FeatureDB):
-        _kwargs['data'] = data.all_features()
+        _kwargs["data"] = data.all_features()
         return _FeatureIterator(**_kwargs)
 
     else:

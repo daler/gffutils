@@ -33,12 +33,13 @@ def assign_child(parent, child):
 
     Child Feature
     """
-    child.attributes['Parent'] = parent['ID']
+    child.attributes["Parent"] = parent["ID"]
     return child
 
 
 # Reusable constant for FeatureDB.merge()
 no_children = tuple()
+
 
 def _finalize_merge(feature, feature_children):
     """
@@ -57,11 +58,12 @@ def _finalize_merge(feature, feature_children):
     feature, modified
     """
     if len(feature_children) > 1:
-        feature.source = ','.join(set(child.source for child in feature_children))
+        feature.source = ",".join(set(child.source for child in feature_children))
         feature.children = feature_children
     else:
         feature.children = no_children
     return feature
+
 
 class FeatureDB(object):
     # docstring to be filled in for methods that call out to
@@ -93,10 +95,15 @@ class FeatureDB(object):
             within `limit`. Only relevant when `limit` is not None.
     """
 
-    def __init__(self, dbfn, default_encoding='utf-8', keep_order=False,
-                 pragmas=constants.default_pragmas,
-                 sort_attribute_values=False,
-                 text_factory=sqlite3.OptimizedUnicode):
+    def __init__(
+        self,
+        dbfn,
+        default_encoding="utf-8",
+        keep_order=False,
+        pragmas=constants.default_pragmas,
+        sort_attribute_values=False,
+        text_factory=sqlite3.OptimizedUnicode,
+    ):
         """
         Connect to a database created by :func:`gffutils.create_db`.
 
@@ -149,6 +156,7 @@ class FeatureDB(object):
         # pass in a sqlite connection instance to use its existing, in-memory
         # db.
         from gffutils import create
+
         if isinstance(dbfn, create._DBCreator):
             self.conn = dbfn.conn
             self.dbfn = dbfn.dbfn
@@ -157,9 +165,10 @@ class FeatureDB(object):
             self.conn = dbfn
             self.dbfn = dbfn
         # otherwise assume dbfn is a string.
-        elif dbfn == ':memory:':
+        elif dbfn == ":memory:":
             raise ValueError(
-                "cannot connect to memory db; please provide the connection")
+                "cannot connect to memory db; please provide the connection"
+            )
         else:
             if not os.path.exists(dbfn):
                 raise ValueError("Database file %s does not exist" % dbfn)
@@ -179,27 +188,30 @@ class FeatureDB(object):
         # TODO: this is a good place to check for previous versions, and offer
         # to upgrade...
         c.execute(
-            '''
+            """
             SELECT version, dialect FROM meta
-            ''')
+            """
+        )
         version, dialect = c.fetchone()
         self.version = version
         self.dialect = helpers._unjsonify(dialect)
 
         # Load directives from db
         c.execute(
-            '''
+            """
             SELECT directive FROM directives
-            ''')
+            """
+        )
         self.directives = [directive[0] for directive in c if directive]
 
         # Load autoincrements so that when we add new features, we can start
         # autoincrementing from where we last left off (instead of from 1,
         # which would cause name collisions)
         c.execute(
-            '''
+            """
             SELECT base, n FROM autoincrements
-            ''')
+            """
+        )
         self._autoincrements = collections.defaultdict(int, c)
 
         self.set_pragmas(pragmas)
@@ -211,7 +223,8 @@ class FeatureDB(object):
                 "speed up queries, and is done by default for databases "
                 "created with gffutils >0.8.7.1 (this database was "
                 "created with version %s) Consider calling the analyze() "
-                "method of this object." % self.version)
+                "method of this object." % self.version
+            )
 
     def set_pragmas(self, pragmas):
         """
@@ -225,20 +238,16 @@ class FeatureDB(object):
         """
         self.pragmas = pragmas
         c = self.conn.cursor()
-        c.executescript(
-            ';\n'.join(
-                ['PRAGMA %s=%s' % i for i in self.pragmas.items()]
-            )
-        )
+        c.executescript(";\n".join(["PRAGMA %s=%s" % i for i in self.pragmas.items()]))
         self.conn.commit()
 
     def _feature_returner(self, **kwargs):
         """
         Returns a feature, adding additional database-specific defaults
         """
-        kwargs.setdefault('dialect', self.dialect)
-        kwargs.setdefault('keep_order', self.keep_order)
-        kwargs.setdefault('sort_attribute_values', self.sort_attribute_values)
+        kwargs.setdefault("dialect", self.dialect)
+        kwargs.setdefault("keep_order", self.keep_order)
+        kwargs.setdefault("sort_attribute_values", self.sort_attribute_values)
         return Feature(**kwargs)
 
     def _analyzed(self):
@@ -246,7 +255,8 @@ class FeatureDB(object):
             """
             SELECT name FROM sqlite_master WHERE type='table'
             AND name='sqlite_stat1';
-            """)
+            """
+        )
         return len(list(res)) == 1
 
     def schema(self):
@@ -255,25 +265,27 @@ class FeatureDB(object):
         """
         c = self.conn.cursor()
         c.execute(
-            '''
+            """
             SELECT sql FROM sqlite_master
-            ''')
+            """
+        )
         results = []
-        for i, in c:
+        for (i,) in c:
             if i is not None:
                 results.append(i)
-        return '\n'.join(results)
+        return "\n".join(results)
 
     def __getitem__(self, key):
         if isinstance(key, Feature):
             key = key.id
         c = self.conn.cursor()
         try:
-            c.execute(constants._SELECT + ' WHERE id = ?', (key,))
+            c.execute(constants._SELECT + " WHERE id = ?", (key,))
         except sqlite3.ProgrammingError:
             c.execute(
-                constants._SELECT + ' WHERE id = ?',
-                (key.decode(self.default_encoding),))
+                constants._SELECT + " WHERE id = ?",
+                (key.decode(self.default_encoding),),
+            )
         results = c.fetchone()
         # TODO: raise error if more than one key is found
         if results is None:
@@ -303,24 +315,33 @@ class FeatureDB(object):
         c = self.conn.cursor()
         if featuretype is not None:
             c.execute(
-                '''
+                """
                 SELECT count() FROM features
                 WHERE featuretype = ?
-                ''', (featuretype,))
+                """,
+                (featuretype,),
+            )
         else:
             c.execute(
-                '''
+                """
                 SELECT count() FROM features
-                ''')
+                """
+            )
 
         results = c.fetchone()
         if results is not None:
             results = results[0]
         return results
 
-    def features_of_type(self, featuretype, limit=None, strand=None,
-                         order_by=None, reverse=False,
-                         completely_within=False):
+    def features_of_type(
+        self,
+        featuretype,
+        limit=None,
+        strand=None,
+        order_by=None,
+        reverse=False,
+        completely_within=False,
+    ):
         """
         Returns an iterator of :class:`gffutils.Feature` objects.
 
@@ -342,9 +363,14 @@ class FeatureDB(object):
             yield self._feature_returner(**i)
 
     # TODO: convert this to a syntax similar to itertools.groupby
-    def iter_by_parent_childs(self, featuretype="gene", level=None,
-                              order_by=None, reverse=False,
-                              completely_within=False):
+    def iter_by_parent_childs(
+        self,
+        featuretype="gene",
+        level=None,
+        order_by=None,
+        reverse=False,
+        completely_within=False,
+    ):
         """
         For each parent of type `featuretype`, yield a list L of that parent
         and all of its children (`[parent] + list(children)`). The parent will
@@ -360,12 +386,18 @@ class FeatureDB(object):
         # Return a generator of these parent records and their
         # children
         for parent_rec in parent_recs:
-            unit_records = \
-                [parent_rec] + list(self.children(parent_rec.id))
+            unit_records = [parent_rec] + list(self.children(parent_rec.id))
             yield unit_records
 
-    def all_features(self, limit=None, strand=None, featuretype=None,
-                     order_by=None, reverse=False, completely_within=False):
+    def all_features(
+        self,
+        limit=None,
+        strand=None,
+        featuretype=None,
+        order_by=None,
+        reverse=False,
+        completely_within=False,
+    ):
         """
         Iterate through the entire database.
 
@@ -384,7 +416,7 @@ class FeatureDB(object):
             featuretype=featuretype,
             order_by=order_by,
             reverse=reverse,
-            completely_within=completely_within
+            completely_within=completely_within,
         )
         for i in self._execute(query, args):
             yield self._feature_returner(**i)
@@ -399,15 +431,25 @@ class FeatureDB(object):
         """
         c = self.conn.cursor()
         c.execute(
-            '''
+            """
             SELECT DISTINCT featuretype from features
-            ''')
-        for i, in c:
+            """
+        )
+        for (i,) in c:
             yield i
 
-    def _relation(self, id, join_on, join_to, level=None, featuretype=None,
-                  order_by=None, reverse=False, completely_within=False,
-                  limit=None):
+    def _relation(
+        self,
+        id,
+        join_on,
+        join_to,
+        level=None,
+        featuretype=None,
+        order_by=None,
+        reverse=False,
+        completely_within=False,
+        limit=None,
+    ):
 
         # The following docstring will be included in the parents() and
         # children() docstrings to maintain consistency, since they both
@@ -433,16 +475,18 @@ class FeatureDB(object):
         if isinstance(id, Feature):
             id = id.id
 
-        other = '''
+        other = """
         JOIN relations
         ON relations.{join_on} = features.id
         WHERE relations.{join_to} = ?
-        '''.format(**locals())
+        """.format(
+            **locals()
+        )
         args = [id]
 
-        level_clause = ''
+        level_clause = ""
         if level is not None:
-            level_clause = 'relations.level = ?'
+            level_clause = "relations.level = ?"
             args.append(level)
 
         query, args = helpers.make_query(
@@ -461,27 +505,57 @@ class FeatureDB(object):
         for i in self._execute(query, args):
             yield self._feature_returner(**i)
 
-    def children(self, id, level=None, featuretype=None, order_by=None,
-                 reverse=False, limit=None, completely_within=False):
+    def children(
+        self,
+        id,
+        level=None,
+        featuretype=None,
+        order_by=None,
+        reverse=False,
+        limit=None,
+        completely_within=False,
+    ):
         """
         Return children of feature `id`.
         {_relation_docstring}
         """
         return self._relation(
-            id, join_on='child', join_to='parent', level=level,
-            featuretype=featuretype, order_by=order_by, reverse=reverse,
-            limit=limit, completely_within=completely_within)
+            id,
+            join_on="child",
+            join_to="parent",
+            level=level,
+            featuretype=featuretype,
+            order_by=order_by,
+            reverse=reverse,
+            limit=limit,
+            completely_within=completely_within,
+        )
 
-    def parents(self, id, level=None, featuretype=None, order_by=None,
-                reverse=False, completely_within=False, limit=None):
+    def parents(
+        self,
+        id,
+        level=None,
+        featuretype=None,
+        order_by=None,
+        reverse=False,
+        completely_within=False,
+        limit=None,
+    ):
         """
         Return parents of feature `id`.
         {_relation_docstring}
         """
         return self._relation(
-            id, join_on='parent', join_to='child', level=level,
-            featuretype=featuretype, order_by=order_by, reverse=reverse,
-            limit=limit, completely_within=completely_within)
+            id,
+            join_on="parent",
+            join_to="child",
+            level=level,
+            featuretype=featuretype,
+            order_by=order_by,
+            reverse=reverse,
+            limit=limit,
+            completely_within=completely_within,
+        )
 
     def _execute(self, query, args):
         self._last_query = query
@@ -518,11 +592,19 @@ class FeatureDB(object):
         Runs the sqlite ANALYZE command to potentially speed up queries
         dramatically.
         """
-        self.execute('ANALYZE features')
+        self.execute("ANALYZE features")
         self.conn.commit()
 
-    def region(self, region=None, seqid=None, start=None, end=None,
-               strand=None, featuretype=None, completely_within=False):
+    def region(
+        self,
+        region=None,
+        seqid=None,
+        start=None,
+        end=None,
+        strand=None,
+        featuretype=None,
+        completely_within=False,
+    ):
         """
         Return features within specified genomic coordinates.
 
@@ -605,9 +687,10 @@ class FeatureDB(object):
             if (seqid is not None) or (start is not None) or (end is not None):
                 raise ValueError(
                     "If region is supplied, do not supply seqid, "
-                    "start, or end as separate kwargs")
+                    "start, or end as separate kwargs"
+                )
             if isinstance(region, six.string_types):
-                toks = region.split(':')
+                toks = region.split(":")
                 if len(toks) == 1:
                     seqid = toks[0]
                     start, end = None, None
@@ -615,7 +698,7 @@ class FeatureDB(object):
                     seqid, coords = toks[:2]
                     if len(toks) == 3:
                         strand = toks[2]
-                    start, end = coords.split('-')
+                    start, end = coords.split("-")
 
             elif isinstance(region, Feature):
                 seqid = region.seqid
@@ -631,17 +714,17 @@ class FeatureDB(object):
         #   completely_within=True..... start >= {start} AND end <= {end}
         #   completely_within=False.... start <  {end}   AND end >  {start}
         if completely_within:
-            start_op = '>='
-            end_op = '<='
+            start_op = ">="
+            end_op = "<="
         else:
-            start_op = '<'
-            end_op = '>'
+            start_op = "<"
+            end_op = ">"
             end, start = start, end
 
         args = []
         position_clause = []
         if seqid is not None:
-            position_clause.append('seqid = ?')
+            position_clause.append("seqid = ?")
             args.append(seqid)
         if start is not None:
             start = int(start)
@@ -650,51 +733,50 @@ class FeatureDB(object):
 
         # See #129
         if start and end and not completely_within:
-            position_clause.append('''(
+            position_clause.append(
+                """(
                 ({region_start} <= start AND {region_end} >= start) OR
                 ({region_start} >= start AND {region_end} <= end) OR
                 ({region_start} <= end AND {region_end} >= end)
-            )'''.format(region_start=start, region_end=end))
+            )""".format(
+                    region_start=start, region_end=end
+                )
+            )
         else:
             if start:
-                position_clause.append('start %s ?' % start_op)
+                position_clause.append("start %s ?" % start_op)
                 args.append(start)
             if end:
-                position_clause.append('end %s ?' % end_op)
+                position_clause.append("end %s ?" % end_op)
                 args.append(end)
 
-        position_clause = ' AND '.join(position_clause)
+        position_clause = " AND ".join(position_clause)
 
         # Only use bins if we have defined boundaries and completely_within is
         # True. Otherwise you can't know how far away a feature stretches
         # (which means bins are not computable ahead of time)
-        _bin_clause = ''
+        _bin_clause = ""
         if (start is not None) and (end is not None) and completely_within:
             if start <= bins.MAX_CHROM_SIZE and end <= bins.MAX_CHROM_SIZE:
                 _bins = list(bins.bins(start, end, one=False))
                 # See issue #45
                 if len(_bins) < 900:
-                    _bin_clause = ' or ' .join(['bin = ?' for _ in _bins])
-                    _bin_clause = 'AND ( %s )' % _bin_clause
+                    _bin_clause = " or ".join(["bin = ?" for _ in _bins])
+                    _bin_clause = "AND ( %s )" % _bin_clause
                     args += _bins
 
-        query = ' '.join([
-            constants._SELECT,
-            'WHERE ',
-            position_clause,
-            _bin_clause])
+        query = " ".join([constants._SELECT, "WHERE ", position_clause, _bin_clause])
 
         # Add the featuretype clause
         if featuretype is not None:
             if isinstance(featuretype, six.string_types):
                 featuretype = [featuretype]
-            feature_clause = ' or '.join(
-                ['featuretype = ?' for _ in featuretype])
-            query += ' AND (%s) ' % feature_clause
+            feature_clause = " or ".join(["featuretype = ?" for _ in featuretype])
+            query += " AND (%s) " % feature_clause
             args.extend(featuretype)
 
         if strand is not None:
-            strand_clause = ' and strand = ? '
+            strand_clause = " and strand = ? "
             query += strand_clause
             args.append(strand)
 
@@ -702,18 +784,24 @@ class FeatureDB(object):
         self._last_query = query
         self._last_args = args
         self._context = {
-            'start': start,
-            'end': end,
-            'seqid': seqid,
-            'region': region,
+            "start": start,
+            "end": end,
+            "seqid": seqid,
+            "region": region,
         }
         c.execute(query, tuple(args))
         for i in c:
             yield self._feature_returner(**i)
 
-    def interfeatures(self, features, new_featuretype=None,
-                      merge_attributes=True, dialect=None,
-                      attribute_func=None, update_attributes=None):
+    def interfeatures(
+        self,
+        features,
+        new_featuretype=None,
+        merge_attributes=True,
+        dialect=None,
+        attribute_func=None,
+        update_attributes=None,
+    ):
         """
         Construct new features representing the space between features.
 
@@ -771,10 +859,12 @@ class FeatureDB(object):
 
             interfeature_stop = f.start
             if new_featuretype is None:
-                new_featuretype = 'inter_%s_%s' % (
-                    last_feature.featuretype, f.featuretype)
+                new_featuretype = "inter_%s_%s" % (
+                    last_feature.featuretype,
+                    f.featuretype,
+                )
             if last_feature.strand != f.strand:
-                new_strand = '.'
+                new_strand = "."
             else:
                 new_strand = f.strand
 
@@ -796,27 +886,28 @@ class FeatureDB(object):
 
             if merge_attributes:
                 new_attributes = helpers.merge_attributes(
-                    last_feature.attributes, f.attributes)
+                    last_feature.attributes, f.attributes
+                )
             else:
                 new_attributes = {}
 
             if update_attributes:
                 new_attributes.update(update_attributes)
 
-            new_bin = bins.bins(
-                interfeature_start, interfeature_stop, one=True)
+            new_bin = bins.bins(interfeature_start, interfeature_stop, one=True)
             _id = None
             fields = dict(
                 seqid=chrom,
-                source='gffutils_derived',
+                source="gffutils_derived",
                 featuretype=new_featuretype,
                 start=interfeature_start,
                 end=interfeature_stop,
-                score='.',
+                score=".",
                 strand=strand,
-                frame='.',
+                frame=".",
                 attributes=new_attributes,
-                bin=new_bin)
+                bin=new_bin,
+            )
 
             if dialect is None:
                 # Support for @classmethod -- if calling from the class, then
@@ -851,7 +942,7 @@ class FeatureDB(object):
         """
         if make_backup:
             if isinstance(self.dbfn, six.string_types):
-                shutil.copy2(self.dbfn, self.dbfn + '.bak')
+                shutil.copy2(self.dbfn, self.dbfn + ".bak")
 
         c = self.conn.cursor()
         query1 = """
@@ -914,9 +1005,10 @@ class FeatureDB(object):
 
         from gffutils import create
         from gffutils import iterators
+
         if make_backup:
             if isinstance(self.dbfn, six.string_types):
-                shutil.copy2(self.dbfn, self.dbfn + '.bak')
+                shutil.copy2(self.dbfn, self.dbfn + ".bak")
 
         # get iterator-specific kwargs
         _iterator_kwargs = {}
@@ -930,19 +1022,20 @@ class FeatureDB(object):
         if not data._peek:
             return self
 
-        kwargs['_autoincrements'] = self._autoincrements
+        kwargs["_autoincrements"] = self._autoincrements
 
-        if self.dialect['fmt'] == 'gtf':
-            if 'id_spec' not in kwargs:
-                kwargs['id_spec'] = {
-                    'gene': 'gene_id', 'transcript': 'transcript_id'}
+        if self.dialect["fmt"] == "gtf":
+            if "id_spec" not in kwargs:
+                kwargs["id_spec"] = {"gene": "gene_id", "transcript": "transcript_id"}
             db = create._GTFDBCreator(
-                data=data, dbfn=self.dbfn, dialect=self.dialect, **kwargs)
-        elif self.dialect['fmt'] == 'gff3':
-            if 'id_spec' not in kwargs:
-                kwargs['id_spec'] = 'ID'
+                data=data, dbfn=self.dbfn, dialect=self.dialect, **kwargs
+            )
+        elif self.dialect["fmt"] == "gff3":
+            if "id_spec" not in kwargs:
+                kwargs["id_spec"] = "ID"
             db = create._GFFDBCreator(
-                data=data, dbfn=self.dbfn, dialect=self.dialect, **kwargs)
+                data=data, dbfn=self.dbfn, dialect=self.dialect, **kwargs
+            )
 
         else:
             raise ValueError
@@ -957,8 +1050,7 @@ class FeatureDB(object):
         self._autoincrements.update(db._autoincrements)
         return self
 
-    def add_relation(self, parent, child, level, parent_func=None,
-                     child_func=None):
+    def add_relation(self, parent, child, level, parent_func=None, child_func=None):
         """
         Manually add relations to the database.
 
@@ -1000,9 +1092,12 @@ class FeatureDB(object):
             child = self[child]
 
         c = self.conn.cursor()
-        c.execute('''
+        c.execute(
+            """
                   INSERT INTO relations (parent, child, level)
-                  VALUES (?, ?, ?)''', (parent.id, child.id, level))
+                  VALUES (?, ?, ?)""",
+            (parent.id, child.id, level),
+        )
 
         if parent_func is not None:
             parent = parent_func(parent, child)
@@ -1016,8 +1111,7 @@ class FeatureDB(object):
 
     def _update(self, feature, cursor):
         values = [list(feature.astuple()) + [feature.id]]
-        cursor.execute(
-            constants._UPDATE, *tuple(values))
+        cursor.execute(constants._UPDATE, *tuple(values))
 
     def _insert(self, feature, cursor):
         """
@@ -1026,12 +1120,16 @@ class FeatureDB(object):
         try:
             cursor.execute(constants._INSERT, feature.astuple())
         except sqlite3.ProgrammingError:
-            cursor.execute(
-                constants._INSERT, feature.astuple(self.default_encoding))
+            cursor.execute(constants._INSERT, feature.astuple(self.default_encoding))
 
-    def create_introns(self, exon_featuretype='exon',
-                       grandparent_featuretype='gene', parent_featuretype=None,
-                       new_featuretype='intron', merge_attributes=True):
+    def create_introns(
+        self,
+        exon_featuretype="exon",
+        grandparent_featuretype="gene",
+        parent_featuretype=None,
+        new_featuretype="intron",
+        merge_attributes=True,
+    ):
         """
         Create introns from existing annotations.
 
@@ -1081,25 +1179,33 @@ class FeatureDB(object):
         if (grandparent_featuretype and parent_featuretype) or (
             grandparent_featuretype is None and parent_featuretype is None
         ):
-            raise ValueError("exactly one of `grandparent_featuretype` or "
-                             "`parent_featuretype` should be provided")
+            raise ValueError(
+                "exactly one of `grandparent_featuretype` or "
+                "`parent_featuretype` should be provided"
+            )
 
         if grandparent_featuretype:
+
             def child_gen():
                 for gene in self.features_of_type(grandparent_featuretype):
                     for child in self.children(gene, level=1):
                         yield child
+
         elif parent_featuretype:
+
             def child_gen():
                 for child in self.features_of_type(parent_featuretype):
                     yield child
 
         for child in child_gen():
-            exons = self.children(child, level=1, featuretype=exon_featuretype,
-                                  order_by='start')
+            exons = self.children(
+                child, level=1, featuretype=exon_featuretype, order_by="start"
+            )
             for intron in self.interfeatures(
-                exons, new_featuretype=new_featuretype,
-                merge_attributes=merge_attributes, dialect=self.dialect
+                exons,
+                new_featuretype=new_featuretype,
+                merge_attributes=merge_attributes,
+                dialect=self.dialect,
             ):
                 yield intron
 
@@ -1134,19 +1240,19 @@ class FeatureDB(object):
 
         # Either set all strands to '+' or check for strand-consistency.
         if ignore_strand:
-            strand = '.'
+            strand = "."
         else:
             strands = [i.strand for i in features]
             if len(set(strands)) > 1:
-                raise ValueError('Specify ignore_strand=True to force merging '
-                                 'of multiple strands')
+                raise ValueError(
+                    "Specify ignore_strand=True to force merging " "of multiple strands"
+                )
             strand = strands[0]
 
         # Sanity check to make sure all features are from the same chromosome.
         chroms = [i.chrom for i in features]
         if len(set(chroms)) > 1:
-            raise NotImplementedError('Merging multiple chromosomes not '
-                                      'implemented')
+            raise NotImplementedError("Merging multiple chromosomes not " "implemented")
         chrom = chroms[0]
 
         # To start, we create a merged feature of just the first feature.
@@ -1171,14 +1277,15 @@ class FeatureDB(object):
                 # done with the current merged feature.  Prepare for output...
                 merged_feature = dict(
                     seqid=feature.chrom,
-                    source='.',
+                    source=".",
                     featuretype=feature.featuretype,
                     start=current_merged_start,
                     end=current_merged_stop,
-                    score='.',
+                    score=".",
                     strand=strand,
-                    frame='.',
-                    attributes='')
+                    frame=".",
+                    attributes="",
+                )
                 yield self._feature_returner(**merged_feature)
 
                 # and we start a new one, initializing with this feature's
@@ -1191,20 +1298,23 @@ class FeatureDB(object):
             feature = features[0]
         merged_feature = dict(
             seqid=feature.chrom,
-            source='.',
+            source=".",
             featuretype=feature.featuretype,
             start=current_merged_start,
             end=current_merged_stop,
-            score='.',
+            score=".",
             strand=strand,
-            frame='.',
-            attributes='')
+            frame=".",
+            attributes="",
+        )
         yield self._feature_returner(**merged_feature)
 
-
-    def merge(self, features,
-              merge_criteria=(mc.seqid, mc.overlap_end_inclusive, mc.strand, mc.feature_type),
-              multiline=False):
+    def merge(
+        self,
+        features,
+        merge_criteria=(mc.seqid, mc.overlap_end_inclusive, mc.strand, mc.feature_type),
+        multiline=False,
+    ):
         """
         Merge features matching criteria together
 
@@ -1272,7 +1382,10 @@ class FeatureDB(object):
 
         for feature in features:
             if current_merged is None:
-                if all(criteria(feature, feature, feature_children) for criteria in merge_criteria):
+                if all(
+                    criteria(feature, feature, feature_children)
+                    for criteria in merge_criteria
+                ):
                     current_merged = feature
                     feature_children = [feature]
                 else:
@@ -1280,8 +1393,13 @@ class FeatureDB(object):
                     last_id = None
                 continue
 
-            if len(feature_children) == 0:  # current_merged is last feature and unchecked
-                if all(criteria(current_merged, current_merged, feature_children) for criteria in merge_criteria):
+            if (
+                len(feature_children) == 0
+            ):  # current_merged is last feature and unchecked
+                if all(
+                    criteria(current_merged, current_merged, feature_children)
+                    for criteria in merge_criteria
+                ):
                     feature_children.append(current_merged)
                 else:
                     yield _finalize_merge(current_merged, no_children)
@@ -1289,7 +1407,10 @@ class FeatureDB(object):
                     last_id = None
                     continue
 
-            if all(criteria(current_merged, feature, feature_children) for criteria in merge_criteria):
+            if all(
+                criteria(current_merged, feature, feature_children)
+                for criteria in merge_criteria
+            ):
                 # Criteria satisfied, merge
                 # TODO Test multiline records and iron out the following code
                 # if multiline and (feature.start > current_merged.end + 1 or feature.end + 1 < current_merged.start):
@@ -1301,27 +1422,34 @@ class FeatureDB(object):
                 if len(feature_children) == 1:
                     # Current merged is only child and merge is going to occur, make copy
                     current_merged = vars(current_merged).copy()
-                    del current_merged['attributes']
-                    del current_merged['extra']
-                    del current_merged['dialect']
-                    del current_merged['keep_order']
-                    del current_merged['sort_attribute_values']
+                    del current_merged["attributes"]
+                    del current_merged["extra"]
+                    del current_merged["dialect"]
+                    del current_merged["keep_order"]
+                    del current_merged["sort_attribute_values"]
                     current_merged = self._feature_returner(**current_merged)
                     if not last_id:
                         # Generate unique ID for new Feature
                         self._autoincrements[current_merged.featuretype] += 1
-                        last_id = current_merged.featuretype + '_' + str(
-                            self._autoincrements[current_merged.featuretype])
-                    current_merged['ID'] = last_id
+                        last_id = (
+                            current_merged.featuretype
+                            + "_"
+                            + str(self._autoincrements[current_merged.featuretype])
+                        )
+                    current_merged["ID"] = last_id
                     current_merged.id = last_id
 
                 feature_children.append(feature)
 
                 # Set mismatched properties to ambiguous values
-                if feature.seqid not in current_merged.seqid.split(','): current_merged.seqid += ',' + feature.seqid
-                if feature.strand != current_merged.strand: current_merged.strand = '.'
-                if feature.frame != current_merged.frame: current_merged.frame = '.'
-                if feature.featuretype != current_merged.featuretype: current_merged.featuretype = "sequence_feature"
+                if feature.seqid not in current_merged.seqid.split(","):
+                    current_merged.seqid += "," + feature.seqid
+                if feature.strand != current_merged.strand:
+                    current_merged.strand = "."
+                if feature.frame != current_merged.frame:
+                    current_merged.frame = "."
+                if feature.featuretype != current_merged.featuretype:
+                    current_merged.featuretype = "sequence_feature"
 
                 if feature.start < current_merged.start:
                     # Extends prior, so set a new start position
@@ -1340,11 +1468,13 @@ class FeatureDB(object):
         if current_merged:
             yield _finalize_merge(current_merged, feature_children)
 
-    def merge_all(self,
-                  merge_order=('seqid', 'featuretype', 'strand', 'start'),
-                  merge_criteria=(mc.seqid, mc.overlap_end_inclusive, mc.strand, mc.feature_type),
-                  featuretypes_groups=(None,),
-                  exclude_components=False):
+    def merge_all(
+        self,
+        merge_order=("seqid", "featuretype", "strand", "start"),
+        merge_criteria=(mc.seqid, mc.overlap_end_inclusive, mc.strand, mc.feature_type),
+        featuretypes_groups=(None,),
+        exclude_components=False,
+    ):
         """
         Merge all features in database according to criteria.
         Merged features will be assigned as children of the merged record.
@@ -1374,8 +1504,10 @@ class FeatureDB(object):
 
         # Merge features per featuregroup
         for featuregroup in featuretypes_groups:
-            for merged in self.merge(self.all_features(featuretype=featuregroup, order_by=merge_order),
-                                merge_criteria=merge_criteria):
+            for merged in self.merge(
+                self.all_features(featuretype=featuregroup, order_by=merge_order),
+                merge_criteria=merge_criteria,
+            ):
                 # If feature is result of merge
                 if merged.children:
                     self._insert(merged, self.conn.cursor())
@@ -1392,8 +1524,9 @@ class FeatureDB(object):
 
         return result_features
 
-    def children_bp(self, feature, child_featuretype='exon', merge=False,
-                    ignore_strand=False):
+    def children_bp(
+        self, feature, child_featuretype="exon", merge=False, ignore_strand=False
+    ):
         """
         Total bp of all children of a featuretype.
 
@@ -1422,8 +1555,9 @@ class FeatureDB(object):
         Integer representing the total number of bp.
         """
 
-        children = self.children(feature, featuretype=child_featuretype,
-                                 order_by='start')
+        children = self.children(
+            feature, featuretype=child_featuretype, order_by="start"
+        )
         if merge:
             children = self.merge(children, ignore_strand=ignore_strand)
 
@@ -1432,9 +1566,15 @@ class FeatureDB(object):
             total += len(child)
         return total
 
-    def bed12(self, feature, block_featuretype=['exon'],
-              thick_featuretype=['CDS'], thin_featuretype=None,
-              name_field='ID', color=None):
+    def bed12(
+        self,
+        feature,
+        block_featuretype=["exon"],
+        thick_featuretype=["CDS"],
+        thin_featuretype=None,
+        name_field="ID",
+        color=None,
+    ):
         """
         Converts `feature` into a BED12 format.
 
@@ -1494,11 +1634,13 @@ class FeatureDB(object):
             are integers in the range 0-255.
         """
         if thick_featuretype and thin_featuretype:
-            raise ValueError("Can only specify one of `thick_featuertype` or "
-                             "`thin_featuretype`")
+            raise ValueError(
+                "Can only specify one of `thick_featuertype` or " "`thin_featuretype`"
+            )
 
-        exons = list(self.children(feature, featuretype=block_featuretype,
-                                   order_by='start'))
+        exons = list(
+            self.children(feature, featuretype=block_featuretype, order_by="start")
+        )
         if len(exons) == 0:
             exons = [feature]
         feature = self[feature]
@@ -1508,15 +1650,17 @@ class FeatureDB(object):
         if first != feature.start:
             raise ValueError(
                 "Start of first exon (%s) does not match start of feature (%s)"
-                % (first, feature.start))
+                % (first, feature.start)
+            )
         if last != feature.stop:
             raise ValueError(
                 "End of last exon (%s) does not match end of feature (%s)"
-                % (last, feature.stop))
+                % (last, feature.stop)
+            )
 
         if color is None:
-            color = '0,0,0'
-        color = color.replace(' ', '').strip()
+            color = "0,0,0"
+        color = color.replace(" ", "").strip()
 
         # Use field names as defined at
         # http://genome.ucsc.edu/FAQ/FAQformat.html#format1
@@ -1533,8 +1677,8 @@ class FeatureDB(object):
         constants.always_return_list = orig
 
         score = feature.score
-        if score == '.':
-            score = '0'
+        if score == ".":
+            score = "0"
         strand = feature.strand
         itemRgb = color
         blockCount = len(exons)
@@ -1542,8 +1686,9 @@ class FeatureDB(object):
         blockStarts = [i.start - 1 - chromStart for i in exons]
 
         if thick_featuretype:
-            thick = list(self.children(feature, featuretype=thick_featuretype,
-                                       order_by='start'))
+            thick = list(
+                self.children(feature, featuretype=thick_featuretype, order_by="start")
+            )
             if len(thick) == 0:
                 thickStart = feature.start
                 thickEnd = feature.stop
@@ -1552,8 +1697,9 @@ class FeatureDB(object):
                 thickEnd = thick[-1].stop
 
         if thin_featuretype:
-            thin = list(self.children(feature, featuretype=thin_featuretype,
-                                      order_by='start'))
+            thin = list(
+                self.children(feature, featuretype=thin_featuretype, order_by="start")
+            )
             if len(thin) == 0:
                 thickStart = feature.start
                 thickEnd = feature.stop
@@ -1575,18 +1721,16 @@ class FeatureDB(object):
             thickEnd,
             itemRgb,
             blockCount,
-            ','.join(map(str, blockSizes)),
-            ','.join(map(str, blockStarts))]
-        return '\t'.join(map(str, fields))
+            ",".join(map(str, blockSizes)),
+            ",".join(map(str, blockStarts)),
+        ]
+        return "\t".join(map(str, fields))
 
     # Recycle the docs for _relation so they stay consistent between parents()
     # and children()
-    children.__doc__ = children.__doc__.format(
-        _relation_docstring=_relation.__doc__)
-    parents.__doc__ = parents.__doc__.format(
-        _relation_docstring=_relation.__doc__)
+    children.__doc__ = children.__doc__.format(_relation_docstring=_relation.__doc__)
+    parents.__doc__ = parents.__doc__.format(_relation_docstring=_relation.__doc__)
 
     # Add the docs for methods that call helpers.make_query()
     for method in [parents, children, features_of_type, all_features]:
-        method.__doc__ = method.__doc__.format(
-            _method_doc=_method_doc)
+        method.__doc__ = method.__doc__.format(_method_doc=_method_doc)

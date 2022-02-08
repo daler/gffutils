@@ -1,47 +1,52 @@
 import tempfile
 from nose.tools import assert_raises
-from gffutils import (parser, create, feature, iterators, constants, helpers,
-                      exceptions)
+from gffutils import parser, create, feature, iterators, constants, helpers, exceptions
 from gffutils import example_filename, create_db
 from . import attr_test_cases
 from textwrap import dedent
 
-TEST_FILENAMES = [example_filename(i) for i in [
-    'c_elegans_WS199_ann_gff.txt',
-    'ensembl_gtf.txt',
-    'hybrid1.gff3',
-    'ncbi_gff3.txt',
-    'c_elegans_WS199_dna_shortened.fa',
-    'F3-unique-3.v2.gff',
-    'jgi_gff2.txt',
-    'wormbase_gff2_alt.txt',
-    'c_elegans_WS199_shortened_gff.txt',
-    'glimmer_nokeyval.gff3',
-    'mouse_extra_comma.gff3',
-    'wormbase_gff2.txt']]
+TEST_FILENAMES = [
+    example_filename(i)
+    for i in [
+        "c_elegans_WS199_ann_gff.txt",
+        "ensembl_gtf.txt",
+        "hybrid1.gff3",
+        "ncbi_gff3.txt",
+        "c_elegans_WS199_dna_shortened.fa",
+        "F3-unique-3.v2.gff",
+        "jgi_gff2.txt",
+        "wormbase_gff2_alt.txt",
+        "c_elegans_WS199_shortened_gff.txt",
+        "glimmer_nokeyval.gff3",
+        "mouse_extra_comma.gff3",
+        "wormbase_gff2.txt",
+    ]
+]
 
 
 def test_directives():
-    data = dedent("""
+    data = dedent(
+        """
     ##directive1 example
     .	.	.	.	.	.	.	.
     .	.	.	.	.	.	.	.
     .	.	.	.	.	.	.	.
     .	.	.	.	.	.	.	.
-    """)
+    """
+    )
 
     it = iterators.DataIterator(data, from_string=True)
-    assert it.directives == ['directive1 example']
+    assert it.directives == ["directive1 example"]
 
-    db = create_db(data, dbfn=':memory:', from_string=True, verbose=False)
-    assert db.directives == ['directive1 example'], db.directives
+    db = create_db(data, dbfn=":memory:", from_string=True, verbose=False)
+    assert db.directives == ["directive1 example"], db.directives
+
 
 def test_split_attrs():
     # nosetests generator for all the test cases in attr_test_cases.  (note no
     # docstring for this test function so that nosetests -v will print the test
     # cases)
-    for (attr_str, attr_dict, acceptable_reconstruction) \
-            in attr_test_cases.attrs:
+    for (attr_str, attr_dict, acceptable_reconstruction) in attr_test_cases.attrs:
         yield attrs_OK, attr_str, attr_dict, acceptable_reconstruction
 
 
@@ -70,24 +75,30 @@ def parser_smoke_test():
     """
     # Don't show the warnings for tests
     import logging
+
     parser.logger.setLevel(logging.CRITICAL)
     for filename in TEST_FILENAMES:
         p = iterators._FileIterator(filename)
         for i in p:
             continue
 
+
 def test_empty_recontruct():
     """
     reconstructing attributes with incomplete information returns empty string
     """
     assert parser._reconstruct(None, constants.dialect) == ""
-    assert_raises(exceptions.AttributeStringError, parser._reconstruct, dict(ID='asdf'), None)
+    assert_raises(
+        exceptions.AttributeStringError, parser._reconstruct, dict(ID="asdf"), None
+    )
     assert_raises(exceptions.AttributeStringError, parser._reconstruct, None, None)
+
 
 def test_empty_split_keyvals():
     attrs, dialect = parser._split_keyvals(keyval_str=None)
     assert attrs == feature.dict_class()
     assert dialect == constants.dialect
+
 
 def test_repeated_keys_conflict():
     """
@@ -98,9 +109,10 @@ def test_repeated_keys_conflict():
     # This is now only checked when infer_dialect is True -- and is disabled
     # when a dialect is provided
     #
-    #dialect = constants.dialect.copy()
-    #dialect['repeated keys'] = True
-    #assert_raises(exceptions.AttributeStringError, parser._split_keyvals, "Parent=1,2,3", dialect)
+    # dialect = constants.dialect.copy()
+    # dialect['repeated keys'] = True
+    # assert_raises(exceptions.AttributeStringError, parser._split_keyvals, "Parent=1,2,3", dialect)
+
 
 def test_parser_from_string():
     # DEPRECATED
@@ -111,14 +123,15 @@ def test_parser_from_string():
 
 
 def test_valid_line_count():
-    p = iterators._FileIterator(example_filename('ncbi_gff3.txt'))
+    p = iterators._FileIterator(example_filename("ncbi_gff3.txt"))
     assert len(list(p)) == 17
 
-    p = iterators._FileIterator(example_filename('hybrid1.gff3'))
+    p = iterators._FileIterator(example_filename("hybrid1.gff3"))
     assert len(list(p)) == 6
 
-    p = iterators._FileIterator(example_filename('FBgn0031208.gff'))
+    p = iterators._FileIterator(example_filename("FBgn0031208.gff"))
     assert len(list(p)) == 27
+
 
 def test_inconsistent_dialect():
     """
@@ -127,18 +140,23 @@ def test_inconsistent_dialect():
     is set to, which can cause errors when parsing attributes.
     """
     db = create.create_db(
-    """
+        """
     chr1	.	gene	1	100	.	+	.	gene_id "gene1";
     chr1	.	mRNA	1	100	.	+	.	transcript_id "mRNA1"
-    """, ':memory:', from_string=True)
+    """,
+        ":memory:",
+        from_string=True,
+    )
     items = list(db.all_features())
     print(items[0])
     # before, was ['"mRNA1'] -- note extra "
-    assert items[1].attributes['transcript_id'] == ['mRNA1'], items[1].attributes['transcript_id']
+    assert items[1].attributes["transcript_id"] == ["mRNA1"], items[1].attributes[
+        "transcript_id"
+    ]
+
 
 def test_attributes():
     s = "chr2L	FlyBase	mRNA	7529	9484	.	+	.	ID=FBtr0300690;Name=CG11023-RC;Parent=FBgn0031208;"
     f = feature.feature_from_line(s)
     f.keep_order = True
     assert str(f) == s, str(f)
-

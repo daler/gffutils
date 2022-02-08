@@ -17,7 +17,7 @@ from gffutils import iterators
 
 import logging
 
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
@@ -32,7 +32,7 @@ def deprecation_handler(kwargs):
     # After reconsidering, let's leave `infer_gene_extent` for another release.
     # But when it's time to deprecate it, use this code:
     if 0:
-        if 'infer_gene_extent' in kwargs:
+        if "infer_gene_extent" in kwargs:
             raise ValueError(
                 "'infer_gene_extent' is deprecated as of version 0.8.4 in "
                 "favor of more granular control over inferring genes and/or "
@@ -41,24 +41,37 @@ def deprecation_handler(kwargs):
                 "defaults "
                 "'disable_infer_genes=False' and "
                 "'disable_infer_transcripts=False'. Please see the docstring "
-                "for gffutils.create_db for details.")
+                "for gffutils.create_db for details."
+            )
     if len(kwargs) > 0:
         raise TypeError("unhandled kwarg in %s" % kwargs)
 
 
 class _DBCreator(object):
-    def __init__(self, data, dbfn, force=False, verbose=False, id_spec=None,
-                 merge_strategy='error', checklines=10, transform=None,
-                 force_dialect_check=False, from_string=False, dialect=None,
-                 default_encoding='utf-8',
-                 disable_infer_genes=False,
-                 disable_infer_transcripts=False,
-                 infer_gene_extent=True,
-                 force_merge_fields=None,
-                 text_factory=sqlite3.OptimizedUnicode,
-                 pragmas=constants.default_pragmas, _keep_tempfiles=False,
-                 directives=None,
-                 **kwargs):
+    def __init__(
+        self,
+        data,
+        dbfn,
+        force=False,
+        verbose=False,
+        id_spec=None,
+        merge_strategy="error",
+        checklines=10,
+        transform=None,
+        force_dialect_check=False,
+        from_string=False,
+        dialect=None,
+        default_encoding="utf-8",
+        disable_infer_genes=False,
+        disable_infer_transcripts=False,
+        infer_gene_extent=True,
+        force_merge_fields=None,
+        text_factory=sqlite3.OptimizedUnicode,
+        pragmas=constants.default_pragmas,
+        _keep_tempfiles=False,
+        directives=None,
+        **kwargs
+    ):
         """
         Base class for _GFFDBCreator and _GTFDBCreator; see create_db()
         function for docs
@@ -66,16 +79,17 @@ class _DBCreator(object):
         self._keep_tempfiles = _keep_tempfiles
         if force_merge_fields is None:
             force_merge_fields = []
-        if merge_strategy == 'merge':
-            if set(['start', 'end']).intersection(force_merge_fields):
-                raise ValueError("Can't merge start/end fields since "
-                                 "they must be integers")
-            warn = set(force_merge_fields)\
-                .intersection(['frame', 'strand'])
+        if merge_strategy == "merge":
+            if set(["start", "end"]).intersection(force_merge_fields):
+                raise ValueError(
+                    "Can't merge start/end fields since " "they must be integers"
+                )
+            warn = set(force_merge_fields).intersection(["frame", "strand"])
             for w in warn:
                 warnings.warn(
                     "%s field will be merged for features with the same ID; "
-                    "this may result in unusable features." % w)
+                    "this may result in unusable features." % w
+                )
 
         self.force_merge_fields = force_merge_fields
         self.pragmas = pragmas
@@ -86,11 +100,13 @@ class _DBCreator(object):
         self.directives = directives
 
         if not infer_gene_extent:
-            warnings.warn("'infer_gene_extent' will be deprecated. For now, "
-                          "the following equivalent values were automatically "
-                          "set: 'disable_infer_genes=True', "
-                          "'disable_infer_transcripts=True'. Please use these "
-                          "instead in the future.")
+            warnings.warn(
+                "'infer_gene_extent' will be deprecated. For now, "
+                "the following equivalent values were automatically "
+                "set: 'disable_infer_genes=True', "
+                "'disable_infer_transcripts=True'. Please use these "
+                "instead in the future."
+            )
             disable_infer_genes = True
             disable_infer_transcripts = True
 
@@ -111,27 +127,30 @@ class _DBCreator(object):
         self.set_verbose(verbose)
 
         if text_factory is not None:
-            logger.debug('setting text factory to %s' % text_factory)
+            logger.debug("setting text factory to %s" % text_factory)
             self.conn.text_factory = text_factory
         self._data = data
 
         self._orig_logger_level = logger.level
 
         self.iterator = iterators.DataIterator(
-            data=data, checklines=checklines, transform=transform,
-            force_dialect_check=force_dialect_check, from_string=from_string,
-            dialect=dialect
+            data=data,
+            checklines=checklines,
+            transform=transform,
+            force_dialect_check=force_dialect_check,
+            from_string=from_string,
+            dialect=dialect,
         )
 
         # keys are featuretypes, values are integers. Results in unique,
         # derived feature IDs like "exon_94".
-        if '_autoincrements' in kwargs:
-            self._autoincrements = kwargs['_autoincrements']
+        if "_autoincrements" in kwargs:
+            self._autoincrements = kwargs["_autoincrements"]
         else:
             self._autoincrements = collections.defaultdict(int)
 
     def set_verbose(self, verbose=None):
-        if verbose == 'debug':
+        if verbose == "debug":
             logger.setLevel(logging.DEBUG)
         elif verbose:
             logger.setLevel(logging.INFO)
@@ -141,7 +160,7 @@ class _DBCreator(object):
 
     def _increment_featuretype_autoid(self, key):
         self._autoincrements[key] += 1
-        return '%s_%s' % (key, self._autoincrements[key])
+        return "%s_%s" % (key, self._autoincrements[key])
 
     def _id_handler(self, f):
         """
@@ -153,7 +172,7 @@ class _DBCreator(object):
         # If id_spec is a string or callable, convert to iterable for later
         if isinstance(self.id_spec, six.string_types):
             id_key = [self.id_spec]
-        elif hasattr(self.id_spec, '__call__'):
+        elif hasattr(self.id_spec, "__call__"):
             id_key = [self.id_spec]
 
         # If dict, then assume it's a feature -> attribute mapping, e.g.,
@@ -175,16 +194,16 @@ class _DBCreator(object):
         # Then try them in order, returning the first one that works:
         for k in id_key:
 
-            if hasattr(k, '__call__'):
+            if hasattr(k, "__call__"):
                 _id = k(f)
                 if _id:
-                    if _id.startswith('autoincrement:'):
+                    if _id.startswith("autoincrement:"):
                         return self._increment_featuretype_autoid(_id[14:])
                     return _id
             else:
                 # use GFF fields rather than attributes for cases like :seqid:
                 # or :strand:
-                if (len(k) > 3) and (k[0] == ':') and (k[-1] == ':'):
+                if (len(k) > 3) and (k[0] == ":") and (k[-1] == ":"):
                     # No trailing [0] here to get first item -- only attributes
                     # key/vals are forced into lists, not standard GFF fields
                     # like seqid or strand.
@@ -199,8 +218,7 @@ class _DBCreator(object):
 
     def _get_feature(self, ID):
         c = self.conn.cursor()
-        results = c.execute(
-            constants._SELECT + ' WHERE id = ?', (ID,)).fetchone()
+        results = c.execute(constants._SELECT + " WHERE id = ?", (ID,)).fetchone()
         return feature.Feature(dialect=self.iterator.dialect, **results)
 
     def _do_merge(self, f, merge_strategy, add_duplicate=False):
@@ -224,20 +242,21 @@ class _DBCreator(object):
         "replace":
             Replaces existing database feature with `f`.
         """
-        if merge_strategy == 'error':
+        if merge_strategy == "error":
             raise ValueError("Duplicate ID {0.id}".format(f))
 
-        if merge_strategy == 'warning':
+        if merge_strategy == "warning":
             logger.warning(
                 "Duplicate lines in file for id '{0.id}'; "
-                "ignoring all but the first".format(f))
+                "ignoring all but the first".format(f)
+            )
             return None, merge_strategy
 
-        elif merge_strategy == 'replace':
+        elif merge_strategy == "replace":
             return f, merge_strategy
 
         # This is by far the most complicated strategy.
-        elif merge_strategy == 'merge':
+        elif merge_strategy == "merge":
 
             # Recall that if we made it to this method, there was at least one
             # ID collision.
@@ -249,15 +268,17 @@ class _DBCreator(object):
             # Iterate through all features that have the same ID according to
             # the id_spec provided.
             if self.verbose == "debug":
-                logger.debug('candidates with same idspec: %s'
-                             % ([i.id for i in self._candidate_merges(f)]))
+                logger.debug(
+                    "candidates with same idspec: %s"
+                    % ([i.id for i in self._candidate_merges(f)])
+                )
 
             # If force_merge_fields was provided, don't check them even if
             # they're different. We are assuming the attributes field will be
             # different, hence the [:-1]
             _gffkeys_to_check = list(
-                set(constants._gffkeys[:-1])
-                .difference(self.force_merge_fields))
+                set(constants._gffkeys[:-1]).difference(self.force_merge_fields)
+            )
 
             for existing_feature in self._candidate_merges(f):
                 # Check other GFF fields (if not specified in
@@ -273,18 +294,18 @@ class _DBCreator(object):
                     # should be merged.
                     features_to_merge.append(existing_feature)
                     logger.debug(
-                        'same attributes between:\nexisting: %s'
-                        '\nthis    : %s'
-                        % (existing_feature, f))
+                        "same attributes between:\nexisting: %s"
+                        "\nthis    : %s" % (existing_feature, f)
+                    )
                 else:
                     # The existing feature's GFF fields don't match, so don't
                     # append anything.
                     logger.debug(
-                        'different attributes between:\nexisting: %s\n'
-                        'this    : %s'
-                        % (existing_feature, f))
+                        "different attributes between:\nexisting: %s\n"
+                        "this    : %s" % (existing_feature, f)
+                    )
 
-            if (len(features_to_merge) == 0):
+            if len(features_to_merge) == 0:
                 # No merge candidates found, so we should make a new ID for
                 # this feature. This can happen when idspecs match, but other
                 # fields (like start/stop) are different.  Call this method
@@ -292,13 +313,14 @@ class _DBCreator(object):
                 # record the newly-created ID in the duplicates table.
                 orig_id = f.id
                 uniqued_feature, merge_strategy = self._do_merge(
-                    f, merge_strategy='create_unique')
+                    f, merge_strategy="create_unique"
+                )
                 self._add_duplicate(orig_id, uniqued_feature.id)
                 return uniqued_feature, merge_strategy
 
             # Whoo! Found some candidates to merge.
             else:
-                logger.debug('num candidates: %s' % len(features_to_merge))
+                logger.debug("num candidates: %s" % len(features_to_merge))
 
                 # This is the attributes dictionary we'll be modifying.
                 merged_attributes = copy.deepcopy(f.attributes)
@@ -306,13 +328,15 @@ class _DBCreator(object):
                 # Keep track of non-attribute fields (this will be an empty
                 # dict if no force_merge_fields)
                 final_fields = dict(
-                    [(field, set([getattr(f, field)]))
-                     for field in self.force_merge_fields])
+                    [
+                        (field, set([getattr(f, field)]))
+                        for field in self.force_merge_fields
+                    ]
+                )
 
                 # Update the attributes
                 for existing_feature in features_to_merge:
-                    logger.debug(
-                        '\nmerging\n\n%s\n%s\n' % (f, existing_feature))
+                    logger.debug("\nmerging\n\n%s\n%s\n" % (f, existing_feature))
                     for k in existing_feature.attributes.keys():
                         v = merged_attributes.setdefault(k, [])
                         v.extend(existing_feature[k])
@@ -320,8 +344,7 @@ class _DBCreator(object):
 
                     # Update the set of non-attribute fields found so far
                     for field in self.force_merge_fields:
-                        final_fields[field].update(
-                            [getattr(existing_feature, field)])
+                        final_fields[field].update([getattr(existing_feature, field)])
 
                 # Set the merged attributes
                 for k, v in merged_attributes.items():
@@ -330,17 +353,16 @@ class _DBCreator(object):
 
                 # Set the final merged non-attributes
                 for k, v in final_fields.items():
-                    setattr(existing_feature, k, ','.join(sorted(map(str, v))))
+                    setattr(existing_feature, k, ",".join(sorted(map(str, v))))
 
-                logger.debug('\nMERGED:\n%s' % existing_feature)
+                logger.debug("\nMERGED:\n%s" % existing_feature)
                 return existing_feature, merge_strategy
 
-        elif merge_strategy == 'create_unique':
+        elif merge_strategy == "create_unique":
             f.id = self._increment_featuretype_autoid(f.id)
             return f, merge_strategy
         else:
-            raise ValueError("Invalid merge strategy '%s'"
-                             % (merge_strategy))
+            raise ValueError("Invalid merge strategy '%s'" % (merge_strategy))
 
     def _add_duplicate(self, idspecid, newid):
         """
@@ -358,21 +380,24 @@ class _DBCreator(object):
         c = self.conn.cursor()
         try:
             c.execute(
-                '''
+                """
                 INSERT INTO duplicates
                 (idspecid, newid)
-                VALUES (?, ?)''',
-                (idspecid, newid))
+                VALUES (?, ?)""",
+                (idspecid, newid),
+            )
         except sqlite3.ProgrammingError:
             c.execute(
-                '''
+                """
                 INSERT INTO duplicates
                 (idspecid, newid)
-                VALUES (?, ?)''',
-                (idspecid.decode(self.default_encoding),
-                 newid.decode(self.default_encoding))
+                VALUES (?, ?)""",
+                (
+                    idspecid.decode(self.default_encoding),
+                    newid.decode(self.default_encoding),
+                ),
             )
-        logger.debug('added id=%s; new=%s' % (idspecid, newid))
+        logger.debug("added id=%s; new=%s" % (idspecid, newid))
         self.conn.commit()
 
     def _candidate_merges(self, f):
@@ -384,14 +409,14 @@ class _DBCreator(object):
         candidates = [self._get_feature(f.id)]
         c = self.conn.cursor()
         results = c.execute(
-            constants._SELECT + '''
+            constants._SELECT
+            + """
             JOIN duplicates ON
-            duplicates.newid = features.id WHERE duplicates.idspecid = ?''',
-            (f.id,)
+            duplicates.newid = features.id WHERE duplicates.idspecid = ?""",
+            (f.id,),
         )
         for i in results:
-            candidates.append(
-                feature.Feature(dialect=self.iterator.dialect, **i))
+            candidates.append(feature.Feature(dialect=self.iterator.dialect, **i))
         return list(set(candidates))
 
     def _populate_from_lines(self, lines):
@@ -418,11 +443,7 @@ class _DBCreator(object):
         """
         self.pragmas = pragmas
         c = self.conn.cursor()
-        c.executescript(
-            ';\n'.join(
-                ['PRAGMA %s=%s' % i for i in self.pragmas.items()]
-            )
-        )
+        c.executescript(";\n".join(["PRAGMA %s=%s" % i for i in self.pragmas.items()]))
         self.conn.commit()
 
     def _init_tables(self):
@@ -444,21 +465,27 @@ class _DBCreator(object):
         """
         c = self.conn.cursor()
         directives = self.directives
-        c.executemany('''
+        c.executemany(
+            """
                       INSERT INTO directives VALUES (?)
-                      ''', ((i,) for i in directives))
+                      """,
+            ((i,) for i in directives),
+        )
         c.execute(
-            '''
+            """
             INSERT INTO meta (version, dialect)
-            VALUES (:version, :dialect)''',
-            dict(version=version.version,
-                 dialect=helpers._jsonify(self.iterator.dialect))
+            VALUES (:version, :dialect)""",
+            dict(
+                version=version.version, dialect=helpers._jsonify(self.iterator.dialect)
+            ),
         )
 
         c.executemany(
-            '''
+            """
             INSERT OR REPLACE INTO autoincrements VALUES (?, ?)
-            ''', list(self._autoincrements.items()))
+            """,
+            list(self._autoincrements.items()),
+        )
 
         # These indexes are *well* worth the effort and extra storage: over
         # 500x speedup on code like this:
@@ -469,24 +496,26 @@ class _DBCreator(object):
         #           genes.append(k.id)
         #
         logger.info("Creating relations(parent) index")
-        c.execute('DROP INDEX IF EXISTS relationsparent')
-        c.execute('CREATE INDEX relationsparent ON relations (parent)')
+        c.execute("DROP INDEX IF EXISTS relationsparent")
+        c.execute("CREATE INDEX relationsparent ON relations (parent)")
         logger.info("Creating relations(child) index")
-        c.execute('DROP INDEX IF EXISTS relationschild')
-        c.execute('CREATE INDEX relationschild ON relations (child)')
+        c.execute("DROP INDEX IF EXISTS relationschild")
+        c.execute("CREATE INDEX relationschild ON relations (child)")
         logger.info("Creating features(featuretype) index")
-        c.execute('DROP INDEX IF EXISTS featuretype')
-        c.execute('CREATE INDEX featuretype ON features (featuretype)')
+        c.execute("DROP INDEX IF EXISTS featuretype")
+        c.execute("CREATE INDEX featuretype ON features (featuretype)")
         logger.info("Creating features (seqid, start, end) index")
-        c.execute('DROP INDEX IF EXISTS seqidstartend')
-        c.execute('CREATE INDEX seqidstartend ON features (seqid, start, end)')
+        c.execute("DROP INDEX IF EXISTS seqidstartend")
+        c.execute("CREATE INDEX seqidstartend ON features (seqid, start, end)")
         logger.info("Creating features (seqid, start, end, strand) index")
-        c.execute('DROP INDEX IF EXISTS seqidstartendstrand')
-        c.execute('CREATE INDEX seqidstartendstrand ON features (seqid, start, end, strand)')
+        c.execute("DROP INDEX IF EXISTS seqidstartendstrand")
+        c.execute(
+            "CREATE INDEX seqidstartendstrand ON features (seqid, start, end, strand)"
+        )
 
         # speeds computation 1000x in some cases
         logger.info("Running ANALYZE features")
-        c.execute('ANALYZE features')
+        c.execute("ANALYZE features")
 
         self.conn.commit()
 
@@ -525,21 +554,19 @@ class _DBCreator(object):
         try:
             cursor.execute(constants._INSERT, feature.astuple())
         except sqlite3.ProgrammingError:
-            cursor.execute(
-                constants._INSERT, feature.astuple(self.default_encoding))
+            cursor.execute(constants._INSERT, feature.astuple(self.default_encoding))
 
     def _replace(self, feature, cursor):
         """
         Insert a feature into the database.
         """
         try:
-            cursor.execute(
-                constants._UPDATE,
-                list(feature.astuple()) + [feature.id])
+            cursor.execute(constants._UPDATE, list(feature.astuple()) + [feature.id])
         except sqlite3.ProgrammingError:
             cursor.execute(
                 constants._INSERT,
-                list(feature.astuple(self.default_encoding)) + [feature.id])
+                list(feature.astuple(self.default_encoding)) + [feature.id],
+            )
 
 
 class _GFFDBCreator(_DBCreator):
@@ -556,8 +583,7 @@ class _GFFDBCreator(_DBCreator):
         self._drop_indexes()
         last_perc = 0
         logger.info("Populating features")
-        msg = ("Populating features table and first-order relations: "
-               "%d features\r")
+        msg = "Populating features table and first-order relations: " "%d features\r"
 
         # c.executemany() was not as much of an improvement as I had expected.
         #
@@ -585,42 +611,48 @@ class _GFFDBCreator(_DBCreator):
                 self._insert(f, c)
             except sqlite3.IntegrityError:
                 fixed, final_strategy = self._do_merge(f, self.merge_strategy)
-                if final_strategy == 'merge':
+                if final_strategy == "merge":
                     c.execute(
-                        '''
+                        """
                         UPDATE features SET attributes = ?
                         WHERE id = ?
-                        ''', (helpers._jsonify(fixed.attributes),
-                              fixed.id))
+                        """,
+                        (helpers._jsonify(fixed.attributes), fixed.id),
+                    )
 
                     # For any additional fields we're merging, update those as
                     # well.
                     if self.force_merge_fields:
-                        _set_clause = ', '.join(
-                            ['%s = ?' % field
-                             for field in self.force_merge_fields])
+                        _set_clause = ", ".join(
+                            ["%s = ?" % field for field in self.force_merge_fields]
+                        )
                         values = [
-                            getattr(fixed, field)
-                            for field in self.force_merge_fields] + [fixed.id]
+                            getattr(fixed, field) for field in self.force_merge_fields
+                        ] + [fixed.id]
                         c.execute(
-                            '''
+                            """
                             UPDATE features SET %s
                             WHERE id = ?
-                            ''' % _set_clause, tuple(values))
+                            """
+                            % _set_clause,
+                            tuple(values),
+                        )
 
-                elif final_strategy == 'replace':
+                elif final_strategy == "replace":
                     self._replace(f, c)
 
-                elif final_strategy == 'create_unique':
+                elif final_strategy == "create_unique":
                     self._insert(f, c)
 
-            if 'Parent' in f.attributes:
-                for parent in f.attributes['Parent']:
+            if "Parent" in f.attributes:
+                for parent in f.attributes["Parent"]:
                     c.execute(
-                        '''
+                        """
                         INSERT OR IGNORE INTO relations VALUES
                         (?, ?, 1)
-                        ''', (parent, f.id))
+                        """,
+                        (parent, f.id),
+                    )
         if features_seen is None:
             raise ValueError("No lines parsed -- was an empty file provided?")
 
@@ -643,9 +675,9 @@ class _GFFDBCreator(_DBCreator):
         if isinstance(self._keep_tempfiles, six.string_types):
             suffix = self._keep_tempfiles
         else:
-            suffix = '.gffutils'
+            suffix = ".gffutils"
         tmp = tempfile.NamedTemporaryFile(delete=False, suffix=suffix).name
-        with open(tmp, 'w') as fout:
+        with open(tmp, "w") as fout:
 
             # Here we look for "grandchildren" -- for each ID, get the child
             # (parenthetical subquery below); then for each of those get *its*
@@ -654,26 +686,31 @@ class _GFFDBCreator(_DBCreator):
             # Results are written to temp file so that we don't read and write at
             # the same time, which would slow things down considerably.
 
-            c.execute('SELECT id FROM features')
+            c.execute("SELECT id FROM features")
             for parent in c:
-                c2.execute('''
+                c2.execute(
+                    """
                            SELECT child FROM relations WHERE parent IN
                            (SELECT child FROM relations WHERE parent = ?)
-                           ''', tuple(parent))
+                           """,
+                    tuple(parent),
+                )
                 for grandchild in c2:
-                    fout.write('\t'.join((parent[0], grandchild[0])) + '\n')
+                    fout.write("\t".join((parent[0], grandchild[0])) + "\n")
 
         def relations_generator():
             with open(fout.name) as fin:
                 for line in fin:
-                    parent, child = line.strip().split('\t')
+                    parent, child = line.strip().split("\t")
                     yield dict(parent=parent, child=child, level=2)
 
         c.executemany(
-            '''
+            """
             INSERT OR IGNORE INTO relations VALUES
             (:parent, :child, :level)
-            ''', relations_generator())
+            """,
+            relations_generator(),
+        )
 
         # TODO: Index creation.  Which ones affect performance?
         c.execute("DROP INDEX IF EXISTS binindex")
@@ -690,16 +727,13 @@ class _GTFDBCreator(_DBCreator):
         """
         create_db() delegates to this class -- see that function for docs
         """
-        self.transcript_key = kwargs.pop('transcript_key', 'transcript_id')
-        self.gene_key = kwargs.pop('gene_key', 'gene_id')
-        self.subfeature = kwargs.pop('subfeature', 'exon')
+        self.transcript_key = kwargs.pop("transcript_key", "transcript_id")
+        self.gene_key = kwargs.pop("gene_key", "gene_id")
+        self.subfeature = kwargs.pop("subfeature", "exon")
         super(_GTFDBCreator, self).__init__(*args, **kwargs)
 
     def _populate_from_lines(self, lines):
-        msg = (
-            "Populating features table and first-order relations: %d "
-            "features\r"
-        )
+        msg = "Populating features table and first-order relations: %d " "features\r"
 
         c = self.conn.cursor()
 
@@ -713,24 +747,20 @@ class _GTFDBCreator(_DBCreator):
 
             # See issues #48 and #20.
             if lines_seen < gene_and_transcript_check_limit:
-                if (
-                    f.featuretype == 'transcript' and
-                    not self.disable_infer_transcripts
-                ):
+                if f.featuretype == "transcript" and not self.disable_infer_transcripts:
                     warnings.warn(
                         "It appears you have a transcript feature in your GTF "
                         "file. You may want to use the "
                         "`disable_infer_transcripts=True` "
-                        "option to speed up database creation")
-                elif (
-                    f.featuretype == 'gene' and
-                    not self.disable_infer_genes
-                ):
+                        "option to speed up database creation"
+                    )
+                elif f.featuretype == "gene" and not self.disable_infer_genes:
                     warnings.warn(
                         "It appears you have a gene feature in your GTF "
                         "file. You may want to use the "
                         "`disable_infer_genes=True` "
-                        "option to speed up database creation")
+                        "option to speed up database creation"
+                    )
 
             lines_seen = i + 1
 
@@ -748,30 +778,34 @@ class _GTFDBCreator(_DBCreator):
                 self._insert(f, c)
             except sqlite3.IntegrityError:
                 fixed, final_strategy = self._do_merge(f, self.merge_strategy)
-                if final_strategy == 'merge':
+                if final_strategy == "merge":
                     c.execute(
-                        '''
+                        """
                         UPDATE features SET attributes = ?
                         WHERE id = ?
-                        ''', (helpers._jsonify(fixed.attributes),
-                              fixed.id))
+                        """,
+                        (helpers._jsonify(fixed.attributes), fixed.id),
+                    )
                     # For any additional fields we're merging, update those as
                     # well.
                     if self.force_merge_fields:
-                        _set_clause = ', '.join(
-                            ['%s = ?' % field
-                             for field in self.force_merge_fields])
-                        values = [getattr(fixed, field)
-                                  for field in self.force_merge_fields]\
-                            + [fixed.id]
+                        _set_clause = ", ".join(
+                            ["%s = ?" % field for field in self.force_merge_fields]
+                        )
+                        values = [
+                            getattr(fixed, field) for field in self.force_merge_fields
+                        ] + [fixed.id]
                         c.execute(
-                            '''
+                            """
                             UPDATE features SET %s
                             WHERE id = ?
-                            ''' % _set_clause, values)
-                elif final_strategy == 'replace':
+                            """
+                            % _set_clause,
+                            values,
+                        )
+                elif final_strategy == "replace":
                     self._replace(f, c)
-                elif final_strategy == 'create_unique':
+                elif final_strategy == "create_unique":
                     self._insert(f, c)
 
             # For an on-spec GTF file,
@@ -781,8 +815,8 @@ class _GTFDBCreator(_DBCreator):
             parent = None
             grandparent = None
             if (
-                self.transcript_key in f.attributes and
-                f.attributes[self.transcript_key]
+                self.transcript_key in f.attributes
+                and f.attributes[self.transcript_key]
             ):
                 parent = f.attributes[self.transcript_key][0]
                 relations.append((parent, f.id, 1))
@@ -799,15 +833,16 @@ class _GTFDBCreator(_DBCreator):
             # (e.g., the transcript-gene relation on pretty much every line in
             # a GTF) will only be included once.
             c.executemany(
-                '''
+                """
                 INSERT OR IGNORE INTO relations (parent, child, level)
                 VALUES (?, ?, ?)
-                ''', relations
+                """,
+                relations,
             )
 
         if lines_seen == 0:
             raise ValueError("No lines parsed -- was an empty file provided?")
-        logger.info('Committing changes')
+        logger.info("Committing changes")
         self.conn.commit()
         if self.verbose:
             logger.info(msg % i)
@@ -822,28 +857,27 @@ class _GTFDBCreator(_DBCreator):
         c2 = self.conn.cursor()
 
         logger.info("Creating relations(parent) index")
-        c.execute('DROP INDEX IF EXISTS relationsparent')
-        c.execute('CREATE INDEX relationsparent ON relations (parent)')
+        c.execute("DROP INDEX IF EXISTS relationsparent")
+        c.execute("CREATE INDEX relationsparent ON relations (parent)")
         logger.info("Creating relations(child) index")
-        c.execute('DROP INDEX IF EXISTS relationschild')
-        c.execute('CREATE INDEX relationschild ON relations (child)')
+        c.execute("DROP INDEX IF EXISTS relationschild")
+        c.execute("CREATE INDEX relationschild ON relations (child)")
 
         if not (self.disable_infer_genes or self.disable_infer_transcripts):
-            msg = 'gene and transcript'
+            msg = "gene and transcript"
         elif self.disable_infer_transcripts:
-            msg = 'gene'
+            msg = "gene"
         elif self.disable_infer_genes:
-            msg = 'transcript'
-        logger.info('Inferring %s extents '
-                    'and writing to tempfile' % msg)
+            msg = "transcript"
+        logger.info("Inferring %s extents " "and writing to tempfile" % msg)
 
         if isinstance(self._keep_tempfiles, six.string_types):
             suffix = self._keep_tempfiles
         else:
-            suffix = '.gffutils'
+            suffix = ".gffutils"
 
         tmp = tempfile.NamedTemporaryFile(delete=False, suffix=suffix).name
-        with open(tmp, 'w') as fout:
+        with open(tmp, "w") as fout:
             self._tmpfile = tmp
 
             # This takes some explanation...
@@ -875,7 +909,7 @@ class _GTFDBCreator(_DBCreator):
             # only looking for genes.
 
             c.execute(
-                '''
+                """
                 SELECT DISTINCT firstlevel.parent, relations.parent
                 FROM (
                     SELECT DISTINCT parent
@@ -888,7 +922,9 @@ class _GTFDBCreator(_DBCreator):
                 JOIN relations ON firstlevel.parent = child
                 WHERE relations.level = 1
                 ORDER BY relations.parent
-                ''', (self.subfeature,))
+                """,
+                (self.subfeature,),
+            )
 
             # Now we iterate through those results (using a new cursor) to infer
             # the extent of transcripts and/or genes.
@@ -900,36 +936,47 @@ class _GTFDBCreator(_DBCreator):
                 if not self.disable_infer_transcripts:
                     # transcript extent
                     c2.execute(
-                        '''
+                        """
                         SELECT MIN(start), MAX(end), strand, seqid
                         FROM features
                         JOIN relations ON
                         features.id = relations.child
                         WHERE parent = ? AND featuretype == ?
-                        ''', (transcript_id, self.subfeature))
+                        """,
+                        (transcript_id, self.subfeature),
+                    )
                     transcript_start, transcript_end, strand, seqid = c2.fetchone()
                     transcript_attributes = {
                         self.transcript_key: [transcript_id],
-                        self.gene_key: [gene_id]
+                        self.gene_key: [gene_id],
                     }
                     transcript_bin = bins.bins(
-                        transcript_start, transcript_end, one=True)
+                        transcript_start, transcript_end, one=True
+                    )
 
                     # Write out to file; we'll be reading it back in shortly.  Omit
                     # score, frame, source, and extra since they will always have
                     # the same default values (".", ".", "gffutils_derived", and []
                     # respectively)
 
-                    fout.write('\t'.join(map(str, [
-                        transcript_id,
-                        seqid,
-                        transcript_start,
-                        transcript_end,
-                        strand,
-                        'transcript',
-                        transcript_bin,
-                        helpers._jsonify(transcript_attributes)
-                    ])) + '\n')
+                    fout.write(
+                        "\t".join(
+                            map(
+                                str,
+                                [
+                                    transcript_id,
+                                    seqid,
+                                    transcript_start,
+                                    transcript_end,
+                                    strand,
+                                    "transcript",
+                                    transcript_bin,
+                                    helpers._jsonify(transcript_attributes),
+                                ],
+                            )
+                        )
+                        + "\n"
+                    )
 
                     n_features += 1
 
@@ -939,27 +986,37 @@ class _GTFDBCreator(_DBCreator):
                     # works
                     if gene_id != last_gene_id:
                         c2.execute(
-                            '''
+                            """
                             SELECT MIN(start), MAX(end), strand, seqid
                             FROM features
                             JOIN relations ON
                             features.id = relations.child
                             WHERE parent = ? AND featuretype == ?
-                            ''', (gene_id, self.subfeature))
+                            """,
+                            (gene_id, self.subfeature),
+                        )
                         gene_start, gene_end, strand, seqid = c2.fetchone()
                         gene_attributes = {self.gene_key: [gene_id]}
                         gene_bin = bins.bins(gene_start, gene_end, one=True)
 
-                        fout.write('\t'.join(map(str, [
-                            gene_id,
-                            seqid,
-                            gene_start,
-                            gene_end,
-                            strand,
-                            'gene',
-                            gene_bin,
-                            helpers._jsonify(gene_attributes)
-                        ])) + '\n')
+                        fout.write(
+                            "\t".join(
+                                map(
+                                    str,
+                                    [
+                                        gene_id,
+                                        seqid,
+                                        gene_start,
+                                        gene_end,
+                                        strand,
+                                        "gene",
+                                        gene_bin,
+                                        helpers._jsonify(gene_attributes),
+                                    ],
+                                )
+                            )
+                            + "\n"
+                        )
 
                     last_gene_id = gene_id
                     n_features += 1
@@ -968,24 +1025,32 @@ class _GTFDBCreator(_DBCreator):
             """
             Generator of items from the file that was just created...
             """
-            keys = ['parent', 'seqid', 'start', 'end', 'strand',
-                    'featuretype', 'bin', 'attributes']
+            keys = [
+                "parent",
+                "seqid",
+                "start",
+                "end",
+                "strand",
+                "featuretype",
+                "bin",
+                "attributes",
+            ]
             with open(fout.name) as fin:
                 for line in fin:
-                    d = dict(list(zip(keys, line.strip().split('\t'))))
-                    d.pop('parent')
-                    d['score'] = '.'
-                    d['source'] = 'gffutils_derived'
-                    d['frame'] = '.'
-                    d['extra'] = []
-                    d['attributes'] = helpers._unjsonify(d['attributes'])
+                    d = dict(list(zip(keys, line.strip().split("\t"))))
+                    d.pop("parent")
+                    d["score"] = "."
+                    d["source"] = "gffutils_derived"
+                    d["frame"] = "."
+                    d["extra"] = []
+                    d["attributes"] = helpers._unjsonify(d["attributes"])
                     f = feature.Feature(**d)
                     f.id = self._id_handler(f)
                     yield f
 
         # Drop the indexes so the inserts are faster
-        c.execute('DROP INDEX IF EXISTS relationsparent')
-        c.execute('DROP INDEX IF EXISTS relationschild')
+        c.execute("DROP INDEX IF EXISTS relationsparent")
+        c.execute("DROP INDEX IF EXISTS relationschild")
 
         # Insert the just-inferred transcripts and genes.  TODO: should we
         # *always* use "merge" here for the merge_strategy?
@@ -994,19 +1059,20 @@ class _GTFDBCreator(_DBCreator):
         for i, f in enumerate(derived_feature_generator()):
             perc = int(i / float(n_features) * 100)
             if perc != last_perc:
-                sys.stderr.write('%s of %s (%s%%)\r' % (i, n_features, perc))
+                sys.stderr.write("%s of %s (%s%%)\r" % (i, n_features, perc))
                 sys.stderr.flush()
             last_perc = perc
             try:
                 self._insert(f, c)
             except sqlite3.IntegrityError:
-                fixed, final_strategy = self._do_merge(f, 'merge')
+                fixed, final_strategy = self._do_merge(f, "merge")
                 c.execute(
-                    '''
+                    """
                     UPDATE features SET attributes = ?
                     WHERE id = ?
-                    ''', (helpers._jsonify(fixed.attributes),
-                          fixed.id))
+                    """,
+                    (helpers._jsonify(fixed.attributes), fixed.id),
+                )
 
         logger.info("Committing changes")
         self.conn.commit()
@@ -1017,16 +1083,33 @@ class _GTFDBCreator(_DBCreator):
         # called after this one, and indexes are created in _finalize().
 
 
-def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
-              checklines=10, merge_strategy='error', transform=None,
-              gtf_transcript_key='transcript_id', gtf_gene_key='gene_id',
-              gtf_subfeature='exon', force_gff=False,
-              force_dialect_check=False, from_string=False, keep_order=False,
-              text_factory=sqlite3.OptimizedUnicode, force_merge_fields=None,
-              pragmas=constants.default_pragmas, sort_attribute_values=False,
-              dialect=None, _keep_tempfiles=False, infer_gene_extent=True,
-              disable_infer_genes=False, disable_infer_transcripts=False,
-              **kwargs):
+def create_db(
+    data,
+    dbfn,
+    id_spec=None,
+    force=False,
+    verbose=False,
+    checklines=10,
+    merge_strategy="error",
+    transform=None,
+    gtf_transcript_key="transcript_id",
+    gtf_gene_key="gene_id",
+    gtf_subfeature="exon",
+    force_gff=False,
+    force_dialect_check=False,
+    from_string=False,
+    keep_order=False,
+    text_factory=sqlite3.OptimizedUnicode,
+    force_merge_fields=None,
+    pragmas=constants.default_pragmas,
+    sort_attribute_values=False,
+    dialect=None,
+    _keep_tempfiles=False,
+    infer_gene_extent=True,
+    disable_infer_genes=False,
+    disable_infer_transcripts=False,
+    **kwargs
+):
     """
     Create a database from a GFF or GTF file.
 
@@ -1266,22 +1349,22 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
     # result is available as as iterator._iter.
     #
     # That's what we should be using now for `data:
-    kwargs['data'] = iterator
-    kwargs['directives'] = iterator.directives
+    kwargs["data"] = iterator
+    kwargs["directives"] = iterator.directives
 
     # Since we've already checked lines, we don't want to do it again
-    kwargs['checklines'] = 0
+    kwargs["checklines"] = 0
 
-    if force_gff or (dialect['fmt'] == 'gff3'):
+    if force_gff or (dialect["fmt"] == "gff3"):
         cls = _GFFDBCreator
-        id_spec = id_spec or 'ID'
+        id_spec = id_spec or "ID"
         add_kwargs = dict(
             id_spec=id_spec,
         )
 
-    elif dialect['fmt'] == 'gtf':
+    elif dialect["fmt"] == "gtf":
         cls = _GTFDBCreator
-        id_spec = id_spec or {'gene': 'gene_id', 'transcript': 'transcript_id'}
+        id_spec = id_spec or {"gene": "gene_id", "transcript": "transcript_id"}
         add_kwargs = dict(
             transcript_key=gtf_transcript_key,
             gene_key=gtf_gene_key,
@@ -1290,21 +1373,25 @@ def create_db(data, dbfn, id_spec=None, force=False, verbose=False,
         )
 
     kwargs.update(**add_kwargs)
-    kwargs['dialect'] = dialect
+    kwargs["dialect"] = dialect
     c = cls(**kwargs)
 
     c.create()
-    if dbfn == ':memory:':
-        db = interface.FeatureDB(c.conn,
-                                 keep_order=keep_order,
-                                 pragmas=pragmas,
-                                 sort_attribute_values=sort_attribute_values,
-                                 text_factory=text_factory)
+    if dbfn == ":memory:":
+        db = interface.FeatureDB(
+            c.conn,
+            keep_order=keep_order,
+            pragmas=pragmas,
+            sort_attribute_values=sort_attribute_values,
+            text_factory=text_factory,
+        )
     else:
-        db = interface.FeatureDB(c,
-                                 keep_order=keep_order,
-                                 pragmas=pragmas,
-                                 sort_attribute_values=sort_attribute_values,
-                                 text_factory=text_factory)
+        db = interface.FeatureDB(
+            c,
+            keep_order=keep_order,
+            pragmas=pragmas,
+            sort_attribute_values=sort_attribute_values,
+            text_factory=text_factory,
+        )
 
     return db
