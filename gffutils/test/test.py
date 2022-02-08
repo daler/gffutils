@@ -750,7 +750,7 @@ def test_empty_files():
     fn = tempfile.NamedTemporaryFile(delete=False).name
     a = open(fn, "w")
     a.close()
-    assert_raises(ValueError, gffutils.create_db, fn, fn + ".db")
+    assert_raises(gffutils.exceptions.EmptyInputError, gffutils.create_db, fn, fn + ".db")
 
 
 def test_false_function():

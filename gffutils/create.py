@@ -14,6 +14,7 @@ from gffutils import helpers
 from gffutils import feature
 from gffutils import interface
 from gffutils import iterators
+from gffutils.exceptions import EmptyInputError
 
 import logging
 
@@ -653,8 +654,9 @@ class _GFFDBCreator(_DBCreator):
                         """,
                         (parent, f.id),
                     )
+
         if features_seen is None:
-            raise ValueError("No lines parsed -- was an empty file provided?")
+            raise EmptyInputError("No lines parsed -- was an empty file provided?")
 
         self.conn.commit()
         if self.verbose:

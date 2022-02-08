@@ -17,3 +17,7 @@ class DuplicateIDError(Exception):
 
 class AttributeStringError(Exception):
     pass
+
+
+class EmptyInputError(Exception):
+    pass
