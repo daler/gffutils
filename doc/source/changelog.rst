@@ -28,6 +28,10 @@ Stefano Rivera, Daniel Lowengrub, Nolan Woods, Stefen Moeller,  and Husen Umer.
   it easier to catch cases where one might expect empty input (addresses `#17
   <https://github.com/daler/gffutils/issues/17>`_)
 - PEP8 formatting in code
+- New dialect detection method will weight more highly those features with more
+  attributes. This solves things like `#128
+  <https://github.com/daler/gffutils/issues/128/>`_ where some dialect
+  components are otherwise ambiguous.
 
 Changes in v0.10.1
 ------------------
