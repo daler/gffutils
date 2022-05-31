@@ -282,3 +282,25 @@ def test_issue_129():
     #               | | | | Test feature
     res = list(db.region(region=("chr1", 69094, 69097), featuretype="start_codon"))
     assert len(res) == 0
+
+
+def test_issue_128():
+    gff = gffutils.example_filename('gms2_example.gff3')
+    db = gffutils.create_db(
+        gff,
+        "tmp.db",
+        force=True,
+
+    )
+
+    expected = {
+        'ID': ['1'],
+        'Parent': ['gene_1'],
+        'gene_type': ['native'],
+        'partial': ['11'],
+        'gc': ['33'], 
+        'length': ['363'],
+    }
+    print(db.dialect)
+    assert dict(db['1'].attributes) == expected
+
