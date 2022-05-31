@@ -82,15 +82,13 @@ class _BaseIterator(object):
             # a dialect.
             self._iter = self._custom_iter()
         elif dialect is not None:
-            self._observed_dialects = [dialect]
-            self.dialect = helpers._choose_dialect(self._observed_dialects)
+            self.dialect = dialect
         else:
             # Otherwise, check some lines to determine what the dialect should
             # be
             _peek = self.peek(checklines)
             self._peek = _peek
-            self._observed_dialects = [i.dialect for i in _peek]
-            self.dialect = helpers._choose_dialect(self._observed_dialects)
+            self.dialect = helpers._choose_dialect(_peek)
 
     def _custom_iter(self):
         raise NotImplementedError("Must define in subclasses")
