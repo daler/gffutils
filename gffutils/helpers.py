@@ -61,10 +61,6 @@ def _choose_dialect(features):
     # NOTE: can use helpers.dialect_compare if you need to make this more
     # complex....
 
-    # For now, this function favors the first dialect, and then appends the
-    # order of additional fields seen in the attributes of other lines giving
-    # priority to dialects that come first in the iterable.
-
     if len(features) == 0:
         return constants.dialect
 
@@ -99,7 +95,7 @@ def _choose_dialect(features):
             # Increment the observed value by the number of attributes (so more
             # complex attribute strings have higher weight in determining
             # dialect)
-            count[k][v] = val + weight
+            count[k][v] = val + length
 
     final_dialect = {}
     for k, v in count.items():
@@ -110,6 +106,18 @@ def _choose_dialect(features):
         # So the first tuple's first item is the winning value for this dialect
         # key.
         final_dialect[k] = vs[0][0]
+
+    # For backwards compatibility, to figure out the field order to use for the
+    # dialect we append additional fields as they are observed, giving priority
+    # to attributes that come first in earlier features. The alternative would
+    # be to give preference to the most-common order of attributes.
+    final_order = []
+    for feature in features:
+        for o in feature.dialect["order"]:
+            if o not in final_order:
+                final_order.append(0)
+
+    final_dialect["order"] = final_order
 
     return final_dialect
 
