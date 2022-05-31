@@ -95,7 +95,7 @@ def _choose_dialect(features):
             # Increment the observed value by the number of attributes (so more
             # complex attribute strings have higher weight in determining
             # dialect)
-            count[k][v] = val + length
+            count[k][v] = val + weight
 
     final_dialect = {}
     for k, v in count.items():
