@@ -113,9 +113,9 @@ def _choose_dialect(features):
     # be to give preference to the most-common order of attributes.
     final_order = []
     for feature in features:
-        for o in feature.dialect["order"]:
+        for o in feature.attributes.keys():
             if o not in final_order:
-                final_order.append(0)
+                final_order.append(o)
 
     final_dialect["order"] = final_order
 
