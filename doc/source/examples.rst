@@ -646,9 +646,11 @@ attributes to have the same format.  To help with this, we can use the
 :func:`helpers.infer_dialect` function by providing attributes:
 
 >>> from gffutils import helpers
->>> dialect = helpers.infer_dialect([
+>>> dialect = helpers.infer_dialect(
 ... 'Transcript "B0019.1" ; WormPep "WP:CE40797" ; Note "amx-2" ; Prediction_status "Partially_confirmed" ; Gene "WBGene00000138" ; CDS "B0019.1" ; WormPep "WP:CE40797" ; Note "amx-2" ; Prediction_status "Partially_confirmed" ; Gene "WBGene00000138"',
-... ])
+... )
+>>> print(dialect)
+{'leading semicolon': False, 'trailing semicolon': False, 'quoted GFF2 values': True, 'field separator': ' ; ', 'keyval separator': ' ', 'multival separator': ',', 'fmt': 'gtf', 'repeated keys': True, 'order': ['Transcript', 'WormPep', 'Note', 'Prediction_status', 'Gene', 'CDS', 'WormPep', 'Note', 'Prediction_status', 'Gene']}
 
 >>> db.dialect = dialect
 

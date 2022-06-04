@@ -28,18 +28,15 @@ def infer_dialect(attributes):
 
     Parameters
     ----------
-    attributes : str or iterable
-        A single attributes string from a GTF or GFF line, or an iterable of
-        such strings.
+    attributes : str
+        A single attributes string from a GTF or GFF line
 
     Returns
     -------
     Dictionary representing the inferred dialect
     """
-    if isinstance(attributes, six.string_types):
-        attributes = [attributes]
-    dialects = [parser._split_keyvals(i)[1] for i in attributes]
-    return _choose_dialect(dialects)
+    attributes, dialect = parser._split_keyvals(attributes)
+    return dialect
 
 
 def _choose_dialect(features):
