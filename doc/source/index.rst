@@ -315,3 +315,22 @@ Aha! A single 5'UTR.  What about 3'UTRs?
 2L	FlyBase	intron	8117	8192	.	+	.	Name=CG11023-in;Parent=FBtr0300689,FBtr0300690;parent_type=mRNA
 2L	FlyBase	intron	8590	8667	.	+	.	Name=CG11023-in;Parent=FBtr0300690;parent_type=mRNA
 
+
+.. toctree::
+    :maxdepth: 2
+    :hidden:
+
+    installation
+    database-import
+    database-schema
+    database-ids
+    gtf
+    dialect
+    attributes
+    examples
+    api
+    changelog
+    developers
+    meta
+
+
