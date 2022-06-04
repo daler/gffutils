@@ -44,14 +44,6 @@ jobs:
           conda deactivate
 
       - name: doctests
-        run: |
-          eval "$(conda shell.bash hook)"
-          mamba install -y -p ./env --file docs-requirements.txt
-          conda activate ./env
-          (cd doc && make clean doctest)
-          conda deactivate
-
-      - name: build docs
         # Specifically in 3.8 (but not 3.6, 3.7, 3.9) we get:
         #
         #       Handler <function process_generate_options at 0x7f6eb70ba790>
@@ -60,6 +52,16 @@ jobs:
         #
         # ...and this is difficult or impossible to replicate locally.
         # The workaround is to just not build the html docs on 3.8.
+        if: ${{ (matrix.python-version != 3.8) }}
+        run: |
+          eval "$(conda shell.bash hook)"
+          mamba install -y -p ./env --file docs-requirements.txt
+          conda activate ./env
+          (cd doc && make clean doctest)
+          conda deactivate
+
+      - name: build docs
+        # See above for note about 3.8
         if: ${{ (matrix.python-version != 3.8) }}
         run: |
           eval "$(conda shell.bash hook)"
