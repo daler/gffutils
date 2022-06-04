@@ -92,6 +92,13 @@ jobs:
           fi
           cd $WORKDIR
 
+      - name: push artifact
+        if: ${{ (matrix.python-version == 3.9) }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: doc
+          path: /tmp/docs
+
       - name: push docs to gh-pages branch
         # Push docs to gh-pages if this test is running on master branch, and
         # restrict to a single Python version.
