@@ -75,7 +75,7 @@ Changes in v0.10
   <https://github.com/daler/gffutils/pull/144>`_).
 
 - Ensure that tests work post-installation (`#145
-  <https://github.com/daler/gffutils/pull/145`_, thanks Michael Crusoe @mr-c)
+  <https://github.com/daler/gffutils/pull/145>`_, thanks Michael Crusoe @mr-c)
 
 - Removed redundant ``inspection.py`` module (`#147
   <https://github.com/daler/gffutils/pull/147>`_).

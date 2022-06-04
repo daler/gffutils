@@ -12,7 +12,7 @@ allows operations which would be complicated or time-consuming using
 a text-file-only approach.
 
 Below is a short demonstration of :mod:`gffutils`. For the full documentation,
-see :doc:`contents`.
+see the rest of the table of contents to the left.
 
 Example file
 ------------
