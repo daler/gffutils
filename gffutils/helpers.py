@@ -76,7 +76,7 @@ def _choose_dialect(features):
 
     for feature in features:
 
-        # Number of attributes is is currently being used as the weight for
+        # Number of attributes is currently being used as the weight for
         # dialect selection. That is, more complex attribute strings are more
         # likely to be informative when determining dialect. This is important
         # for e.g., #128, where there is equal representation of long and short

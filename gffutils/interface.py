@@ -645,7 +645,7 @@ class FeatureDB(object):
             `region` will be returned.
 
         Notes
-        -------
+        -----
 
         The meaning of `seqid`, `start`, and `end` is interpreted as follows:
 
