@@ -537,8 +537,10 @@ a gene-level kind of object.  So we can use a transform function to add
 "gene_id" and "transcript_id" fields to all non-CDS features so that the file
 conforms to a GTF standard and gene extents can be inferred.  Furthermore, by
 default :mod:`gffutils` uses `'exon'` as the default feature type to merge into
-genes.  Here, we need to specify `gtf_subfeature='coding_exon'`.
-
+genes.  Here, we need to specify `gtf_subfeature='coding_exon'`. Last, note
+that the file itself has inconsistent trailing semicolons. The dialect
+detection decides that there should be no trailing semicolon since that's what
+the majority of the features use.
 
 File contents
 `````````````
@@ -565,7 +567,7 @@ Access
 Note that the inferred genes have a source of "gffutils_derived": 
 
 >>> print(db["cr01.sctg102.wum.2.1"])  #doctest:+NORMALIZE_WHITESPACE
-Contig102	gffutils_derived	gene	1629	3377	.	-	.	gene_id "cr01.sctg102.wum.2.1";
+Contig102	gffutils_derived	gene	1629	3377	.	-	.	gene_id "cr01.sctg102.wum.2.1"
 
 
 Get a report of the childrent of the gene:
