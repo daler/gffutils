@@ -28,30 +28,28 @@ def infer_dialect(attributes):
 
     Parameters
     ----------
-    attributes : str or iterable
-        A single attributes string from a GTF or GFF line, or an iterable of
-        such strings.
+    attributes : str
+        A single attributes string from a GTF or GFF line
 
     Returns
     -------
     Dictionary representing the inferred dialect
     """
-    if isinstance(attributes, six.string_types):
-        attributes = [attributes]
-    dialects = [parser._split_keyvals(i)[1] for i in attributes]
-    return _choose_dialect(dialects)
+    attributes, dialect = parser._split_keyvals(attributes)
+    return dialect
 
 
-def _choose_dialect(dialects):
+def _choose_dialect(features):
     """
-    Given a list of dialects, choose the one to use as the "canonical" version.
+    Given a list of features (often from peeking into an iterator), choose
+    a dialect to use as the "canonical" version.
 
-    If `dialects` is an empty list, then use the default GFF3 dialect
+    If `features` is an empty list, then use the default GFF3 dialect
 
     Parameters
     ----------
-    dialects : iterable
-        iterable of dialect dictionaries
+    features : iterable
+        iterable of features
 
     Returns
     -------
@@ -60,19 +58,65 @@ def _choose_dialect(dialects):
     # NOTE: can use helpers.dialect_compare if you need to make this more
     # complex....
 
-    # For now, this function favors the first dialect, and then appends the
-    # order of additional fields seen in the attributes of other lines giving
-    # priority to dialects that come first in the iterable.
-    if len(dialects) == 0:
+    if len(features) == 0:
         return constants.dialect
+
+    # Structure of `count` will be, e.g.,
+    #
+    #    {
+    #    'keyval separator': {'=': 35},
+    #    'trailing semicolon': {True: 30, False: 5},
+    #    ...(other dialect keys here)...
+    #    }
+    #
+    # In this example, all features agreed on keyval separeator. For trailing
+    # semicolon, there was a higher weight for True, so that will be selected
+    # for the final dialect.
+    count = {k: {} for k in constants.dialect.keys()}
+
+    for feature in features:
+
+        # Number of attributes is currently being used as the weight for
+        # dialect selection. That is, more complex attribute strings are more
+        # likely to be informative when determining dialect. This is important
+        # for e.g., #128, where there is equal representation of long and short
+        # attributes -- but only the longer attributes correctly have ";
+        # " field separators.
+        weight = len(feature.attributes)
+
+        for k, v in feature.dialect.items():
+            if isinstance(v, list):
+                v = tuple(v)
+            val = count[k].get(v, 0)
+
+            # Increment the observed value by the number of attributes (so more
+            # complex attribute strings have higher weight in determining
+            # dialect)
+            count[k][v] = val + weight
+
+    final_dialect = {}
+    for k, v in count.items():
+
+        # Tuples of (entry, total weight) in descending sort
+        vs = sorted(v.items(), key=lambda x: x[1], reverse=True)
+
+        # So the first tuple's first item is the winning value for this dialect
+        # key.
+        final_dialect[k] = vs[0][0]
+
+    # For backwards compatibility, to figure out the field order to use for the
+    # dialect we append additional fields as they are observed, giving priority
+    # to attributes that come first in earlier features. The alternative would
+    # be to give preference to the most-common order of attributes.
     final_order = []
-    for dialect in dialects:
-        for o in dialect["order"]:
+    for feature in features:
+        for o in feature.attributes.keys():
             if o not in final_order:
                 final_order.append(o)
-    dialect = dialects[0]
-    dialect["order"] = final_order
-    return dialect
+
+    final_dialect["order"] = final_order
+
+    return final_dialect
 
 
 def make_query(
