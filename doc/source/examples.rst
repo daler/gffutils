@@ -34,12 +34,6 @@ successfully import into a database and retrieve features.
     vs the 9th field of a GFF line, which is called the "attributes" field
     according to the spec. Confusing?  Yes!
 
-
-This documentation undergoes automated testing, and in order to support both
-Python 2 and 3 in the same test suite, we need to do this:
-
->>> from __future__ import print_function
-
 .. _mouse_extra_comma.gff3:
 
 .. rst-class:: html-toggle
