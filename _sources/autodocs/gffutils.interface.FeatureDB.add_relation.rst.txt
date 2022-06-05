@@ -1,4 +1,4 @@
-gffutils.interface.FeatureDB.add\_relation
+﻿gffutils.interface.FeatureDB.add\_relation
 ==========================================
 
 .. currentmodule:: gffutils.interface

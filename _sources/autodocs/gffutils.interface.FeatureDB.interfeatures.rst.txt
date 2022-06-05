@@ -1,4 +1,4 @@
-gffutils.interface.FeatureDB.interfeatures
+﻿gffutils.interface.FeatureDB.interfeatures
 ==========================================
 
 .. currentmodule:: gffutils.interface

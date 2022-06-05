@@ -1,6 +1,0 @@
-gffutils.FeatureDB.schema
-=========================
-
-.. currentmodule:: gffutils
-
-.. automethod:: FeatureDB.schema

@@ -1,4 +1,4 @@
-gffutils.interface.FeatureDB.bed12
+﻿gffutils.interface.FeatureDB.bed12
 ==================================
 
 .. currentmodule:: gffutils.interface

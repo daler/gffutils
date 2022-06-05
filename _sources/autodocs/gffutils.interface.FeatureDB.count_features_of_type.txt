@@ -1,6 +1,0 @@
-gffutils.interface.FeatureDB.count_features_of_type
-===================================================
-
-.. currentmodule:: gffutils.interface
-
-.. automethod:: FeatureDB.count_features_of_type

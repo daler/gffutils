@@ -1,6 +1,0 @@
-gffutils.create.create_db
-=========================
-
-.. currentmodule:: gffutils.create
-
-.. autofunction:: create_db

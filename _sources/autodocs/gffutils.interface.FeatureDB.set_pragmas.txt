@@ -1,6 +1,0 @@
-gffutils.interface.FeatureDB.set_pragmas
-========================================
-
-.. currentmodule:: gffutils.interface
-
-.. automethod:: FeatureDB.set_pragmas

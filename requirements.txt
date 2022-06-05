@@ -1,6 +1,0 @@
-biopython
-pyfaidx
-six
-argh
-argcomplete
-simplejson

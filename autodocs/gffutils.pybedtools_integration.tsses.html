@@ -1,71 +1,39 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>gffutils.pybedtools_integration.tsses &mdash; gffutils 0.10.1 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gffutils.pybedtools_integration.tsses &mdash; gffutils 0.11.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="gffutils.pybedtools_integration.to_bedtool" href="gffutils.pybedtools_integration.to_bedtool.html" />
     <link rel="prev" title="gffutils.biopython_integration.from_seqfeature" href="gffutils.biopython_integration.from_seqfeature.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="../contents.html" class="icon icon-home"> gffutils
-          
-
-          
+            <a href="../index.html" class="icon icon-home"> gffutils
           </a>
-
-          
-            
-            
               <div class="version">
-                0.10.1
+                0.11.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -73,19 +41,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../database-import.html">Importing data into a database</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../database-schema.html">Database schema</a></li>
@@ -102,7 +59,10 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../api.html#integration-with-other-tools">Integration with other tools</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="gffutils.biopython_integration.to_seqfeature.html">gffutils.biopython_integration.to_seqfeature</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gffutils.biopython_integration.from_seqfeature.html">gffutils.biopython_integration.from_seqfeature</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">gffutils.pybedtools_integration.tsses</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">gffutils.pybedtools_integration.tsses</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#gffutils.pybedtools_integration.tsses">tsses</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="gffutils.pybedtools_integration.to_bedtool.html">gffutils.pybedtools_integration.to_bedtool</a></li>
 </ul>
 </li>
@@ -114,75 +74,36 @@
 <li class="toctree-l1"><a class="reference internal" href="../meta.html">Meta-docs (docs about the docs)</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../contents.html">gffutils</a>
-        
+          <a href="../index.html">gffutils</a>
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../contents.html">Docs</a> &raquo;</li>
-        
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../api.html">API</a> &raquo;</li>
-        
       <li>gffutils.pybedtools_integration.tsses</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../_sources/autodocs/gffutils.pybedtools_integration.tsses.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="gffutils-pybedtools-integration-tsses">
-<h1>gffutils.pybedtools_integration.tsses<a class="headerlink" href="#gffutils-pybedtools-integration-tsses" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="gffutils.pybedtools_integration.tsses">
-<code class="sig-prename descclassname">gffutils.pybedtools_integration.</code><code class="sig-name descname">tsses</code><span class="sig-paren">(</span><em class="sig-param">db</em>, <em class="sig-param">merge_overlapping=False</em>, <em class="sig-param">attrs=None</em>, <em class="sig-param">attrs_sep=':'</em>, <em class="sig-param">merge_kwargs=None</em>, <em class="sig-param">as_bed6=False</em>, <em class="sig-param">bedtools_227_or_later=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/pybedtools_integration.html#tsses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gffutils.pybedtools_integration.tsses" title="Permalink to this definition">¶</a></dt>
+             
+  <section id="gffutils-pybedtools-integration-tsses">
+<h1>gffutils.pybedtools_integration.tsses<a class="headerlink" href="#gffutils-pybedtools-integration-tsses" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="gffutils.pybedtools_integration.tsses">
+<span class="sig-prename descclassname"><span class="pre">gffutils.pybedtools_integration.</span></span><span class="sig-name descname"><span class="pre">tsses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">merge_overlapping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs_sep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">':'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">merge_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_bed6</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bedtools_227_or_later</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/pybedtools_integration.html#tsses"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gffutils.pybedtools_integration.tsses" title="Permalink to this definition"></a></dt>
 <dd><p>Create 1-bp transcription start sites for all transcripts in the database
 and return as a sorted pybedtools.BedTool object pointing to a temporary
 file.</p>
@@ -191,20 +112,18 @@ resulting <code class="docutils literal notranslate"><span class="pre">pybedtool
 <p>To extend regions upstream/downstream, see the <code class="docutils literal notranslate"><span class="pre">.slop()</span></code> method on the
 resulting <code class="docutils literal notranslate"><span class="pre">pybedtools.BedTool</span> <span class="pre">object</span></code>.</p>
 <p>Requires pybedtools.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl>
-<dt><strong>db</strong><span class="classifier">gffutils.FeatureDB</span></dt><dd><p>The database to use</p>
-</dd>
-<dt><strong>as_bed6</strong><span class="classifier">bool</span></dt><dd><p>If True, output file is in BED6 format; otherwise it remains in the
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> (<em>gffutils.FeatureDB</em>) – The database to use</p></li>
+<li><p><strong>as_bed6</strong> (<em>bool</em>) – <p>If True, output file is in BED6 format; otherwise it remains in the
 GFF/GTF format and dialect of the file used to create the database.</p>
 <p>Note that the merge options below necessarily force <code class="docutils literal notranslate"><span class="pre">as_bed6=True</span></code>.</p>
-</dd>
-<dt><strong>merge_overlapping</strong><span class="classifier">bool</span></dt><dd><p>If True, output will be in BED format. Overlapping TSSes will be merged
+</p></li>
+<li><p><strong>merge_overlapping</strong> (<em>bool</em>) – If True, output will be in BED format. Overlapping TSSes will be merged
 into a single feature, and their names will be collapsed using
-<code class="docutils literal notranslate"><span class="pre">merge_sep</span></code> and placed in the new name field.</p>
-</dd>
-<dt><strong>merge_kwargs</strong><span class="classifier">dict</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">merge_overlapping=True</span></code>, these keyword arguments are passed to
+<code class="docutils literal notranslate"><span class="pre">merge_sep</span></code> and placed in the new name field.</p></li>
+<li><p><strong>merge_kwargs</strong> (<em>dict</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">merge_overlapping=True</span></code>, these keyword arguments are passed to
 pybedtools.BedTool.merge(), which are in turn sent to <code class="docutils literal notranslate"><span class="pre">bedtools</span> <span class="pre">merge</span></code>.
 The merge operates on a BED6 file which will have had the name field
 constructed as specified by other arguments here.  See the available
@@ -215,26 +134,25 @@ recommended to not override <code class="docutils literal notranslate"><span cla
 post-merge fixing may not work correctly. Good candidates for tweaking
 are <code class="docutils literal notranslate"><span class="pre">d</span></code> (merge distance), <code class="docutils literal notranslate"><span class="pre">o</span></code> (operation), <code class="docutils literal notranslate"><span class="pre">delim</span></code> (delimiter to use
 for collapse operations).</p>
-</dd>
-<dt><strong>attrs</strong><span class="classifier">str or list</span></dt><dd><p>Only has an effect when <code class="docutils literal notranslate"><span class="pre">as_bed6=True</span></code> or <code class="docutils literal notranslate"><span class="pre">merge_overlapping=True</span></code>.</p>
+</p></li>
+<li><p><strong>attrs</strong> (<em>str</em><em> or </em><em>list</em>) – <p>Only has an effect when <code class="docutils literal notranslate"><span class="pre">as_bed6=True</span></code> or <code class="docutils literal notranslate"><span class="pre">merge_overlapping=True</span></code>.</p>
 <p>Determines what goes in the name field of an output BED file. By
 default, “gene_id” for GTF databases and “ID” for GFF. If a list of
 attributes is supplied, e.g. [“gene_id”, “transcript_id”], then these
 will be joined by <code class="docutils literal notranslate"><span class="pre">attr_join_sep</span></code> and then placed in the name field.</p>
-</dd>
-<dt><strong>attrs_sep: str</strong></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">as_bed6=True</span></code> or <code class="docutils literal notranslate"><span class="pre">merge_overlapping=True</span></code>, then use this character
+</p></li>
+<li><p><strong>attrs_sep</strong> (<em>str</em>) – If <code class="docutils literal notranslate"><span class="pre">as_bed6=True</span></code> or <code class="docutils literal notranslate"><span class="pre">merge_overlapping=True</span></code>, then use this character
 to separate attributes in the name field of the output BED. If also
 using <code class="docutils literal notranslate"><span class="pre">merge_overlapping=True</span></code>, you’ll probably want this to be
-different than <code class="docutils literal notranslate"><span class="pre">merge_sep</span></code> in order to parse things out later.</p>
-</dd>
-<dt><strong>bedtools_227_or_later</strong><span class="classifier">bool</span></dt><dd><p>In version 2.27, BEDTools changed the output for merge. By default,
+different than <code class="docutils literal notranslate"><span class="pre">merge_sep</span></code> in order to parse things out later.</p></li>
+<li><p><strong>bedtools_227_or_later</strong> (<em>bool</em>) – <p>In version 2.27, BEDTools changed the output for merge. By default,
 this function expects BEDTools version 2.27 or later, but set this to
 False to assume the older behavior.</p>
 <p>For testing purposes, the environment variable
 GFFUTILS_USES_BEDTOOLS_227_OR_LATER is set to either “true” or “false”
 and is used to override this argument.</p>
-</dd>
-</dl>
+</p></li>
+</ul>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -293,55 +211,37 @@ specified, we must add <code class="docutils literal notranslate"><span class="p
 </div>
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="gffutils.pybedtools_integration.to_bedtool.html" class="btn btn-neutral float-right" title="gffutils.pybedtools_integration.to_bedtool" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="gffutils.biopython_integration.from_seqfeature.html" class="btn btn-neutral float-left" title="gffutils.biopython_integration.from_seqfeature" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="gffutils.biopython_integration.from_seqfeature.html" class="btn btn-neutral float-left" title="gffutils.biopython_integration.from_seqfeature" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gffutils.pybedtools_integration.to_bedtool.html" class="btn btn-neutral float-right" title="gffutils.pybedtools_integration.to_bedtool" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2013, Ryan Dale
-
-    </p>
+    <p>&#169; Copyright 2013-2022, Ryan Dale.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

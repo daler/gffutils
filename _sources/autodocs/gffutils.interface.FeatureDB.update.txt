@@ -1,6 +1,0 @@
-gffutils.interface.FeatureDB.update
-===================================
-
-.. currentmodule:: gffutils.interface
-
-.. automethod:: FeatureDB.update

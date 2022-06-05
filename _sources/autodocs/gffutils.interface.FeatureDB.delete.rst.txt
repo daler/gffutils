@@ -1,4 +1,4 @@
-gffutils.interface.FeatureDB.delete
+﻿gffutils.interface.FeatureDB.delete
 ===================================
 
 .. currentmodule:: gffutils.interface

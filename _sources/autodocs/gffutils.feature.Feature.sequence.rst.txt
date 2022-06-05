@@ -1,4 +1,4 @@
-gffutils.feature.Feature.sequence
+﻿gffutils.feature.Feature.sequence
 =================================
 
 .. currentmodule:: gffutils.feature

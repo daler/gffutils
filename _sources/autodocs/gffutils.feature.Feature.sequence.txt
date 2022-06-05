@@ -1,6 +1,0 @@
-gffutils.feature.Feature.sequence
-=================================
-
-.. currentmodule:: gffutils.feature
-
-.. automethod:: Feature.sequence

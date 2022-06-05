@@ -1,71 +1,39 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Developer’s docs &mdash; gffutils 0.10.1 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Developer’s docs &mdash; gffutils 0.11.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  
-  
-
-  
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Meta-docs (docs about the docs)" href="meta.html" />
     <link rel="prev" title="Change log" href="changelog.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="contents.html" class="icon icon-home"> gffutils
-          
-
-          
+            <a href="index.html" class="icon icon-home"> gffutils
           </a>
-
-          
-            
-            
               <div class="version">
-                0.10.1
+                0.11.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -73,19 +41,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="index.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="database-import.html">Importing data into a database</a></li>
 <li class="toctree-l1"><a class="reference internal" href="database-schema.html">Database schema</a></li>
@@ -110,74 +67,36 @@
 <li class="toctree-l1"><a class="reference internal" href="meta.html">Meta-docs (docs about the docs)</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="contents.html">gffutils</a>
-        
+          <a href="index.html">gffutils</a>
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="contents.html">Docs</a> &raquo;</li>
-        
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
       <li>Developer’s docs</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/developers.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="developer-s-docs">
-<h1>Developer’s docs<a class="headerlink" href="#developer-s-docs" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="developer-s-docs">
+<h1>Developer’s docs<a class="headerlink" href="#developer-s-docs" title="Permalink to this heading"></a></h1>
 <p>This section serves as an entry point for learning about the internals of
 <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a>. The github repository can be found <a class="reference external" href="https://github.com/daler/gffutils">here</a></p>
-<div class="section" id="package-modules">
-<h2>Package modules<a class="headerlink" href="#package-modules" title="Permalink to this headline">¶</a></h2>
+<section id="package-modules">
+<h2>Package modules<a class="headerlink" href="#package-modules" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">create.py</span></code> for creating new databases</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">parser.py</span></code> for parsing GFF/GTF files and determining the dialect</p></li>
@@ -188,69 +107,80 @@ schema, and the default dialect</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">interface.py</span></code> provides the <code class="xref py py-class docutils literal notranslate"><span class="pre">FeatureDB</span></code> class for interfacing with an
 existing db</p></li>
 </ul>
-</div>
-<div class="section" id="general-workflow">
-<h2>General workflow<a class="headerlink" href="#general-workflow" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="how-data-is-read-in">
-<h3>How data is read in<a class="headerlink" href="#how-data-is-read-in" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="general-workflow">
+<h2>General workflow<a class="headerlink" href="#general-workflow" title="Permalink to this heading"></a></h2>
+<section id="how-data-is-read-in">
+<h3>How data is read in<a class="headerlink" href="#how-data-is-read-in" title="Permalink to this heading"></a></h3>
 <p>Three kinds of input data can be provided: a filename, an iterator of
-<code class="xref py py-class docutils literal notranslate"><span class="pre">Feature</span></code> objects, or a string containing GFF/GTF lines.  This
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Feature</span></code> objects, or a string containing GFF/GTF lines. This
 flexibility comes at the cost of code complexity.</p>
 <p>Any of these three kinds of input are provided to <code class="xref py py-class docutils literal notranslate"><span class="pre">DataIterator</span></code>, which
 figures out the right iterator class it should delegate out to
-(<code class="xref py py-class docutils literal notranslate"><span class="pre">FileIterator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">FeatureIterator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">StringIterator</span></code>).
-The iterator class must define a <code class="xref py py-class docutils literal notranslate"><span class="pre">_custom_iter</span></code> method, which is
+(<code class="xref py py-class docutils literal notranslate"><span class="pre">_FileIterator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">_FeatureIterator</span></code>, or <code class="xref py py-class docutils literal notranslate"><span class="pre">_UrlIterator</span></code>).
+The iterator class must define a <code class="xref py py-meth docutils literal notranslate"><span class="pre">_custom_iter()</span></code> method, which is
 responsible for taking input in whatever form (filename, Feature objects,
-string of lines, respectively) and always yielding <code class="xref py py-class docutils literal notranslate"><span class="pre">Feature</span></code> objects.</p>
-<p>These iterator classes are subclasses of <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseIterator</span></code>.</p>
+string of lines, respectively) and always yielding <code class="xref py py-class docutils literal notranslate"><span class="pre">Feature</span></code> objects. It
+must also define a <code class="xref py py-meth docutils literal notranslate"><span class="pre">peek()</span></code> method that returns the first <code class="docutils literal notranslate"><span class="pre">n</span></code> features.
+Importantly, both <code class="xref py py-meth docutils literal notranslate"><span class="pre">peek()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">_custom_iter()</span></code> must be written such
+that the act of “peeking” into the first items does not consume the underlying
+iterator.</p>
+<p>These iterator classes are subclasses of <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseIterator</span></code>.</p>
 <p>Upon initialization, a <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseIterator</span></code> figures out what the dialect is.
-It does so by consuming <code class="docutils literal notranslate"><span class="pre">checklines</span></code> <code class="xref py py-class docutils literal notranslate"><span class="pre">Feature</span></code> objects from
-<code class="xref py py-meth docutils literal notranslate"><span class="pre">_custom_iter()</span></code>.  It uses the <code class="xref py py-func docutils literal notranslate"><span class="pre">iterators.peek()</span></code> function to do this,
-which returns a list of the first <code class="docutils literal notranslate"><span class="pre">checklines</span></code> objects, along with a new,
-re-wound iterator.  This new iterator is stored as the
-<code class="xref py py-attr docutils literal notranslate"><span class="pre">BaseIterator._iter</span></code> attribute.</p>
-<p>So now the <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseIterator</span></code> has figured out what dialect we’re working
-with, and it has the <code class="docutils literal notranslate"><span class="pre">dialect</span></code> attribute set.  Its <code class="xref py py-meth docutils literal notranslate"><span class="pre">__iter__()</span></code>
-method iterates over the <code class="xref py py-meth docutils literal notranslate"><span class="pre">_custom_iter()</span></code>, Upon iterating, it
-will add this dialect to every <code class="xref py py-class docutils literal notranslate"><span class="pre">Feature</span></code>.  This means that, no matter
+It does so by consuming <code class="docutils literal notranslate"><span class="pre">checklines</span></code> <code class="xref py py-class docutils literal notranslate"><span class="pre">Feature</span></code> objects using
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">peek()</span></code>. So now the <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseIterator</span></code> has figured out what dialect
+we’re working with, and it has the <code class="docutils literal notranslate"><span class="pre">dialect</span></code> attribute set. Its
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">__iter__()</span></code> method iterates over the <code class="xref py py-meth docutils literal notranslate"><span class="pre">_custom_iter()</span></code>, Upon iterating,
+it will add this dialect to every <code class="xref py py-class docutils literal notranslate"><span class="pre">Feature</span></code>. This means that, no matter
 what format <code class="docutils literal notranslate"><span class="pre">data</span></code> is (filename, iterable of features, or a string with GFF
 lines), the following will print the lines correctly:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">DataIterator</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>To summarize the path of data from a file: <code class="docutils literal notranslate"><span class="pre">_FileIterator._custom_iter</span></code>
+configures how to read from the file, yielding features generated from lines.
+When instantiating the <code class="docutils literal notranslate"><span class="pre">_FileIterator</span></code> (see <code class="docutils literal notranslate"><span class="pre">_BaseIterator.__init__</span></code>),
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">_FileIterator._peek()</span></code> is run to get the dialect. This uses
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">_FileIterator._custom_iter()</span></code> to check the first lines. Then whenever the
+<code class="xref py py-class docutils literal notranslate"><span class="pre">_FileIterator</span></code> is iterated over, <code class="xref py py-meth docutils literal notranslate"><span class="pre">_FileIterator._custom_iter()</span></code>
+re-opens the file and <code class="xref py py-meth docutils literal notranslate"><span class="pre">_BaseIterator.__iter__()</span></code> sets the dialect of the
+feature, applies any transform if needed, and yields the feature. This then
+goes to the DBCreator classes, who call
+<code class="docutils literal notranslate"><span class="pre">self._populate_from_lines(self.iterator)</span></code>. <code class="docutils literal notranslate"><span class="pre">self.iterator</span></code> is whatever
+<code class="docutils literal notranslate"><span class="pre">_BaseIterator</span></code> subclass was delegated to.</p>
 <p>A dialect can be optionally provided, which will disable the automatic dialect
-inference.  This makes it straightforward to sanitize input, or convert to
-a new dialect.  For example, to convert from GTF to GFF dialects:</p>
+inference. This makes it straightforward to sanitize input, or convert to
+a new dialect. For example, to convert from GTF to GFF dialects:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">DataIterator</span><span class="p">(</span><span class="n">GTF_data</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="n">GFF_dialect</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>If <code class="docutils literal notranslate"><span class="pre">dialect</span></code> is not None, then that dialect will be used; otherwise, it will be
 auto-detected.</p>
-</div>
-<div class="section" id="import">
-<h3>Import<a class="headerlink" href="#import" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="import">
+<h3>Import<a class="headerlink" href="#import" title="Permalink to this heading"></a></h3>
 <p>While the format of each line in a GFF and GTF file are <em>syntactically</em> similar
 (same number of fields, roughly the same attributes string formatting), in the
 context of the file as a whole they can be very <em>semantically</em> different.</p>
-<p>For example, GTF files do not have “gene” features defined.  The genomic
+<p>For example, GTF files do not have “gene” features defined. The genomic
 coordinates of a gene must be inferred from the various “exon” features
-comprising a particular gene.  For a GTF file, it’s easy to figure out which
+comprising a particular gene. For a GTF file, it’s easy to figure out which
 gene an exon belongs to by the “gene_id” attribute.</p>
-<p>In contrast, GFF files typically have a “Parent” attribute.  For an exon, the
+<p>In contrast, GFF files typically have a “Parent” attribute. For an exon, the
 parent is the transcript; in order to figure out which gene an exon belongs to
-requires looking at the parent of that transcript.  But … the transcript may be
+requires looking at the parent of that transcript. But … the transcript may be
 defined many lines away in the GFF file, making it difficult to work with using
 a line-by-line parsing approach.</p>
 <p>The point of <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a> is to make access to the underlying data uniform
 across both formats and to allow inter-conversion for use by downstream tools.
 It does this by creating a relational database of features and parent-child
-relationships.  That is, GTF and GFF files are all modeled as parent-child
-reationships between features.  This abstraction is what allows interconversion
+relationships. That is, GTF and GFF files are all modeled as parent-child
+reationships between features. This abstraction is what allows interconversion
 and the hierarchical navigation.</p>
 <p>Since the formats are so different, they require different methods of creation.
-The <code class="xref py py-class docutils literal notranslate"><span class="pre">create._DBCreator</span></code> class abstracts out common creation tasks.  The
+The <code class="xref py py-class docutils literal notranslate"><span class="pre">create._DBCreator</span></code> class abstracts out common creation tasks. The
 <code class="xref py py-class docutils literal notranslate"><span class="pre">create._GFFDBCreator</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">create._GTFDBCreator</span></code> classes take
 care of the format-specific routines.</p>
 <dl class="simple">
@@ -265,103 +195,85 @@ writing version info, dialect, autoincrent info, etc.</p></li>
 </dl>
 <p><code class="xref py py-class docutils literal notranslate"><span class="pre">_GFFDBCreator</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">_GTFDBCreator</span></code> subclass <code class="xref py py-class docutils literal notranslate"><span class="pre">_DBCreator</span></code>
 and override the <code class="xref py py-meth docutils literal notranslate"><span class="pre">_populate_from_lines()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">_update_relations()</span></code>
-methods.  Details are best left to the source code itself and the comments in
+methods. Details are best left to the source code itself and the comments in
 those methods, it gets tricky.</p>
 <p>The <code class="xref py py-func docutils literal notranslate"><span class="pre">create.create_db()</span></code> function delegates out to the appropriate class,
 and all the docs for the kwargs are in this function.</p>
-<p>A lot of work has gone into making the import very flexible.  The
+<p>A lot of work has gone into making the import very flexible. The
 <a class="reference internal" href="database-ids.html#database-ids"><span class="std std-ref">Database IDs</span></a>, <a class="reference internal" href="gtf.html#gtf"><span class="std std-ref">GTF files</span></a> and <a class="reference internal" href="examples.html#examples"><span class="std std-ref">Examples</span></a> sections discuss
 the flexibility.</p>
-</div>
-<div class="section" id="access">
-<h3>Access<a class="headerlink" href="#access" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="access">
+<h3>Access<a class="headerlink" href="#access" title="Permalink to this heading"></a></h3>
 <p>Since the db creation imported the data into a uniform format, access requires
-only a single class, <code class="xref py py-class docutils literal notranslate"><span class="pre">interface.FeatureDB</span></code>.  Most methods on this class
+only a single class, <code class="xref py py-class docutils literal notranslate"><span class="pre">interface.FeatureDB</span></code>. Most methods on this class
 simply perform queries on the database and return iterators of
 <code class="xref py py-class docutils literal notranslate"><span class="pre">feature.Feature</span></code> instances.</p>
 <p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">Feature</span></code> instances yielded from these iterators inherit the
 database’s dialect so that they print correctly.</p>
-</div>
-<div class="section" id="little-things">
-<h3>Little things<a class="headerlink" href="#little-things" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="little-things">
+<h3>Little things<a class="headerlink" href="#little-things" title="Permalink to this heading"></a></h3>
 <p>Some notes that don’t fit elsewhere:</p>
 <ul class="simple">
 <li><p>the database stores an autoincrement table, keeping track of the last ID used
-for each featuretype.  This means you can update a database with some more
+for each featuretype. This means you can update a database with some more
 features, and if there are missing IDs (for, say, exons) the primary key
 numbering will pick up where it left of (so the next exon would have an ID of
 “exon_199” or something).</p></li>
 <li><p>I really wanted to maintain round-trip invariance: importing into a db and
-then getting the features back out should not change them at all.  That’s
+then getting the features back out should not change them at all. That’s
 where the dialect comes into play – it specifies the format of the
 attributes string, which is the trickiest thing to get right.</p></li>
 <li><p>at first, I was keeping track of the order of attributes in an OrderedDict.
-Benchmarking with 1M+ line files showed that this was slow.  So now the
+Benchmarking with 1M+ line files showed that this was slow. So now the
 attributes are stored as plain ol’ dicts, and information about the order of
-attributes is stored only once: in the db’s dialect.  While features with
+attributes is stored only once: in the db’s dialect. While features with
 different orders of attributes (on one line “gene_id” comes first; on another
 line “Name” comes first) will be round-trip invariant, this should at least
-hold for most cases.  I figured it was a good compromise.</p></li>
+hold for most cases. I figured it was a good compromise.</p></li>
 <li><p>upon getting features back from a db, the dialect is “injected” into each
-feature.  Each Feature’s dialect can still be changed, though, for on-the-fly
+feature. Each Feature’s dialect can still be changed, though, for on-the-fly
 dialect conversion</p></li>
 <li><p>many methods on FeatureDB share optional constraints for the underlying query
-– genomic region, strand, featuretype, order_by, etc.  These are factored
+– genomic region, strand, featuretype, order_by, etc. These are factored
 out into <code class="xref py py-func docutils literal notranslate"><span class="pre">helpers.make_query()</span></code>, which handles this type of query.
 I decided on this sort of minimal ORM rather than accept the overhead of
 something like sqlalchemy.</p></li>
 </ul>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="meta.html" class="btn btn-neutral float-right" title="Meta-docs (docs about the docs)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="changelog.html" class="btn btn-neutral float-left" title="Change log" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="changelog.html" class="btn btn-neutral float-left" title="Change log" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="meta.html" class="btn btn-neutral float-right" title="Meta-docs (docs about the docs)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2013, Ryan Dale
-
-    </p>
+    <p>&#169; Copyright 2013-2022, Ryan Dale.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

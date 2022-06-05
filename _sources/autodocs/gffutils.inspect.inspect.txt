@@ -1,6 +1,0 @@
-gffutils.inspect.inspect
-========================
-
-.. currentmodule:: gffutils.inspect
-
-.. autofunction:: inspect

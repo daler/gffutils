@@ -1,6 +1,0 @@
-gffutils.FeatureDB.delete
-=========================
-
-.. currentmodule:: gffutils
-
-.. automethod:: FeatureDB.delete

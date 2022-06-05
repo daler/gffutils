@@ -1,4 +1,4 @@
-gffutils.interface.FeatureDB.create\_introns
+﻿gffutils.interface.FeatureDB.create\_introns
 ============================================
 
 .. currentmodule:: gffutils.interface

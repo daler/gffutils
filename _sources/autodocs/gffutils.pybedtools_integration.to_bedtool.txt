@@ -1,6 +1,0 @@
-gffutils.pybedtools_integration.to_bedtool
-==========================================
-
-.. currentmodule:: gffutils.pybedtools_integration
-
-.. autofunction:: to_bedtool

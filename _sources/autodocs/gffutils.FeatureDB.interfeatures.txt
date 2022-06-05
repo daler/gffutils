@@ -1,6 +1,0 @@
-gffutils.FeatureDB.interfeatures
-================================
-
-.. currentmodule:: gffutils
-
-.. automethod:: FeatureDB.interfeatures

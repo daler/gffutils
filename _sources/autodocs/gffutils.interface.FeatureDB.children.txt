@@ -1,6 +1,0 @@
-gffutils.interface.FeatureDB.children
-=====================================
-
-.. currentmodule:: gffutils.interface
-
-.. automethod:: FeatureDB.children

@@ -1,4 +1,4 @@
-gffutils.interface.FeatureDB.merge
+﻿gffutils.interface.FeatureDB.merge
 ==================================
 
 .. currentmodule:: gffutils.interface

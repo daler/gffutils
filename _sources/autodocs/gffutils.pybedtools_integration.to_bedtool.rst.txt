@@ -1,4 +1,4 @@
-gffutils.pybedtools\_integration.to\_bedtool
+﻿gffutils.pybedtools\_integration.to\_bedtool
 ============================================
 
 .. currentmodule:: gffutils.pybedtools_integration

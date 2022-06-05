@@ -1,4 +1,4 @@
-gffutils.feature.feature\_from\_line
+﻿gffutils.feature.feature\_from\_line
 ====================================
 
 .. currentmodule:: gffutils.feature

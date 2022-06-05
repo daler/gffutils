@@ -1,4 +1,4 @@
-gffutils.helpers.merge\_attributes
+﻿gffutils.helpers.merge\_attributes
 ==================================
 
 .. currentmodule:: gffutils.helpers

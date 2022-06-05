@@ -1,71 +1,39 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>gffutils.interface.FeatureDB.children &mdash; gffutils 0.10.1 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gffutils.interface.FeatureDB.children &mdash; gffutils 0.11.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="gffutils.interface.FeatureDB.parents" href="gffutils.interface.FeatureDB.parents.html" />
     <link rel="prev" title="gffutils.interface.FeatureDB" href="gffutils.interface.FeatureDB.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="../contents.html" class="icon icon-home"> gffutils
-          
-
-          
+            <a href="../index.html" class="icon icon-home"> gffutils
           </a>
-
-          
-            
-            
               <div class="version">
-                0.10.1
+                0.11.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -73,19 +41,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../database-import.html">Importing data into a database</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../database-schema.html">Database schema</a></li>
@@ -99,7 +56,10 @@
 <li class="toctree-l2"><a class="reference internal" href="../api.html#create-a-database">Create a database</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../api.html#interact-with-a-database">Interact with a database</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="gffutils.interface.FeatureDB.html">gffutils.interface.FeatureDB</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">gffutils.interface.FeatureDB.children</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">gffutils.interface.FeatureDB.children</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#gffutils.interface.FeatureDB.children">children</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="gffutils.interface.FeatureDB.parents.html">gffutils.interface.FeatureDB.parents</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gffutils.interface.FeatureDB.schema.html">gffutils.interface.FeatureDB.schema</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gffutils.interface.FeatureDB.features_of_type.html">gffutils.interface.FeatureDB.features_of_type</a></li>
@@ -130,162 +90,96 @@
 <li class="toctree-l1"><a class="reference internal" href="../meta.html">Meta-docs (docs about the docs)</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../contents.html">gffutils</a>
-        
+          <a href="../index.html">gffutils</a>
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../contents.html">Docs</a> &raquo;</li>
-        
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../api.html">API</a> &raquo;</li>
-        
       <li>gffutils.interface.FeatureDB.children</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../_sources/autodocs/gffutils.interface.FeatureDB.children.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="gffutils-interface-featuredb-children">
-<h1>gffutils.interface.FeatureDB.children<a class="headerlink" href="#gffutils-interface-featuredb-children" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="gffutils.interface.FeatureDB.children">
-<code class="sig-prename descclassname">FeatureDB.</code><code class="sig-name descname">children</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">id</em>, <em class="sig-param">level=None</em>, <em class="sig-param">featuretype=None</em>, <em class="sig-param">order_by=None</em>, <em class="sig-param">reverse=False</em>, <em class="sig-param">limit=None</em>, <em class="sig-param">completely_within=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/interface.html#FeatureDB.children"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gffutils.interface.FeatureDB.children" title="Permalink to this definition">¶</a></dt>
+             
+  <section id="gffutils-interface-featuredb-children">
+<h1>gffutils.interface.FeatureDB.children<a class="headerlink" href="#gffutils-interface-featuredb-children" title="Permalink to this heading"></a></h1>
+<dl class="py method">
+<dt class="sig sig-object py" id="gffutils.interface.FeatureDB.children">
+<span class="sig-prename descclassname"><span class="pre">FeatureDB.</span></span><span class="sig-name descname"><span class="pre">children</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">featuretype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">completely_within</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/interface.html#FeatureDB.children"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gffutils.interface.FeatureDB.children" title="Permalink to this definition"></a></dt>
 <dd><p>Return children of feature <code class="docutils literal notranslate"><span class="pre">id</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>id</strong><span class="classifier">string or a Feature object</span></dt><dd></dd>
-<dt><strong>level</strong><span class="classifier">None or int</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">level=None</span></code> (default), then return all children regardless
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>string</em><em> or </em><em>a Feature object</em>) – </p></li>
+<li><p><strong>level</strong> (<em>None</em><em> or </em><em>int</em>) – If <code class="docutils literal notranslate"><span class="pre">level=None</span></code> (default), then return all children regardless
 of level.  If <code class="docutils literal notranslate"><span class="pre">level</span></code> is an integer, then constrain to just that
-level.</p>
-</dd>
-<dt><strong>limit</strong><span class="classifier">string or tuple</span></dt><dd><p>Limit the results to a genomic region.  If string, then of the form
-“seqid:start-end”; if tuple, then (seqid, start, end).</p>
-</dd>
-<dt><strong>strand</strong><span class="classifier">“-” | “+” | “.”</span></dt><dd><p>Limit the results to one strand</p>
-</dd>
-<dt><strong>featuretype</strong><span class="classifier">string or tuple</span></dt><dd><p>Limit the results to one or several featuretypes.</p>
-</dd>
-<dt><strong>order_by</strong><span class="classifier">string or tuple</span></dt><dd><p>Order results by one or many fields; the string or tuple items must
+level.</p></li>
+<li><p><strong>limit</strong> (<em>string</em><em> or </em><em>tuple</em>) – Limit the results to a genomic region.  If string, then of the form
+“seqid:start-end”; if tuple, then (seqid, start, end).</p></li>
+<li><p><strong>strand</strong> (<em>&quot;-&quot;</em><em> | </em><em>&quot;+&quot;</em><em> | </em><em>&quot;.&quot;</em>) – Limit the results to one strand</p></li>
+<li><p><strong>featuretype</strong> (<em>string</em><em> or </em><em>tuple</em>) – Limit the results to one or several featuretypes.</p></li>
+<li><p><strong>order_by</strong> (<em>string</em><em> or </em><em>tuple</em>) – Order results by one or many fields; the string or tuple items must
 be in: ‘seqid’, ‘source’, ‘featuretype’, ‘start’, ‘end’, ‘score’,
-‘strand’, ‘frame’, ‘attributes’, ‘extra’.</p>
-</dd>
-<dt><strong>reverse</strong><span class="classifier">bool</span></dt><dd><p>Change sort order; only relevant if <code class="docutils literal notranslate"><span class="pre">order_by</span></code> is not None.  By
+‘strand’, ‘frame’, ‘attributes’, ‘extra’.</p></li>
+<li><p><strong>reverse</strong> (<em>bool</em>) – Change sort order; only relevant if <code class="docutils literal notranslate"><span class="pre">order_by</span></code> is not None.  By
 default, results will be in ascending order, so use <code class="docutils literal notranslate"><span class="pre">reverse=True</span></code>
-for descending.</p>
-</dd>
-<dt><strong>completely_within</strong><span class="classifier">bool</span></dt><dd><p>If False (default), a single bp overlap with <code class="docutils literal notranslate"><span class="pre">limit</span></code> is sufficient
+for descending.</p></li>
+<li><p><strong>completely_within</strong> (<em>bool</em>) – If False (default), a single bp overlap with <code class="docutils literal notranslate"><span class="pre">limit</span></code> is sufficient
 to return a feature; if True, then the feature must be completely
-within <code class="docutils literal notranslate"><span class="pre">limit</span></code>. Only relevant when <code class="docutils literal notranslate"><span class="pre">limit</span></code> is not None.</p>
+within <code class="docutils literal notranslate"><span class="pre">limit</span></code>. Only relevant when <code class="docutils literal notranslate"><span class="pre">limit</span></code> is not None.</p></li>
+</ul>
 </dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>A generator object that yields <code class="xref py py-class docutils literal notranslate"><span class="pre">Feature</span></code> objects.</dt><dd></dd>
-</dl>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>A generator object that yields <code class="xref py py-class docutils literal notranslate"><span class="pre">Feature</span></code> objects.</p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="gffutils.interface.FeatureDB.parents.html" class="btn btn-neutral float-right" title="gffutils.interface.FeatureDB.parents" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="gffutils.interface.FeatureDB.html" class="btn btn-neutral float-left" title="gffutils.interface.FeatureDB" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="gffutils.interface.FeatureDB.html" class="btn btn-neutral float-left" title="gffutils.interface.FeatureDB" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gffutils.interface.FeatureDB.parents.html" class="btn btn-neutral float-right" title="gffutils.interface.FeatureDB.parents" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2013, Ryan Dale
-
-    </p>
+    <p>&#169; Copyright 2013-2022, Ryan Dale.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

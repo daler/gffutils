@@ -12,7 +12,7 @@ allows operations which would be complicated or time-consuming using
 a text-file-only approach.
 
 Below is a short demonstration of :mod:`gffutils`. For the full documentation,
-see :doc:`contents`.
+see the rest of the table of contents to the left.
 
 Example file
 ------------
@@ -314,4 +314,23 @@ Aha! A single 5'UTR.  What about 3'UTRs?
 2L	FlyBase	intron	8117	8228	.	+	.	Name=CG11023-in;Parent=FBtr0330654;parent_type=mRNA
 2L	FlyBase	intron	8117	8192	.	+	.	Name=CG11023-in;Parent=FBtr0300689,FBtr0300690;parent_type=mRNA
 2L	FlyBase	intron	8590	8667	.	+	.	Name=CG11023-in;Parent=FBtr0300690;parent_type=mRNA
+
+
+.. toctree::
+    :maxdepth: 2
+    :hidden:
+
+    installation
+    database-import
+    database-schema
+    database-ids
+    gtf
+    dialect
+    attributes
+    examples
+    api
+    changelog
+    developers
+    meta
+
 

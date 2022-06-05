@@ -1,69 +1,36 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gffutils.helpers &mdash; gffutils 0.11.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>gffutils.helpers &mdash; gffutils 0.10.1 documentation</title>
-  
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="../../contents.html" class="icon icon-home"> gffutils
-          
-
-          
+            <a href="../../index.html" class="icon icon-home"> gffutils
           </a>
-
-          
-            
-            
               <div class="version">
-                0.10.1
+                0.11.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -71,19 +38,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../index.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../database-import.html">Importing data into a database</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../database-schema.html">Database schema</a></li>
@@ -98,66 +54,30 @@
 <li class="toctree-l1"><a class="reference internal" href="../../meta.html">Meta-docs (docs about the docs)</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../contents.html">gffutils</a>
-        
+          <a href="../../index.html">gffutils</a>
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../contents.html">Docs</a> &raquo;</li>
-        
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../index.html">Module code</a> &raquo;</li>
-        
       <li>gffutils.helpers</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <h1>Source code for gffutils.helpers</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -180,7 +100,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the full path of a data file that ships with gffutils.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">HERE</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">HERE</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="infer_dialect"><a class="viewcode-back" href="../../autodocs/gffutils.helpers.infer_dialect.html#gffutils.helpers.infer_dialect">[docs]</a><span class="k">def</span> <span class="nf">infer_dialect</span><span class="p">(</span><span class="n">attributes</span><span class="p">):</span>
@@ -189,30 +109,28 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    attributes : str or iterable</span>
-<span class="sd">        A single attributes string from a GTF or GFF line, or an iterable of</span>
-<span class="sd">        such strings.</span>
+<span class="sd">    attributes : str</span>
+<span class="sd">        A single attributes string from a GTF or GFF line</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    Dictionary representing the inferred dialect</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attributes</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
-        <span class="n">attributes</span> <span class="o">=</span> <span class="p">[</span><span class="n">attributes</span><span class="p">]</span>
-    <span class="n">dialects</span> <span class="o">=</span> <span class="p">[</span><span class="n">parser</span><span class="o">.</span><span class="n">_split_keyvals</span><span class="p">(</span><span class="n">i</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">attributes</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">_choose_dialect</span><span class="p">(</span><span class="n">dialects</span><span class="p">)</span></div>
+    <span class="n">attributes</span><span class="p">,</span> <span class="n">dialect</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">_split_keyvals</span><span class="p">(</span><span class="n">attributes</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dialect</span></div>
 
 
-<span class="k">def</span> <span class="nf">_choose_dialect</span><span class="p">(</span><span class="n">dialects</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_choose_dialect</span><span class="p">(</span><span class="n">features</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Given a list of dialects, choose the one to use as the &quot;canonical&quot; version.</span>
+<span class="sd">    Given a list of features (often from peeking into an iterator), choose</span>
+<span class="sd">    a dialect to use as the &quot;canonical&quot; version.</span>
 
-<span class="sd">    If `dialects` is an empty list, then use the default GFF3 dialect</span>
+<span class="sd">    If `features` is an empty list, then use the default GFF3 dialect</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    dialects : iterable</span>
-<span class="sd">        iterable of dialect dictionaries</span>
+<span class="sd">    features : iterable</span>
+<span class="sd">        iterable of features</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -221,24 +139,78 @@
     <span class="c1"># NOTE: can use helpers.dialect_compare if you need to make this more</span>
     <span class="c1"># complex....</span>
 
-    <span class="c1"># For now, this function favors the first dialect, and then appends the</span>
-    <span class="c1"># order of additional fields seen in the attributes of other lines giving</span>
-    <span class="c1"># priority to dialects that come first in the iterable.</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dialects</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">constants</span><span class="o">.</span><span class="n">dialect</span>
+
+    <span class="c1"># Structure of `count` will be, e.g.,</span>
+    <span class="c1">#</span>
+    <span class="c1">#    {</span>
+    <span class="c1">#    &#39;keyval separator&#39;: {&#39;=&#39;: 35},</span>
+    <span class="c1">#    &#39;trailing semicolon&#39;: {True: 30, False: 5},</span>
+    <span class="c1">#    ...(other dialect keys here)...</span>
+    <span class="c1">#    }</span>
+    <span class="c1">#</span>
+    <span class="c1"># In this example, all features agreed on keyval separeator. For trailing</span>
+    <span class="c1"># semicolon, there was a higher weight for True, so that will be selected</span>
+    <span class="c1"># for the final dialect.</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">{}</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">constants</span><span class="o">.</span><span class="n">dialect</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+
+    <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">features</span><span class="p">:</span>
+
+        <span class="c1"># Number of attributes is currently being used as the weight for</span>
+        <span class="c1"># dialect selection. That is, more complex attribute strings are more</span>
+        <span class="c1"># likely to be informative when determining dialect. This is important</span>
+        <span class="c1"># for e.g., #128, where there is equal representation of long and short</span>
+        <span class="c1"># attributes -- but only the longer attributes correctly have &quot;;</span>
+        <span class="c1"># &quot; field separators.</span>
+        <span class="n">weight</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature</span><span class="o">.</span><span class="n">attributes</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">feature</span><span class="o">.</span><span class="n">dialect</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">count</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+            <span class="c1"># Increment the observed value by the number of attributes (so more</span>
+            <span class="c1"># complex attribute strings have higher weight in determining</span>
+            <span class="c1"># dialect)</span>
+            <span class="n">count</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span> <span class="o">+</span> <span class="n">weight</span>
+
+    <span class="n">final_dialect</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">count</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+        <span class="c1"># Tuples of (entry, total weight) in descending sort</span>
+        <span class="n">vs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># So the first tuple&#39;s first item is the winning value for this dialect</span>
+        <span class="c1"># key.</span>
+        <span class="n">final_dialect</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">vs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># For backwards compatibility, to figure out the field order to use for the</span>
+    <span class="c1"># dialect we append additional fields as they are observed, giving priority</span>
+    <span class="c1"># to attributes that come first in earlier features. The alternative would</span>
+    <span class="c1"># be to give preference to the most-common order of attributes.</span>
     <span class="n">final_order</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">dialect</span> <span class="ow">in</span> <span class="n">dialects</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">dialect</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">features</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">feature</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">o</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">final_order</span><span class="p">:</span>
                 <span class="n">final_order</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
-    <span class="n">dialect</span> <span class="o">=</span> <span class="n">dialects</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">dialect</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">final_order</span>
-    <span class="k">return</span> <span class="n">dialect</span>
+
+    <span class="n">final_dialect</span><span class="p">[</span><span class="s2">&quot;order&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">final_order</span>
+
+    <span class="k">return</span> <span class="n">final_dialect</span>
 
 
-<span class="k">def</span> <span class="nf">make_query</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">strand</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-               <span class="n">extra</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">order_by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-               <span class="n">completely_within</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">make_query</span><span class="p">(</span>
+    <span class="n">args</span><span class="p">,</span>
+    <span class="n">other</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">limit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">strand</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">featuretype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">extra</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">order_by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">completely_within</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Multi-purpose, bare-bones ORM function.</span>
 
@@ -270,26 +242,32 @@
 <span class="sd">    `args` can be pre-filled with args that are passed to `other` and `extra`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">_QUERY</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">{_SELECT}</span><span class="s2"> </span><span class="si">{OTHER}</span><span class="s2"> </span><span class="si">{EXTRA}</span><span class="s2"> </span><span class="si">{FEATURETYPE}</span><span class="s2"> &quot;</span>
-              <span class="s2">&quot;</span><span class="si">{LIMIT}</span><span class="s2"> </span><span class="si">{STRAND}</span><span class="s2"> </span><span class="si">{ORDER_BY}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">_QUERY</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{_SELECT}</span><span class="s2"> </span><span class="si">{OTHER}</span><span class="s2"> </span><span class="si">{EXTRA}</span><span class="s2"> </span><span class="si">{FEATURETYPE}</span><span class="s2"> &quot;</span> <span class="s2">&quot;</span><span class="si">{LIMIT}</span><span class="s2"> </span><span class="si">{STRAND}</span><span class="s2"> </span><span class="si">{ORDER_BY}</span><span class="s2">&quot;</span>
 
     <span class="c1"># Construct a dictionary `d` that will be used later as _QUERY.format(**d).</span>
     <span class="c1"># Default is just _SELECT, which returns all records in the features table.</span>
     <span class="c1"># (Recall that constants._SELECT gets the fields in the order needed to</span>
     <span class="c1"># reconstruct a Feature)</span>
-    <span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">_SELECT</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">_SELECT</span><span class="p">,</span> <span class="n">OTHER</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">FEATURETYPE</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">LIMIT</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-             <span class="n">STRAND</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ORDER_BY</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">EXTRA</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">_SELECT</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">_SELECT</span><span class="p">,</span>
+        <span class="n">OTHER</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">FEATURETYPE</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">LIMIT</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">STRAND</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">ORDER_BY</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">EXTRA</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">other</span><span class="p">:</span>
-        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;OTHER&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">other</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;OTHER&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">other</span>
     <span class="k">if</span> <span class="n">extra</span><span class="p">:</span>
-        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;EXTRA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">extra</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;EXTRA&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">extra</span>
 
     <span class="c1"># If `other` and `extra` take args (that is, they have &quot;?&quot; in them), then</span>
     <span class="c1"># they should have been provided in `args`.</span>
-    <span class="n">required_args</span> <span class="o">=</span> <span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;EXTRA&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;OTHER&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;?&#39;</span><span class="p">)</span>
+    <span class="n">required_args</span> <span class="o">=</span> <span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;EXTRA&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;OTHER&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">!=</span> <span class="n">required_args</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Not enough args (</span><span class="si">%s</span><span class="s1">) for subquery&#39;</span> <span class="o">%</span> <span class="n">args</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Not enough args (</span><span class="si">%s</span><span class="s2">) for subquery&quot;</span> <span class="o">%</span> <span class="n">args</span><span class="p">)</span>
 
     <span class="c1"># Below, if a kwarg is specified, then we create sections of the query --</span>
     <span class="c1"># appending to args as necessary.</span>
@@ -306,12 +284,11 @@
         <span class="c1">#</span>
         <span class="c1"># or, &quot;featuretype IN (&#39;exon&#39;, &#39;CDS&#39;)&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">featuretype</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
-            <span class="n">d</span><span class="p">[</span><span class="s1">&#39;FEATURETYPE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;features.featuretype = ?&quot;</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;FEATURETYPE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;features.featuretype = ?&quot;</span>
             <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">featuretype</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="s1">&#39;FEATURETYPE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;features.featuretype IN  (</span><span class="si">%s</span><span class="s2">)&quot;</span>
-                <span class="o">%</span> <span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;?&quot;</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">featuretype</span><span class="p">]))</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;FEATURETYPE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;features.featuretype IN  (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;?&quot;</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">featuretype</span><span class="p">])</span>
             <span class="p">)</span>
             <span class="n">args</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">featuretype</span><span class="p">)</span>
 
@@ -323,8 +300,8 @@
         <span class="c1">#</span>
         <span class="c1"># e.g., &quot;seqid = &#39;chr2L&#39; AND start &gt; 1000 AND end &lt; 5000&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">limit</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
-            <span class="n">seqid</span><span class="p">,</span> <span class="n">startstop</span> <span class="o">=</span> <span class="n">limit</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
-            <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">startstop</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+            <span class="n">seqid</span><span class="p">,</span> <span class="n">startstop</span> <span class="o">=</span> <span class="n">limit</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+            <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">startstop</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">seqid</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">limit</span>
 
@@ -333,31 +310,29 @@
 
         <span class="c1"># Use different overlap conditions</span>
         <span class="k">if</span> <span class="n">completely_within</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="s1">&#39;LIMIT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;features.seqid = ? AND features.start &gt;= ? &quot;</span>
-                <span class="s2">&quot;AND features.end &lt;= ?&quot;</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;LIMIT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;features.seqid = ? AND features.start &gt;= ? &quot;</span> <span class="s2">&quot;AND features.end &lt;= ?&quot;</span>
             <span class="p">)</span>
             <span class="n">args</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">seqid</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">])</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="s1">&#39;LIMIT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;features.seqid = ? AND features.start &lt;= ? &quot;</span>
-                <span class="s2">&quot;AND features.end &gt;= ?&quot;</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;LIMIT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;features.seqid = ? AND features.start &lt;= ? &quot;</span> <span class="s2">&quot;AND features.end &gt;= ?&quot;</span>
             <span class="p">)</span>
             <span class="c1"># Note order (end, start)</span>
             <span class="n">args</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">seqid</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">start</span><span class="p">])</span>
 
         <span class="c1"># Add bin clause. See issue #45.</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_bins</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">900</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="s1">&#39;LIMIT&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="s2">&quot; AND features.bin IN (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">_bins</span><span class="p">)))</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;LIMIT&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="s2">&quot; AND features.bin IN (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">_bins</span><span class="p">)))</span>
 
     <span class="k">if</span> <span class="n">strand</span><span class="p">:</span>
         <span class="c1"># e.g., &quot;strand = &#39;+&#39;&quot;</span>
-        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;STRAND&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;features.strand = ?&quot;</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;STRAND&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;features.strand = ?&quot;</span>
         <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">strand</span><span class="p">)</span>
 
     <span class="c1"># TODO: implement file_order!</span>
-    <span class="n">valid_order_by</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">_gffkeys_extra</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;file_order&#39;</span><span class="p">,</span> <span class="s1">&#39;length&#39;</span><span class="p">]</span>
+    <span class="n">valid_order_by</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">_gffkeys_extra</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;file_order&quot;</span><span class="p">,</span> <span class="s2">&quot;length&quot;</span><span class="p">]</span>
     <span class="n">_order_by</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">if</span> <span class="n">order_by</span><span class="p">:</span>
         <span class="c1"># Default is essentially random order.</span>
@@ -369,27 +344,28 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">order_by</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_order_by</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> not a valid order-by value in </span><span class="si">%s</span><span class="s2">&quot;</span>
-                                     <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">valid_order_by</span><span class="p">))</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> not a valid order-by value in </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">valid_order_by</span><span class="p">)</span>
+                    <span class="p">)</span>
 
                 <span class="c1"># There&#39;s no length field, so order by end - start</span>
-                <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">&#39;length&#39;</span><span class="p">:</span>
-                    <span class="n">k</span> <span class="o">=</span> <span class="s1">&#39;(end - start)&#39;</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;length&quot;</span><span class="p">:</span>
+                    <span class="n">k</span> <span class="o">=</span> <span class="s2">&quot;(end - start)&quot;</span>
 
                 <span class="n">_order_by</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
 
-        <span class="n">_order_by</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_order_by</span><span class="p">)</span>
+        <span class="n">_order_by</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_order_by</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">reverse</span><span class="p">:</span>
-            <span class="n">direction</span> <span class="o">=</span> <span class="s1">&#39;DESC&#39;</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;DESC&quot;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">direction</span> <span class="o">=</span> <span class="s1">&#39;ASC&#39;</span>
-        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;ORDER_BY&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;ORDER BY </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_order_by</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;ASC&quot;</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;ORDER_BY&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ORDER BY </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_order_by</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
 
     <span class="c1"># Ensure only one &quot;WHERE&quot; is included; the rest get &quot;AND &quot;.  This is ugly.</span>
     <span class="n">where</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="k">if</span> <span class="s2">&quot;where&quot;</span> <span class="ow">in</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;OTHER&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+    <span class="k">if</span> <span class="s2">&quot;where&quot;</span> <span class="ow">in</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;OTHER&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
         <span class="n">where</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;EXTRA&#39;</span><span class="p">,</span> <span class="s1">&#39;FEATURETYPE&#39;</span><span class="p">,</span> <span class="s1">&#39;LIMIT&#39;</span><span class="p">,</span> <span class="s1">&#39;STRAND&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;EXTRA&quot;</span><span class="p">,</span> <span class="s2">&quot;FEATURETYPE&quot;</span><span class="p">,</span> <span class="s2">&quot;LIMIT&quot;</span><span class="p">,</span> <span class="s2">&quot;STRAND&quot;</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">where</span><span class="p">:</span>
                 <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;WHERE &quot;</span> <span class="o">+</span> <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
@@ -405,8 +381,8 @@
 <span class="sd">    Given a dictionary yielded by the parser, return the genomic &quot;UCSC&quot; bin</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">])</span>
-        <span class="n">end</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;end&#39;</span><span class="p">])</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">])</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">bins</span><span class="o">.</span><span class="n">bins</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">one</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># e.g., if &quot;.&quot;</span>
@@ -417,8 +393,8 @@
 <span class="k">def</span> <span class="nf">_jsonify</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Use most compact form of JSON&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dict_class</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">_d</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">_d</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">))</span>
 
 
 <span class="k">def</span> <span class="nf">_unjsonify</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">isattributes</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -436,7 +412,7 @@
     <span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">constants</span><span class="o">.</span><span class="n">_keys</span><span class="p">:</span>
         <span class="n">v</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">jsonify</span> <span class="ow">and</span> <span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;attributes&#39;</span><span class="p">,</span> <span class="s1">&#39;extra&#39;</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">jsonify</span> <span class="ow">and</span> <span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;attributes&quot;</span><span class="p">,</span> <span class="s2">&quot;extra&quot;</span><span class="p">)):</span>
             <span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_jsonify</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
@@ -450,7 +426,7 @@
     <span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">constants</span><span class="o">.</span><span class="n">_keys</span><span class="p">:</span>
         <span class="n">v</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">jsonify</span> <span class="ow">and</span> <span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;attributes&#39;</span><span class="p">,</span> <span class="s1">&#39;extra&#39;</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">jsonify</span> <span class="ow">and</span> <span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;attributes&quot;</span><span class="p">,</span> <span class="s2">&quot;extra&quot;</span><span class="p">)):</span>
             <span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_jsonify</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
@@ -462,16 +438,22 @@
 <span class="sd">    Converts a gffutils.Feature to a pybedtools.Interval</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span> <span class="nn">pybedtools</span>
-    <span class="k">return</span> <span class="n">pybedtools</span><span class="o">.</span><span class="n">create_interval_from_list</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">))</span></div>
+
+    <span class="k">return</span> <span class="n">pybedtools</span><span class="o">.</span><span class="n">create_interval_from_list</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="merge_attributes"><a class="viewcode-back" href="../../autodocs/gffutils.helpers.merge_attributes.html#gffutils.helpers.merge_attributes">[docs]</a><span class="k">def</span> <span class="nf">merge_attributes</span><span class="p">(</span><span class="n">attr1</span><span class="p">,</span> <span class="n">attr2</span><span class="p">):</span>
+<div class="viewcode-block" id="merge_attributes"><a class="viewcode-back" href="../../autodocs/gffutils.helpers.merge_attributes.html#gffutils.helpers.merge_attributes">[docs]</a><span class="k">def</span> <span class="nf">merge_attributes</span><span class="p">(</span><span class="n">attr1</span><span class="p">,</span> <span class="n">attr2</span><span class="p">,</span> <span class="n">numeric_sort</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Merges two attribute dictionaries into a single dictionary.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    `attr1`, `attr2` : dict</span>
+
+<span class="sd">    numeric_sort : bool</span>
+<span class="sd">        If True, then attempt to convert all values for a key into floats, sort</span>
+<span class="sd">        them numerically, and return the original strings in numerical order.</span>
+<span class="sd">        Default is False for performance.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -481,7 +463,7 @@
     <span class="n">new_d</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">attr1</span><span class="p">)</span>
     <span class="n">new_d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">attr2</span><span class="p">))</span>
 
-    <span class="c1">#all of attr2 key : values just overwrote attr1, fix it</span>
+    <span class="c1"># all of attr2 key : values just overwrote attr1, fix it</span>
     <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">new_d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="n">new_d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="p">]</span>
@@ -491,7 +473,31 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
                 <span class="n">v</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="p">]</span>
             <span class="n">new_d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nb">dict</span><span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">v</span><span class="p">)))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">new_d</span><span class="o">.</span><span class="n">items</span><span class="p">())</span></div>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">numeric_sort</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">v</span><span class="p">)))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">new_d</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+
+    <span class="n">final_d</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">new_d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># I.e.:</span>
+            <span class="c1">#</span>
+            <span class="c1">#   [&#39;5&#39;, &#39;4.2&#39;]</span>
+            <span class="c1">#</span>
+            <span class="c1"># becomes the sorted tuples:</span>
+            <span class="c1">#</span>
+            <span class="c1">#   [(4.2, &#39;4.2&#39;), (&#39;5.0&#39;, &#39;5&#39;)]</span>
+            <span class="c1">#</span>
+            <span class="c1"># from which original strings are pulled to get the</span>
+            <span class="c1"># numerically-sorted strings,</span>
+            <span class="c1">#</span>
+            <span class="c1">#   [&#39;4.2&#39;, &#39;5&#39;]</span>
+            <span class="n">sorted_numeric</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([(</span><span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">values</span><span class="p">)])</span>
+            <span class="n">new_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sorted_numeric</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="c1"># E.g., not everything was able to be converted into a number</span>
+            <span class="n">new_values</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
+        <span class="n">final_d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_values</span>
+    <span class="k">return</span> <span class="n">final_d</span></div>
 
 
 <span class="k">def</span> <span class="nf">dialect_compare</span><span class="p">(</span><span class="n">dialect1</span><span class="p">,</span> <span class="n">dialect2</span><span class="p">):</span>
@@ -501,8 +507,7 @@
     <span class="n">orig</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">dialect1</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
     <span class="n">new</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">dialect2</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
     <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
-        <span class="n">added</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">new</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">orig</span><span class="p">))),</span>
-        <span class="n">removed</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">orig</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">new</span><span class="p">)))</span>
+        <span class="n">added</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">new</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">orig</span><span class="p">))),</span> <span class="n">removed</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">orig</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">new</span><span class="p">)))</span>
     <span class="p">)</span>
 
 
@@ -518,6 +523,7 @@
 
 <span class="sd">    TODO: Do something with negative coordinates?</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">sanitized_iterator</span><span class="p">():</span>
         <span class="c1"># Iterate through the database by each gene&#39;s records</span>
         <span class="k">for</span> <span class="n">gene_recs</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">iter_by_parent_childs</span><span class="p">():</span>
@@ -530,16 +536,13 @@
                 <span class="c1"># Add a gene id field to each gene&#39;s records</span>
                 <span class="n">rec</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">gid_field</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">gene_id</span><span class="p">]</span>
                 <span class="k">yield</span> <span class="n">rec</span>
+
     <span class="c1"># Return sanitized GFF database</span>
-    <span class="n">sanitized_db</span> <span class="o">=</span> \
-        <span class="n">gffutils</span><span class="o">.</span><span class="n">create_db</span><span class="p">(</span><span class="n">sanitized_iterator</span><span class="p">(),</span> <span class="s2">&quot;:memory:&quot;</span><span class="p">,</span>
-                           <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">sanitized_db</span> <span class="o">=</span> <span class="n">gffutils</span><span class="o">.</span><span class="n">create_db</span><span class="p">(</span><span class="n">sanitized_iterator</span><span class="p">(),</span> <span class="s2">&quot;:memory:&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">sanitized_db</span></div>
 
 
-<span class="k">def</span> <span class="nf">sanitize_gff_file</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">,</span>
-                      <span class="n">in_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                      <span class="n">in_place</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">sanitize_gff_file</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">,</span> <span class="n">in_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Sanitize a GFF file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -550,13 +553,11 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Need to create a database for file</span>
         <span class="k">if</span> <span class="n">in_memory</span><span class="p">:</span>
-            <span class="n">db</span> <span class="o">=</span> <span class="n">gffutils</span><span class="o">.</span><span class="n">create_db</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">,</span> <span class="s2">&quot;:memory:&quot;</span><span class="p">,</span>
-                                    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">db</span> <span class="o">=</span> <span class="n">gffutils</span><span class="o">.</span><span class="n">create_db</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">,</span> <span class="s2">&quot;:memory:&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">db</span> <span class="o">=</span> <span class="n">get_gff_db</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">in_place</span><span class="p">:</span>
-        <span class="n">gff_out</span> <span class="o">=</span> <span class="n">gffwriter</span><span class="o">.</span><span class="n">GFFWriter</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">,</span>
-                                      <span class="n">in_place</span><span class="o">=</span><span class="n">in_place</span><span class="p">)</span>
+        <span class="n">gff_out</span> <span class="o">=</span> <span class="n">gffwriter</span><span class="o">.</span><span class="n">GFFWriter</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="n">in_place</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">gff_out</span> <span class="o">=</span> <span class="n">gffwriter</span><span class="o">.</span><span class="n">GFFWriter</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
     <span class="n">sanitized_db</span> <span class="o">=</span> <span class="n">sanitize_gff_db</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
@@ -586,7 +587,7 @@
     <span class="k">return</span> <span class="kc">False</span>
 
 
-<span class="k">def</span> <span class="nf">to_unicode</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">to_unicode</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">text_type</span><span class="p">):</span>
             <span class="n">obj</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">text_type</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">encoding</span><span class="p">)</span>
@@ -594,9 +595,15 @@
 
 
 <span class="k">def</span> <span class="nf">canonical_transcripts</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">fasta_filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    WARNING: this function is currently not well ttested and will likely be</span>
+<span class="sd">    replaced with a more modular approach.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span> <span class="nn">pyfaidx</span>
-    <span class="n">fasta</span> <span class="o">=</span> <span class="n">pyfaidx</span><span class="o">.</span><span class="n">Fasta</span><span class="p">(</span><span class="n">fasta_filename</span><span class="p">,</span> <span class="n">as_raw</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">gene</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">features_of_type</span><span class="p">(</span><span class="s1">&#39;gene&#39;</span><span class="p">):</span>
+
+
+    <span class="n">fasta</span> <span class="o">=</span> <span class="n">pyfaidx</span><span class="o">.</span><span class="n">Fasta</span><span class="p">(</span><span class="n">fasta_filename</span><span class="p">,</span> <span class="n">as_raw</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">gene</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">features_of_type</span><span class="p">(</span><span class="s2">&quot;gene&quot;</span><span class="p">):</span>
 
         <span class="c1"># exons_list will contain (CDS_length, total_length, transcript, [exons]) tuples.</span>
         <span class="n">exon_list</span> <span class="o">=</span> <span class="p">[]</span>
@@ -606,26 +613,25 @@
             <span class="n">exons</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="n">transcript</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">exon</span> <span class="ow">in</span> <span class="n">exons</span><span class="p">:</span>
                 <span class="n">exon_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">exon</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">exon</span><span class="o">.</span><span class="n">featuretype</span> <span class="o">==</span> <span class="s1">&#39;CDS&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">exon</span><span class="o">.</span><span class="n">featuretype</span> <span class="o">==</span> <span class="s2">&quot;CDS&quot;</span><span class="p">:</span>
                     <span class="n">cds_len</span> <span class="o">+=</span> <span class="n">exon_length</span>
                 <span class="n">total_len</span> <span class="o">+=</span> <span class="n">exon_length</span>
 
-            <span class="n">exon_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">cds_len</span><span class="p">,</span> <span class="n">total_len</span><span class="p">,</span> <span class="n">transcript</span><span class="p">,</span> <span class="n">exons</span><span class="p">))</span>
+            <span class="n">exon_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">cds_len</span><span class="p">,</span> <span class="n">total_len</span><span class="p">,</span> <span class="n">transcript</span><span class="p">,</span> <span class="n">exons</span> <span class="k">if</span> <span class="n">cds_len</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">exons</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">featuretype</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;CDS&#39;</span><span class="p">,</span> <span class="s1">&#39;five_prime_UTR&#39;</span><span class="p">,</span> <span class="s1">&#39;three_prime_UTR&#39;</span><span class="p">]]))</span>
 
         <span class="c1"># If we have CDS, then use the longest coding transcript</span>
         <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">exon_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">best</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">exon_list</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">best</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">exon_list</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="c1"># Otherwise, just choose the longest</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">best</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">exon_list</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">best</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">exon_list</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="n">best</span><span class="p">)</span>
 
         <span class="n">canonical_exons</span> <span class="o">=</span> <span class="n">best</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">transcript</span> <span class="o">=</span> <span class="n">best</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
-        <span class="n">seqs</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">sequence</span><span class="p">(</span><span class="n">fasta</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">canonical_exons</span><span class="p">]</span>
-        <span class="k">yield</span> <span class="n">transcript</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">seqs</span><span class="p">)</span>
-
+        <span class="n">seqs</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">sequence</span><span class="p">(</span><span class="n">fasta</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">canonical_exons</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="n">transcript</span><span class="o">.</span><span class="n">strand</span> <span class="o">!=</span> <span class="s1">&#39;+&#39;</span><span class="p">)]</span>
+        <span class="k">yield</span> <span class="n">transcript</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">seqs</span><span class="p">)</span>
 
 
 <span class="c1">##</span>
@@ -633,8 +639,7 @@
 <span class="c1">##</span>
 <span class="c1">## TODO: move clean_gff here?</span>
 <span class="c1">##</span>
-<span class="k">def</span> <span class="nf">get_gff_db</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">,</span>
-               <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;.db&quot;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">get_gff_db</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;.db&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get db for GFF file. If the database has a .db file,</span>
 <span class="sd">    load that. Otherwise, create a named temporary file,</span>
@@ -659,51 +664,39 @@
     <span class="c1"># when using function internally)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Creating db for </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">gff_fname</span><span class="p">))</span>
     <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-    <span class="n">db</span> <span class="o">=</span> <span class="n">gffutils</span><span class="o">.</span><span class="n">create_db</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">,</span> <span class="n">db_fname</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-                            <span class="n">merge_strategy</span><span class="o">=</span><span class="s2">&quot;merge&quot;</span><span class="p">,</span>
-                            <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">gffutils</span><span class="o">.</span><span class="n">create_db</span><span class="p">(</span>
+        <span class="n">gff_fname</span><span class="p">,</span> <span class="n">db_fname</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">merge_strategy</span><span class="o">=</span><span class="s2">&quot;merge&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span>
     <span class="n">t2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - Took </span><span class="si">%.2f</span><span class="s2"> seconds&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t2</span> <span class="o">-</span> <span class="n">t1</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">db</span>
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2013, Ryan Dale
-
-    </p>
+    <p>&#169; Copyright 2013-2022, Ryan Dale.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

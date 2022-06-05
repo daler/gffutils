@@ -1,6 +1,0 @@
-gffutils.interface.FeatureDB.bed12
-==================================
-
-.. currentmodule:: gffutils.interface
-
-.. automethod:: FeatureDB.bed12

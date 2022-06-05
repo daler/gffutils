@@ -1,4 +1,4 @@
-gffutils.interface.FeatureDB
+﻿gffutils.interface.FeatureDB
 ============================
 
 .. currentmodule:: gffutils.interface
@@ -34,6 +34,7 @@ gffutils.interface.FeatureDB
       ~FeatureDB.parents
       ~FeatureDB.region
       ~FeatureDB.schema
+      ~FeatureDB.seqids
       ~FeatureDB.set_pragmas
       ~FeatureDB.update
    

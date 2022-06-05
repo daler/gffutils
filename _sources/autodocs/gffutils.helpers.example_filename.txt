@@ -1,6 +1,0 @@
-gffutils.helpers.example_filename
-=================================
-
-.. currentmodule:: gffutils.helpers
-
-.. autofunction:: example_filename

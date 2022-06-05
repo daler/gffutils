@@ -1,4 +1,4 @@
-gffutils.interface.FeatureDB.schema
+﻿gffutils.interface.FeatureDB.schema
 ===================================
 
 .. currentmodule:: gffutils.interface

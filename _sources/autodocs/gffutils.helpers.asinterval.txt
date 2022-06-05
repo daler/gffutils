@@ -1,6 +1,0 @@
-gffutils.helpers.asinterval
-===========================
-
-.. currentmodule:: gffutils.helpers
-
-.. autofunction:: asinterval

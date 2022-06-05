@@ -1,4 +1,4 @@
-gffutils.helpers.annotate\_gff\_db
+﻿gffutils.helpers.annotate\_gff\_db
 ==================================
 
 .. currentmodule:: gffutils.helpers

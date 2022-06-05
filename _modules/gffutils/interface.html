@@ -1,69 +1,36 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gffutils.interface &mdash; gffutils 0.11.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>gffutils.interface &mdash; gffutils 0.10.1 documentation</title>
-  
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="../../contents.html" class="icon icon-home"> gffutils
-          
-
-          
+            <a href="../../index.html" class="icon icon-home"> gffutils
           </a>
-
-          
-            
-            
               <div class="version">
-                0.10.1
+                0.11.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -71,19 +38,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../index.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../database-import.html">Importing data into a database</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../database-schema.html">Database schema</a></li>
@@ -98,66 +54,30 @@
 <li class="toctree-l1"><a class="reference internal" href="../../meta.html">Meta-docs (docs about the docs)</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../contents.html">gffutils</a>
-        
+          <a href="../../index.html">gffutils</a>
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../contents.html">Docs</a> &raquo;</li>
-        
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../index.html">Module code</a> &raquo;</li>
-        
       <li>gffutils.interface</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <h1>Source code for gffutils.interface</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">collections</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -194,12 +114,13 @@
 
 <span class="sd">    Child Feature</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">child</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s1">&#39;Parent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">parent</span><span class="p">[</span><span class="s1">&#39;ID&#39;</span><span class="p">]</span>
+    <span class="n">child</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;Parent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">parent</span><span class="p">[</span><span class="s2">&quot;ID&quot;</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">child</span>
 
 
 <span class="c1"># Reusable constant for FeatureDB.merge()</span>
 <span class="n">no_children</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">()</span>
+
 
 <span class="k">def</span> <span class="nf">_finalize_merge</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">feature_children</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -209,20 +130,21 @@
 <span class="sd">    ----------</span>
 <span class="sd">    feature : Feature</span>
 <span class="sd">        feature to finalise</span>
-<span class="sd">    </span>
+
 <span class="sd">    feature_children</span>
 <span class="sd">        list of children to assign</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    feature, modified</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature_children</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">feature</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">source</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">feature_children</span><span class="p">))</span>
+        <span class="n">feature</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">source</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">feature_children</span><span class="p">))</span>
         <span class="n">feature</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="n">feature_children</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">feature</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="n">no_children</span>
     <span class="k">return</span> <span class="n">feature</span>
+
 
 <div class="viewcode-block" id="FeatureDB"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.html#gffutils.interface.FeatureDB">[docs]</a><span class="k">class</span> <span class="nc">FeatureDB</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="c1"># docstring to be filled in for methods that call out to</span>
@@ -254,10 +176,15 @@
 <span class="s2">            within `limit`. Only relevant when `limit` is not None.</span>
 <span class="s2">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="FeatureDB.__init__"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.html#gffutils.interface.FeatureDB.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbfn</span><span class="p">,</span> <span class="n">default_encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">keep_order</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">pragmas</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">default_pragmas</span><span class="p">,</span>
-                 <span class="n">sort_attribute_values</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">text_factory</span><span class="o">=</span><span class="n">sqlite3</span><span class="o">.</span><span class="n">OptimizedUnicode</span><span class="p">):</span>
+<div class="viewcode-block" id="FeatureDB.__init__"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.html#gffutils.interface.FeatureDB.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">dbfn</span><span class="p">,</span>
+        <span class="n">default_encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span>
+        <span class="n">keep_order</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">pragmas</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">default_pragmas</span><span class="p">,</span>
+        <span class="n">sort_attribute_values</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">text_factory</span><span class="o">=</span><span class="n">sqlite3</span><span class="o">.</span><span class="n">OptimizedUnicode</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Connect to a database created by :func:`gffutils.create_db`.</span>
 
@@ -274,7 +201,7 @@
 <span class="sd">            sqlite3.OptimizedUnicode, which returns ascii when possible,</span>
 <span class="sd">            unicode otherwise</span>
 
-<span class="sd">        encoding : str</span>
+<span class="sd">        default_encoding : str</span>
 
 <span class="sd">            When non-ASCII characters are encountered, assume they are in this</span>
 <span class="sd">            encoding.</span>
@@ -289,6 +216,12 @@
 
 <span class="sd">            Default is False, since this includes a sorting step that can get</span>
 <span class="sd">            time-consuming for many features.</span>
+
+<span class="sd">        sort_attributes_values : bool</span>
+<span class="sd">            If True, then in cases where there are multiple values for an</span>
+<span class="sd">            attribute then ensure they appear in the same order every time.</span>
+<span class="sd">            This is typically only used for testing, in cases where it is</span>
+<span class="sd">            important to have consistent ordering.</span>
 
 <span class="sd">        pragmas : dict</span>
 <span class="sd">            Dictionary of pragmas to use when connecting to the database.  See</span>
@@ -310,6 +243,7 @@
         <span class="c1"># pass in a sqlite connection instance to use its existing, in-memory</span>
         <span class="c1"># db.</span>
         <span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">create</span>
+
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dbfn</span><span class="p">,</span> <span class="n">create</span><span class="o">.</span><span class="n">_DBCreator</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="n">dbfn</span><span class="o">.</span><span class="n">conn</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dbfn</span> <span class="o">=</span> <span class="n">dbfn</span><span class="o">.</span><span class="n">dbfn</span>
@@ -318,9 +252,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="n">dbfn</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dbfn</span> <span class="o">=</span> <span class="n">dbfn</span>
         <span class="c1"># otherwise assume dbfn is a string.</span>
-        <span class="k">elif</span> <span class="n">dbfn</span> <span class="o">==</span> <span class="s1">&#39;:memory:&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">dbfn</span> <span class="o">==</span> <span class="s2">&quot;:memory:&quot;</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;cannot connect to memory db; please provide the connection&quot;</span><span class="p">)</span>
+                <span class="s2">&quot;cannot connect to memory db; please provide the connection&quot;</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dbfn</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Database file </span><span class="si">%s</span><span class="s2"> does not exist&quot;</span> <span class="o">%</span> <span class="n">dbfn</span><span class="p">)</span>
@@ -340,27 +275,30 @@
         <span class="c1"># TODO: this is a good place to check for previous versions, and offer</span>
         <span class="c1"># to upgrade...</span>
         <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="sd">&#39;&#39;&#39;</span>
+            <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            SELECT version, dialect FROM meta</span>
-<span class="sd">            &#39;&#39;&#39;</span><span class="p">)</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+        <span class="p">)</span>
         <span class="n">version</span><span class="p">,</span> <span class="n">dialect</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="n">version</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dialect</span> <span class="o">=</span> <span class="n">helpers</span><span class="o">.</span><span class="n">_unjsonify</span><span class="p">(</span><span class="n">dialect</span><span class="p">)</span>
 
         <span class="c1"># Load directives from db</span>
         <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="sd">&#39;&#39;&#39;</span>
+            <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            SELECT directive FROM directives</span>
-<span class="sd">            &#39;&#39;&#39;</span><span class="p">)</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">directives</span> <span class="o">=</span> <span class="p">[</span><span class="n">directive</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">directive</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">if</span> <span class="n">directive</span><span class="p">]</span>
 
         <span class="c1"># Load autoincrements so that when we add new features, we can start</span>
         <span class="c1"># autoincrementing from where we last left off (instead of from 1,</span>
         <span class="c1"># which would cause name collisions)</span>
         <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="sd">&#39;&#39;&#39;</span>
+            <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            SELECT base, n FROM autoincrements</span>
-<span class="sd">            &#39;&#39;&#39;</span><span class="p">)</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_autoincrements</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">set_pragmas</span><span class="p">(</span><span class="n">pragmas</span><span class="p">)</span>
@@ -372,7 +310,8 @@
                 <span class="s2">&quot;speed up queries, and is done by default for databases &quot;</span>
                 <span class="s2">&quot;created with gffutils &gt;0.8.7.1 (this database was &quot;</span>
                 <span class="s2">&quot;created with version </span><span class="si">%s</span><span class="s2">) Consider calling the analyze() &quot;</span>
-                <span class="s2">&quot;method of this object.&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="p">)</span></div>
+                <span class="s2">&quot;method of this object.&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span>
+            <span class="p">)</span></div>
 
 <div class="viewcode-block" id="FeatureDB.set_pragmas"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.set_pragmas.html#gffutils.interface.FeatureDB.set_pragmas">[docs]</a>    <span class="k">def</span> <span class="nf">set_pragmas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pragmas</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -386,20 +325,16 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pragmas</span> <span class="o">=</span> <span class="n">pragmas</span>
         <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
-        <span class="n">c</span><span class="o">.</span><span class="n">executescript</span><span class="p">(</span>
-            <span class="s1">&#39;;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                <span class="p">[</span><span class="s1">&#39;PRAGMA </span><span class="si">%s</span><span class="s1">=</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pragmas</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">executescript</span><span class="p">(</span><span class="s2">&quot;;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;PRAGMA </span><span class="si">%s</span><span class="s2">=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pragmas</span><span class="o">.</span><span class="n">items</span><span class="p">()]))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">_feature_returner</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a feature, adding additional database-specific defaults</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;dialect&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialect</span><span class="p">)</span>
-        <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;keep_order&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">keep_order</span><span class="p">)</span>
-        <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;sort_attribute_values&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sort_attribute_values</span><span class="p">)</span>
+        <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;dialect&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialect</span><span class="p">)</span>
+        <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;keep_order&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">keep_order</span><span class="p">)</span>
+        <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;sort_attribute_values&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sort_attribute_values</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Feature</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_analyzed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -407,7 +342,8 @@
             <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            SELECT name FROM sqlite_master WHERE type=&#39;table&#39;</span>
 <span class="sd">            AND name=&#39;sqlite_stat1&#39;;</span>
-<span class="sd">            &quot;&quot;&quot;</span><span class="p">)</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">res</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span>
 
 <div class="viewcode-block" id="FeatureDB.schema"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.schema.html#gffutils.interface.FeatureDB.schema">[docs]</a>    <span class="k">def</span> <span class="nf">schema</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -416,25 +352,27 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
         <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="sd">&#39;&#39;&#39;</span>
+            <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            SELECT sql FROM sqlite_master</span>
-<span class="sd">            &#39;&#39;&#39;</span><span class="p">)</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+        <span class="p">)</span>
         <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="ow">in</span> <span class="n">c</span><span class="p">:</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">c</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">i</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">results</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">results</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">Feature</span><span class="p">):</span>
             <span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">id</span>
         <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">_SELECT</span> <span class="o">+</span> <span class="s1">&#39; WHERE id = ?&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">key</span><span class="p">,))</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">_SELECT</span> <span class="o">+</span> <span class="s2">&quot; WHERE id = ?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">key</span><span class="p">,))</span>
         <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">ProgrammingError</span><span class="p">:</span>
             <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-                <span class="n">constants</span><span class="o">.</span><span class="n">_SELECT</span> <span class="o">+</span> <span class="s1">&#39; WHERE id = ?&#39;</span><span class="p">,</span>
-                <span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_encoding</span><span class="p">),))</span>
+                <span class="n">constants</span><span class="o">.</span><span class="n">_SELECT</span> <span class="o">+</span> <span class="s2">&quot; WHERE id = ?&quot;</span><span class="p">,</span>
+                <span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_encoding</span><span class="p">),),</span>
+            <span class="p">)</span>
         <span class="n">results</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
         <span class="c1"># TODO: raise error if more than one key is found</span>
         <span class="k">if</span> <span class="n">results</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -464,24 +402,33 @@
         <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">featuretype</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-                <span class="sd">&#39;&#39;&#39;</span>
+                <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                SELECT count() FROM features</span>
 <span class="sd">                WHERE featuretype = ?</span>
-<span class="sd">                &#39;&#39;&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">featuretype</span><span class="p">,))</span>
+<span class="sd">                &quot;&quot;&quot;</span><span class="p">,</span>
+                <span class="p">(</span><span class="n">featuretype</span><span class="p">,),</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-                <span class="sd">&#39;&#39;&#39;</span>
+                <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                SELECT count() FROM features</span>
-<span class="sd">                &#39;&#39;&#39;</span><span class="p">)</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+            <span class="p">)</span>
 
         <span class="n">results</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">results</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">results</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">results</span></div>
 
-<div class="viewcode-block" id="FeatureDB.features_of_type"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.features_of_type.html#gffutils.interface.FeatureDB.features_of_type">[docs]</a>    <span class="k">def</span> <span class="nf">features_of_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">featuretype</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">strand</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                         <span class="n">order_by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                         <span class="n">completely_within</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="FeatureDB.features_of_type"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.features_of_type.html#gffutils.interface.FeatureDB.features_of_type">[docs]</a>    <span class="k">def</span> <span class="nf">features_of_type</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">featuretype</span><span class="p">,</span>
+        <span class="n">limit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">strand</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">order_by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">completely_within</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns an iterator of :class:`gffutils.Feature` objects.</span>
 
@@ -503,9 +450,14 @@
             <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">_feature_returner</span><span class="p">(</span><span class="o">**</span><span class="n">i</span><span class="p">)</span></div>
 
     <span class="c1"># TODO: convert this to a syntax similar to itertools.groupby</span>
-<div class="viewcode-block" id="FeatureDB.iter_by_parent_childs"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.iter_by_parent_childs.html#gffutils.interface.FeatureDB.iter_by_parent_childs">[docs]</a>    <span class="k">def</span> <span class="nf">iter_by_parent_childs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="s2">&quot;gene&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                              <span class="n">order_by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                              <span class="n">completely_within</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="FeatureDB.iter_by_parent_childs"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.iter_by_parent_childs.html#gffutils.interface.FeatureDB.iter_by_parent_childs">[docs]</a>    <span class="k">def</span> <span class="nf">iter_by_parent_childs</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">featuretype</span><span class="o">=</span><span class="s2">&quot;gene&quot;</span><span class="p">,</span>
+        <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">order_by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">completely_within</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        For each parent of type `featuretype`, yield a list L of that parent</span>
 <span class="sd">        and all of its children (`[parent] + list(children)`). The parent will</span>
@@ -521,12 +473,18 @@
         <span class="c1"># Return a generator of these parent records and their</span>
         <span class="c1"># children</span>
         <span class="k">for</span> <span class="n">parent_rec</span> <span class="ow">in</span> <span class="n">parent_recs</span><span class="p">:</span>
-            <span class="n">unit_records</span> <span class="o">=</span> \
-                <span class="p">[</span><span class="n">parent_rec</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="n">parent_rec</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+            <span class="n">unit_records</span> <span class="o">=</span> <span class="p">[</span><span class="n">parent_rec</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="n">parent_rec</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
             <span class="k">yield</span> <span class="n">unit_records</span></div>
 
-<div class="viewcode-block" id="FeatureDB.all_features"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.all_features.html#gffutils.interface.FeatureDB.all_features">[docs]</a>    <span class="k">def</span> <span class="nf">all_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">strand</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                     <span class="n">order_by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">completely_within</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="FeatureDB.all_features"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.all_features.html#gffutils.interface.FeatureDB.all_features">[docs]</a>    <span class="k">def</span> <span class="nf">all_features</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">limit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">strand</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">featuretype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">order_by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">completely_within</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Iterate through the entire database.</span>
 
@@ -545,7 +503,7 @@
             <span class="n">featuretype</span><span class="o">=</span><span class="n">featuretype</span><span class="p">,</span>
             <span class="n">order_by</span><span class="o">=</span><span class="n">order_by</span><span class="p">,</span>
             <span class="n">reverse</span><span class="o">=</span><span class="n">reverse</span><span class="p">,</span>
-            <span class="n">completely_within</span><span class="o">=</span><span class="n">completely_within</span>
+            <span class="n">completely_within</span><span class="o">=</span><span class="n">completely_within</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
             <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">_feature_returner</span><span class="p">(</span><span class="o">**</span><span class="n">i</span><span class="p">)</span></div>
@@ -560,15 +518,25 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
         <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="sd">&#39;&#39;&#39;</span>
+            <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            SELECT DISTINCT featuretype from features</span>
-<span class="sd">            &#39;&#39;&#39;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="ow">in</span> <span class="n">c</span><span class="p">:</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">c</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">i</span></div>
 
-    <span class="k">def</span> <span class="nf">_relation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">join_on</span><span class="p">,</span> <span class="n">join_to</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                  <span class="n">order_by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">completely_within</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                  <span class="n">limit</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_relation</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">join_on</span><span class="p">,</span>
+        <span class="n">join_to</span><span class="p">,</span>
+        <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">featuretype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">order_by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">completely_within</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">limit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
 
         <span class="c1"># The following docstring will be included in the parents() and</span>
         <span class="c1"># children() docstrings to maintain consistency, since they both</span>
@@ -594,16 +562,18 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">Feature</span><span class="p">):</span>
             <span class="nb">id</span> <span class="o">=</span> <span class="nb">id</span><span class="o">.</span><span class="n">id</span>
 
-        <span class="n">other</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
-<span class="s1">        JOIN relations</span>
-<span class="s1">        ON relations.</span><span class="si">{join_on}</span><span class="s1"> = features.id</span>
-<span class="s1">        WHERE relations.</span><span class="si">{join_to}</span><span class="s1"> = ?</span>
-<span class="s1">        &#39;&#39;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="nb">locals</span><span class="p">())</span>
+        <span class="n">other</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        JOIN relations</span>
+<span class="s2">        ON relations.</span><span class="si">{join_on}</span><span class="s2"> = features.id</span>
+<span class="s2">        WHERE relations.</span><span class="si">{join_to}</span><span class="s2"> = ?</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="o">**</span><span class="nb">locals</span><span class="p">()</span>
+        <span class="p">)</span>
         <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="nb">id</span><span class="p">]</span>
 
-        <span class="n">level_clause</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">level_clause</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="k">if</span> <span class="n">level</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">level_clause</span> <span class="o">=</span> <span class="s1">&#39;relations.level = ?&#39;</span>
+            <span class="n">level_clause</span> <span class="o">=</span> <span class="s2">&quot;relations.level = ?&quot;</span>
             <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
 
         <span class="n">query</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">helpers</span><span class="o">.</span><span class="n">make_query</span><span class="p">(</span>
@@ -622,27 +592,57 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
             <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">_feature_returner</span><span class="p">(</span><span class="o">**</span><span class="n">i</span><span class="p">)</span>
 
-<div class="viewcode-block" id="FeatureDB.children"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.children.html#gffutils.interface.FeatureDB.children">[docs]</a>    <span class="k">def</span> <span class="nf">children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">order_by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">completely_within</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="FeatureDB.children"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.children.html#gffutils.interface.FeatureDB.children">[docs]</a>    <span class="k">def</span> <span class="nf">children</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">featuretype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">order_by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">limit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">completely_within</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return children of feature `id`.</span>
 <span class="sd">        {_relation_docstring}</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_relation</span><span class="p">(</span>
-            <span class="nb">id</span><span class="p">,</span> <span class="n">join_on</span><span class="o">=</span><span class="s1">&#39;child&#39;</span><span class="p">,</span> <span class="n">join_to</span><span class="o">=</span><span class="s1">&#39;parent&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">,</span>
-            <span class="n">featuretype</span><span class="o">=</span><span class="n">featuretype</span><span class="p">,</span> <span class="n">order_by</span><span class="o">=</span><span class="n">order_by</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="n">reverse</span><span class="p">,</span>
-            <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="n">completely_within</span><span class="o">=</span><span class="n">completely_within</span><span class="p">)</span></div>
+            <span class="nb">id</span><span class="p">,</span>
+            <span class="n">join_on</span><span class="o">=</span><span class="s2">&quot;child&quot;</span><span class="p">,</span>
+            <span class="n">join_to</span><span class="o">=</span><span class="s2">&quot;parent&quot;</span><span class="p">,</span>
+            <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">,</span>
+            <span class="n">featuretype</span><span class="o">=</span><span class="n">featuretype</span><span class="p">,</span>
+            <span class="n">order_by</span><span class="o">=</span><span class="n">order_by</span><span class="p">,</span>
+            <span class="n">reverse</span><span class="o">=</span><span class="n">reverse</span><span class="p">,</span>
+            <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span>
+            <span class="n">completely_within</span><span class="o">=</span><span class="n">completely_within</span><span class="p">,</span>
+        <span class="p">)</span></div>
 
-<div class="viewcode-block" id="FeatureDB.parents"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.parents.html#gffutils.interface.FeatureDB.parents">[docs]</a>    <span class="k">def</span> <span class="nf">parents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">order_by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">completely_within</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="FeatureDB.parents"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.parents.html#gffutils.interface.FeatureDB.parents">[docs]</a>    <span class="k">def</span> <span class="nf">parents</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">,</span>
+        <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">featuretype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">order_by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">completely_within</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">limit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return parents of feature `id`.</span>
 <span class="sd">        {_relation_docstring}</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_relation</span><span class="p">(</span>
-            <span class="nb">id</span><span class="p">,</span> <span class="n">join_on</span><span class="o">=</span><span class="s1">&#39;parent&#39;</span><span class="p">,</span> <span class="n">join_to</span><span class="o">=</span><span class="s1">&#39;child&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">,</span>
-            <span class="n">featuretype</span><span class="o">=</span><span class="n">featuretype</span><span class="p">,</span> <span class="n">order_by</span><span class="o">=</span><span class="n">order_by</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="n">reverse</span><span class="p">,</span>
-            <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="n">completely_within</span><span class="o">=</span><span class="n">completely_within</span><span class="p">)</span></div>
+            <span class="nb">id</span><span class="p">,</span>
+            <span class="n">join_on</span><span class="o">=</span><span class="s2">&quot;parent&quot;</span><span class="p">,</span>
+            <span class="n">join_to</span><span class="o">=</span><span class="s2">&quot;child&quot;</span><span class="p">,</span>
+            <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">,</span>
+            <span class="n">featuretype</span><span class="o">=</span><span class="n">featuretype</span><span class="p">,</span>
+            <span class="n">order_by</span><span class="o">=</span><span class="n">order_by</span><span class="p">,</span>
+            <span class="n">reverse</span><span class="o">=</span><span class="n">reverse</span><span class="p">,</span>
+            <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span>
+            <span class="n">completely_within</span><span class="o">=</span><span class="n">completely_within</span><span class="p">,</span>
+        <span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_last_query</span> <span class="o">=</span> <span class="n">query</span>
@@ -679,11 +679,19 @@
 <span class="sd">        Runs the sqlite ANALYZE command to potentially speed up queries</span>
 <span class="sd">        dramatically.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;ANALYZE features&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;ANALYZE features&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
 
-<div class="viewcode-block" id="FeatureDB.region"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.region.html#gffutils.interface.FeatureDB.region">[docs]</a>    <span class="k">def</span> <span class="nf">region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">seqid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-               <span class="n">strand</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">completely_within</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="FeatureDB.region"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.region.html#gffutils.interface.FeatureDB.region">[docs]</a>    <span class="k">def</span> <span class="nf">region</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">region</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">seqid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">strand</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">featuretype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">completely_within</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return features within specified genomic coordinates.</span>
 
@@ -724,7 +732,7 @@
 <span class="sd">            `region` will be returned.</span>
 
 <span class="sd">        Notes</span>
-<span class="sd">        -------</span>
+<span class="sd">        -----</span>
 
 <span class="sd">        The meaning of `seqid`, `start`, and `end` is interpreted as follows:</span>
 
@@ -766,9 +774,10 @@
             <span class="k">if</span> <span class="p">(</span><span class="n">seqid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">start</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">end</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="s2">&quot;If region is supplied, do not supply seqid, &quot;</span>
-                    <span class="s2">&quot;start, or end as separate kwargs&quot;</span><span class="p">)</span>
+                    <span class="s2">&quot;start, or end as separate kwargs&quot;</span>
+                <span class="p">)</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
-                <span class="n">toks</span> <span class="o">=</span> <span class="n">region</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+                <span class="n">toks</span> <span class="o">=</span> <span class="n">region</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">toks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="n">seqid</span> <span class="o">=</span> <span class="n">toks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                     <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
@@ -776,7 +785,7 @@
                     <span class="n">seqid</span><span class="p">,</span> <span class="n">coords</span> <span class="o">=</span> <span class="n">toks</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">toks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
                         <span class="n">strand</span> <span class="o">=</span> <span class="n">toks</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-                    <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">coords</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+                    <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">coords</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
 
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">Feature</span><span class="p">):</span>
                 <span class="n">seqid</span> <span class="o">=</span> <span class="n">region</span><span class="o">.</span><span class="n">seqid</span>
@@ -792,59 +801,69 @@
         <span class="c1">#   completely_within=True..... start &gt;= {start} AND end &lt;= {end}</span>
         <span class="c1">#   completely_within=False.... start &lt;  {end}   AND end &gt;  {start}</span>
         <span class="k">if</span> <span class="n">completely_within</span><span class="p">:</span>
-            <span class="n">start_op</span> <span class="o">=</span> <span class="s1">&#39;&gt;=&#39;</span>
-            <span class="n">end_op</span> <span class="o">=</span> <span class="s1">&#39;&lt;=&#39;</span>
+            <span class="n">start_op</span> <span class="o">=</span> <span class="s2">&quot;&gt;=&quot;</span>
+            <span class="n">end_op</span> <span class="o">=</span> <span class="s2">&quot;&lt;=&quot;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">start_op</span> <span class="o">=</span> <span class="s1">&#39;&lt;&#39;</span>
-            <span class="n">end_op</span> <span class="o">=</span> <span class="s1">&#39;&gt;&#39;</span>
+            <span class="n">start_op</span> <span class="o">=</span> <span class="s2">&quot;&lt;&quot;</span>
+            <span class="n">end_op</span> <span class="o">=</span> <span class="s2">&quot;&gt;&quot;</span>
             <span class="n">end</span><span class="p">,</span> <span class="n">start</span> <span class="o">=</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span>
 
         <span class="n">args</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">position_clause</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">seqid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">position_clause</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;seqid = ?&#39;</span><span class="p">)</span>
+            <span class="n">position_clause</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;seqid = ?&quot;</span><span class="p">)</span>
             <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">seqid</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">start</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
-            <span class="n">position_clause</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;start </span><span class="si">%s</span><span class="s1"> ?&#39;</span> <span class="o">%</span> <span class="n">start_op</span><span class="p">)</span>
-            <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">end</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">end</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">end</span><span class="p">)</span>
-            <span class="n">position_clause</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;end </span><span class="si">%s</span><span class="s1"> ?&#39;</span> <span class="o">%</span> <span class="n">end_op</span><span class="p">)</span>
-            <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">end</span><span class="p">)</span>
 
-        <span class="n">position_clause</span> <span class="o">=</span> <span class="s1">&#39; AND &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">position_clause</span><span class="p">)</span>
+        <span class="c1"># See #129</span>
+        <span class="k">if</span> <span class="n">start</span> <span class="ow">and</span> <span class="n">end</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">completely_within</span><span class="p">:</span>
+            <span class="n">position_clause</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="sd">&quot;&quot;&quot;(</span>
+<span class="sd">                ({region_start} &lt;= start AND {region_end} &gt;= start) OR</span>
+<span class="sd">                ({region_start} &gt;= start AND {region_end} &lt;= end) OR</span>
+<span class="sd">                ({region_start} &lt;= end AND {region_end} &gt;= end)</span>
+<span class="sd">            )&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">region_start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">region_end</span><span class="o">=</span><span class="n">end</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">start</span><span class="p">:</span>
+                <span class="n">position_clause</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;start </span><span class="si">%s</span><span class="s2"> ?&quot;</span> <span class="o">%</span> <span class="n">start_op</span><span class="p">)</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">end</span><span class="p">:</span>
+                <span class="n">position_clause</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;end </span><span class="si">%s</span><span class="s2"> ?&quot;</span> <span class="o">%</span> <span class="n">end_op</span><span class="p">)</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">end</span><span class="p">)</span>
+
+        <span class="n">position_clause</span> <span class="o">=</span> <span class="s2">&quot; AND &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">position_clause</span><span class="p">)</span>
 
         <span class="c1"># Only use bins if we have defined boundaries and completely_within is</span>
         <span class="c1"># True. Otherwise you can&#39;t know how far away a feature stretches</span>
         <span class="c1"># (which means bins are not computable ahead of time)</span>
-        <span class="n">_bin_clause</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">_bin_clause</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">start</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">end</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="n">completely_within</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">start</span> <span class="o">&lt;=</span> <span class="n">bins</span><span class="o">.</span><span class="n">MAX_CHROM_SIZE</span> <span class="ow">and</span> <span class="n">end</span> <span class="o">&lt;=</span> <span class="n">bins</span><span class="o">.</span><span class="n">MAX_CHROM_SIZE</span><span class="p">:</span>
                 <span class="n">_bins</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">bins</span><span class="o">.</span><span class="n">bins</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">one</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
                 <span class="c1"># See issue #45</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_bins</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">900</span><span class="p">:</span>
-                    <span class="n">_bin_clause</span> <span class="o">=</span> <span class="s1">&#39; or &#39;</span> <span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;bin = ?&#39;</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">_bins</span><span class="p">])</span>
-                    <span class="n">_bin_clause</span> <span class="o">=</span> <span class="s1">&#39;AND ( </span><span class="si">%s</span><span class="s1"> )&#39;</span> <span class="o">%</span> <span class="n">_bin_clause</span>
+                    <span class="n">_bin_clause</span> <span class="o">=</span> <span class="s2">&quot; or &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;bin = ?&quot;</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">_bins</span><span class="p">])</span>
+                    <span class="n">_bin_clause</span> <span class="o">=</span> <span class="s2">&quot;AND ( </span><span class="si">%s</span><span class="s2"> )&quot;</span> <span class="o">%</span> <span class="n">_bin_clause</span>
                     <span class="n">args</span> <span class="o">+=</span> <span class="n">_bins</span>
 
-        <span class="n">query</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
-            <span class="n">constants</span><span class="o">.</span><span class="n">_SELECT</span><span class="p">,</span>
-            <span class="s1">&#39;WHERE &#39;</span><span class="p">,</span>
-            <span class="n">position_clause</span><span class="p">,</span>
-            <span class="n">_bin_clause</span><span class="p">])</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">constants</span><span class="o">.</span><span class="n">_SELECT</span><span class="p">,</span> <span class="s2">&quot;WHERE &quot;</span><span class="p">,</span> <span class="n">position_clause</span><span class="p">,</span> <span class="n">_bin_clause</span><span class="p">])</span>
 
         <span class="c1"># Add the featuretype clause</span>
         <span class="k">if</span> <span class="n">featuretype</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">featuretype</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
                 <span class="n">featuretype</span> <span class="o">=</span> <span class="p">[</span><span class="n">featuretype</span><span class="p">]</span>
-            <span class="n">feature_clause</span> <span class="o">=</span> <span class="s1">&#39; or &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                <span class="p">[</span><span class="s1">&#39;featuretype = ?&#39;</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">featuretype</span><span class="p">])</span>
-            <span class="n">query</span> <span class="o">+=</span> <span class="s1">&#39; AND (</span><span class="si">%s</span><span class="s1">) &#39;</span> <span class="o">%</span> <span class="n">feature_clause</span>
+            <span class="n">feature_clause</span> <span class="o">=</span> <span class="s2">&quot; or &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;featuretype = ?&quot;</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">featuretype</span><span class="p">])</span>
+            <span class="n">query</span> <span class="o">+=</span> <span class="s2">&quot; AND (</span><span class="si">%s</span><span class="s2">) &quot;</span> <span class="o">%</span> <span class="n">feature_clause</span>
             <span class="n">args</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">featuretype</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">strand</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">strand_clause</span> <span class="o">=</span> <span class="s1">&#39; and strand = ? &#39;</span>
+            <span class="n">strand_clause</span> <span class="o">=</span> <span class="s2">&quot; and strand = ? &quot;</span>
             <span class="n">query</span> <span class="o">+=</span> <span class="n">strand_clause</span>
             <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">strand</span><span class="p">)</span>
 
@@ -852,18 +871,25 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_last_query</span> <span class="o">=</span> <span class="n">query</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_last_args</span> <span class="o">=</span> <span class="n">args</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_context</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="n">start</span><span class="p">,</span>
-            <span class="s1">&#39;end&#39;</span><span class="p">:</span> <span class="n">end</span><span class="p">,</span>
-            <span class="s1">&#39;seqid&#39;</span><span class="p">:</span> <span class="n">seqid</span><span class="p">,</span>
-            <span class="s1">&#39;region&#39;</span><span class="p">:</span> <span class="n">region</span><span class="p">,</span>
+            <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="n">start</span><span class="p">,</span>
+            <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="n">end</span><span class="p">,</span>
+            <span class="s2">&quot;seqid&quot;</span><span class="p">:</span> <span class="n">seqid</span><span class="p">,</span>
+            <span class="s2">&quot;region&quot;</span><span class="p">:</span> <span class="n">region</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">c</span><span class="p">:</span>
             <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">_feature_returner</span><span class="p">(</span><span class="o">**</span><span class="n">i</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FeatureDB.interfeatures"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.interfeatures.html#gffutils.interface.FeatureDB.interfeatures">[docs]</a>    <span class="k">def</span> <span class="nf">interfeatures</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">new_featuretype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                      <span class="n">merge_attributes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                      <span class="n">attribute_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">update_attributes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="FeatureDB.interfeatures"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.interfeatures.html#gffutils.interface.FeatureDB.interfeatures">[docs]</a>    <span class="k">def</span> <span class="nf">interfeatures</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">features</span><span class="p">,</span>
+        <span class="n">new_featuretype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">merge_attributes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">numeric_sort</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">dialect</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">attribute_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">update_attributes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct new features representing the space between features.</span>
 
@@ -896,6 +922,15 @@
 <span class="sd">            be a comma-separated list of values, potentially listing the same</span>
 <span class="sd">            gene ID twice.</span>
 
+<span class="sd">        numeric_sort : bool</span>
+<span class="sd">            If True, then merged attributes that can be cast to float will be</span>
+<span class="sd">            sorted by their numeric values (but will still be returned as</span>
+<span class="sd">            string). This is useful, for example, when creating introns between</span>
+<span class="sd">            exons and the exons have exon_number attributes as an integer.</span>
+<span class="sd">            Using numeric_sort=True will ensure that the returned exons have</span>
+<span class="sd">            merged exon_number attribute of [&#39;9&#39;, &#39;10&#39;] (numerically sorted)</span>
+<span class="sd">            rather than [&#39;10&#39;, &#39;9&#39;] (alphabetically sorted).</span>
+
 <span class="sd">        attribute_func : callable or None</span>
 <span class="sd">            If None, then nothing special is done to the attributes.  If</span>
 <span class="sd">            callable, then the callable accepts two attribute dictionaries and</span>
@@ -921,10 +956,12 @@
 
             <span class="n">interfeature_stop</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">start</span>
             <span class="k">if</span> <span class="n">new_featuretype</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">new_featuretype</span> <span class="o">=</span> <span class="s1">&#39;inter_</span><span class="si">%s</span><span class="s1">_</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
-                    <span class="n">last_feature</span><span class="o">.</span><span class="n">featuretype</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">featuretype</span><span class="p">)</span>
+                <span class="n">new_featuretype</span> <span class="o">=</span> <span class="s2">&quot;inter_</span><span class="si">%s</span><span class="s2">_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="n">last_feature</span><span class="o">.</span><span class="n">featuretype</span><span class="p">,</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">featuretype</span><span class="p">,</span>
+                <span class="p">)</span>
             <span class="k">if</span> <span class="n">last_feature</span><span class="o">.</span><span class="n">strand</span> <span class="o">!=</span> <span class="n">f</span><span class="o">.</span><span class="n">strand</span><span class="p">:</span>
-                <span class="n">new_strand</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span>
+                <span class="n">new_strand</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">new_strand</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">strand</span>
 
@@ -946,27 +983,29 @@
 
             <span class="k">if</span> <span class="n">merge_attributes</span><span class="p">:</span>
                 <span class="n">new_attributes</span> <span class="o">=</span> <span class="n">helpers</span><span class="o">.</span><span class="n">merge_attributes</span><span class="p">(</span>
-                    <span class="n">last_feature</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">attributes</span><span class="p">)</span>
+                    <span class="n">last_feature</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span>
+                    <span class="n">numeric_sort</span><span class="o">=</span><span class="n">numeric_sort</span><span class="p">,</span>
+                <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">new_attributes</span> <span class="o">=</span> <span class="p">{}</span>
 
             <span class="k">if</span> <span class="n">update_attributes</span><span class="p">:</span>
                 <span class="n">new_attributes</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">update_attributes</span><span class="p">)</span>
 
-            <span class="n">new_bin</span> <span class="o">=</span> <span class="n">bins</span><span class="o">.</span><span class="n">bins</span><span class="p">(</span>
-                <span class="n">interfeature_start</span><span class="p">,</span> <span class="n">interfeature_stop</span><span class="p">,</span> <span class="n">one</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">new_bin</span> <span class="o">=</span> <span class="n">bins</span><span class="o">.</span><span class="n">bins</span><span class="p">(</span><span class="n">interfeature_start</span><span class="p">,</span> <span class="n">interfeature_stop</span><span class="p">,</span> <span class="n">one</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">_id</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
                 <span class="n">seqid</span><span class="o">=</span><span class="n">chrom</span><span class="p">,</span>
-                <span class="n">source</span><span class="o">=</span><span class="s1">&#39;gffutils_derived&#39;</span><span class="p">,</span>
+                <span class="n">source</span><span class="o">=</span><span class="s2">&quot;gffutils_derived&quot;</span><span class="p">,</span>
                 <span class="n">featuretype</span><span class="o">=</span><span class="n">new_featuretype</span><span class="p">,</span>
                 <span class="n">start</span><span class="o">=</span><span class="n">interfeature_start</span><span class="p">,</span>
                 <span class="n">end</span><span class="o">=</span><span class="n">interfeature_stop</span><span class="p">,</span>
-                <span class="n">score</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span>
+                <span class="n">score</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span>
                 <span class="n">strand</span><span class="o">=</span><span class="n">strand</span><span class="p">,</span>
-                <span class="n">frame</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span>
+                <span class="n">frame</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span>
                 <span class="n">attributes</span><span class="o">=</span><span class="n">new_attributes</span><span class="p">,</span>
-                <span class="nb">bin</span><span class="o">=</span><span class="n">new_bin</span><span class="p">)</span>
+                <span class="nb">bin</span><span class="o">=</span><span class="n">new_bin</span><span class="p">,</span>
+            <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">dialect</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="c1"># Support for @classmethod -- if calling from the class, then</span>
@@ -1001,7 +1040,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">make_backup</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dbfn</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
-                <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dbfn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbfn</span> <span class="o">+</span> <span class="s1">&#39;.bak&#39;</span><span class="p">)</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dbfn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbfn</span> <span class="o">+</span> <span class="s2">&quot;.bak&quot;</span><span class="p">)</span>
 
         <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
         <span class="n">query1</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
@@ -1064,9 +1103,10 @@
 
         <span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">create</span>
         <span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">iterators</span>
+
         <span class="k">if</span> <span class="n">make_backup</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dbfn</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
-                <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dbfn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbfn</span> <span class="o">+</span> <span class="s1">&#39;.bak&#39;</span><span class="p">)</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dbfn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbfn</span> <span class="o">+</span> <span class="s2">&quot;.bak&quot;</span><span class="p">)</span>
 
         <span class="c1"># get iterator-specific kwargs</span>
         <span class="n">_iterator_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1076,25 +1116,27 @@
 
         <span class="c1"># Handle all sorts of input</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">iterators</span><span class="o">.</span><span class="n">DataIterator</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">_iterator_kwargs</span><span class="p">)</span>
-        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;_autoincrements&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_autoincrements</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialect</span><span class="p">[</span><span class="s1">&#39;fmt&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;gtf&#39;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s1">&#39;id_spec&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-                <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;id_spec&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-                    <span class="s1">&#39;gene&#39;</span><span class="p">:</span> <span class="s1">&#39;gene_id&#39;</span><span class="p">,</span> <span class="s1">&#39;transcript&#39;</span><span class="p">:</span> <span class="s1">&#39;transcript_id&#39;</span><span class="p">}</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="o">.</span><span class="n">_peek</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;_autoincrements&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_autoincrements</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialect</span><span class="p">[</span><span class="s2">&quot;fmt&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;gtf&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;id_spec&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;id_spec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;gene&quot;</span><span class="p">:</span> <span class="s2">&quot;gene_id&quot;</span><span class="p">,</span> <span class="s2">&quot;transcript&quot;</span><span class="p">:</span> <span class="s2">&quot;transcript_id&quot;</span><span class="p">}</span>
             <span class="n">db</span> <span class="o">=</span> <span class="n">create</span><span class="o">.</span><span class="n">_GTFDBCreator</span><span class="p">(</span>
-                <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">dbfn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dbfn</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dialect</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialect</span><span class="p">[</span><span class="s1">&#39;fmt&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;gff3&#39;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s1">&#39;id_spec&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-                <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;id_spec&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;ID&#39;</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">dbfn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dbfn</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dialect</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialect</span><span class="p">[</span><span class="s2">&quot;fmt&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;gff3&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;id_spec&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;id_spec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ID&quot;</span>
             <span class="n">db</span> <span class="o">=</span> <span class="n">create</span><span class="o">.</span><span class="n">_GFFDBCreator</span><span class="p">(</span>
-                <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">dbfn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dbfn</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dialect</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">dbfn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dbfn</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dialect</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span>
-
-        <span class="n">peek</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">_iter</span> <span class="o">=</span> <span class="n">iterators</span><span class="o">.</span><span class="n">peek</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">_iter</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">peek</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="n">db</span>  <span class="c1"># If the file is empty then do nothing</span>
 
         <span class="n">db</span><span class="o">.</span><span class="n">_populate_from_lines</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="n">db</span><span class="o">.</span><span class="n">_update_relations</span><span class="p">()</span>
@@ -1106,8 +1148,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_autoincrements</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">_autoincrements</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="FeatureDB.add_relation"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.add_relation.html#gffutils.interface.FeatureDB.add_relation">[docs]</a>    <span class="k">def</span> <span class="nf">add_relation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">parent_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                     <span class="n">child_func</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="FeatureDB.add_relation"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.add_relation.html#gffutils.interface.FeatureDB.add_relation">[docs]</a>    <span class="k">def</span> <span class="nf">add_relation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">parent_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">child_func</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Manually add relations to the database.</span>
 
@@ -1149,9 +1190,12 @@
             <span class="n">child</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">child</span><span class="p">]</span>
 
         <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
-        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
-<span class="s1">                  INSERT INTO relations (parent, child, level)</span>
-<span class="s1">                  VALUES (?, ?, ?)&#39;&#39;&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">parent</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">child</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">level</span><span class="p">))</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                  INSERT INTO relations (parent, child, level)</span>
+<span class="sd">                  VALUES (?, ?, ?)&quot;&quot;&quot;</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">parent</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">child</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">level</span><span class="p">),</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">parent_func</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">parent</span> <span class="o">=</span> <span class="n">parent_func</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="p">)</span>
@@ -1165,8 +1209,7 @@
 
     <span class="k">def</span> <span class="nf">_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">cursor</span><span class="p">):</span>
         <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">feature</span><span class="o">.</span><span class="n">astuple</span><span class="p">())</span> <span class="o">+</span> <span class="p">[</span><span class="n">feature</span><span class="o">.</span><span class="n">id</span><span class="p">]]</span>
-        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="n">constants</span><span class="o">.</span><span class="n">_UPDATE</span><span class="p">,</span> <span class="o">*</span><span class="nb">tuple</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">_UPDATE</span><span class="p">,</span> <span class="o">*</span><span class="nb">tuple</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">_insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">cursor</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1175,12 +1218,17 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">_INSERT</span><span class="p">,</span> <span class="n">feature</span><span class="o">.</span><span class="n">astuple</span><span class="p">())</span>
         <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">ProgrammingError</span><span class="p">:</span>
-            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-                <span class="n">constants</span><span class="o">.</span><span class="n">_INSERT</span><span class="p">,</span> <span class="n">feature</span><span class="o">.</span><span class="n">astuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_encoding</span><span class="p">))</span>
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">_INSERT</span><span class="p">,</span> <span class="n">feature</span><span class="o">.</span><span class="n">astuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_encoding</span><span class="p">))</span>
 
-<div class="viewcode-block" id="FeatureDB.create_introns"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.create_introns.html#gffutils.interface.FeatureDB.create_introns">[docs]</a>    <span class="k">def</span> <span class="nf">create_introns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exon_featuretype</span><span class="o">=</span><span class="s1">&#39;exon&#39;</span><span class="p">,</span>
-                       <span class="n">grandparent_featuretype</span><span class="o">=</span><span class="s1">&#39;gene&#39;</span><span class="p">,</span> <span class="n">parent_featuretype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                       <span class="n">new_featuretype</span><span class="o">=</span><span class="s1">&#39;intron&#39;</span><span class="p">,</span> <span class="n">merge_attributes</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="FeatureDB.create_introns"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.create_introns.html#gffutils.interface.FeatureDB.create_introns">[docs]</a>    <span class="k">def</span> <span class="nf">create_introns</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">exon_featuretype</span><span class="o">=</span><span class="s2">&quot;exon&quot;</span><span class="p">,</span>
+        <span class="n">grandparent_featuretype</span><span class="o">=</span><span class="s2">&quot;gene&quot;</span><span class="p">,</span>
+        <span class="n">parent_featuretype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">new_featuretype</span><span class="o">=</span><span class="s2">&quot;intron&quot;</span><span class="p">,</span>
+        <span class="n">merge_attributes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">numeric_sort</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create introns from existing annotations.</span>
 
@@ -1213,6 +1261,15 @@
 <span class="sd">            Whether or not to merge attributes from all exons. If False then no</span>
 <span class="sd">            attributes will be created for the introns.</span>
 
+<span class="sd">        numeric_sort : bool</span>
+<span class="sd">            If True, then merged attributes that can be cast to float will be</span>
+<span class="sd">            sorted by their numeric values (but will still be returned as</span>
+<span class="sd">            string). This is useful, for example, when creating introns between</span>
+<span class="sd">            exons and the exons have exon_number attributes as an integer.</span>
+<span class="sd">            Using numeric_sort=True will ensure that the returned exons have</span>
+<span class="sd">            merged exon_number attribute of [&#39;9&#39;, &#39;10&#39;] (numerically sorted)</span>
+<span class="sd">            rather than [&#39;10&#39;, &#39;9&#39;] (alphabetically sorted).</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        A generator object that yields :class:`Feature` objects representing</span>
@@ -1230,25 +1287,34 @@
         <span class="k">if</span> <span class="p">(</span><span class="n">grandparent_featuretype</span> <span class="ow">and</span> <span class="n">parent_featuretype</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
             <span class="n">grandparent_featuretype</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">parent_featuretype</span> <span class="ow">is</span> <span class="kc">None</span>
         <span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;exactly one of `grandparent_featuretype` or &quot;</span>
-                             <span class="s2">&quot;`parent_featuretype` should be provided&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;exactly one of `grandparent_featuretype` or &quot;</span>
+                <span class="s2">&quot;`parent_featuretype` should be provided&quot;</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">grandparent_featuretype</span><span class="p">:</span>
+
             <span class="k">def</span> <span class="nf">child_gen</span><span class="p">():</span>
                 <span class="k">for</span> <span class="n">gene</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features_of_type</span><span class="p">(</span><span class="n">grandparent_featuretype</span><span class="p">):</span>
                     <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="n">gene</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
                         <span class="k">yield</span> <span class="n">child</span>
+
         <span class="k">elif</span> <span class="n">parent_featuretype</span><span class="p">:</span>
+
             <span class="k">def</span> <span class="nf">child_gen</span><span class="p">():</span>
                 <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features_of_type</span><span class="p">(</span><span class="n">parent_featuretype</span><span class="p">):</span>
                     <span class="k">yield</span> <span class="n">child</span>
 
         <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">child_gen</span><span class="p">():</span>
-            <span class="n">exons</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="n">exon_featuretype</span><span class="p">,</span>
-                                  <span class="n">order_by</span><span class="o">=</span><span class="s1">&#39;start&#39;</span><span class="p">)</span>
+            <span class="n">exons</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">(</span>
+                <span class="n">child</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="n">exon_featuretype</span><span class="p">,</span> <span class="n">order_by</span><span class="o">=</span><span class="s2">&quot;start&quot;</span>
+            <span class="p">)</span>
             <span class="k">for</span> <span class="n">intron</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">interfeatures</span><span class="p">(</span>
-                <span class="n">exons</span><span class="p">,</span> <span class="n">new_featuretype</span><span class="o">=</span><span class="n">new_featuretype</span><span class="p">,</span>
-                <span class="n">merge_attributes</span><span class="o">=</span><span class="n">merge_attributes</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dialect</span>
+                <span class="n">exons</span><span class="p">,</span>
+                <span class="n">new_featuretype</span><span class="o">=</span><span class="n">new_featuretype</span><span class="p">,</span>
+                <span class="n">merge_attributes</span><span class="o">=</span><span class="n">merge_attributes</span><span class="p">,</span>
+                <span class="n">numeric_sort</span><span class="o">=</span><span class="n">numeric_sort</span><span class="p">,</span>
+                <span class="n">dialect</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dialect</span><span class="p">,</span>
             <span class="p">):</span>
                 <span class="k">yield</span> <span class="n">intron</span></div>
 
@@ -1283,19 +1349,19 @@
 
         <span class="c1"># Either set all strands to &#39;+&#39; or check for strand-consistency.</span>
         <span class="k">if</span> <span class="n">ignore_strand</span><span class="p">:</span>
-            <span class="n">strand</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span>
+            <span class="n">strand</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">strands</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">strand</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">features</span><span class="p">]</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">strands</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Specify ignore_strand=True to force merging &#39;</span>
-                                 <span class="s1">&#39;of multiple strands&#39;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Specify ignore_strand=True to force merging &quot;</span> <span class="s2">&quot;of multiple strands&quot;</span>
+                <span class="p">)</span>
             <span class="n">strand</span> <span class="o">=</span> <span class="n">strands</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="c1"># Sanity check to make sure all features are from the same chromosome.</span>
         <span class="n">chroms</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">chrom</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">features</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">chroms</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;Merging multiple chromosomes not &#39;</span>
-                                      <span class="s1">&#39;implemented&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Merging multiple chromosomes not &quot;</span> <span class="s2">&quot;implemented&quot;</span><span class="p">)</span>
         <span class="n">chrom</span> <span class="o">=</span> <span class="n">chroms</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="c1"># To start, we create a merged feature of just the first feature.</span>
@@ -1320,14 +1386,15 @@
                 <span class="c1"># done with the current merged feature.  Prepare for output...</span>
                 <span class="n">merged_feature</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
                     <span class="n">seqid</span><span class="o">=</span><span class="n">feature</span><span class="o">.</span><span class="n">chrom</span><span class="p">,</span>
-                    <span class="n">source</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span>
+                    <span class="n">source</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span>
                     <span class="n">featuretype</span><span class="o">=</span><span class="n">feature</span><span class="o">.</span><span class="n">featuretype</span><span class="p">,</span>
                     <span class="n">start</span><span class="o">=</span><span class="n">current_merged_start</span><span class="p">,</span>
                     <span class="n">end</span><span class="o">=</span><span class="n">current_merged_stop</span><span class="p">,</span>
-                    <span class="n">score</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span>
+                    <span class="n">score</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span>
                     <span class="n">strand</span><span class="o">=</span><span class="n">strand</span><span class="p">,</span>
-                    <span class="n">frame</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span>
-                    <span class="n">attributes</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+                    <span class="n">frame</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span>
+                    <span class="n">attributes</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
                 <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">_feature_returner</span><span class="p">(</span><span class="o">**</span><span class="n">merged_feature</span><span class="p">)</span>
 
                 <span class="c1"># and we start a new one, initializing with this feature&#39;s</span>
@@ -1340,20 +1407,23 @@
             <span class="n">feature</span> <span class="o">=</span> <span class="n">features</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">merged_feature</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
             <span class="n">seqid</span><span class="o">=</span><span class="n">feature</span><span class="o">.</span><span class="n">chrom</span><span class="p">,</span>
-            <span class="n">source</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span>
+            <span class="n">source</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span>
             <span class="n">featuretype</span><span class="o">=</span><span class="n">feature</span><span class="o">.</span><span class="n">featuretype</span><span class="p">,</span>
             <span class="n">start</span><span class="o">=</span><span class="n">current_merged_start</span><span class="p">,</span>
             <span class="n">end</span><span class="o">=</span><span class="n">current_merged_stop</span><span class="p">,</span>
-            <span class="n">score</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span>
+            <span class="n">score</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span>
             <span class="n">strand</span><span class="o">=</span><span class="n">strand</span><span class="p">,</span>
-            <span class="n">frame</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span>
-            <span class="n">attributes</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">frame</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span>
+            <span class="n">attributes</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">_feature_returner</span><span class="p">(</span><span class="o">**</span><span class="n">merged_feature</span><span class="p">)</span>
 
-
-<div class="viewcode-block" id="FeatureDB.merge"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.merge.html#gffutils.interface.FeatureDB.merge">[docs]</a>    <span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span>
-              <span class="n">merge_criteria</span><span class="o">=</span><span class="p">(</span><span class="n">mc</span><span class="o">.</span><span class="n">seqid</span><span class="p">,</span> <span class="n">mc</span><span class="o">.</span><span class="n">overlap_end_inclusive</span><span class="p">,</span> <span class="n">mc</span><span class="o">.</span><span class="n">strand</span><span class="p">,</span> <span class="n">mc</span><span class="o">.</span><span class="n">feature_type</span><span class="p">),</span>
-              <span class="n">multiline</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="FeatureDB.merge"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.merge.html#gffutils.interface.FeatureDB.merge">[docs]</a>    <span class="k">def</span> <span class="nf">merge</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">features</span><span class="p">,</span>
+        <span class="n">merge_criteria</span><span class="o">=</span><span class="p">(</span><span class="n">mc</span><span class="o">.</span><span class="n">seqid</span><span class="p">,</span> <span class="n">mc</span><span class="o">.</span><span class="n">overlap_end_inclusive</span><span class="p">,</span> <span class="n">mc</span><span class="o">.</span><span class="n">strand</span><span class="p">,</span> <span class="n">mc</span><span class="o">.</span><span class="n">feature_type</span><span class="p">),</span>
+        <span class="n">multiline</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Merge features matching criteria together</span>
 
@@ -1402,7 +1472,6 @@
 <span class="sd">        The function should return True to merge `cur` into `acc`, False to set</span>
 <span class="sd">        `cur` to `acc` (that is, start a new merged feature).</span>
 
-
 <span class="sd">        If merge criteria allows different feature types then the merged</span>
 <span class="sd">        features&#39; feature types should have their featuretype property</span>
 <span class="sd">        reassigned to a more specific ontology value.</span>
@@ -1421,7 +1490,10 @@
 
         <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">features</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">current_merged</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">criteria</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">feature_children</span><span class="p">)</span> <span class="k">for</span> <span class="n">criteria</span> <span class="ow">in</span> <span class="n">merge_criteria</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">all</span><span class="p">(</span>
+                    <span class="n">criteria</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">feature_children</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">criteria</span> <span class="ow">in</span> <span class="n">merge_criteria</span>
+                <span class="p">):</span>
                     <span class="n">current_merged</span> <span class="o">=</span> <span class="n">feature</span>
                     <span class="n">feature_children</span> <span class="o">=</span> <span class="p">[</span><span class="n">feature</span><span class="p">]</span>
                 <span class="k">else</span><span class="p">:</span>
@@ -1429,8 +1501,13 @@
                     <span class="n">last_id</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="k">continue</span>
 
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature_children</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># current_merged is last feature and unchecked</span>
-                <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">criteria</span><span class="p">(</span><span class="n">current_merged</span><span class="p">,</span> <span class="n">current_merged</span><span class="p">,</span> <span class="n">feature_children</span><span class="p">)</span> <span class="k">for</span> <span class="n">criteria</span> <span class="ow">in</span> <span class="n">merge_criteria</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">feature_children</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+            <span class="p">):</span>  <span class="c1"># current_merged is last feature and unchecked</span>
+                <span class="k">if</span> <span class="nb">all</span><span class="p">(</span>
+                    <span class="n">criteria</span><span class="p">(</span><span class="n">current_merged</span><span class="p">,</span> <span class="n">current_merged</span><span class="p">,</span> <span class="n">feature_children</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">criteria</span> <span class="ow">in</span> <span class="n">merge_criteria</span>
+                <span class="p">):</span>
                     <span class="n">feature_children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_merged</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">yield</span> <span class="n">_finalize_merge</span><span class="p">(</span><span class="n">current_merged</span><span class="p">,</span> <span class="n">no_children</span><span class="p">)</span>
@@ -1438,7 +1515,10 @@
                     <span class="n">last_id</span> <span class="o">=</span> <span class="kc">None</span>
                     <span class="k">continue</span>
 
-            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">criteria</span><span class="p">(</span><span class="n">current_merged</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">feature_children</span><span class="p">)</span> <span class="k">for</span> <span class="n">criteria</span> <span class="ow">in</span> <span class="n">merge_criteria</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span>
+                <span class="n">criteria</span><span class="p">(</span><span class="n">current_merged</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">feature_children</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">criteria</span> <span class="ow">in</span> <span class="n">merge_criteria</span>
+            <span class="p">):</span>
                 <span class="c1"># Criteria satisfied, merge</span>
                 <span class="c1"># TODO Test multiline records and iron out the following code</span>
                 <span class="c1"># if multiline and (feature.start &gt; current_merged.end + 1 or feature.end + 1 &lt; current_merged.start):</span>
@@ -1450,27 +1530,34 @@
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature_children</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="c1"># Current merged is only child and merge is going to occur, make copy</span>
                     <span class="n">current_merged</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="n">current_merged</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-                    <span class="k">del</span> <span class="n">current_merged</span><span class="p">[</span><span class="s1">&#39;attributes&#39;</span><span class="p">]</span>
-                    <span class="k">del</span> <span class="n">current_merged</span><span class="p">[</span><span class="s1">&#39;extra&#39;</span><span class="p">]</span>
-                    <span class="k">del</span> <span class="n">current_merged</span><span class="p">[</span><span class="s1">&#39;dialect&#39;</span><span class="p">]</span>
-                    <span class="k">del</span> <span class="n">current_merged</span><span class="p">[</span><span class="s1">&#39;keep_order&#39;</span><span class="p">]</span>
-                    <span class="k">del</span> <span class="n">current_merged</span><span class="p">[</span><span class="s1">&#39;sort_attribute_values&#39;</span><span class="p">]</span>
+                    <span class="k">del</span> <span class="n">current_merged</span><span class="p">[</span><span class="s2">&quot;attributes&quot;</span><span class="p">]</span>
+                    <span class="k">del</span> <span class="n">current_merged</span><span class="p">[</span><span class="s2">&quot;extra&quot;</span><span class="p">]</span>
+                    <span class="k">del</span> <span class="n">current_merged</span><span class="p">[</span><span class="s2">&quot;dialect&quot;</span><span class="p">]</span>
+                    <span class="k">del</span> <span class="n">current_merged</span><span class="p">[</span><span class="s2">&quot;keep_order&quot;</span><span class="p">]</span>
+                    <span class="k">del</span> <span class="n">current_merged</span><span class="p">[</span><span class="s2">&quot;sort_attribute_values&quot;</span><span class="p">]</span>
                     <span class="n">current_merged</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_feature_returner</span><span class="p">(</span><span class="o">**</span><span class="n">current_merged</span><span class="p">)</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="n">last_id</span><span class="p">:</span>
                         <span class="c1"># Generate unique ID for new Feature</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">_autoincrements</span><span class="p">[</span><span class="n">current_merged</span><span class="o">.</span><span class="n">featuretype</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-                        <span class="n">last_id</span> <span class="o">=</span> <span class="n">current_merged</span><span class="o">.</span><span class="n">featuretype</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">_autoincrements</span><span class="p">[</span><span class="n">current_merged</span><span class="o">.</span><span class="n">featuretype</span><span class="p">])</span>
-                    <span class="n">current_merged</span><span class="p">[</span><span class="s1">&#39;ID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">last_id</span>
+                        <span class="n">last_id</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="n">current_merged</span><span class="o">.</span><span class="n">featuretype</span>
+                            <span class="o">+</span> <span class="s2">&quot;_&quot;</span>
+                            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_autoincrements</span><span class="p">[</span><span class="n">current_merged</span><span class="o">.</span><span class="n">featuretype</span><span class="p">])</span>
+                        <span class="p">)</span>
+                    <span class="n">current_merged</span><span class="p">[</span><span class="s2">&quot;ID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">last_id</span>
                     <span class="n">current_merged</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">last_id</span>
 
                 <span class="n">feature_children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span>
 
                 <span class="c1"># Set mismatched properties to ambiguous values</span>
-                <span class="k">if</span> <span class="n">feature</span><span class="o">.</span><span class="n">seqid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">current_merged</span><span class="o">.</span><span class="n">seqid</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">):</span> <span class="n">current_merged</span><span class="o">.</span><span class="n">seqid</span> <span class="o">+=</span> <span class="s1">&#39;,&#39;</span> <span class="o">+</span> <span class="n">feature</span><span class="o">.</span><span class="n">seqid</span>
-                <span class="k">if</span> <span class="n">feature</span><span class="o">.</span><span class="n">strand</span> <span class="o">!=</span> <span class="n">current_merged</span><span class="o">.</span><span class="n">strand</span><span class="p">:</span> <span class="n">current_merged</span><span class="o">.</span><span class="n">strand</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span>
-                <span class="k">if</span> <span class="n">feature</span><span class="o">.</span><span class="n">frame</span> <span class="o">!=</span> <span class="n">current_merged</span><span class="o">.</span><span class="n">frame</span><span class="p">:</span> <span class="n">current_merged</span><span class="o">.</span><span class="n">frame</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span>
-                <span class="k">if</span> <span class="n">feature</span><span class="o">.</span><span class="n">featuretype</span> <span class="o">!=</span> <span class="n">current_merged</span><span class="o">.</span><span class="n">featuretype</span><span class="p">:</span> <span class="n">current_merged</span><span class="o">.</span><span class="n">featuretype</span> <span class="o">=</span> <span class="s2">&quot;sequence_feature&quot;</span>
+                <span class="k">if</span> <span class="n">feature</span><span class="o">.</span><span class="n">seqid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">current_merged</span><span class="o">.</span><span class="n">seqid</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">):</span>
+                    <span class="n">current_merged</span><span class="o">.</span><span class="n">seqid</span> <span class="o">+=</span> <span class="s2">&quot;,&quot;</span> <span class="o">+</span> <span class="n">feature</span><span class="o">.</span><span class="n">seqid</span>
+                <span class="k">if</span> <span class="n">feature</span><span class="o">.</span><span class="n">strand</span> <span class="o">!=</span> <span class="n">current_merged</span><span class="o">.</span><span class="n">strand</span><span class="p">:</span>
+                    <span class="n">current_merged</span><span class="o">.</span><span class="n">strand</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>
+                <span class="k">if</span> <span class="n">feature</span><span class="o">.</span><span class="n">frame</span> <span class="o">!=</span> <span class="n">current_merged</span><span class="o">.</span><span class="n">frame</span><span class="p">:</span>
+                    <span class="n">current_merged</span><span class="o">.</span><span class="n">frame</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>
+                <span class="k">if</span> <span class="n">feature</span><span class="o">.</span><span class="n">featuretype</span> <span class="o">!=</span> <span class="n">current_merged</span><span class="o">.</span><span class="n">featuretype</span><span class="p">:</span>
+                    <span class="n">current_merged</span><span class="o">.</span><span class="n">featuretype</span> <span class="o">=</span> <span class="s2">&quot;sequence_feature&quot;</span>
 
                 <span class="k">if</span> <span class="n">feature</span><span class="o">.</span><span class="n">start</span> <span class="o">&lt;</span> <span class="n">current_merged</span><span class="o">.</span><span class="n">start</span><span class="p">:</span>
                     <span class="c1"># Extends prior, so set a new start position</span>
@@ -1489,11 +1576,13 @@
         <span class="k">if</span> <span class="n">current_merged</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">_finalize_merge</span><span class="p">(</span><span class="n">current_merged</span><span class="p">,</span> <span class="n">feature_children</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">merge_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                  <span class="n">merge_order</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;seqid&#39;</span><span class="p">,</span> <span class="s1">&#39;featuretype&#39;</span><span class="p">,</span> <span class="s1">&#39;strand&#39;</span><span class="p">,</span> <span class="s1">&#39;start&#39;</span><span class="p">),</span>
-                  <span class="n">merge_criteria</span><span class="o">=</span><span class="p">(</span><span class="n">mc</span><span class="o">.</span><span class="n">seqid</span><span class="p">,</span> <span class="n">mc</span><span class="o">.</span><span class="n">overlap_end_inclusive</span><span class="p">,</span> <span class="n">mc</span><span class="o">.</span><span class="n">strand</span><span class="p">,</span> <span class="n">mc</span><span class="o">.</span><span class="n">feature_type</span><span class="p">),</span>
-                  <span class="n">featuretypes_groups</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,),</span>
-                  <span class="n">exclude_components</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">merge_all</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">merge_order</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;seqid&quot;</span><span class="p">,</span> <span class="s2">&quot;featuretype&quot;</span><span class="p">,</span> <span class="s2">&quot;strand&quot;</span><span class="p">,</span> <span class="s2">&quot;start&quot;</span><span class="p">),</span>
+        <span class="n">merge_criteria</span><span class="o">=</span><span class="p">(</span><span class="n">mc</span><span class="o">.</span><span class="n">seqid</span><span class="p">,</span> <span class="n">mc</span><span class="o">.</span><span class="n">overlap_end_inclusive</span><span class="p">,</span> <span class="n">mc</span><span class="o">.</span><span class="n">strand</span><span class="p">,</span> <span class="n">mc</span><span class="o">.</span><span class="n">feature_type</span><span class="p">),</span>
+        <span class="n">featuretypes_groups</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,),</span>
+        <span class="n">exclude_components</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Merge all features in database according to criteria.</span>
 <span class="sd">        Merged features will be assigned as children of the merged record.</span>
@@ -1523,8 +1612,10 @@
 
         <span class="c1"># Merge features per featuregroup</span>
         <span class="k">for</span> <span class="n">featuregroup</span> <span class="ow">in</span> <span class="n">featuretypes_groups</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">merged</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_features</span><span class="p">(</span><span class="n">featuretype</span><span class="o">=</span><span class="n">featuregroup</span><span class="p">,</span> <span class="n">order_by</span><span class="o">=</span><span class="n">merge_order</span><span class="p">),</span>
-                                <span class="n">merge_criteria</span><span class="o">=</span><span class="n">merge_criteria</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">merged</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">all_features</span><span class="p">(</span><span class="n">featuretype</span><span class="o">=</span><span class="n">featuregroup</span><span class="p">,</span> <span class="n">order_by</span><span class="o">=</span><span class="n">merge_order</span><span class="p">),</span>
+                <span class="n">merge_criteria</span><span class="o">=</span><span class="n">merge_criteria</span><span class="p">,</span>
+            <span class="p">):</span>
                 <span class="c1"># If feature is result of merge</span>
                 <span class="k">if</span> <span class="n">merged</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_insert</span><span class="p">(</span><span class="n">merged</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">())</span>
@@ -1541,8 +1632,12 @@
 
         <span class="k">return</span> <span class="n">result_features</span>
 
-<div class="viewcode-block" id="FeatureDB.children_bp"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.children_bp.html#gffutils.interface.FeatureDB.children_bp">[docs]</a>    <span class="k">def</span> <span class="nf">children_bp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">child_featuretype</span><span class="o">=</span><span class="s1">&#39;exon&#39;</span><span class="p">,</span> <span class="n">merge</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                    <span class="n">ignore_strand</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="FeatureDB.children_bp"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.children_bp.html#gffutils.interface.FeatureDB.children_bp">[docs]</a>    <span class="k">def</span> <span class="nf">children_bp</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">child_featuretype</span><span class="o">=</span><span class="s2">&quot;exon&quot;</span><span class="p">,</span> <span class="n">merge</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">merge_criteria</span><span class="o">=</span><span class="p">(</span><span class="n">mc</span><span class="o">.</span><span class="n">seqid</span><span class="p">,</span> <span class="n">mc</span><span class="o">.</span><span class="n">overlap_end_inclusive</span><span class="p">,</span> <span class="n">mc</span><span class="o">.</span><span class="n">strand</span><span class="p">,</span>
+                            <span class="n">mc</span><span class="o">.</span><span class="n">feature_type</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Total bp of all children of a featuretype.</span>
 
@@ -1561,29 +1656,49 @@
 <span class="sd">            Whether or not to merge child features together before summing</span>
 <span class="sd">            them.</span>
 
-<span class="sd">        ignore_strand : bool</span>
-<span class="sd">            If True, then overlapping features on different strands will be</span>
-<span class="sd">            merged together; otherwise, merging features with different strands</span>
-<span class="sd">            will result in a ValueError.</span>
+<span class="sd">        merge_criteria : list</span>
+<span class="sd">            List of merge criteria callbacks. All must evaluate to True in</span>
+<span class="sd">            order for a feature to be merged. Only used if merge=True. When</span>
+<span class="sd">            modifying this argument, you may want to use:</span>
+
+<span class="sd">                from gffutils import merge_criteria as mc</span>
+
+<span class="sd">            to access the available callbacks.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Integer representing the total number of bp.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">children</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="n">child_featuretype</span><span class="p">,</span>
-                                 <span class="n">order_by</span><span class="o">=</span><span class="s1">&#39;start&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;ignore_strand&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;&#39;ignore_strand&#39; has been deprecated; please use &quot;</span>
+                    <span class="s2">&quot;merge_criteria to control how features should be merged. &quot;</span>
+                    <span class="s2">&quot;E.g., leave out the &#39;mc.strand&#39; criteria to ignore strand.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;merge() got unexpected keyword arguments &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+
+        <span class="n">children</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">(</span>
+            <span class="n">feature</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="n">child_featuretype</span><span class="p">,</span> <span class="n">order_by</span><span class="o">=</span><span class="s2">&quot;start&quot;</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="n">merge</span><span class="p">:</span>
-            <span class="n">children</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">children</span><span class="p">,</span> <span class="n">ignore_strand</span><span class="o">=</span><span class="n">ignore_strand</span><span class="p">)</span>
+            <span class="n">children</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">children</span><span class="p">,</span> <span class="n">merge_criteria</span><span class="o">=</span><span class="n">merge_criteria</span><span class="p">)</span>
 
         <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">children</span><span class="p">:</span>
             <span class="n">total</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">total</span></div>
 
-<div class="viewcode-block" id="FeatureDB.bed12"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.bed12.html#gffutils.interface.FeatureDB.bed12">[docs]</a>    <span class="k">def</span> <span class="nf">bed12</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">block_featuretype</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;exon&#39;</span><span class="p">],</span>
-              <span class="n">thick_featuretype</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;CDS&#39;</span><span class="p">],</span> <span class="n">thin_featuretype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-              <span class="n">name_field</span><span class="o">=</span><span class="s1">&#39;ID&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="FeatureDB.bed12"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.bed12.html#gffutils.interface.FeatureDB.bed12">[docs]</a>    <span class="k">def</span> <span class="nf">bed12</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">feature</span><span class="p">,</span>
+        <span class="n">block_featuretype</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;exon&quot;</span><span class="p">],</span>
+        <span class="n">thick_featuretype</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CDS&quot;</span><span class="p">],</span>
+        <span class="n">thin_featuretype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">name_field</span><span class="o">=</span><span class="s2">&quot;ID&quot;</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Converts `feature` into a BED12 format.</span>
 
@@ -1643,11 +1758,13 @@
 <span class="sd">            are integers in the range 0-255.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">thick_featuretype</span> <span class="ow">and</span> <span class="n">thin_featuretype</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Can only specify one of `thick_featuertype` or &quot;</span>
-                             <span class="s2">&quot;`thin_featuretype`&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Can only specify one of `thick_featuertype` or &quot;</span> <span class="s2">&quot;`thin_featuretype`&quot;</span>
+            <span class="p">)</span>
 
-        <span class="n">exons</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="n">block_featuretype</span><span class="p">,</span>
-                                   <span class="n">order_by</span><span class="o">=</span><span class="s1">&#39;start&#39;</span><span class="p">))</span>
+        <span class="n">exons</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="n">block_featuretype</span><span class="p">,</span> <span class="n">order_by</span><span class="o">=</span><span class="s2">&quot;start&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">exons</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">exons</span> <span class="o">=</span> <span class="p">[</span><span class="n">feature</span><span class="p">]</span>
         <span class="n">feature</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span>
@@ -1657,15 +1774,17 @@
         <span class="k">if</span> <span class="n">first</span> <span class="o">!=</span> <span class="n">feature</span><span class="o">.</span><span class="n">start</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s2">&quot;Start of first exon (</span><span class="si">%s</span><span class="s2">) does not match start of feature (</span><span class="si">%s</span><span class="s2">)&quot;</span>
-                <span class="o">%</span> <span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">feature</span><span class="o">.</span><span class="n">start</span><span class="p">))</span>
+                <span class="o">%</span> <span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">feature</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="n">last</span> <span class="o">!=</span> <span class="n">feature</span><span class="o">.</span><span class="n">stop</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s2">&quot;End of last exon (</span><span class="si">%s</span><span class="s2">) does not match end of feature (</span><span class="si">%s</span><span class="s2">)&quot;</span>
-                <span class="o">%</span> <span class="p">(</span><span class="n">last</span><span class="p">,</span> <span class="n">feature</span><span class="o">.</span><span class="n">stop</span><span class="p">))</span>
+                <span class="o">%</span> <span class="p">(</span><span class="n">last</span><span class="p">,</span> <span class="n">feature</span><span class="o">.</span><span class="n">stop</span><span class="p">)</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">color</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;0,0,0&#39;</span>
-        <span class="n">color</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;0,0,0&quot;</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
         <span class="c1"># Use field names as defined at</span>
         <span class="c1"># http://genome.ucsc.edu/FAQ/FAQformat.html#format1</span>
@@ -1682,8 +1801,8 @@
         <span class="n">constants</span><span class="o">.</span><span class="n">always_return_list</span> <span class="o">=</span> <span class="n">orig</span>
 
         <span class="n">score</span> <span class="o">=</span> <span class="n">feature</span><span class="o">.</span><span class="n">score</span>
-        <span class="k">if</span> <span class="n">score</span> <span class="o">==</span> <span class="s1">&#39;.&#39;</span><span class="p">:</span>
-            <span class="n">score</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span>
+        <span class="k">if</span> <span class="n">score</span> <span class="o">==</span> <span class="s2">&quot;.&quot;</span><span class="p">:</span>
+            <span class="n">score</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span>
         <span class="n">strand</span> <span class="o">=</span> <span class="n">feature</span><span class="o">.</span><span class="n">strand</span>
         <span class="n">itemRgb</span> <span class="o">=</span> <span class="n">color</span>
         <span class="n">blockCount</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">exons</span><span class="p">)</span>
@@ -1691,8 +1810,9 @@
         <span class="n">blockStarts</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">start</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">chromStart</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">exons</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">thick_featuretype</span><span class="p">:</span>
-            <span class="n">thick</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="n">thick_featuretype</span><span class="p">,</span>
-                                       <span class="n">order_by</span><span class="o">=</span><span class="s1">&#39;start&#39;</span><span class="p">))</span>
+            <span class="n">thick</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="n">thick_featuretype</span><span class="p">,</span> <span class="n">order_by</span><span class="o">=</span><span class="s2">&quot;start&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">thick</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">thickStart</span> <span class="o">=</span> <span class="n">feature</span><span class="o">.</span><span class="n">start</span>
                 <span class="n">thickEnd</span> <span class="o">=</span> <span class="n">feature</span><span class="o">.</span><span class="n">stop</span>
@@ -1701,8 +1821,9 @@
                 <span class="n">thickEnd</span> <span class="o">=</span> <span class="n">thick</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">stop</span>
 
         <span class="k">if</span> <span class="n">thin_featuretype</span><span class="p">:</span>
-            <span class="n">thin</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="n">thin_featuretype</span><span class="p">,</span>
-                                      <span class="n">order_by</span><span class="o">=</span><span class="s1">&#39;start&#39;</span><span class="p">))</span>
+            <span class="n">thin</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="n">thin_featuretype</span><span class="p">,</span> <span class="n">order_by</span><span class="o">=</span><span class="s2">&quot;start&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">thin</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">thickStart</span> <span class="o">=</span> <span class="n">feature</span><span class="o">.</span><span class="n">start</span>
                 <span class="n">thickEnd</span> <span class="o">=</span> <span class="n">feature</span><span class="o">.</span><span class="n">stop</span>
@@ -1724,60 +1845,61 @@
             <span class="n">thickEnd</span><span class="p">,</span>
             <span class="n">itemRgb</span><span class="p">,</span>
             <span class="n">blockCount</span><span class="p">,</span>
-            <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">blockSizes</span><span class="p">)),</span>
-            <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">blockStarts</span><span class="p">))]</span>
-        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">fields</span><span class="p">))</span></div>
+            <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">blockSizes</span><span class="p">)),</span>
+            <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">blockStarts</span><span class="p">)),</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">fields</span><span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="nf">seqids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Yield the unique sequence IDs (chromosomes, contigs) observed in the</span>
+<span class="sd">        database.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            SELECT DISTINCT seqid from features</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">c</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">i</span>
+
 
     <span class="c1"># Recycle the docs for _relation so they stay consistent between parents()</span>
     <span class="c1"># and children()</span>
-    <span class="n">children</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">children</span><span class="o">.</span><span class="vm">__doc__</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="n">_relation_docstring</span><span class="o">=</span><span class="n">_relation</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
-    <span class="n">parents</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">parents</span><span class="o">.</span><span class="vm">__doc__</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="n">_relation_docstring</span><span class="o">=</span><span class="n">_relation</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+    <span class="n">children</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">children</span><span class="o">.</span><span class="vm">__doc__</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_relation_docstring</span><span class="o">=</span><span class="n">_relation</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+    <span class="n">parents</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">parents</span><span class="o">.</span><span class="vm">__doc__</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_relation_docstring</span><span class="o">=</span><span class="n">_relation</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
 
     <span class="c1"># Add the docs for methods that call helpers.make_query()</span>
     <span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="n">parents</span><span class="p">,</span> <span class="n">children</span><span class="p">,</span> <span class="n">features_of_type</span><span class="p">,</span> <span class="n">all_features</span><span class="p">]:</span>
-        <span class="n">method</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="vm">__doc__</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">_method_doc</span><span class="o">=</span><span class="n">_method_doc</span><span class="p">)</span></div>
+        <span class="n">method</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="vm">__doc__</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_method_doc</span><span class="o">=</span><span class="n">_method_doc</span><span class="p">)</span></div>
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2013, Ryan Dale
-
-    </p>
+    <p>&#169; Copyright 2013-2022, Ryan Dale.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

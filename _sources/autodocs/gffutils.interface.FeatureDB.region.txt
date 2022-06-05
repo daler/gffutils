@@ -1,6 +1,0 @@
-gffutils.interface.FeatureDB.region
-===================================
-
-.. currentmodule:: gffutils.interface
-
-.. automethod:: FeatureDB.region

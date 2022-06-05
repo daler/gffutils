@@ -1,71 +1,39 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>gffutils.create.create_db &mdash; gffutils 0.10.1 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gffutils.create.create_db &mdash; gffutils 0.11.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="gffutils.interface.FeatureDB" href="gffutils.interface.FeatureDB.html" />
     <link rel="prev" title="API" href="../api.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="../contents.html" class="icon icon-home"> gffutils
-          
-
-          
+            <a href="../index.html" class="icon icon-home"> gffutils
           </a>
-
-          
-            
-            
               <div class="version">
-                0.10.1
+                0.11.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -73,19 +41,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../database-import.html">Importing data into a database</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../database-schema.html">Database schema</a></li>
@@ -97,7 +54,10 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-gffutils"><code class="docutils literal notranslate"><span class="pre">gffutils</span></code></a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../api.html#create-a-database">Create a database</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">gffutils.create.create_db</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">gffutils.create.create_db</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#gffutils.create.create_db">create_db</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#interact-with-a-database">Interact with a database</a></li>
@@ -111,113 +71,86 @@
 <li class="toctree-l1"><a class="reference internal" href="../meta.html">Meta-docs (docs about the docs)</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../contents.html">gffutils</a>
-        
+          <a href="../index.html">gffutils</a>
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../contents.html">Docs</a> &raquo;</li>
-        
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../api.html">API</a> &raquo;</li>
-        
       <li>gffutils.create.create_db</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../_sources/autodocs/gffutils.create.create_db.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="gffutils-create-create-db">
-<h1>gffutils.create.create_db<a class="headerlink" href="#gffutils-create-create-db" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="gffutils.create.create_db">
-<code class="sig-prename descclassname">gffutils.create.</code><code class="sig-name descname">create_db</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">dbfn</em>, <em class="sig-param">id_spec=None</em>, <em class="sig-param">force=False</em>, <em class="sig-param">verbose=False</em>, <em class="sig-param">checklines=10</em>, <em class="sig-param">merge_strategy='error'</em>, <em class="sig-param">transform=None</em>, <em class="sig-param">gtf_transcript_key='transcript_id'</em>, <em class="sig-param">gtf_gene_key='gene_id'</em>, <em class="sig-param">gtf_subfeature='exon'</em>, <em class="sig-param">force_gff=False</em>, <em class="sig-param">force_dialect_check=False</em>, <em class="sig-param">from_string=False</em>, <em class="sig-param">keep_order=False</em>, <em class="sig-param">text_factory=&lt;class 'str'&gt;</em>, <em class="sig-param">force_merge_fields=None</em>, <em class="sig-param">pragmas={'synchronous': 'NORMAL'</em>, <em class="sig-param">'journal_mode': 'MEMORY'</em>, <em class="sig-param">'main.page_size': 4096</em>, <em class="sig-param">'main.cache_size': 10000}</em>, <em class="sig-param">sort_attribute_values=False</em>, <em class="sig-param">dialect=None</em>, <em class="sig-param">_keep_tempfiles=False</em>, <em class="sig-param">infer_gene_extent=True</em>, <em class="sig-param">disable_infer_genes=False</em>, <em class="sig-param">disable_infer_transcripts=False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/create.html#create_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gffutils.create.create_db" title="Permalink to this definition">¶</a></dt>
+             
+  <section id="gffutils-create-create-db">
+<h1>gffutils.create.create_db<a class="headerlink" href="#gffutils-create-create-db" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="gffutils.create.create_db">
+<span class="sig-prename descclassname"><span class="pre">gffutils.create.</span></span><span class="sig-name descname"><span class="pre">create_db</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dbfn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_spec=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checklines=10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">merge_strategy='error'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gtf_transcript_key='transcript_id'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gtf_gene_key='gene_id'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gtf_subfeature='exon'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_gff=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_dialect_check=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_string=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_order=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_factory=&lt;class</span> <span class="pre">'str'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_merge_fields=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pragmas={'journal_mode':</span> <span class="pre">'MEMORY'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'main.cache_size':</span> <span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'main.page_size':</span> <span class="pre">4096</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'synchronous':</span> <span class="pre">'NORMAL'}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_attribute_values=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dialect=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_keep_tempfiles=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">infer_gene_extent=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disable_infer_genes=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disable_infer_transcripts=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/create.html#create_db"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gffutils.create.create_db" title="Permalink to this definition"></a></dt>
 <dd><p>Create a database from a GFF or GTF file.</p>
 <p>For more details on when and how to use the kwargs below, see the examples
 in the online documentation (<a class="reference internal" href="../examples.html#examples"><span class="std std-ref">Examples</span></a>).</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl>
-<dt><strong>data</strong><span class="classifier">string or iterable</span></dt><dd><p>If a string (and <code class="docutils literal notranslate"><span class="pre">from_string</span></code> is False), then <code class="docutils literal notranslate"><span class="pre">data</span></code> is the path to
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>string</em><em> or </em><em>iterable</em>) – <p>If a string (and <code class="docutils literal notranslate"><span class="pre">from_string</span></code> is False), then <code class="docutils literal notranslate"><span class="pre">data</span></code> is the path to
 the original GFF or GTF file.</p>
 <p>If a string and <code class="docutils literal notranslate"><span class="pre">from_string</span></code> is True, then assume <code class="docutils literal notranslate"><span class="pre">data</span></code> is the actual
 data to use.</p>
 <p>Otherwise, it’s an iterable of Feature objects.</p>
-</dd>
-<dt><strong>dbfn</strong><span class="classifier">string</span></dt><dd><p>Path to the database that will be created.  Can be the special string
-“:memory:” to create an in-memory database.</p>
-</dd>
-<dt><strong>id_spec</strong><span class="classifier">string, list, dict, callable, or None</span></dt><dd><p>This parameter guides what will be used as the primary key for the
+</p></li>
+<li><p><strong>dbfn</strong> (<em>string</em>) – Path to the database that will be created.  Can be the special string
+“:memory:” to create an in-memory database.</p></li>
+<li><p><strong>id_spec</strong> (<em>string</em><em>, </em><em>list</em><em>, </em><em>dict</em><em>, </em><em>callable</em><em>, or </em><em>None</em>) – <p>This parameter guides what will be used as the primary key for the
 database, which in turn determines how you will access individual
 features by name from the database.</p>
-<p>If <code class="docutils literal notranslate"><span class="pre">id_spec=None</span></code>, then auto-increment primary keys based on the
-feature type (e.g., “gene_1”, “gene_2”).  This is also the fallback
-behavior for the other values below.</p>
+<p>If an id spec is not otherwise specified for a featuretype (keep
+reading below for how to do this), or the provided id spec is not
+available for a particular feature (say, exons do not have “ID”
+attributes even though <code class="docutils literal notranslate"><span class="pre">id_spec=&quot;ID&quot;</span></code> was provided) then the default
+behavior is to autoincrement an ID for that featuretype. For example,
+if there is no id spec defined for an exon, then the ids for exons will
+take the form exon1, exon2, exon3, and so on. This ensures that each
+feature has a unique primary key in the database without requiring lots
+of configuration. However, if you want to be able to retrieve features
+based on their primary key, then it is worth the effort to provide an
+accurate id spec.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">id_spec=None</span></code>, then use the default behavior. The default behavior
+depends on the detected format (or forced format, e.g., if
+<code class="docutils literal notranslate"><span class="pre">force_gff=True</span></code>). For GFF files, the default is be <code class="docutils literal notranslate"><span class="pre">id_spec=&quot;ID&quot;</span></code>. For
+GTF files, the default is <code class="docutils literal notranslate"><span class="pre">id_spec={'gene':</span> <span class="pre">'gene_id',</span> <span class="pre">'transcript':</span>
+<span class="pre">'transcript_id'}</span></code>.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">id_spec</span></code> is a string, then look for this key in the attributes.  If
 it exists, then use its value as the primary key, otherwise
 autoincrement based on the feature type.  For many GFF3 files, “ID”
 usually works well.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">id_spec</span></code> is a list or tuple of keys, then check for each one in
-order, using the first one found.  For GFF3, this might be [“ID”,
-“Name”], which would use the ID if it exists, otherwise the Name,
-otherwise autoincrement based on the feature type.</p>
+order, using the first one found.  For GFF3, this might be modified to
+[“ID”, “Name”], which would use the ID if it exists, otherwise the
+Name, otherwise autoincrement based on the feature type.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">id_spec</span></code> is a dictionary, then it is a mapping of feature types to
 what should be used as the ID.  For example, for GTF files, <code class="docutils literal notranslate"><span class="pre">{'gene':</span>
 <span class="pre">'gene_id',</span> <span class="pre">'transcript':</span> <span class="pre">'transcript_id'}</span></code> may be useful.  The values
 of this dictionary can also be a list, e.g., <code class="docutils literal notranslate"><span class="pre">{'gene':</span> <span class="pre">['gene_id',</span>
-<span class="pre">'geneID']}</span></code></p>
+<span class="pre">'geneID']}</span></code>.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">id_spec</span></code> is a callable object, then it accepts a dictionary from
 the iterator and returns one of the following:</p>
 <blockquote>
-<div><ul class="simple">
+<div><ul>
 <li><p>None (in which case the feature type will be auto-incremented)</p></li>
 <li><p>string (which will be used as the primary key)</p></li>
 <li><p>special string starting with “autoincrement:X”, where “X” is
@@ -226,24 +159,23 @@ if “autoincrement:chr10”, then the first feature will be
 “chr10_1”, the second “chr10_2”, and so on.</p></li>
 </ul>
 </div></blockquote>
-</dd>
-<dt><strong>force</strong><span class="classifier">bool</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">False</span></code> (default), then raise an exception if <code class="docutils literal notranslate"><span class="pre">dbfn</span></code> already exists.
-Use <code class="docutils literal notranslate"><span class="pre">force=True</span></code> to overwrite any existing databases.</p>
-</dd>
-<dt><strong>verbose</strong><span class="classifier">bool</span></dt><dd><p>Report percent complete and other feedback on how the db creation is
+</p></li>
+<li><p><strong>force</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">False</span></code> (default), then raise an exception if <code class="docutils literal notranslate"><span class="pre">dbfn</span></code> already exists.
+Use <code class="docutils literal notranslate"><span class="pre">force=True</span></code> to overwrite any existing databases.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – <p>Report percent complete and other feedback on how the db creation is
 progressing.</p>
 <p>In order to report percent complete, the entire file needs to be read
 once to see how many items there are; for large files you may want to
 use <code class="docutils literal notranslate"><span class="pre">verbose=False</span></code> to avoid this.</p>
-</dd>
-<dt><strong>checklines</strong><span class="classifier">int</span></dt><dd><p>Number of lines to check the dialect.</p>
-</dd>
-<dt><strong>merge_strategy</strong><span class="classifier">str</span></dt><dd><p>One of {merge, create_unique, error, warning, replace}.</p>
+</p></li>
+<li><p><strong>checklines</strong> (<em>int</em>) – Number of lines to check the dialect.</p></li>
+<li><p><strong>merge_strategy</strong> (<em>str</em>) – <p>One of {merge, create_unique, error, warning, replace}.</p>
 <p>This parameter specifies the behavior when two items have an identical
 primary key.</p>
 <p>Using <code class="docutils literal notranslate"><span class="pre">merge_strategy=&quot;merge&quot;</span></code>, then there will be a single entry in
 the database, but the attributes of all features with the same primary
-key will be merged.</p>
+key will be merged. WARNING: this can be quite slow when incorrectly
+used.</p>
 <p>Using <code class="docutils literal notranslate"><span class="pre">merge_strategy=&quot;create_unique&quot;</span></code>, then the first entry will use
 the original primary key, but the second entry will have a unique,
 autoincremented primary key assigned to it</p>
@@ -254,28 +186,27 @@ yourself to fix the duplicated IDs.</p>
 logger, and the duplicate feature will be skipped.</p>
 <p>Using <code class="docutils literal notranslate"><span class="pre">merge_strategy=&quot;replace&quot;</span></code> will replace the entire existing
 feature with the new feature.</p>
-</dd>
-<dt><strong>transform</strong><span class="classifier">callable</span></dt><dd><p>Function (or other callable object) that accepts a <code class="docutils literal notranslate"><span class="pre">Feature</span></code> object and
-returns a (possibly modified) <code class="docutils literal notranslate"><span class="pre">Feature</span></code> object.</p>
-</dd>
-<dt><strong>gtf_transcript_key, gtf_gene_key</strong><span class="classifier">string</span></dt><dd><p>Which attribute to use as the transcript ID and gene ID respectively
+</p></li>
+<li><p><strong>transform</strong> (<em>callable</em>) – If not None, <code class="docutils literal notranslate"><span class="pre">transform</span></code> should accept a Feature object as its only
+argument and return either a (possibly modified) Feature object or
+a value that evaluates to False.  If the return value is False, the
+feature will be skipped.</p></li>
+<li><p><strong>gtf_transcript_key</strong> (<em>string</em>) – Which attribute to use as the transcript ID and gene ID respectively
 for GTF files.  Default is <code class="docutils literal notranslate"><span class="pre">transcript_id</span></code> and <code class="docutils literal notranslate"><span class="pre">gene_id</span></code> according to
-the GTF spec.</p>
-</dd>
-<dt><strong>gtf_subfeature</strong><span class="classifier">string</span></dt><dd><p>Feature type to use as a “gene component” when inferring gene and
+the GTF spec.</p></li>
+<li><p><strong>gtf_gene_key</strong> (<em>string</em>) – Which attribute to use as the transcript ID and gene ID respectively
+for GTF files.  Default is <code class="docutils literal notranslate"><span class="pre">transcript_id</span></code> and <code class="docutils literal notranslate"><span class="pre">gene_id</span></code> according to
+the GTF spec.</p></li>
+<li><p><strong>gtf_subfeature</strong> (<em>string</em>) – Feature type to use as a “gene component” when inferring gene and
 transcript extents for GTF files.  Default is <code class="docutils literal notranslate"><span class="pre">exon</span></code> according to the
-GTF spec.</p>
-</dd>
-<dt><strong>force_gff</strong><span class="classifier">bool</span></dt><dd><p>If True, do not do automatic format detection – only use GFF.</p>
-</dd>
-<dt><strong>force_dialect_check</strong><span class="classifier">bool</span></dt><dd><p>If True, the dialect will be checkef for every feature (instead of just
+GTF spec.</p></li>
+<li><p><strong>force_gff</strong> (<em>bool</em>) – If True, do not do automatic format detection – only use GFF.</p></li>
+<li><p><strong>force_dialect_check</strong> (<em>bool</em>) – If True, the dialect will be checkef for every feature (instead of just
 <code class="docutils literal notranslate"><span class="pre">checklines</span></code> features).  This can be slow, but may be necessary for
-inconsistently-formatted input files.</p>
-</dd>
-<dt><strong>from_string</strong><span class="classifier">bool</span></dt><dd><p>If True, then treat <code class="docutils literal notranslate"><span class="pre">data</span></code> as actual data (rather than the path to
-a file).</p>
-</dd>
-<dt><strong>keep_order</strong><span class="classifier">bool</span></dt><dd><p>If True, all features returned from this instance will have the
+inconsistently-formatted input files.</p></li>
+<li><p><strong>from_string</strong> (<em>bool</em>) – If True, then treat <code class="docutils literal notranslate"><span class="pre">data</span></code> as actual data (rather than the path to
+a file).</p></li>
+<li><p><strong>keep_order</strong> (<em>bool</em>) – <p>If True, all features returned from this instance will have the
 order of their attributes maintained.  This can be turned on or off
 database-wide by setting the <code class="docutils literal notranslate"><span class="pre">keep_order</span></code> attribute or with this
 kwarg, or on a feature-by-feature basis by setting the <code class="docutils literal notranslate"><span class="pre">keep_order</span></code>
@@ -286,11 +217,10 @@ keys in the first <code class="docutils literal notranslate"><span class="pre">c
 helpers._choose_dialect for more information on this.</p>
 <p>Default is False, since this includes a sorting step that can get
 time-consuming for many features.</p>
-</dd>
-<dt><strong>infer_gene_extent</strong><span class="classifier">bool</span></dt><dd><p>DEPRECATED in version 0.8.4. See <code class="docutils literal notranslate"><span class="pre">disable_infer_transcripts</span></code> and
-<code class="docutils literal notranslate"><span class="pre">disable_infer_genes</span></code> for more granular control.</p>
-</dd>
-<dt><strong>disable_infer_transcripts, disable_infer_genes</strong><span class="classifier">bool</span></dt><dd><p>Only used for GTF files. By default – and according to the GTF spec –
+</p></li>
+<li><p><strong>infer_gene_extent</strong> (<em>bool</em>) – DEPRECATED in version 0.8.4. See <code class="docutils literal notranslate"><span class="pre">disable_infer_transcripts</span></code> and
+<code class="docutils literal notranslate"><span class="pre">disable_infer_genes</span></code> for more granular control.</p></li>
+<li><p><strong>disable_infer_transcripts</strong> (<em>bool</em>) – <p>Only used for GTF files. By default – and according to the GTF spec –
 we assume that there are no transcript or gene features in the file.
 gffutils then infers the extent of each transcript based on its
 constituent exons and infers the extent of each gene bases on its
@@ -306,95 +236,87 @@ already has genes in it. This can result in dramatic (100x) speedup.</p>
 <p>Prior to version 0.8.4, setting <code class="docutils literal notranslate"><span class="pre">infer_gene_extents=False</span></code> would
 disable both transcript and gene inference simultaneously. As of
 version 0.8.4, these argument allow more granular control.</p>
-</dd>
-<dt><strong>force_merge_fields</strong><span class="classifier">list</span></dt><dd><p>If merge_strategy=”merge”, then features will only be merged if their
+</p></li>
+<li><p><strong>disable_infer_genes</strong> (<em>bool</em>) – <p>Only used for GTF files. By default – and according to the GTF spec –
+we assume that there are no transcript or gene features in the file.
+gffutils then infers the extent of each transcript based on its
+constituent exons and infers the extent of each gene bases on its
+constituent transcripts.</p>
+<p>This default behavior is problematic if the input file already contains
+transcript or gene features (like recent GENCODE GTF files for human),
+since 1) the work to infer extents is unnecessary, and 2)
+trying to insert an inferred feature back into the database triggers
+gffutils’ feature-merging routines, which can get time consuming.</p>
+<p>The solution is to use <code class="docutils literal notranslate"><span class="pre">disable_infer_transcripts=True</span></code> if your GTF
+already has transcripts in it, and/or <code class="docutils literal notranslate"><span class="pre">disable_infer_genes=True</span></code> if it
+already has genes in it. This can result in dramatic (100x) speedup.</p>
+<p>Prior to version 0.8.4, setting <code class="docutils literal notranslate"><span class="pre">infer_gene_extents=False</span></code> would
+disable both transcript and gene inference simultaneously. As of
+version 0.8.4, these argument allow more granular control.</p>
+</p></li>
+<li><p><strong>force_merge_fields</strong> (<em>list</em>) – If merge_strategy=”merge”, then features will only be merged if their
 non-attribute values are identical (same chrom, source, start, stop,
 score, strand, phase).  Using <code class="docutils literal notranslate"><span class="pre">force_merge_fields</span></code>, you can override
 this behavior to allow merges even when fields are different.  This
 list can contain one or more of [‘seqid’, ‘source’, ‘featuretype’,
 ‘score’, ‘strand’, ‘frame’].  The resulting merged fields will be
 strings of comma-separated values.  Note that ‘start’ and ‘end’ are not
-available, since these fields need to be integers.</p>
-</dd>
-<dt><strong>text_factory</strong><span class="classifier">callable</span></dt><dd><p>Text factory to use for the sqlite3 database.  See
+available, since these fields need to be integers.</p></li>
+<li><p><strong>text_factory</strong> (<em>callable</em>) – Text factory to use for the sqlite3 database.  See
 <a class="reference external" href="https://docs.python.org/2/library/">https://docs.python.org/2/library/</a>                sqlite3.html#sqlite3.Connection.text_factory
 for details. The default sqlite3.OptimizedUnicode will return Unicode
-objects only for non-ASCII data, and bytestrings otherwise.</p>
-</dd>
-<dt><strong>pragmas</strong><span class="classifier">dict</span></dt><dd><p>Dictionary of pragmas used when creating the sqlite3 database. See
+objects only for non-ASCII data, and bytestrings otherwise.</p></li>
+<li><p><strong>pragmas</strong> (<em>dict</em>) – Dictionary of pragmas used when creating the sqlite3 database. See
 <a class="reference external" href="http://www.sqlite.org/pragma.html">http://www.sqlite.org/pragma.html</a> for a list of available pragmas.  The
 defaults are stored in constants.default_pragmas, which can be used as
-a template for supplying a custom dictionary.</p>
-</dd>
-<dt><strong>sort_attribute_values</strong><span class="classifier">bool</span></dt><dd><p>All features returned from the database will have their attribute
+a template for supplying a custom dictionary.</p></li>
+<li><p><strong>sort_attribute_values</strong> (<em>bool</em>) – All features returned from the database will have their attribute
 values sorted.  Typically this is only useful for testing, since this
-can get time-consuming for large numbers of features.</p>
-</dd>
-<dt><strong>_keep_tempfiles</strong><span class="classifier">bool or string</span></dt><dd><p>False by default to clean up intermediate tempfiles created during GTF
+can get time-consuming for large numbers of features.</p></li>
+<li><p><strong>_keep_tempfiles</strong> (<em>bool</em><em> or </em><em>string</em>) – False by default to clean up intermediate tempfiles created during GTF
 import.  If True, then keep these tempfile for testing or debugging.
 If string, then keep the tempfile for testing, but also use the string
 as the suffix fo the tempfile. This can be useful for testing in
-parallel environments.</p>
+parallel environments.</p></li>
+</ul>
 </dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>New <code class="xref py py-class docutils literal notranslate"><span class="pre">FeatureDB</span></code> object.</dt><dd></dd>
-</dl>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>New <code class="xref py py-class docutils literal notranslate"><span class="pre">FeatureDB</span></code> object.</p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="gffutils.interface.FeatureDB.html" class="btn btn-neutral float-right" title="gffutils.interface.FeatureDB" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="../api.html" class="btn btn-neutral float-left" title="API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../api.html" class="btn btn-neutral float-left" title="API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gffutils.interface.FeatureDB.html" class="btn btn-neutral float-right" title="gffutils.interface.FeatureDB" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2013, Ryan Dale
-
-    </p>
+    <p>&#169; Copyright 2013-2022, Ryan Dale.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

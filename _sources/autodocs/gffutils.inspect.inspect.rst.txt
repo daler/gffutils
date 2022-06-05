@@ -1,4 +1,4 @@
-gffutils.inspect.inspect
+﻿gffutils.inspect.inspect
 ========================
 
 .. currentmodule:: gffutils.inspect

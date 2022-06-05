@@ -1,4 +1,4 @@
-gffutils.interface.FeatureDB.set\_pragmas
+﻿gffutils.interface.FeatureDB.set\_pragmas
 =========================================
 
 .. currentmodule:: gffutils.interface

@@ -1,4 +1,4 @@
-gffutils.helpers.example\_filename
+﻿gffutils.helpers.example\_filename
 ==================================
 
 .. currentmodule:: gffutils.helpers

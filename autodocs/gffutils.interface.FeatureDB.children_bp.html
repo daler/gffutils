@@ -1,71 +1,39 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>gffutils.interface.FeatureDB.children_bp &mdash; gffutils 0.10.1 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gffutils.interface.FeatureDB.children_bp &mdash; gffutils 0.11.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="gffutils.interface.FeatureDB.merge" href="gffutils.interface.FeatureDB.merge.html" />
     <link rel="prev" title="gffutils.interface.FeatureDB.interfeatures" href="gffutils.interface.FeatureDB.interfeatures.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="../contents.html" class="icon icon-home"> gffutils
-          
-
-          
+            <a href="../index.html" class="icon icon-home"> gffutils
           </a>
-
-          
-            
-            
               <div class="version">
-                0.10.1
+                0.11.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -73,19 +41,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../database-import.html">Importing data into a database</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../database-schema.html">Database schema</a></li>
@@ -114,7 +71,10 @@
 <li class="toctree-l3"><a class="reference internal" href="gffutils.interface.FeatureDB.add_relation.html">gffutils.interface.FeatureDB.add_relation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gffutils.interface.FeatureDB.set_pragmas.html">gffutils.interface.FeatureDB.set_pragmas</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gffutils.interface.FeatureDB.interfeatures.html">gffutils.interface.FeatureDB.interfeatures</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">gffutils.interface.FeatureDB.children_bp</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">gffutils.interface.FeatureDB.children_bp</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#gffutils.interface.FeatureDB.children_bp">children_bp</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="gffutils.interface.FeatureDB.merge.html">gffutils.interface.FeatureDB.merge</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gffutils.interface.FeatureDB.create_introns.html">gffutils.interface.FeatureDB.create_introns</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gffutils.interface.FeatureDB.bed12.html">gffutils.interface.FeatureDB.bed12</a></li>
@@ -130,150 +90,93 @@
 <li class="toctree-l1"><a class="reference internal" href="../meta.html">Meta-docs (docs about the docs)</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../contents.html">gffutils</a>
-        
+          <a href="../index.html">gffutils</a>
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../contents.html">Docs</a> &raquo;</li>
-        
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../api.html">API</a> &raquo;</li>
-        
       <li>gffutils.interface.FeatureDB.children_bp</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../_sources/autodocs/gffutils.interface.FeatureDB.children_bp.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="gffutils-interface-featuredb-children-bp">
-<h1>gffutils.interface.FeatureDB.children_bp<a class="headerlink" href="#gffutils-interface-featuredb-children-bp" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="gffutils.interface.FeatureDB.children_bp">
-<code class="sig-prename descclassname">FeatureDB.</code><code class="sig-name descname">children_bp</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">feature</em>, <em class="sig-param">child_featuretype='exon'</em>, <em class="sig-param">merge=False</em>, <em class="sig-param">ignore_strand=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/interface.html#FeatureDB.children_bp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gffutils.interface.FeatureDB.children_bp" title="Permalink to this definition">¶</a></dt>
+             
+  <section id="gffutils-interface-featuredb-children-bp">
+<h1>gffutils.interface.FeatureDB.children_bp<a class="headerlink" href="#gffutils-interface-featuredb-children-bp" title="Permalink to this heading"></a></h1>
+<dl class="py method">
+<dt class="sig sig-object py" id="gffutils.interface.FeatureDB.children_bp">
+<span class="sig-prename descclassname"><span class="pre">FeatureDB.</span></span><span class="sig-name descname"><span class="pre">children_bp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">child_featuretype='exon'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">merge=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">merge_criteria=(&lt;function</span> <span class="pre">seqid&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;function</span> <span class="pre">overlap_end_inclusive&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;function</span> <span class="pre">strand&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;function</span> <span class="pre">feature_type&gt;)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/interface.html#FeatureDB.children_bp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gffutils.interface.FeatureDB.children_bp" title="Permalink to this definition"></a></dt>
 <dd><p>Total bp of all children of a featuretype.</p>
 <p>Useful for getting the exonic bp of an mRNA.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>feature</strong><span class="classifier">str or Feature instance</span></dt><dd></dd>
-<dt><strong>child_featuretype</strong><span class="classifier">str</span></dt><dd><p>Which featuretype to consider.  For example, to get exonic bp of an
-mRNA, use <code class="docutils literal notranslate"><span class="pre">child_featuretype='exon'</span></code>.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>feature</strong> (<em>str</em><em> or </em><em>Feature instance</em>) – </p></li>
+<li><p><strong>child_featuretype</strong> (<em>str</em>) – Which featuretype to consider.  For example, to get exonic bp of an
+mRNA, use <code class="docutils literal notranslate"><span class="pre">child_featuretype='exon'</span></code>.</p></li>
+<li><p><strong>merge</strong> (<em>bool</em>) – Whether or not to merge child features together before summing
+them.</p></li>
+<li><p><strong>merge_criteria</strong> (<em>list</em>) – <p>List of merge criteria callbacks. All must evaluate to True in
+order for a feature to be merged. Only used if merge=True. When
+modifying this argument, you may want to use:</p>
+<blockquote>
+<div><p>from gffutils import merge_criteria as mc</p>
+</div></blockquote>
+<p>to access the available callbacks.</p>
+</p></li>
+</ul>
 </dd>
-<dt><strong>merge</strong><span class="classifier">bool</span></dt><dd><p>Whether or not to merge child features together before summing
-them.</p>
-</dd>
-<dt><strong>ignore_strand</strong><span class="classifier">bool</span></dt><dd><p>If True, then overlapping features on different strands will be
-merged together; otherwise, merging features with different strands
-will result in a ValueError.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>Integer representing the total number of bp.</dt><dd></dd>
-</dl>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Integer representing the total number of bp.</p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="gffutils.interface.FeatureDB.merge.html" class="btn btn-neutral float-right" title="gffutils.interface.FeatureDB.merge" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="gffutils.interface.FeatureDB.interfeatures.html" class="btn btn-neutral float-left" title="gffutils.interface.FeatureDB.interfeatures" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="gffutils.interface.FeatureDB.interfeatures.html" class="btn btn-neutral float-left" title="gffutils.interface.FeatureDB.interfeatures" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gffutils.interface.FeatureDB.merge.html" class="btn btn-neutral float-right" title="gffutils.interface.FeatureDB.merge" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2013, Ryan Dale
-
-    </p>
+    <p>&#169; Copyright 2013-2022, Ryan Dale.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

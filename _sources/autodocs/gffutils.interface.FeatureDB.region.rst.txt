@@ -1,4 +1,4 @@
-gffutils.interface.FeatureDB.region
+﻿gffutils.interface.FeatureDB.region
 ===================================
 
 .. currentmodule:: gffutils.interface

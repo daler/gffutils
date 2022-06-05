@@ -1,4 +1,4 @@
-gffutils.interface.FeatureDB.iter\_by\_parent\_childs
+﻿gffutils.interface.FeatureDB.iter\_by\_parent\_childs
 =====================================================
 
 .. currentmodule:: gffutils.interface

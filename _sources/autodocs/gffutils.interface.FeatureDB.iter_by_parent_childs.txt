@@ -1,6 +1,0 @@
-gffutils.interface.FeatureDB.iter_by_parent_childs
-==================================================
-
-.. currentmodule:: gffutils.interface
-
-.. automethod:: FeatureDB.iter_by_parent_childs

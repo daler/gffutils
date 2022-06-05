@@ -1,4 +1,4 @@
-gffutils.interface.FeatureDB.children
+﻿gffutils.interface.FeatureDB.children
 =====================================
 
 .. currentmodule:: gffutils.interface

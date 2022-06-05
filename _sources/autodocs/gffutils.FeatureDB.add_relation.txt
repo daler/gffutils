@@ -1,6 +1,0 @@
-gffutils.FeatureDB.add_relation
-===============================
-
-.. currentmodule:: gffutils
-
-.. automethod:: FeatureDB.add_relation
