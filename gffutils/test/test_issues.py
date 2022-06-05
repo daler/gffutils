@@ -349,6 +349,11 @@ def test_issue_164():
         disable_infer_genes=True,
         id_spec={'gene': 'gene_id', 'transcript': 'transcript_id'},
         merge_strategy='create_unique',
-        keep_order=True,
-        verbose=True)
+        keep_order=True)
+
+
+def test_issue_166():
+    db = gffutils.create_db(gffutils.example_filename('nonascii'), ':memory:')
+    seqs = list(db.seqids())
+    assert seqs == ['2L', '2R', '3L', '3R', 'X'], seqs
 

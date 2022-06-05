@@ -37,6 +37,8 @@ Stefano Rivera, Daniel Lowengrub, Nolan Woods, Stefen Moeller,  and Husen Umer.
 - Fix bug in :meth:`FeatureDB.children_bp`, `#157
   <https://github.com/daler/gffutils/issues/157>`_, where the `ignore_strand`
   argument is deprecated.
+- Add new :meth:`FeatureDB.seqids` to list the unique
+  seqids/chromosomes/contigs observed in the database, see `#166 <https://github.com/daler/gffutils/issues/166>`_.
 
 Changes in v0.10.1
 ------------------
