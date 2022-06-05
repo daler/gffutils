@@ -337,6 +337,3 @@ def test_issue_159():
     fasta = gffutils.example_filename('dm6-chr2L.fa')
     for transcript, seq in gffutils.helpers.canonical_transcripts(db, fasta):
         pass
-
-    1/0
-
