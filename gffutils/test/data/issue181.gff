@@ -1,0 +1,14 @@
+#OriSeqID=Chr1	Accession=GWHACDB00000001.1
+GWHACDB00000001.1	.	gene	9738	14906	1	+	.	ID=Hc.01G000010;Accession=GWHGACDB000001.1;Augustus_transcriptSupport_percentage=100;Augustus_intronSupport=4/4;Source=augustus000002;Integrity=complete;;transl_table=1
+GWHACDB00000001.1	.	mRNA	9738	14906	1	+	.	ID=Hc.01G000010.t1;Accession=GWHTACDB000001.1;Parent=Hc.01G000010;Parent_Accession=GWHGACDB000001.1;IntronSupport=4/4;Integrity=complete;;transl_table=1
+GWHACDB00000001.1	.	exon	9738	11686	.	+	.	ID=Hc.01G000010.t1.exon1;Parent=Hc.01G000010.t1;Parent_Accession=GWHTACDB000001.1;;transl_table=1
+GWHACDB00000001.1	.	CDS	9738	11686	1	+	0	ID=Hc.01G000010.t1.CDS1;Parent=Hc.01G000010.t1;Parent_Accession=GWHTACDB000001.1;Protein_Accession=GWHPACDB000001.1;;transl_table=1
+GWHACDB00000001.1	.	exon	11897	12671	.	+	.	ID=Hc.01G000010.t1.exon2;Parent=Hc.01G000010.t1;Parent_Accession=GWHTACDB000001.1;;transl_table=1
+GWHACDB00000001.1	.	CDS	11897	12671	1	+	1	ID=Hc.01G000010.t1.CDS2;Parent=Hc.01G000010.t1;Parent_Accession=GWHTACDB000001.1;Protein_Accession=GWHPACDB000001.1;;transl_table=1
+GWHACDB00000001.1	.	exon	13090	13368	.	+	.	ID=Hc.01G000010.t1.exon3;Parent=Hc.01G000010.t1;Parent_Accession=GWHTACDB000001.1;;transl_table=1
+GWHACDB00000001.1	.	CDS	13090	13368	1	+	0	ID=Hc.01G000010.t1.CDS3;Parent=Hc.01G000010.t1;Parent_Accession=GWHTACDB000001.1;Protein_Accession=GWHPACDB000001.1;;transl_table=1
+GWHACDB00000001.1	.	exon	13650	14396	.	+	.	ID=Hc.01G000010.t1.exon4;Parent=Hc.01G000010.t1;Parent_Accession=GWHTACDB000001.1;;transl_table=1
+GWHACDB00000001.1	.	CDS	13650	14396	1	+	0	ID=Hc.01G000010.t1.CDS4;Parent=Hc.01G000010.t1;Parent_Accession=GWHTACDB000001.1;Protein_Accession=GWHPACDB000001.1;;transl_table=1
+GWHACDB00000001.1	.	exon	14601	14906	.	+	.	ID=Hc.01G000010.t1.exon5;Parent=Hc.01G000010.t1;Parent_Accession=GWHTACDB000001.1;;transl_table=1
+GWHACDB00000001.1	.	CDS	14601	14708	1	+	0	ID=Hc.01G000010.t1.CDS5;Parent=Hc.01G000010.t1;Parent_Accession=GWHTACDB000001.1;Protein_Accession=GWHPACDB000001.1;;transl_table=1
+GWHACDB00000001.1	.	three_prime_UTR	14709	14906	.	+	.	ID=Hc.01G000010.t1.3UTR1;Parent=Hc.01G000010.t1;Parent_Accession=GWHTACDB000001.1;;transl_table=1

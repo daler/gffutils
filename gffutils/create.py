@@ -211,6 +211,16 @@ class _DBCreator(object):
                     return getattr(f, k[1:-1])
                 else:
                     try:
+                        if len(f.attributes[k]) > 1:
+                            raise ValueError(
+                                "The ID field {} has more than one value but "
+                                "a single value is required for a primary key in the "
+                                "database. Consider using a custom id_spec to "
+                                "convert these multiple values into a single "
+                                "value".format(k))
+                    except KeyError:
+                        pass
+                    try:
                         return f.attributes[k][0]
                     except (KeyError, IndexError):
                         pass

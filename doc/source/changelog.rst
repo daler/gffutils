@@ -38,14 +38,21 @@ Stefano Rivera, Daniel Lowengrub, Nolan Woods, Stefen Moeller,  and Husen Umer.
   <https://github.com/daler/gffutils/issues/157>`_, where the `ignore_strand`
   argument is deprecated.
 - Add new :meth:`FeatureDB.seqids` to list the unique
-  seqids/chromosomes/contigs observed in the database, see `#166 <https://github.com/daler/gffutils/issues/166>`_.
-- Add regression tests for `#167 <https://github.com/daler/gffutils/issues/167>`_, `#164 <https://github.com/daler/gffutils/issues/164>`_
+  seqids/chromosomes/contigs observed in the database, see `#166
+  <https://github.com/daler/gffutils/issues/166>`_.
+- Add regression tests for `#167
+  <https://github.com/daler/gffutils/issues/167>`_, `#164
+  <https://github.com/daler/gffutils/issues/164>`_
 - Add new argument for :meth:`FeatureDB.create_introns` and
   :meth:`FeatureDB.interfeatures` to handle cases where introns are being
   created from component exons and the numeric-like attributes (e.g.,
   `exon_number`) should be numerically sorted rather than alphanumerical
   sorted. This addresses `#174
   <https://github.com/daler/gffutils/issues/174>`_.
+- Features with multiple values for their ID (e.g., `ID=gene1,gene2`) are no
+  longer permitted and a ValueError is raised with advice for addressing the
+  issue with a custom id spec. This addresses `#181
+  <https://github.com/daler/gffutils/issues/181>`_.
 
 Changes in v0.10.1
 ------------------
