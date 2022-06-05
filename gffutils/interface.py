@@ -1741,6 +1741,21 @@ class FeatureDB(object):
         ]
         return "\t".join(map(str, fields))
 
+    def seqids(self):
+        """
+        Yield the unique sequence IDs (chromosomes, contigs) observed in the
+        database.
+        """
+        c = self.conn.cursor()
+        c.execute(
+            """
+            SELECT DISTINCT seqid from features
+            """
+        )
+        for (i,) in c:
+            yield i
+
+
     # Recycle the docs for _relation so they stay consistent between parents()
     # and children()
     children.__doc__ = children.__doc__.format(_relation_docstring=_relation.__doc__)
