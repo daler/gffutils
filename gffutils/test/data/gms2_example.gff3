@@ -1,0 +1,28 @@
+##gff-version 3
+# GeneMark.hmm-2 prokaryotic version: 1.07_lic
+# translation table: 11
+# output date start: Mon Apr 22 16:38:32 2019
+
+##sequence-region k141_97 1 321
+
+##sequence-region k141_85 1 202
+
+##sequence-region k141_145 1 204
+
+##sequence-region k141_121 1 283
+
+##sequence-region k141_73 1 367
+k141_73	GeneMark.hmm2	gene	3	365	.	+	.	ID=gene_1;
+k141_73	GeneMark.hmm2	CDS	3	365	11.77	+	0	ID=1; Parent=gene_1; gene_type=native; partial=11; gc=33; length=363;
+
+##sequence-region k141_7 1 287
+
+##sequence-region k141_35 1 318
+
+##sequence-region k141_109 1 439
+
+##sequence-region k141_21 1 524
+
+##sequence-region k141_103 1 448
+k141_103	GeneMark.hmm2	gene	126	446	.	-	.	ID=gene_2;
+k141_103	GeneMark.hmm2	CDS	126	446	14.13	-	0	ID=2; Parent=gene_2; gene_type=native; partial=01; gc=34; length=321;

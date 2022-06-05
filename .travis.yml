@@ -1,9 +1,0 @@
-language: c
-before_script:
-  - export PATH=~/anaconda/bin:$PATH
-env:
-  - PY=2
-  - PY=3
-
-install: "ci/travis-setup.sh"
-script: "ci/travis-run.sh"

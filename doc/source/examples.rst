@@ -34,12 +34,6 @@ successfully import into a database and retrieve features.
     vs the 9th field of a GFF line, which is called the "attributes" field
     according to the spec. Confusing?  Yes!
 
-
-This documentation undergoes automated testing, and in order to support both
-Python 2 and 3 in the same test suite, we need to do this:
-
->>> from __future__ import print_function
-
 .. _mouse_extra_comma.gff3:
 
 .. rst-class:: html-toggle
@@ -537,8 +531,10 @@ a gene-level kind of object.  So we can use a transform function to add
 "gene_id" and "transcript_id" fields to all non-CDS features so that the file
 conforms to a GTF standard and gene extents can be inferred.  Furthermore, by
 default :mod:`gffutils` uses `'exon'` as the default feature type to merge into
-genes.  Here, we need to specify `gtf_subfeature='coding_exon'`.
-
+genes.  Here, we need to specify `gtf_subfeature='coding_exon'`. Last, note
+that the file itself has inconsistent trailing semicolons. The dialect
+detection decides that there should be no trailing semicolon since that's what
+the majority of the features use.
 
 File contents
 `````````````
@@ -565,7 +561,7 @@ Access
 Note that the inferred genes have a source of "gffutils_derived": 
 
 >>> print(db["cr01.sctg102.wum.2.1"])  #doctest:+NORMALIZE_WHITESPACE
-Contig102	gffutils_derived	gene	1629	3377	.	-	.	gene_id "cr01.sctg102.wum.2.1";
+Contig102	gffutils_derived	gene	1629	3377	.	-	.	gene_id "cr01.sctg102.wum.2.1"
 
 
 Get a report of the childrent of the gene:
@@ -644,9 +640,11 @@ attributes to have the same format.  To help with this, we can use the
 :func:`helpers.infer_dialect` function by providing attributes:
 
 >>> from gffutils import helpers
->>> dialect = helpers.infer_dialect([
+>>> dialect = helpers.infer_dialect(
 ... 'Transcript "B0019.1" ; WormPep "WP:CE40797" ; Note "amx-2" ; Prediction_status "Partially_confirmed" ; Gene "WBGene00000138" ; CDS "B0019.1" ; WormPep "WP:CE40797" ; Note "amx-2" ; Prediction_status "Partially_confirmed" ; Gene "WBGene00000138"',
-... ])
+... )
+>>> print(dialect)
+{'leading semicolon': False, 'trailing semicolon': False, 'quoted GFF2 values': True, 'field separator': ' ; ', 'keyval separator': ' ', 'multival separator': ',', 'fmt': 'gtf', 'repeated keys': True, 'order': ['Transcript', 'WormPep', 'Note', 'Prediction_status', 'Gene', 'CDS', 'WormPep', 'Note', 'Prediction_status', 'Gene']}
 
 >>> db.dialect = dialect
 

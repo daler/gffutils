@@ -3,15 +3,15 @@ Installation
 
 Using `conda <http://conda.pydata.org/docs/index.html>`_::
 
-    conda install --channel bioconda gffutils
+    conda install --channel conda-forge --channel bioconda gffutils
 
 Or `pip`::
 
     pip install gffutils
 
 
-`gffutils` is `tested <https://travis-ci.org/daler/gffutils>`_ with Python 2.7
-and Python 3.3.
+`gffutils` is `tested <https://github.com/daler/gffutils/actions>`_ with Python
+3.6, 3.7, 3.8, 3.9.
 
 Optional requirements
 ---------------------
@@ -22,4 +22,4 @@ Optional requirements
 
 Install them all with `conda`::
 
-    conda install --channel bioconda pybedtools bedtools biopython
+    conda install --channel conda-forge --channel bioconda pybedtools bedtools biopython

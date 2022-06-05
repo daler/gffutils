@@ -3,6 +3,57 @@
 Change log
 ==========
 
+Changes in v0.11
+----------------
+
+This is largely a bugfix release, many thanks to contributors Rory Kirchner,
+Stefano Rivera, Daniel Lowengrub, Nolan Woods, Stefen Moeller,  and Husen Umer.
+
+- Avoid deadlocks in tests under Python 3.8 (`#155
+  <https://github.com/daler/gffutils/pull/155>`_, thanks Stefano Rivera)
+- Fix deprecation warning for invalid escape sequence (`#168
+  <https://github.com/daler/gffutils/pull/168>`_, Stefen Moeller, and `#165
+  <https://github.com/daler/gffutils/pull/165>`_, thanks Rory Kirchner)
+- Fix ResourceWarning about unclosed file (`#169
+  <https://github.com/daler/gffutils/pull/169>`_, thanks Daniel Lowengrub)
+- Allow database creation when there is an empty string in the transcript ID
+  (`#171 <https://github.com/daler/gffutils/pull/171>`_, thanks Nolan Woods)
+- Fix off-by-one error in ``FeatureDB.region()`` when ``completely_within
+  = False`` (`#162 <https://github.com/daler/gffutils/pull/162>`_, thanks Husen
+  Umer and also @Brunox13 for the detailed reporting in `#126
+  <https://github.com/daler/gffutils/issues/129>`_)
+- Migrated tests to GitHub Actions
+- Refactored the :mod:`iterators` module to make it a bit easier to understand
+  the code, and to pave the way for supporting FASTA sequences at the end of
+  GFF files (see `PR #179 <https://github.com/daler/gffutils/pull/179>`_)
+- Empty input now raises ``EmptyInputError`` rather than ``ValueError``, making
+  it easier to catch cases where one might expect empty input (addresses `#17
+  <https://github.com/daler/gffutils/issues/17>`_)
+- PEP8 formatting in code
+- New dialect detection method will weight more highly those features with more
+  attributes. This solves things like `#128
+  <https://github.com/daler/gffutils/issues/128/>`_ where some dialect
+  components are otherwise ambiguous.
+- Fix bug in :meth:`FeatureDB.children_bp`, `#157
+  <https://github.com/daler/gffutils/issues/157>`_, where the `ignore_strand`
+  argument is deprecated.
+- Add new :meth:`FeatureDB.seqids` to list the unique
+  seqids/chromosomes/contigs observed in the database, see `#166
+  <https://github.com/daler/gffutils/issues/166>`_.
+- Add regression tests for `#167
+  <https://github.com/daler/gffutils/issues/167>`_, `#164
+  <https://github.com/daler/gffutils/issues/164>`_
+- Add new argument for :meth:`FeatureDB.create_introns` and
+  :meth:`FeatureDB.interfeatures` to handle cases where introns are being
+  created from component exons and the numeric-like attributes (e.g.,
+  `exon_number`) should be numerically sorted rather than alphanumerical
+  sorted. This addresses `#174
+  <https://github.com/daler/gffutils/issues/174>`_.
+- Features with multiple values for their ID (e.g., `ID=gene1,gene2`) are no
+  longer permitted and a ValueError is raised with advice for addressing the
+  issue with a custom id spec. This addresses `#181
+  <https://github.com/daler/gffutils/issues/181>`_.
+
 Changes in v0.10.1
 ------------------
 
@@ -45,7 +96,7 @@ Changes in v0.10
   <https://github.com/daler/gffutils/pull/144>`_).
 
 - Ensure that tests work post-installation (`#145
-  <https://github.com/daler/gffutils/pull/145`_, thanks Michael Crusoe @mr-c)
+  <https://github.com/daler/gffutils/pull/145>`_, thanks Michael Crusoe @mr-c)
 
 - Removed redundant ``inspection.py`` module (`#147
   <https://github.com/daler/gffutils/pull/147>`_).

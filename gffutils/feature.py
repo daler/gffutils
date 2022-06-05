@@ -8,17 +8,43 @@ from gffutils import bins
 from gffutils.attributes import dict_class
 
 
-_position_lookup = dict(enumerate(['seqid', 'source', 'featuretype', 'start',
-                                   'end', 'score', 'strand', 'frame',
-                                   'attributes']))
+_position_lookup = dict(
+    enumerate(
+        [
+            "seqid",
+            "source",
+            "featuretype",
+            "start",
+            "end",
+            "score",
+            "strand",
+            "frame",
+            "attributes",
+        ]
+    )
+)
 
 
 class Feature(object):
-    def __init__(self, seqid=".", source=".", featuretype=".",
-                 start=".", end=".", score=".", strand=".", frame=".",
-                 attributes=None, extra=None, bin=None, id=None, dialect=None,
-                 file_order=None, keep_order=False,
-                 sort_attribute_values=False):
+    def __init__(
+        self,
+        seqid=".",
+        source=".",
+        featuretype=".",
+        start=".",
+        end=".",
+        score=".",
+        strand=".",
+        frame=".",
+        attributes=None,
+        extra=None,
+        bin=None,
+        id=None,
+        dialect=None,
+        file_order=None,
+        keep_order=False,
+        sort_attribute_values=False,
+    ):
         """
         Represents a feature from the database.
 
@@ -160,7 +186,7 @@ class Feature(object):
             try:
                 extra = helpers._unjsonify(extra)
             except json.JSONDecodeError:
-                extra = extra.split('\t')
+                extra = extra.split("\t")
 
         self.seqid = seqid
         self.source = source
@@ -195,18 +221,20 @@ class Feature(object):
 
         # Reconstruct start/end as "."
         if self.start is None:
-            start = '.'
+            start = "."
         else:
             start = self.start
         if self.end is None:
-            end = '.'
+            end = "."
         else:
             end = self.end
 
         return (
             "<Feature {x.featuretype} ({x.seqid}:{start}-{end}"
-            "[{x.strand}]) at {loc}>".format(x=self, start=start, end=end,
-                                             loc=memory_loc))
+            "[{x.strand}]) at {loc}>".format(
+                x=self, start=start, end=end, loc=memory_loc
+            )
+        )
 
     def __getitem__(self, key):
         if isinstance(key, int):
@@ -229,7 +257,7 @@ class Feature(object):
         if six.PY3:
             return self.__unicode__()
         else:
-            return unicode(self).encode('utf-8')
+            return unicode(self).encode("utf-8")
 
     def __unicode__(self):
 
@@ -249,16 +277,19 @@ class Feature(object):
 
         # Reconstruct from dict and dialect
         reconstructed_attributes = parser._reconstruct(
-            self.attributes, self.dialect, keep_order=self.keep_order,
-            sort_attribute_values=self.sort_attribute_values)
+            self.attributes,
+            self.dialect,
+            keep_order=self.keep_order,
+            sort_attribute_values=self.sort_attribute_values,
+        )
 
         # Final line includes reconstructed as well as any previously-added
         # "extra" fields
         items.append(reconstructed_attributes)
         if self.extra:
-            items.append('\t'.join(self.extra))
+            items.append("\t".join(self.extra))
 
-        return '\t'.join(items)
+        return "\t".join(items)
 
     def __hash__(self):
         return hash(str(self))
@@ -307,18 +338,32 @@ class Feature(object):
         """
         if not encoding:
             return (
-                self.id, self.seqid, self.source, self.featuretype, self.start,
-                self.end, self.score, self.strand, self.frame,
+                self.id,
+                self.seqid,
+                self.source,
+                self.featuretype,
+                self.start,
+                self.end,
+                self.score,
+                self.strand,
+                self.frame,
                 helpers._jsonify(self.attributes),
-                helpers._jsonify(self.extra), self.calc_bin()
+                helpers._jsonify(self.extra),
+                self.calc_bin(),
             )
         return (
-            self.id.decode(encoding), self.seqid.decode(encoding),
-            self.source.decode(encoding), self.featuretype.decode(encoding),
-            self.start, self.end, self.score.decode(encoding),
-            self.strand.decode(encoding), self.frame.decode(encoding),
+            self.id.decode(encoding),
+            self.seqid.decode(encoding),
+            self.source.decode(encoding),
+            self.featuretype.decode(encoding),
+            self.start,
+            self.end,
+            self.score.decode(encoding),
+            self.strand.decode(encoding),
+            self.frame.decode(encoding),
             helpers._jsonify(self.attributes).decode(encoding),
-            helpers._jsonify(self.extra).decode(encoding), self.calc_bin()
+            helpers._jsonify(self.extra).decode(encoding),
+            self.calc_bin(),
         )
 
     def sequence(self, fasta, use_strand=True):
@@ -347,8 +392,8 @@ class Feature(object):
 
         # recall GTF/GFF is 1-based closed;  pyfaidx uses Python slice notation
         # and is therefore 0-based half-open.
-        seq = fasta[self.chrom][self.start-1:self.stop]
-        if use_strand and self.strand == '-':
+        seq = fasta[self.chrom][self.start - 1 : self.stop]
+        if use_strand and self.strand == "-":
             seq = seq.reverse.complement
         return seq.seq
 
@@ -391,21 +436,21 @@ def feature_from_line(line, dialect=None, strict=True, keep_order=False):
         assert len(_lines) == 1, _lines
         line = _lines[0]
 
-        if '\t' in line:
-            fields = line.rstrip('\n\r').split('\t')
+        if "\t" in line:
+            fields = line.rstrip("\n\r").split("\t")
         else:
-            fields = line.rstrip('\n\r').split(None, 8)
+            fields = line.rstrip("\n\r").split(None, 8)
     else:
-        fields = line.rstrip('\n\r').split('\t')
+        fields = line.rstrip("\n\r").split("\t")
     try:
         attr_string = fields[8]
     except IndexError:
         attr_string = ""
     attrs, _dialect = parser._split_keyvals(attr_string, dialect=dialect)
     d = dict(list(zip(constants._gffkeys, fields)))
-    d['attributes'] = attrs
-    d['extra'] = fields[9:]
-    d['keep_order'] = keep_order
+    d["attributes"] = attrs
+    d["extra"] = fields[9:]
+    d["keep_order"] = keep_order
     if dialect is None:
         dialect = _dialect
     return Feature(dialect=dialect, **d)

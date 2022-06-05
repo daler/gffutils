@@ -9,14 +9,14 @@ from gffutils.exceptions import AttributeStringError
 
 import logging
 
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 ch = logging.StreamHandler()
 ch.setLevel(logging.INFO)
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 
-gff3_kw_pat = re.compile('\w+=')
+gff3_kw_pat = re.compile(r"\w+=")
 
 # Encoding/decoding notes
 # -----------------------
@@ -53,8 +53,8 @@ gff3_kw_pat = re.compile('\w+=')
 # Note that spaces are NOT encoded. Some GFF files have spaces encoded; in
 # these cases round-trip invariance will not hold since the %20 will be decoded
 # but not re-encoded.
-_to_quote = '\n\t\r%;=&,'
-_to_quote += ''.join([chr(i) for i in range(32)])
+_to_quote = "\n\t\r%;=&,"
+_to_quote += "".join([chr(i) for i in range(32)])
 _to_quote += chr(127)
 
 
@@ -63,18 +63,18 @@ _to_quote += chr(127)
 # there.
 class Quoter(collections.defaultdict):
     def __missing__(self, b):
-        if b in _to_quote:
-            res = '%{:02X}'.format(ord(b))
+        if b != "" and b in _to_quote:
+            res = "%{:02X}".format(ord(b))
         else:
             res = b
         self[b] = res
         return res
 
+
 quoter = Quoter()
 
 
-def _reconstruct(keyvals, dialect, keep_order=False,
-                 sort_attribute_values=False):
+def _reconstruct(keyvals, dialect, keep_order=False, sort_attribute_values=False):
     """
     Reconstructs the original attributes string according to the dialect.
 
@@ -103,17 +103,17 @@ def _reconstruct(keyvals, dialect, keep_order=False,
     parts = []
 
     # Re-encode when reconstructing attributes
-    if constants.ignore_url_escape_characters or dialect['fmt'] != 'gff3':
+    if constants.ignore_url_escape_characters or dialect["fmt"] != "gff3":
         attributes = keyvals
     else:
         attributes = {}
         for k, v in keyvals.items():
             attributes[k] = []
             for i in v:
-                attributes[k].append(''.join([quoter[j] for j in i]))
+                attributes[k].append("".join([quoter[j] for j in i]))
 
     # May need to split multiple values into multiple key/val pairs
-    if dialect['repeated keys']:
+    if dialect["repeated keys"]:
         items = []
         for key, val in attributes.items():
             if len(val) > 1:
@@ -128,7 +128,7 @@ def _reconstruct(keyvals, dialect, keep_order=False,
         # sort keys by their order in the dialect; anything not in there will
         # be in arbitrary order at the end.
         try:
-            return dialect['order'].index(x[0])
+            return dialect["order"].index(x[0])
         except ValueError:
             return 1e6
 
@@ -142,31 +142,31 @@ def _reconstruct(keyvals, dialect, keep_order=False,
             if sort_attribute_values:
                 val = sorted(val)
 
-            val_str = dialect['multival separator'].join(val)
+            val_str = dialect["multival separator"].join(val)
 
             if val_str:
 
                 # Surround with quotes if needed
-                if dialect['quoted GFF2 values']:
+                if dialect["quoted GFF2 values"]:
                     val_str = '"%s"' % val_str
 
                 # Typically "=" for GFF3 or " " otherwise
-                part = dialect['keyval separator'].join([key, val_str])
+                part = dialect["keyval separator"].join([key, val_str])
             else:
                 part = key
         else:
-            if dialect['fmt'] == 'gtf':
-                part = dialect['keyval separator'].join([key, '""'])
+            if dialect["fmt"] == "gtf":
+                part = dialect["keyval separator"].join([key, '""'])
             else:
                 part = key
         parts.append(part)
 
     # Typically ";" or "; "
-    parts_str = dialect['field separator'].join(parts)
+    parts_str = dialect["field separator"].join(parts)
 
     # Sometimes need to add this
-    if dialect['trailing semicolon']:
-        parts_str += ';'
+    if dialect["trailing semicolon"]:
+        parts_str += ";"
 
     return parts_str
 
@@ -194,7 +194,7 @@ def _split_keyvals(keyval_str, dialect=None):
 
         See notes on encoding/decoding above.
         """
-        if not constants.ignore_url_escape_characters and dialect['fmt'] == 'gff3':
+        if not constants.ignore_url_escape_characters and dialect["fmt"] == "gff3":
             for key, vals in quals.items():
                 unquoted = [urllib.parse.unquote(v) for v in vals]
                 quals[key] = unquoted
@@ -206,30 +206,31 @@ def _split_keyvals(keyval_str, dialect=None):
         dialect = copy.copy(constants.dialect)
         infer_dialect = True
     from gffutils import feature
+
     quals = feature.dict_class()
     if not keyval_str:
         return quals, dialect
 
     # If a dialect was provided, then use that directly.
     if not infer_dialect:
-        if dialect['trailing semicolon']:
-            keyval_str = keyval_str.rstrip(';')
+        if dialect["trailing semicolon"]:
+            keyval_str = keyval_str.rstrip(";")
 
-        parts = keyval_str.split(dialect['field separator'])
+        parts = keyval_str.split(dialect["field separator"])
 
-        kvsep = dialect['keyval separator']
-        if dialect['leading semicolon']:
+        kvsep = dialect["keyval separator"]
+        if dialect["leading semicolon"]:
             pieces = []
             for p in parts:
-                if p and p[0] == ';':
+                if p and p[0] == ";":
                     p = p[1:]
                 pieces.append(p.strip().split(kvsep))
                 key_vals = [(p[0], " ".join(p[1:])) for p in pieces]
 
-        if dialect['fmt'] == 'gff3':
+        if dialect["fmt"] == "gff3":
             key_vals = [p.split(kvsep) for p in parts]
         else:
-            leadingsemicolon = dialect['leading semicolon']
+            leadingsemicolon = dialect["leading semicolon"]
             pieces = []
             for i, p in enumerate(parts):
                 if i == 0 and leadingsemicolon:
@@ -237,7 +238,7 @@ def _split_keyvals(keyval_str, dialect=None):
                 pieces.append(p.strip().split(kvsep))
                 key_vals = [(p[0], " ".join(p[1:])) for p in pieces]
 
-        quoted = dialect['quoted GFF2 values']
+        quoted = dialect["quoted GFF2 values"]
         for item in key_vals:
             # Easy if it follows spec
             if len(item) == 2:
@@ -246,11 +247,11 @@ def _split_keyvals(keyval_str, dialect=None):
             # Only key provided?
             elif len(item) == 1:
                 key = item[0]
-                val = ''
+                val = ""
 
             else:
                 key = item[0]
-                val = dialect['keyval separator'].join(item[1:])
+                val = dialect["keyval separator"].join(item[1:])
 
             try:
                 quals[key]
@@ -258,14 +259,14 @@ def _split_keyvals(keyval_str, dialect=None):
                 quals[key] = []
 
             if quoted:
-                if (len(val) > 0 and val[0] == '"' and val[-1] == '"'):
+                if len(val) > 0 and val[0] == '"' and val[-1] == '"':
                     val = val[1:-1]
 
             if val:
                 # TODO: if there are extra commas for a value, just use empty
                 # strings
                 # quals[key].extend([v for v in val.split(',') if v])
-                vals = val.split(',')
+                vals = val.split(",")
                 quals[key].extend(vals)
 
         quals = _unquote_quals(quals, dialect)
@@ -275,39 +276,39 @@ def _split_keyvals(keyval_str, dialect=None):
     #
     # Reset the order to an empty list so that it will only be populated with
     # keys that are found in the file.
-    dialect['order'] = []
+    dialect["order"] = []
 
     # ensembl GTF has trailing semicolon
-    if keyval_str[-1] == ';':
+    if keyval_str[-1] == ";":
         keyval_str = keyval_str[:-1]
-        dialect['trailing semicolon'] = True
+        dialect["trailing semicolon"] = True
 
     # GFF2/GTF has a semicolon with at least one space after it.
     # Spaces can be on both sides (e.g. wormbase)
     # GFF3 works with no spaces.
     # So split on the first one we can recognize...
-    for sep in (' ; ', '; ', ';'):
+    for sep in (" ; ", "; ", ";"):
         parts = keyval_str.split(sep)
         if len(parts) > 1:
-            dialect['field separator'] = sep
+            dialect["field separator"] = sep
             break
 
     # Is it GFF3?  They have key-vals separated by "="
     if gff3_kw_pat.match(parts[0]):
-        key_vals = [p.split('=') for p in parts]
-        dialect['fmt'] = 'gff3'
-        dialect['keyval separator'] = '='
+        key_vals = [p.split("=") for p in parts]
+        dialect["fmt"] = "gff3"
+        dialect["keyval separator"] = "="
 
     # Otherwise, key-vals separated by space.  Key is first item.
     else:
-        dialect['keyval separator'] = " "
+        dialect["keyval separator"] = " "
         pieces = []
         for p in parts:
             # Fix misplaced semicolons in keys in some GFF2 files
-            if p and p[0] == ';':
+            if p and p[0] == ";":
                 p = p[1:]
-                dialect['leading semicolon'] = True
-            pieces.append(p.strip().split(' '))
+                dialect["leading semicolon"] = True
+            pieces.append(p.strip().split(" "))
         key_vals = [(p[0], " ".join(p[1:])) for p in pieces]
 
     for item in key_vals:
@@ -318,8 +319,8 @@ def _split_keyvals(keyval_str, dialect=None):
 
         # Only key provided?
         elif len(item) == 1:
-                key = item[0]
-                val = ''
+            key = item[0]
+            val = ""
 
         # Pathological cases where values of a key have within them the key-val
         # separator, e.g.,
@@ -327,37 +328,35 @@ def _split_keyvals(keyval_str, dialect=None):
         #                                                                         ^            ^
         else:
             key = item[0]
-            val = dialect['keyval separator'].join(item[1:])
+            val = dialect["keyval separator"].join(item[1:])
 
         # Is the key already in there?
         if key in quals:
-            dialect['repeated keys'] = True
+            dialect["repeated keys"] = True
         else:
             quals[key] = []
 
         # Remove quotes in GFF2
         if len(val) > 0 and val[0] == '"' and val[-1] == '"':
             val = val[1:-1]
-            dialect['quoted GFF2 values'] = True
+            dialect["quoted GFF2 values"] = True
         if val:
             # TODO: if there are extra commas for a value, just use empty
             # strings
             # quals[key].extend([v for v in val.split(',') if v])
-            vals = val.split(',')
-            if (len(vals) > 1) and dialect['repeated keys']:
+            vals = val.split(",")
+            if (len(vals) > 1) and dialect["repeated keys"]:
                 raise AttributeStringError(
                     "Internally inconsistent attributes formatting: "
-                    "some have repeated keys, some do not.")
+                    "some have repeated keys, some do not."
+                )
             quals[key].extend(vals)
 
         # keep track of the order of keys
-        dialect['order'].append(key)
+        dialect["order"].append(key)
 
-    if (
-        (dialect['keyval separator'] == ' ') and
-        (dialect['quoted GFF2 values'])
-    ):
-        dialect['fmt'] = 'gtf'
+    if (dialect["keyval separator"] == " ") and (dialect["quoted GFF2 values"]):
+        dialect["fmt"] = "gtf"
 
     quals = _unquote_quals(quals, dialect)
     return quals, dialect

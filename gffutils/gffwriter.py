@@ -32,6 +32,7 @@ class GFFWriter:
     TODO: Add make separate GTFWriter class or add support
     for GTF here.
     """
+
     def __init__(self, out, with_header=True, in_place=False):
         self.out = out
         self.with_header = with_header
@@ -53,14 +54,15 @@ class GFFWriter:
             if self.in_place:
                 # The in_place parameter is undefined for
                 # streams, since no filenames are involved
-                raise ValueError("Cannot use 'in_place' when writing to "
-                                 "a stream.")
+                raise ValueError("Cannot use 'in_place' when writing to " "a stream.")
             self.out_stream = out
         # write header if asked
         if self.with_header:
             timestamp = strftime("%Y-%m-%d %H:%M:%S", localtime())
-            header = "#GFF3 file (created by gffutils (v%s) on %s)" \
-                % (version, timestamp)
+            header = "#GFF3 file (created by gffutils (v%s) on %s)" % (
+                version,
+                timestamp,
+            )
             self.out_stream.write("%s\n" % (header))
 
     def write_rec(self, rec):
@@ -115,12 +117,11 @@ class GFFWriter:
         mRNA_lens = {}
         c = list(db.children(gene_id, featuretype="mRNA"))
         for mRNA in db.children(gene_id, featuretype="mRNA"):
-            mRNA_lens[mRNA.id] = \
-                sum(len(exon) for exon in db.children(mRNA,
-                                                      featuretype="exon"))
+            mRNA_lens[mRNA.id] = sum(
+                len(exon) for exon in db.children(mRNA, featuretype="exon")
+            )
         # Sort mRNAs by length
-        sorted_mRNAs = \
-            sorted(mRNA_lens.items(), key=lambda x: x[1], reverse=True)
+        sorted_mRNAs = sorted(mRNA_lens.items(), key=lambda x: x[1], reverse=True)
         for curr_mRNA in sorted_mRNAs:
             mRNA_id = curr_mRNA[0]
             mRNA_rec = db[mRNA_id]
@@ -140,7 +141,7 @@ class GFFWriter:
         order, where exons are sorted by start position and given
         first.
         """
-        mRNA_children = db.children(mRNA_id, order_by='start')
+        mRNA_children = db.children(mRNA_id, order_by="start")
         nonexonic_children = []
         for child_rec in mRNA_children:
             if child_rec.featuretype == "exon":
@@ -155,7 +156,7 @@ class GFFWriter:
         Write out the children records of the exon given by
         the ID (not including the exon record itself).
         """
-        exon_children = db.children(exon_id, order_by='start')
+        exon_children = db.children(exon_id, order_by="start")
         for exon_child in exon_children:
             self.write_rec(exon_child)
 

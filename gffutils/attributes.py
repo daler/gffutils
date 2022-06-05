@@ -92,7 +92,7 @@ class Attributes(collectionsAbc.MutableMapping):
         s = []
         for i in self.items():
             s.append("%s: %s" % i)
-        return '\n'.join(s)
+        return "\n".join(s)
 
     def update(self, *args, **kwargs):
         for k, v in six.iteritems(dict(*args, **kwargs)):
@@ -103,8 +103,3 @@ class Attributes(collectionsAbc.MutableMapping):
 # This is used in Feature below and in parser.py
 
 dict_class = Attributes
-#dict_class = dict
-#dict_class = helper_classes.DefaultOrderedDict
-#dict_class = collections.defaultdict
-#dict_class = collections.OrderedDict
-#dict_class = helper_classes.DefaultListOrderedDict

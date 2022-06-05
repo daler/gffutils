@@ -1,0 +1,109 @@
+name: main
+on: [push]
+jobs:
+  build-and-test:
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8, 3.9]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: git setup
+        id: git-setup
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
+          echo "WORKDIR=$(pwd)" >> $GITHUB_ENV
+
+      - name: conda env
+        run: |
+          eval "$(conda shell.bash hook)"
+          conda config --add channels defaults
+          conda config --add channels bioconda
+          conda config --add channels conda-forge
+          conda install -n base mamba -y
+          mamba create -y -p ./env \
+            python=${{ matrix.python-version }} \
+            --file requirements.txt
+
+          conda activate ./env
+          python setup.py clean sdist
+          (cd dist && pip install gffutils-*.tar.gz)
+          cd $TMPDIR
+          python -c "import gffutils; print(gffutils.__file__)"
+          conda deactivate
+
+      - name: run unit tests
+        run: |
+          eval "$(conda shell.bash hook)"
+          mamba install -y -p ./env --file optional-requirements.txt nose
+
+          conda activate ./env
+          nosetests -v --with-doctest -a '!slow'
+          conda deactivate
+
+      - name: doctests
+        # Specifically in 3.8 (but not 3.6, 3.7, 3.9) we get:
+        #
+        #       Handler <function process_generate_options at 0x7f6eb70ba790>
+        #       for event 'builder-inited' threw an exception (exception: no
+        #       module named gffutils.pybedtools_integration)
+        #
+        # ...and this is difficult or impossible to replicate locally.
+        # The workaround is to just not build the html docs on 3.8.
+        if: ${{ (matrix.python-version != 3.8) }}
+        run: |
+          eval "$(conda shell.bash hook)"
+          mamba install -y -p ./env --file docs-requirements.txt
+          conda activate ./env
+          (cd doc && make clean doctest)
+          conda deactivate
+
+      - name: build docs
+        # See above for note about 3.8
+        if: ${{ (matrix.python-version != 3.8) }}
+        run: |
+          eval "$(conda shell.bash hook)"
+          conda activate ./env
+          (cd doc && make html)
+          conda deactivate
+
+          # Clone the gh-pages branch to a temporary location
+          git clone \
+            --single-branch \
+            --branch gh-pages "https://x-acess-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" \
+            /tmp/docs
+
+
+          # clean it out and add newly-built docs
+          rm -rf /tmp/docs/*
+          cp -r doc/build/html/* /tmp/docs
+
+          # so that sphinx-built docs show up correctly on github.io
+          touch /tmp/docs/.nojekyll
+
+          cd /tmp/docs
+          git add .
+          if git diff --cached --quiet; then
+            echo "no changes to docs, nothing to commit"
+          else
+            git commit -m "update docs"
+          fi
+          cd $WORKDIR
+
+      - name: push artifact
+        if: ${{ (matrix.python-version == 3.9) }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: doc
+          path: /tmp/docs
+
+      - name: push docs to gh-pages branch
+        # Push docs to gh-pages if this test is running on master branch, and
+        # restrict to a single Python version.
+        if: ${{ (github.ref == 'refs/heads/master') && (matrix.python-version == 3.9) }}
+        run: |
+          cd /tmp/docs
+          git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" gh-pages
+          cd $WORKDIR

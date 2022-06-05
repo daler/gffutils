@@ -19,7 +19,7 @@ def example_filename(fn):
     """
     Return the full path of a data file that ships with gffutils.
     """
-    return os.path.join(HERE, 'test', 'data', fn)
+    return os.path.join(HERE, "test", "data", fn)
 
 
 def infer_dialect(attributes):
@@ -28,30 +28,28 @@ def infer_dialect(attributes):
 
     Parameters
     ----------
-    attributes : str or iterable
-        A single attributes string from a GTF or GFF line, or an iterable of
-        such strings.
+    attributes : str
+        A single attributes string from a GTF or GFF line
 
     Returns
     -------
     Dictionary representing the inferred dialect
     """
-    if isinstance(attributes, six.string_types):
-        attributes = [attributes]
-    dialects = [parser._split_keyvals(i)[1] for i in attributes]
-    return _choose_dialect(dialects)
+    attributes, dialect = parser._split_keyvals(attributes)
+    return dialect
 
 
-def _choose_dialect(dialects):
+def _choose_dialect(features):
     """
-    Given a list of dialects, choose the one to use as the "canonical" version.
+    Given a list of features (often from peeking into an iterator), choose
+    a dialect to use as the "canonical" version.
 
-    If `dialects` is an empty list, then use the default GFF3 dialect
+    If `features` is an empty list, then use the default GFF3 dialect
 
     Parameters
     ----------
-    dialects : iterable
-        iterable of dialect dictionaries
+    features : iterable
+        iterable of features
 
     Returns
     -------
@@ -60,24 +58,78 @@ def _choose_dialect(dialects):
     # NOTE: can use helpers.dialect_compare if you need to make this more
     # complex....
 
-    # For now, this function favors the first dialect, and then appends the
-    # order of additional fields seen in the attributes of other lines giving
-    # priority to dialects that come first in the iterable.
-    if len(dialects) == 0:
+    if len(features) == 0:
         return constants.dialect
+
+    # Structure of `count` will be, e.g.,
+    #
+    #    {
+    #    'keyval separator': {'=': 35},
+    #    'trailing semicolon': {True: 30, False: 5},
+    #    ...(other dialect keys here)...
+    #    }
+    #
+    # In this example, all features agreed on keyval separeator. For trailing
+    # semicolon, there was a higher weight for True, so that will be selected
+    # for the final dialect.
+    count = {k: {} for k in constants.dialect.keys()}
+
+    for feature in features:
+
+        # Number of attributes is currently being used as the weight for
+        # dialect selection. That is, more complex attribute strings are more
+        # likely to be informative when determining dialect. This is important
+        # for e.g., #128, where there is equal representation of long and short
+        # attributes -- but only the longer attributes correctly have ";
+        # " field separators.
+        weight = len(feature.attributes)
+
+        for k, v in feature.dialect.items():
+            if isinstance(v, list):
+                v = tuple(v)
+            val = count[k].get(v, 0)
+
+            # Increment the observed value by the number of attributes (so more
+            # complex attribute strings have higher weight in determining
+            # dialect)
+            count[k][v] = val + weight
+
+    final_dialect = {}
+    for k, v in count.items():
+
+        # Tuples of (entry, total weight) in descending sort
+        vs = sorted(v.items(), key=lambda x: x[1], reverse=True)
+
+        # So the first tuple's first item is the winning value for this dialect
+        # key.
+        final_dialect[k] = vs[0][0]
+
+    # For backwards compatibility, to figure out the field order to use for the
+    # dialect we append additional fields as they are observed, giving priority
+    # to attributes that come first in earlier features. The alternative would
+    # be to give preference to the most-common order of attributes.
     final_order = []
-    for dialect in dialects:
-        for o in dialect['order']:
+    for feature in features:
+        for o in feature.attributes.keys():
             if o not in final_order:
                 final_order.append(o)
-    dialect = dialects[0]
-    dialect['order'] = final_order
-    return dialect
+
+    final_dialect["order"] = final_order
+
+    return final_dialect
 
 
-def make_query(args, other=None, limit=None, strand=None, featuretype=None,
-               extra=None, order_by=None, reverse=False,
-               completely_within=False):
+def make_query(
+    args,
+    other=None,
+    limit=None,
+    strand=None,
+    featuretype=None,
+    extra=None,
+    order_by=None,
+    reverse=False,
+    completely_within=False,
+):
     """
     Multi-purpose, bare-bones ORM function.
 
@@ -109,26 +161,32 @@ def make_query(args, other=None, limit=None, strand=None, featuretype=None,
     `args` can be pre-filled with args that are passed to `other` and `extra`.
     """
 
-    _QUERY = ("{_SELECT} {OTHER} {EXTRA} {FEATURETYPE} "
-              "{LIMIT} {STRAND} {ORDER_BY}")
+    _QUERY = "{_SELECT} {OTHER} {EXTRA} {FEATURETYPE} " "{LIMIT} {STRAND} {ORDER_BY}"
 
     # Construct a dictionary `d` that will be used later as _QUERY.format(**d).
     # Default is just _SELECT, which returns all records in the features table.
     # (Recall that constants._SELECT gets the fields in the order needed to
     # reconstruct a Feature)
-    d = dict(_SELECT=constants._SELECT, OTHER="", FEATURETYPE="", LIMIT="",
-             STRAND="", ORDER_BY="", EXTRA="")
+    d = dict(
+        _SELECT=constants._SELECT,
+        OTHER="",
+        FEATURETYPE="",
+        LIMIT="",
+        STRAND="",
+        ORDER_BY="",
+        EXTRA="",
+    )
 
     if other:
-        d['OTHER'] = other
+        d["OTHER"] = other
     if extra:
-        d['EXTRA'] = extra
+        d["EXTRA"] = extra
 
     # If `other` and `extra` take args (that is, they have "?" in them), then
     # they should have been provided in `args`.
-    required_args = (d['EXTRA'] + d['OTHER']).count('?')
+    required_args = (d["EXTRA"] + d["OTHER"]).count("?")
     if len(args) != required_args:
-        raise ValueError('Not enough args (%s) for subquery' % args)
+        raise ValueError("Not enough args (%s) for subquery" % args)
 
     # Below, if a kwarg is specified, then we create sections of the query --
     # appending to args as necessary.
@@ -145,12 +203,11 @@ def make_query(args, other=None, limit=None, strand=None, featuretype=None,
         #
         # or, "featuretype IN ('exon', 'CDS')"
         if isinstance(featuretype, six.string_types):
-            d['FEATURETYPE'] = "features.featuretype = ?"
+            d["FEATURETYPE"] = "features.featuretype = ?"
             args.append(featuretype)
         else:
-            d['FEATURETYPE'] = (
-                "features.featuretype IN  (%s)"
-                % (','.join(["?" for _ in featuretype]))
+            d["FEATURETYPE"] = "features.featuretype IN  (%s)" % (
+                ",".join(["?" for _ in featuretype])
             )
             args.extend(featuretype)
 
@@ -162,8 +219,8 @@ def make_query(args, other=None, limit=None, strand=None, featuretype=None,
         #
         # e.g., "seqid = 'chr2L' AND start > 1000 AND end < 5000"
         if isinstance(limit, six.string_types):
-            seqid, startstop = limit.split(':')
-            start, end = startstop.split('-')
+            seqid, startstop = limit.split(":")
+            start, end = startstop.split("-")
         else:
             seqid, start, end = limit
 
@@ -172,31 +229,29 @@ def make_query(args, other=None, limit=None, strand=None, featuretype=None,
 
         # Use different overlap conditions
         if completely_within:
-            d['LIMIT'] = (
-                "features.seqid = ? AND features.start >= ? "
-                "AND features.end <= ?"
+            d["LIMIT"] = (
+                "features.seqid = ? AND features.start >= ? " "AND features.end <= ?"
             )
             args.extend([seqid, start, end])
 
         else:
-            d['LIMIT'] = (
-                "features.seqid = ? AND features.start <= ? "
-                "AND features.end >= ?"
+            d["LIMIT"] = (
+                "features.seqid = ? AND features.start <= ? " "AND features.end >= ?"
             )
             # Note order (end, start)
             args.extend([seqid, end, start])
 
         # Add bin clause. See issue #45.
         if len(_bins) < 900:
-            d['LIMIT'] += " AND features.bin IN (%s)" % (','.join(map(str, _bins)))
+            d["LIMIT"] += " AND features.bin IN (%s)" % (",".join(map(str, _bins)))
 
     if strand:
         # e.g., "strand = '+'"
-        d['STRAND'] = "features.strand = ?"
+        d["STRAND"] = "features.strand = ?"
         args.append(strand)
 
     # TODO: implement file_order!
-    valid_order_by = constants._gffkeys_extra + ['file_order', 'length']
+    valid_order_by = constants._gffkeys_extra + ["file_order", "length"]
     _order_by = []
     if order_by:
         # Default is essentially random order.
@@ -208,27 +263,28 @@ def make_query(args, other=None, limit=None, strand=None, featuretype=None,
         else:
             for k in order_by:
                 if k not in valid_order_by:
-                    raise ValueError("%s not a valid order-by value in %s"
-                                     % (k, valid_order_by))
+                    raise ValueError(
+                        "%s not a valid order-by value in %s" % (k, valid_order_by)
+                    )
 
                 # There's no length field, so order by end - start
-                if k == 'length':
-                    k = '(end - start)'
+                if k == "length":
+                    k = "(end - start)"
 
                 _order_by.append(k)
 
-        _order_by = ','.join(_order_by)
+        _order_by = ",".join(_order_by)
         if reverse:
-            direction = 'DESC'
+            direction = "DESC"
         else:
-            direction = 'ASC'
-        d['ORDER_BY'] = 'ORDER BY %s %s' % (_order_by, direction)
+            direction = "ASC"
+        d["ORDER_BY"] = "ORDER BY %s %s" % (_order_by, direction)
 
     # Ensure only one "WHERE" is included; the rest get "AND ".  This is ugly.
     where = False
-    if "where" in d['OTHER'].lower():
+    if "where" in d["OTHER"].lower():
         where = True
-    for i in ['EXTRA', 'FEATURETYPE', 'LIMIT', 'STRAND']:
+    for i in ["EXTRA", "FEATURETYPE", "LIMIT", "STRAND"]:
         if d[i]:
             if not where:
                 d[i] = "WHERE " + d[i]
@@ -244,8 +300,8 @@ def _bin_from_dict(d):
     Given a dictionary yielded by the parser, return the genomic "UCSC" bin
     """
     try:
-        start = int(d['start'])
-        end = int(d['end'])
+        start = int(d["start"])
+        end = int(d["end"])
         return bins.bins(start, end, one=True)
 
     # e.g., if "."
@@ -256,8 +312,8 @@ def _bin_from_dict(d):
 def _jsonify(x):
     """Use most compact form of JSON"""
     if isinstance(x, dict_class):
-        return json.dumps(x._d, separators=(',', ':'))
-    return json.dumps(x, separators=(',', ':'))
+        return json.dumps(x._d, separators=(",", ":"))
+    return json.dumps(x, separators=(",", ":"))
 
 
 def _unjsonify(x, isattributes=False):
@@ -275,7 +331,7 @@ def _feature_to_fields(f, jsonify=True):
     x = []
     for k in constants._keys:
         v = getattr(f, k)
-        if jsonify and (k in ('attributes', 'extra')):
+        if jsonify and (k in ("attributes", "extra")):
             x.append(_jsonify(v))
         else:
             x.append(v)
@@ -289,7 +345,7 @@ def _dict_to_fields(d, jsonify=True):
     x = []
     for k in constants._keys:
         v = d[k]
-        if jsonify and (k in ('attributes', 'extra')):
+        if jsonify and (k in ("attributes", "extra")):
             x.append(_jsonify(v))
         else:
             x.append(v)
@@ -301,16 +357,22 @@ def asinterval(feature):
     Converts a gffutils.Feature to a pybedtools.Interval
     """
     import pybedtools
-    return pybedtools.create_interval_from_list(str(feature).split('\t'))
+
+    return pybedtools.create_interval_from_list(str(feature).split("\t"))
 
 
-def merge_attributes(attr1, attr2):
+def merge_attributes(attr1, attr2, numeric_sort=False):
     """
     Merges two attribute dictionaries into a single dictionary.
 
     Parameters
     ----------
     `attr1`, `attr2` : dict
+
+    numeric_sort : bool
+        If True, then attempt to convert all values for a key into floats, sort
+        them numerically, and return the original strings in numerical order.
+        Default is False for performance.
 
     Returns
     -------
@@ -320,7 +382,7 @@ def merge_attributes(attr1, attr2):
     new_d = copy.deepcopy(attr1)
     new_d.update(copy.deepcopy(attr2))
 
-    #all of attr2 key : values just overwrote attr1, fix it
+    # all of attr2 key : values just overwrote attr1, fix it
     for k, v in new_d.items():
         if not isinstance(v, list):
             new_d[k] = [v]
@@ -330,7 +392,31 @@ def merge_attributes(attr1, attr2):
             if not isinstance(v, list):
                 v = [v]
             new_d[k].extend(v)
-    return dict((k, sorted(set(v))) for k, v in new_d.items())
+    if not numeric_sort:
+        return dict((k, sorted(set(v))) for k, v in new_d.items())
+
+    final_d = {}
+    for key, values in new_d.items():
+        try:
+            # I.e.:
+            #
+            #   ['5', '4.2']
+            #
+            # becomes the sorted tuples:
+            #
+            #   [(4.2, '4.2'), ('5.0', '5')]
+            #
+            # from which original strings are pulled to get the
+            # numerically-sorted strings,
+            #
+            #   ['4.2', '5']
+            sorted_numeric = sorted([(float(v), v) for v in set(values)])
+            new_values = [i[1] for i in sorted_numeric]
+        except ValueError:
+            # E.g., not everything was able to be converted into a number
+            new_values = sorted(set(values))
+        final_d[key] = new_values
+    return final_d
 
 
 def dialect_compare(dialect1, dialect2):
@@ -340,8 +426,7 @@ def dialect_compare(dialect1, dialect2):
     orig = set(dialect1.items())
     new = set(dialect2.items())
     return dict(
-        added=dict(list(new.difference(orig))),
-        removed=dict(list(orig.difference(new)))
+        added=dict(list(new.difference(orig))), removed=dict(list(orig.difference(new)))
     )
 
 
@@ -357,6 +442,7 @@ def sanitize_gff_db(db, gid_field="gid"):
 
     TODO: Do something with negative coordinates?
     """
+
     def sanitized_iterator():
         # Iterate through the database by each gene's records
         for gene_recs in db.iter_by_parent_childs():
@@ -369,16 +455,13 @@ def sanitize_gff_db(db, gid_field="gid"):
                 # Add a gene id field to each gene's records
                 rec.attributes[gid_field] = [gene_id]
                 yield rec
+
     # Return sanitized GFF database
-    sanitized_db = \
-        gffutils.create_db(sanitized_iterator(), ":memory:",
-                           verbose=False)
+    sanitized_db = gffutils.create_db(sanitized_iterator(), ":memory:", verbose=False)
     return sanitized_db
 
 
-def sanitize_gff_file(gff_fname,
-                      in_memory=True,
-                      in_place=False):
+def sanitize_gff_file(gff_fname, in_memory=True, in_place=False):
     """
     Sanitize a GFF file.
     """
@@ -389,13 +472,11 @@ def sanitize_gff_file(gff_fname,
     else:
         # Need to create a database for file
         if in_memory:
-            db = gffutils.create_db(gff_fname, ":memory:",
-                                    verbose=False)
+            db = gffutils.create_db(gff_fname, ":memory:", verbose=False)
         else:
             db = get_gff_db(gff_fname)
     if in_place:
-        gff_out = gffwriter.GFFWriter(gff_fname,
-                                      in_place=in_place)
+        gff_out = gffwriter.GFFWriter(gff_fname, in_place=in_place)
     else:
         gff_out = gffwriter.GFFWriter(sys.stdout)
     sanitized_db = sanitize_gff_db(db)
@@ -425,7 +506,7 @@ def is_gff_db(db_fname):
     return False
 
 
-def to_unicode(obj, encoding='utf-8'):
+def to_unicode(obj, encoding="utf-8"):
     if isinstance(obj, six.string_types):
         if not isinstance(obj, six.text_type):
             obj = six.text_type(obj, encoding)
@@ -433,9 +514,15 @@ def to_unicode(obj, encoding='utf-8'):
 
 
 def canonical_transcripts(db, fasta_filename):
+    """
+    WARNING: this function is currently not well ttested and will likely be
+    replaced with a more modular approach.
+    """
     import pyfaidx
-    fasta = pyfaidx.Fasta(fasta_filename, as_raw=True)
-    for gene in db.features_of_type('gene'):
+
+
+    fasta = pyfaidx.Fasta(fasta_filename, as_raw=False)
+    for gene in db.features_of_type("gene"):
 
         # exons_list will contain (CDS_length, total_length, transcript, [exons]) tuples.
         exon_list = []
@@ -445,26 +532,25 @@ def canonical_transcripts(db, fasta_filename):
             exons = list(db.children(transcript, level=1))
             for exon in exons:
                 exon_length = len(exon)
-                if exon.featuretype == 'CDS':
+                if exon.featuretype == "CDS":
                     cds_len += exon_length
                 total_len += exon_length
 
-            exon_list.append((cds_len, total_len, transcript, exons))
+            exon_list.append((cds_len, total_len, transcript, exons if cds_len == 0 else [e for e in exons if e.featuretype in ['CDS', 'five_prime_UTR', 'three_prime_UTR']]))
 
         # If we have CDS, then use the longest coding transcript
         if max(i[0] for i in exon_list) > 0:
-            best = sorted(exon_list)[0]
+            best = sorted(exon_list, key=lambda x: x[0], reverse=True)[0]
         # Otherwise, just choose the longest
         else:
-            best = sorted(exon_list, lambda x: x[1])[0]
+            best = sorted(exon_list, key=lambda x: x[1])[0]
 
         print(best)
 
         canonical_exons = best[-1]
         transcript = best[-2]
-        seqs = [i.sequence(fasta) for i in canonical_exons]
-        yield transcript, ''.join(seqs)
-
+        seqs = [i.sequence(fasta) for i in sorted(canonical_exons, key=lambda x: x.start, reverse=transcript.strand != '+')]
+        yield transcript, "".join(seqs)
 
 
 ##
@@ -472,8 +558,7 @@ def canonical_transcripts(db, fasta_filename):
 ##
 ## TODO: move clean_gff here?
 ##
-def get_gff_db(gff_fname,
-               ext=".db"):
+def get_gff_db(gff_fname, ext=".db"):
     """
     Get db for GFF file. If the database has a .db file,
     load that. Otherwise, create a named temporary file,
@@ -498,9 +583,9 @@ def get_gff_db(gff_fname,
     # when using function internally)
     print("Creating db for %s" % (gff_fname))
     t1 = time.time()
-    db = gffutils.create_db(gff_fname, db_fname.name,
-                            merge_strategy="merge",
-                            verbose=False)
+    db = gffutils.create_db(
+        gff_fname, db_fname.name, merge_strategy="merge", verbose=False
+    )
     t2 = time.time()
     print("  - Took %.2f seconds" % (t2 - t1))
     return db
