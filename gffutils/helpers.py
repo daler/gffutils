@@ -486,8 +486,8 @@ def to_unicode(obj, encoding="utf-8"):
 
 def canonical_transcripts(db, fasta_filename):
     """
-    WARNING: this function is currently untested and will likely be replaced
-    with a more modular approach.
+    WARNING: this function is currently not well ttested and will likely be
+    replaced with a more modular approach.
     """
     import pyfaidx
 
