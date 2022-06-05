@@ -353,7 +353,13 @@ def test_issue_164():
 
 
 def test_issue_166():
+    # Added the new FeatureDB.seqids() method.
     db = gffutils.create_db(gffutils.example_filename('nonascii'), ':memory:')
     seqs = list(db.seqids())
     assert seqs == ['2L', '2R', '3L', '3R', 'X'], seqs
+
+
+def test_issue_167():
+    # Previously was causing sqlite3.InterfaceError
+    db = gffutils.create_db(gffutils.example_filename('issue167.gff'), ':memory:')
 

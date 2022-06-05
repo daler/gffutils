@@ -39,6 +39,7 @@ Stefano Rivera, Daniel Lowengrub, Nolan Woods, Stefen Moeller,  and Husen Umer.
   argument is deprecated.
 - Add new :meth:`FeatureDB.seqids` to list the unique
   seqids/chromosomes/contigs observed in the database, see `#166 <https://github.com/daler/gffutils/issues/166>`_.
+- Add regression tests for `#167 <https://github.com/daler/gffutils/issues/167>`_, `#164 <https://github.com/daler/gffutils/issues/164>`_
 
 Changes in v0.10.1
 ------------------

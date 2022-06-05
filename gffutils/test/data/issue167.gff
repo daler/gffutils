@@ -1,0 +1,6 @@
+An-1__chr2_12990458-12991147    EVM     gene    0       463     .       +       .       ID=ATAN-2G49800;Note=protein_coding_gene
+An-1__chr2_12990458-12991147    EVM     mRNA    0       463     .       +       .       ID=ATAN-2G49800.1;Parent=ATAN-2G49800
+An-1__chr2_12990458-12991147    EVM     CDS     0       272     .       +       0       ID=ATAN-2G49800.1.cds1;Parent=ATAN-2G49800.1
+An-1__chr2_12990458-12991147    EVM     CDS     356     463     .       +       0       ID=ATAN-2G49800.1.cds2;Parent=ATAN-2G49800.1
+An-1__chr2_12990458-12991147    EVM     exon    0       272     .       +       .       ID=ATAN-2G49800.1.exon1;Parent=ATAN-2G49800.1
+An-1__chr2_12990458-12991147    EVM     exon    356     463     .       +       .       ID=ATAN-2G49800.1.exon2;Parent=ATAN-2G49800.1
