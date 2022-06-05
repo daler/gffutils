@@ -380,8 +380,22 @@ def test_issue_174():
     introns = [f for f in db.create_introns(numeric_sort=True)]
     observed = [i.attributes['exon_number'] for i in introns]
     assert observed[7] == ['8', '9']
-
     # This should be fixed:
     assert observed[8] == ['9', '10'] 
-
     assert observed[9] == ['10', '11']
+
+
+def test_issue_181():
+    db = gffutils.create_db(
+        gffutils.example_filename('issue181.gff'),
+        ':memory:')
+    introns = db.create_introns()
+
+    # This now warns that the provided ID key has multiple values.
+    assert_raises(ValueError, db.update, introns)
+
+    # The fix is to provide a custom intron ID converter.
+    def intron_id(f):
+        return ','.join(f['ID'])
+
+    db.update(introns, id_spec={'intron': [intron_id]})
