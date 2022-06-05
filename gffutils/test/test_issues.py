@@ -9,6 +9,8 @@ import difflib
 from textwrap import dedent
 import gffutils
 from gffutils import feature
+from gffutils import merge_criteria as mc
+from nose.tools import assert_raises
 
 
 def test_issue_79():
@@ -285,14 +287,11 @@ def test_issue_129():
 
 
 def test_issue_128():
+    # In #128, some lines had separators of "; " and some with ";". The first
+    # one in the file would win. Now the detection pays more attention to lines
+    # with more attributes to make it work properly
     gff = gffutils.example_filename('gms2_example.gff3')
-    db = gffutils.create_db(
-        gff,
-        "tmp.db",
-        force=True,
-
-    )
-
+    db = gffutils.create_db(gff, ":memory:", force=True)
     expected = {
         'ID': ['1'],
         'Parent': ['gene_1'],
@@ -301,6 +300,33 @@ def test_issue_128():
         'gc': ['33'], 
         'length': ['363'],
     }
-    print(db.dialect)
     assert dict(db['1'].attributes) == expected
 
+
+def test_issue_157():
+    # With the merge overhaul, children_bp incorrectly still used ignore_strand.
+    db = gffutils.create_db(gffutils.example_filename('FBgn0031208.gff'), ":memory:")
+    gene = next(db.features_of_type('gene'))
+    children = list(db.children(gene, featuretype='exon'))
+
+    # Modify the last one to have a different strand so we can test the
+    # ignore_strand argument.
+    children[-1].strand = '-'
+    db.update(children[-1:], merge_strategy='replace')
+
+    # and, since updating has been problematic in the past, double-check again
+    # that the strand is changed in the db.
+    assert list(db.children(gene, featuretype='exon'))[-1].strand == '-'
+    cbp1 = db.children_bp(gene, child_featuretype='exon')
+
+    # Previously this would give:
+    #   TypeError: merge() got an unexpected keyword argument 'ignore_strand'
+    #
+    # Now changing to ValueError and suggesting a fix. 
+    assert_raises(ValueError, db.children_bp, gene, child_featuretype='exon', merge=True, ignore_strand=True)
+    assert_raises(ValueError, db.children_bp, gene, ignore_strand=True, nonexistent=True)
+    assert_raises(TypeError, db.children_bp, gene, nonexistent=True)
+
+    # The way to do it now is the following (we can omit the mc.feature_type
+    # since we're preselecting for exons anyway):
+    db.children_bp(gene, child_featuretype='exon', merge=True, merge_criteria=(mc.overlap_end_inclusive))

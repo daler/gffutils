@@ -1363,7 +1363,6 @@ class FeatureDB(object):
         The function should return True to merge `cur` into `acc`, False to set
         `cur` to `acc` (that is, start a new merged feature).
 
-
         If merge criteria allows different feature types then the merged
         features' feature types should have their featuretype property
         reassigned to a more specific ontology value.
@@ -1525,7 +1524,10 @@ class FeatureDB(object):
         return result_features
 
     def children_bp(
-        self, feature, child_featuretype="exon", merge=False, ignore_strand=False
+        self, feature, child_featuretype="exon", merge=False,
+            merge_criteria=(mc.seqid, mc.overlap_end_inclusive, mc.strand,
+                            mc.feature_type),
+            **kwargs
     ):
         """
         Total bp of all children of a featuretype.
@@ -1545,21 +1547,34 @@ class FeatureDB(object):
             Whether or not to merge child features together before summing
             them.
 
-        ignore_strand : bool
-            If True, then overlapping features on different strands will be
-            merged together; otherwise, merging features with different strands
-            will result in a ValueError.
+        merge_criteria : list
+            List of merge criteria callbacks. All must evaluate to True in
+            order for a feature to be merged. Only used if merge=True. When
+            modifying this argument, you may want to use:
+
+                from gffutils import merge_criteria as mc
+
+            to access the available callbacks.
 
         Returns
         -------
         Integer representing the total number of bp.
         """
 
+        if kwargs:
+            if "ignore_strand" in kwargs:
+                raise ValueError(
+                    "'ignore_strand' has been deprecated; please use "
+                    "merge_criteria to control how features should be merged. "
+                    "E.g., leave out the 'mc.strand' criteria to ignore strand.")
+            else:
+                raise TypeError("merge() got unexpected keyword arguments '{}'".format(kwargs.keys()))
+
         children = self.children(
             feature, featuretype=child_featuretype, order_by="start"
         )
         if merge:
-            children = self.merge(children, ignore_strand=ignore_strand)
+            children = self.merge(children, merge_criteria=merge_criteria)
 
         total = 0
         for child in children:
