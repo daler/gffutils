@@ -337,3 +337,18 @@ def test_issue_159():
     fasta = gffutils.example_filename('dm6-chr2L.fa')
     for transcript, seq in gffutils.helpers.canonical_transcripts(db, fasta):
         pass
+
+
+def test_issue_164():
+    # Something strange with the original annotation, but seems fine at least
+    # after pasting in the offending genes from the GitHub comments.
+    db = gffutils.create_db(
+        gffutils.example_filename('sharr.gtf'),
+        ':memory:',
+        disable_infer_transcripts=True,
+        disable_infer_genes=True,
+        id_spec={'gene': 'gene_id', 'transcript': 'transcript_id'},
+        merge_strategy='create_unique',
+        keep_order=True,
+        verbose=True)
+
