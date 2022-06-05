@@ -1151,9 +1151,23 @@ def create_db(
         database, which in turn determines how you will access individual
         features by name from the database.
 
-        If `id_spec=None`, then auto-increment primary keys based on the
-        feature type (e.g., "gene_1", "gene_2").  This is also the fallback
-        behavior for the other values below.
+        If an id spec is not otherwise specified for a featuretype (keep
+        reading below for how to do this), or the provided id spec is not
+        available for a particular feature (say, exons do not have "ID"
+        attributes even though `id_spec="ID"` was provided) then the default
+        behavior is to autoincrement an ID for that featuretype. For example,
+        if there is no id spec defined for an exon, then the ids for exons will
+        take the form exon1, exon2, exon3, and so on. This ensures that each
+        feature has a unique primary key in the database without requiring lots
+        of configuration. However, if you want to be able to retrieve features
+        based on their primary key, then it is worth the effort to provide an
+        accurate id spec.
+
+        If `id_spec=None`, then use the default behavior. The default behavior
+        depends on the detected format (or forced format, e.g., if
+        `force_gff=True`). For GFF files, the default is be `id_spec="ID"`. For
+        GTF files, the default is `id_spec={'gene': 'gene_id', 'transcript':
+        'transcript_id'}`.
 
         If `id_spec` is a string, then look for this key in the attributes.  If
         it exists, then use its value as the primary key, otherwise
@@ -1161,9 +1175,9 @@ def create_db(
         usually works well.
 
         If `id_spec` is a list or tuple of keys, then check for each one in
-        order, using the first one found.  For GFF3, this might be ["ID",
-        "Name"], which would use the ID if it exists, otherwise the Name,
-        otherwise autoincrement based on the feature type.
+        order, using the first one found.  For GFF3, this might be modified to
+        ["ID", "Name"], which would use the ID if it exists, otherwise the
+        Name, otherwise autoincrement based on the feature type.
 
         If `id_spec` is a dictionary, then it is a mapping of feature types to
         what should be used as the ID.  For example, for GTF files, `{'gene':
