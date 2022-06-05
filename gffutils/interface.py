@@ -798,6 +798,7 @@ class FeatureDB(object):
         features,
         new_featuretype=None,
         merge_attributes=True,
+        numeric_sort=False,
         dialect=None,
         attribute_func=None,
         update_attributes=None,
@@ -833,6 +834,15 @@ class FeatureDB(object):
             parents as a single item. Otherwise, if False, the attribute will
             be a comma-separated list of values, potentially listing the same
             gene ID twice.
+
+        numeric_sort : bool
+            If True, then merged attributes that can be cast to float will be
+            sorted by their numeric values (but will still be returned as
+            string). This is useful, for example, when creating introns between
+            exons and the exons have exon_number attributes as an integer.
+            Using numeric_sort=True will ensure that the returned exons have
+            merged exon_number attribute of ['9', '10'] (numerically sorted)
+            rather than ['10', '9'] (alphabetically sorted).
 
         attribute_func : callable or None
             If None, then nothing special is done to the attributes.  If
@@ -886,7 +896,8 @@ class FeatureDB(object):
 
             if merge_attributes:
                 new_attributes = helpers.merge_attributes(
-                    last_feature.attributes, f.attributes
+                    last_feature.attributes, f.attributes,
+                    numeric_sort=numeric_sort,
                 )
             else:
                 new_attributes = {}
@@ -1129,6 +1140,7 @@ class FeatureDB(object):
         parent_featuretype=None,
         new_featuretype="intron",
         merge_attributes=True,
+        numeric_sort=False,
     ):
         """
         Create introns from existing annotations.
@@ -1161,6 +1173,15 @@ class FeatureDB(object):
         merge_attributes : bool
             Whether or not to merge attributes from all exons. If False then no
             attributes will be created for the introns.
+
+        numeric_sort : bool
+            If True, then merged attributes that can be cast to float will be
+            sorted by their numeric values (but will still be returned as
+            string). This is useful, for example, when creating introns between
+            exons and the exons have exon_number attributes as an integer.
+            Using numeric_sort=True will ensure that the returned exons have
+            merged exon_number attribute of ['9', '10'] (numerically sorted)
+            rather than ['10', '9'] (alphabetically sorted).
 
         Returns
         -------
@@ -1205,6 +1226,7 @@ class FeatureDB(object):
                 exons,
                 new_featuretype=new_featuretype,
                 merge_attributes=merge_attributes,
+                numeric_sort=numeric_sort,
                 dialect=self.dialect,
             ):
                 yield intron

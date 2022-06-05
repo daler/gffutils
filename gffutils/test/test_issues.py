@@ -363,3 +363,25 @@ def test_issue_167():
     # Previously was causing sqlite3.InterfaceError
     db = gffutils.create_db(gffutils.example_filename('issue167.gff'), ':memory:')
 
+
+def test_issue_174():
+    db = gffutils.create_db(
+        gffutils.example_filename('issue174.gtf'),
+        ':memory:',
+        merge_strategy='warning',
+    )
+    introns = [f for f in db.create_introns()]
+    observed = [i.attributes['exon_number'] for i in introns]
+    assert observed[7] == ['8', '9']
+    assert observed[8] == ['10', '9']
+    assert observed[9] == ['10', '11']
+
+    # Now do the same thing, but with the new numeric_sort arg
+    introns = [f for f in db.create_introns(numeric_sort=True)]
+    observed = [i.attributes['exon_number'] for i in introns]
+    assert observed[7] == ['8', '9']
+
+    # This should be fixed:
+    assert observed[8] == ['9', '10'] 
+
+    assert observed[9] == ['10', '11']

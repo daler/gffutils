@@ -361,13 +361,18 @@ def asinterval(feature):
     return pybedtools.create_interval_from_list(str(feature).split("\t"))
 
 
-def merge_attributes(attr1, attr2):
+def merge_attributes(attr1, attr2, numeric_sort=False):
     """
     Merges two attribute dictionaries into a single dictionary.
 
     Parameters
     ----------
     `attr1`, `attr2` : dict
+
+    numeric_sort : bool
+        If True, then attempt to convert all values for a key into floats, sort
+        them numerically, and return the original strings in numerical order.
+        Default is False for performance.
 
     Returns
     -------
@@ -387,7 +392,31 @@ def merge_attributes(attr1, attr2):
             if not isinstance(v, list):
                 v = [v]
             new_d[k].extend(v)
-    return dict((k, sorted(set(v))) for k, v in new_d.items())
+    if not numeric_sort:
+        return dict((k, sorted(set(v))) for k, v in new_d.items())
+
+    final_d = {}
+    for key, values in new_d.items():
+        try:
+            # I.e.:
+            #
+            #   ['5', '4.2']
+            #
+            # becomes the sorted tuples:
+            #
+            #   [(4.2, '4.2'), ('5.0', '5')]
+            #
+            # from which original strings are pulled to get the
+            # numerically-sorted strings,
+            #
+            #   ['4.2', '5']
+            sorted_numeric = sorted([(float(v), v) for v in set(values)])
+            new_values = [i[1] for i in sorted_numeric]
+        except ValueError:
+            # E.g., not everything was able to be converted into a number
+            new_values = sorted(set(values))
+        final_d[key] = new_values
+    return final_d
 
 
 def dialect_compare(dialect1, dialect2):
