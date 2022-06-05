@@ -120,7 +120,7 @@ class FeatureDB(object):
             sqlite3.OptimizedUnicode, which returns ascii when possible,
             unicode otherwise
 
-        encoding : str
+        default_encoding : str
 
             When non-ASCII characters are encountered, assume they are in this
             encoding.
@@ -135,6 +135,12 @@ class FeatureDB(object):
 
             Default is False, since this includes a sorting step that can get
             time-consuming for many features.
+
+        sort_attributes_values : bool
+            If True, then in cases where there are multiple values for an
+            attribute then ensure they appear in the same order every time.
+            This is typically only used for testing, in cases where it is
+            important to have consistent ordering.
 
         pragmas : dict
             Dictionary of pragmas to use when connecting to the database.  See
