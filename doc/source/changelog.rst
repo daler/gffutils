@@ -9,9 +9,11 @@ Changes in v0.11
 This is largely a bugfix release, many thanks to contributors Rory Kirchner,
 Stefano Rivera, Daniel Lowengrub, Nolan Woods, Stefen Moeller,  and Husen Umer.
 
-- Avoid deadlocks in tests under Python 3.8 (`#155 <https://github.com/daler/gffutils/pull/155>`_, thanks Stefano Rivera)
+- Avoid deadlocks in tests under Python 3.8 (`#155
+  <https://github.com/daler/gffutils/pull/155>`_, thanks Stefano Rivera)
 - Fix deprecation warning for invalid escape sequence (`#168
-  <https://github.com/daler/gffutils/pull/168>`_, Stefen Moeller, and `#165 <https://github.com/daler/gffutils/pull/165>`_, thanks Rory Kirchner)
+  <https://github.com/daler/gffutils/pull/168>`_, Stefen Moeller, and `#165
+  <https://github.com/daler/gffutils/pull/165>`_, thanks Rory Kirchner)
 - Fix ResourceWarning about unclosed file (`#169
   <https://github.com/daler/gffutils/pull/169>`_, thanks Daniel Lowengrub)
 - Allow database creation when there is an empty string in the transcript ID
@@ -32,6 +34,9 @@ Stefano Rivera, Daniel Lowengrub, Nolan Woods, Stefen Moeller,  and Husen Umer.
   attributes. This solves things like `#128
   <https://github.com/daler/gffutils/issues/128/>`_ where some dialect
   components are otherwise ambiguous.
+- Fix bug in :meth:`FeatureDB.children_bp`, `#157
+  <https://github.com/daler/gffutils/issues/157>`_, where the `ignore_strand`
+  argument is deprecated.
 
 Changes in v0.10.1
 ------------------

@@ -330,3 +330,10 @@ def test_issue_157():
     # The way to do it now is the following (we can omit the mc.feature_type
     # since we're preselecting for exons anyway):
     db.children_bp(gene, child_featuretype='exon', merge=True, merge_criteria=(mc.overlap_end_inclusive))
+
+
+def test_issue_159():
+    db = gffutils.create_db(gffutils.example_filename('FBgn0031208.gff'), ":memory:")
+    fasta = gffutils.example_filename('dm6-chr2L.fa')
+    for transcript, seq in gffutils.helpers.canonical_transcripts(db, fasta):
+        pass
