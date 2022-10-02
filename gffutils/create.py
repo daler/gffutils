@@ -67,7 +67,7 @@ class _DBCreator(object):
         disable_infer_transcripts=False,
         infer_gene_extent=True,
         force_merge_fields=None,
-        text_factory=sqlite3.OptimizedUnicode,
+        text_factory=str,
         pragmas=constants.default_pragmas,
         _keep_tempfiles=False,
         directives=None,
@@ -1111,7 +1111,7 @@ def create_db(
     force_dialect_check=False,
     from_string=False,
     keep_order=False,
-    text_factory=sqlite3.OptimizedUnicode,
+    text_factory=str,
     force_merge_fields=None,
     pragmas=constants.default_pragmas,
     sort_attribute_values=False,
@@ -1321,11 +1321,7 @@ def create_db(
         available, since these fields need to be integers.
 
     text_factory : callable
-        Text factory to use for the sqlite3 database.  See
-        https://docs.python.org/2/library/\
-                sqlite3.html#sqlite3.Connection.text_factory
-        for details. The default sqlite3.OptimizedUnicode will return Unicode
-        objects only for non-ASCII data, and bytestrings otherwise.
+        Text factory to use for the sqlite3 database.
 
     pragmas : dict
         Dictionary of pragmas used when creating the sqlite3 database. See

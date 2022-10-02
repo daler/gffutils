@@ -819,7 +819,8 @@ class FeatureDB(object):
         Providing N features will return N - 1 new features.
 
         This method purposefully does *not* do any merging or sorting of
-        coordinates, so you may want to use :meth:`FeatureDB.merge` first, or
+        coordinates. So nested or overlapping features may not behave as you
+        might expect. You may want to use :meth:`FeatureDB.merge` first, and
         when selecting features use the `order_by` kwarg, e.g.,
         `db.features_of_type('gene', order_by=('seqid', 'start'))`.
 
@@ -866,43 +867,89 @@ class FeatureDB(object):
         -------
         A generator that yields :class:`Feature` objects
         """
+
+        def _init_interfeature(f):
+            """
+            Used to initialize a new interfeature that is ready to be updated
+            in-place.
+            """
+            keys = ['id', 'seqid', 'source', 'featuretype', 'start', 'end',
+                    'score', 'strand', 'frame', 'attributes', 'bin']
+            d = dict(zip(keys, f.astuple()))
+            d['source'] = 'gffutils_derived'
+            return d
+
+        def _prep_for_yield(d):
+            """
+            Finalize the interfeature by adjusting coords, recalculating the
+            bin, and creating a feature using self._feature_returner.
+
+            If start is greater than stop (which happens when trying to get
+            interfeatures for overlapping features), then return None.
+            """
+            d['start'] += 1
+            d['end'] -= 1
+            new_bin = bins.bins(d['start'], d['end'], one=True)
+            d['bin'] = new_bin
+
+            if d['start'] > d['end']:
+                return None
+
+            return self._feature_returner(**d)
+
+        # If not provided, use a no-op function instead.
+        if not attribute_func:
+            def attribute_func(a):
+                return a
+
         for i, f in enumerate(features):
-            # no inter-feature for the first one
+            # First feature: initialize an interfeature and continue to the next.
             if i == 0:
-                interfeature_start = f.stop
+                interfeature = _init_interfeature(f)
                 last_feature = f
+                nfeatures = 1
                 continue
 
-            interfeature_stop = f.start
+            # Yield the last interfeature (if we saw at least 2 features) and
+            # start a new interfeature on this chrom.
+            if f.chrom != last_feature.chrom:
+                if nfeatures > 1:
+                    new_feature = _prep_for_yield(interfeature)
+                    if new_feature:
+                        yield new_feature
+                interfeature = _init_interfeature(f)
+                last_feature = f
+                nfeatures = 1
+                continue
+
+            # Otherwise, we've already seen a feature on this chrom so
+            # this is the second.
+            nfeatures += 1
+
+            # Adjust the interfeature dict in-place with coords...
+            interfeature['start'] = last_feature.stop
+            interfeature['end'] = f.start
+
+            # ...featuretype
             if new_featuretype is None:
-                new_featuretype = "inter_%s_%s" % (
+                interfeature['featuretype'] = "inter_%s_%s" % (
                     last_feature.featuretype,
                     f.featuretype,
                 )
-            if last_feature.strand != f.strand:
-                new_strand = "."
             else:
-                new_strand = f.strand
+                interfeature['featuretype'] = new_featuretype
 
-            if last_feature.chrom != f.chrom:
-                # We've moved to a new chromosome.  For example, if we're
-                # getting intergenic regions from all genes, they will be on
-                # different chromosomes. We still assume sorted features, but
-                # don't complain if they're on different chromosomes -- just
-                # move on.
-                last_feature = f
-                continue
+            # ...strand
+            if last_feature.strand != f.strand:
+                interfeature['strand'] = '.'
+            else:
+                interfeature['strand'] = f.strand
 
-            strand = new_strand
-            chrom = last_feature.chrom
-
-            # Shrink
-            interfeature_start += 1
-            interfeature_stop -= 1
-
+            # and attributes
             if merge_attributes:
                 new_attributes = helpers.merge_attributes(
-                    last_feature.attributes, f.attributes,
+                    attribute_func(last_feature.attributes),
+                    attribute_func(f.attributes),
                     numeric_sort=numeric_sort,
                 )
             else:
@@ -911,31 +958,14 @@ class FeatureDB(object):
             if update_attributes:
                 new_attributes.update(update_attributes)
 
-            new_bin = bins.bins(interfeature_start, interfeature_stop, one=True)
-            _id = None
-            fields = dict(
-                seqid=chrom,
-                source="gffutils_derived",
-                featuretype=new_featuretype,
-                start=interfeature_start,
-                end=interfeature_stop,
-                score=".",
-                strand=strand,
-                frame=".",
-                attributes=new_attributes,
-                bin=new_bin,
-            )
+            interfeature['attributes'] = new_attributes
 
-            if dialect is None:
-                # Support for @classmethod -- if calling from the class, then
-                # self.dialect is not defined, so defer to Feature's default
-                # (which will be constants.dialect, or GFF3).
-                try:
-                    dialect = self.dialect
-                except AttributeError:
-                    dialect = None
-            yield self._feature_returner(**fields)
-            interfeature_start = f.stop
+            # Ready to yield
+            new_feature = _prep_for_yield(interfeature)
+            if new_feature:
+                yield new_feature
+            nfeatures = 1
+
             last_feature = f
 
     def delete(self, features, make_backup=True, **kwargs):

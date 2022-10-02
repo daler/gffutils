@@ -1,0 +1,39 @@
+tig00000012	EVM	gene	2181975	2182655	.	+	.	ID=ctg012.gene0754;Name=gene0754
+tig00000012	EVM	mRNA	2181975	2182655	.	+	.	ID=ctg012.mRNA0754;Parent=ctg012.gene0754;Name=mRNA0754
+tig00000012	EVM	exon	2181975	2182655	.	+	.	ID=ctg012.mRNA0754.exon01;Parent=ctg012.mRNA0754
+tig00000012	EVM	CDS	2181975	2182655	.	+	0	ID=ctg012.mRNA0754.CDS01;Parent=ctg012.mRNA0754
+tig00000492	EVM	gene	46225	47235	.	-	.	ID=ctg492.gene0001;Name=gene0001
+tig00000492	EVM	mRNA	46225	47235	.	-	.	ID=ctg492.mRNA0001;Parent=ctg492.gene0001;Name=mRNA0001
+tig00000492	EVM	exon	46225	47235	.	-	.	ID=ctg492.mRNA0001.exon01;Parent=ctg492.mRNA0001
+tig00000492	EVM	CDS	46225	47235	.	-	0	ID=ctg492.mRNA0001.CDS01;Parent=ctg492.mRNA0001
+tig00000492	EVM	gene	47351	48256	.	-	.	ID=ctg492.gene0002;Name=gene0002
+tig00000492	EVM	mRNA	47351	48256	.	-	.	ID=ctg492.mRNA0002;Parent=ctg492.gene0002;Name=mRNA0002
+tig00000492	EVM	exon	47351	48256	.	-	.	ID=ctg492.mRNA0002.exon01;Parent=ctg492.mRNA0002
+tig00000492	EVM	CDS	47351	48256	.	-	0	ID=ctg492.mRNA0002.CDS01;Parent=ctg492.mRNA0002
+
+tig00000492	EVM	gene	50000	50009	.	-	.	ID=gene0
+
+# This is a long gene overlapping others. It should not yield an interfeature
+# with the previous gene (since it overlaps) but it also should not prevent
+# subsequent interfeatures. The docstring points out that nested features like
+# this should be merged. When genes are merged, then the next interfeature
+# shouldn't be until 50086 to 50089.
+tig00000492	EVM	gene	50000	50085	.	-	.	ID=gene00
+tig00000492	EVM	gene	50009	50029	.	-	.	ID=gene1
+
+# (no interfeature here since genes are contiguous)
+
+tig00000492	EVM	gene	50030	50032	.	-	.	ID=gene2
+
+# gene3 overlaps with gene2, so should not give interfeature here
+
+tig00000492	EVM	gene	50030	50049	.	-	.	ID=gene3
+tig00000492	EVM	gene	50055	50070	.	-	.	ID=gene4
+
+# interfeature created here should be length 1 (50071 to 50071)
+
+tig00000492	EVM	gene	50072	50075	.	-	.	ID=gene5
+
+# interfeature should be 50076 to 50089
+
+tig00000492	EVM	gene	50090	50100	.	-	.	ID=gene6
