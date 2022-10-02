@@ -404,7 +404,8 @@ def test_issue_197():
 
     # Previously this would fail with ValueError due to using the stop position
     # of the last item on the previous chrom as the start position.
-    db = gffutils.create_db('issue_197.gff', ':memory:', merge_strategy='error')
+
+    db = gffutils.create_db(gffutils.example_filename('issue_197.gff'), ':memory:', merge_strategy='error')
     genes = list(db.features_of_type('gene'))
     igss = list( db.interfeatures(genes,new_featuretype='intergenic_space') )
 
