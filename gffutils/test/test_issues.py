@@ -92,7 +92,7 @@ def test_issue_107():
     )
     assert [str(i) for i in interfeatures] == [
         "chr1\tgffutils_derived\tinter_gene_gene\t6\t9\t.\t.\t.\tID=a,b;",
-        "chr2\tgffutils_derived\tinter_gene_gene\t16\t54\t.\t-\t.\tID=c,d;",
+        "chr2\tgffutils_derived\tinter_gene_gene\t51\t54\t.\t-\t.\tID=c,d;",
     ]
 
 
@@ -184,9 +184,10 @@ def test_pr_139():
     inter = list(db.interfeatures(exons))
 
     # previously, the first exon's attributes would show up in subsequent merged features
-    assert exons[0].attributes["Name"][0] not in inter[1].attributes["Name"]
-    assert exons[0].attributes["Name"][0] not in inter[2].attributes["Name"]
-    assert exons[0].attributes["Name"][0] not in inter[3].attributes["Name"]
+    first_name = exons[0].attributes["Name"][0]
+    for i in inter[1:]:
+        if "Name" in i.attributes:
+            assert first_name not in i.attributes["Name"], str(i)
 
 
 def test_pr_144():
@@ -415,5 +416,14 @@ def test_issue_197():
 
     db = db.update(igss, transform=transform, merge_strategy='error')
 
-    for i in db.all_features(order_by=('seqid', 'start')):
+    obs = list(db.features_of_type('intergenic_space'))
+    for i in obs:
         print(i)
+
+    assert [str(i) for i in obs] == [
+        'tig00000492\tgffutils_derived\tintergenic_space\t47236\t47350\t.\t-\t.\tID=ctg492.gene0001-ctg492.gene0002;Name=gene0001,gene0002',
+        'tig00000492\tgffutils_derived\tintergenic_space\t48257\t49999\t.\t-\t.\tID=ctg492.gene0002-gene0;Name=gene0002',
+        'tig00000492\tgffutils_derived\tintergenic_space\t50050\t50054\t.\t-\t.\tID=gene3-gene4',
+        'tig00000492\tgffutils_derived\tintergenic_space\t50071\t50071\t.\t-\t.\tID=gene4-gene5',
+        'tig00000492\tgffutils_derived\tintergenic_space\t50076\t50089\t.\t-\t.\tID=gene5-gene6',
+    ]
