@@ -3,6 +3,21 @@
 Change log
 ==========
 
+Changes in v0.11.1
+------------------
+
+Bugfix: This fixes `#197 <https://github.com/daler/gffutils/issues/197>`_,
+where the :meth:`FeatureDB.interfeatures` function was not behaving correctly
+when computing inter-features crossing chromosomes and when overlapping
+features are provided. Behavior is still somewhat undefined for computing
+inter-features for multiple nested features, so the recommendation is still to
+merge features before providing them to this method.
+
+This also makes a minor maintenance change, replacing
+``sqlite3.OptimizedUnicode`` with ``str``. Since Python 3.3, the former has
+been an alias to the latter, but this alias will be removed in Python 3.12.
+Making the change now avoids a deprecation warning.
+
 Changes in v0.11
 ----------------
 

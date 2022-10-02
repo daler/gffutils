@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Change log &mdash; gffutils 0.11.0 documentation</title>
+  <title>Change log &mdash; gffutils 0.11.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -33,7 +33,7 @@
             <a href="index.html" class="icon icon-home"> gffutils
           </a>
               <div class="version">
-                0.11.0
+                0.11.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -54,6 +54,7 @@
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Change log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#changes-in-v0-11-1">Changes in v0.11.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#changes-in-v0-11">Changes in v0.11</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#changes-in-v0-10-1">Changes in v0.10.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#changes-in-v0-10">Changes in v0.10</a></li>
@@ -100,6 +101,19 @@
              
   <section id="change-log">
 <h1>Change log<a class="headerlink" href="#change-log" title="Permalink to this heading"></a></h1>
+<section id="changes-in-v0-11-1">
+<h2>Changes in v0.11.1<a class="headerlink" href="#changes-in-v0-11-1" title="Permalink to this heading"></a></h2>
+<p>Bugfix: This fixes <a class="reference external" href="https://github.com/daler/gffutils/issues/197">#197</a>,
+where the <code class="xref py py-meth docutils literal notranslate"><span class="pre">FeatureDB.interfeatures()</span></code> function was not behaving correctly
+when computing inter-features crossing chromosomes and when overlapping
+features are provided. Behavior is still somewhat undefined for computing
+inter-features for multiple nested features, so the recommendation is still to
+merge features before providing them to this method.</p>
+<p>This also makes a minor maintenance change, replacing
+<code class="docutils literal notranslate"><span class="pre">sqlite3.OptimizedUnicode</span></code> with <code class="docutils literal notranslate"><span class="pre">str</span></code>. Since Python 3.3, the former has
+been an alias to the latter, but this alias will be removed in Python 3.12.
+Making the change now avoids a deprecation warning.</p>
+</section>
 <section id="changes-in-v0-11">
 <h2>Changes in v0.11<a class="headerlink" href="#changes-in-v0-11" title="Permalink to this heading"></a></h2>
 <p>This is largely a bugfix release, many thanks to contributors Rory Kirchner,
