@@ -17,6 +17,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -71,6 +72,7 @@
 <li class="toctree-l3"><a class="reference internal" href="gffutils.interface.FeatureDB.add_relation.html">gffutils.interface.FeatureDB.add_relation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gffutils.interface.FeatureDB.set_pragmas.html">gffutils.interface.FeatureDB.set_pragmas</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">gffutils.interface.FeatureDB.interfeatures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#gffutils.interface.FeatureDB.interfeatures"><code class="docutils literal notranslate"><span class="pre">FeatureDB.interfeatures()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#gffutils.interface.FeatureDB.interfeatures">interfeatures</a></li>
 </ul>
 </li>
@@ -126,7 +128,8 @@ return the introns.  If <code class="docutils literal notranslate"><span class="
 will return the intergenic regions.</p>
 <p>Providing N features will return N - 1 new features.</p>
 <p>This method purposefully does <em>not</em> do any merging or sorting of
-coordinates, so you may want to use <a class="reference internal" href="gffutils.interface.FeatureDB.merge.html#gffutils.interface.FeatureDB.merge" title="gffutils.interface.FeatureDB.merge"><code class="xref py py-meth docutils literal notranslate"><span class="pre">FeatureDB.merge()</span></code></a> first, or
+coordinates. So nested or overlapping features may not behave as you
+might expect. You may want to use <a class="reference internal" href="gffutils.interface.FeatureDB.merge.html#gffutils.interface.FeatureDB.merge" title="gffutils.interface.FeatureDB.merge"><code class="xref py py-meth docutils literal notranslate"><span class="pre">FeatureDB.merge()</span></code></a> first, and
 when selecting features use the <code class="docutils literal notranslate"><span class="pre">order_by</span></code> kwarg, e.g.,
 <code class="docutils literal notranslate"><span class="pre">db.features_of_type('gene',</span> <span class="pre">order_by=('seqid',</span> <span class="pre">'start'))</span></code>.</p>
 <dl class="field-list simple">

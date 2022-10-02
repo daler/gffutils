@@ -17,6 +17,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -55,6 +56,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-gffutils"><code class="docutils literal notranslate"><span class="pre">gffutils</span></code></a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../api.html#create-a-database">Create a database</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">gffutils.create.create_db</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#gffutils.create.create_db"><code class="docutils literal notranslate"><span class="pre">create_db()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#gffutils.create.create_db">create_db</a></li>
 </ul>
 </li>
@@ -262,10 +264,7 @@ list can contain one or more of [‘seqid’, ‘source’, ‘featuretype’,
 ‘score’, ‘strand’, ‘frame’].  The resulting merged fields will be
 strings of comma-separated values.  Note that ‘start’ and ‘end’ are not
 available, since these fields need to be integers.</p></li>
-<li><p><strong>text_factory</strong> (<em>callable</em>) – Text factory to use for the sqlite3 database.  See
-<a class="reference external" href="https://docs.python.org/2/library/">https://docs.python.org/2/library/</a>                sqlite3.html#sqlite3.Connection.text_factory
-for details. The default sqlite3.OptimizedUnicode will return Unicode
-objects only for non-ASCII data, and bytestrings otherwise.</p></li>
+<li><p><strong>text_factory</strong> (<em>callable</em>) – Text factory to use for the sqlite3 database.</p></li>
 <li><p><strong>pragmas</strong> (<em>dict</em>) – Dictionary of pragmas used when creating the sqlite3 database. See
 <a class="reference external" href="http://www.sqlite.org/pragma.html">http://www.sqlite.org/pragma.html</a> for a list of available pragmas.  The
 defaults are stored in constants.default_pragmas, which can be used as

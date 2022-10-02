@@ -16,6 +16,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -148,7 +149,7 @@
         <span class="n">disable_infer_transcripts</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">infer_gene_extent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">force_merge_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">text_factory</span><span class="o">=</span><span class="n">sqlite3</span><span class="o">.</span><span class="n">OptimizedUnicode</span><span class="p">,</span>
+        <span class="n">text_factory</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
         <span class="n">pragmas</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">default_pragmas</span><span class="p">,</span>
         <span class="n">_keep_tempfiles</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">directives</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1192,7 +1193,7 @@
     <span class="n">force_dialect_check</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">from_string</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">keep_order</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">text_factory</span><span class="o">=</span><span class="n">sqlite3</span><span class="o">.</span><span class="n">OptimizedUnicode</span><span class="p">,</span>
+    <span class="n">text_factory</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
     <span class="n">force_merge_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">pragmas</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">default_pragmas</span><span class="p">,</span>
     <span class="n">sort_attribute_values</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -1402,11 +1403,7 @@
 <span class="sd">        available, since these fields need to be integers.</span>
 
 <span class="sd">    text_factory : callable</span>
-<span class="sd">        Text factory to use for the sqlite3 database.  See</span>
-<span class="sd">        https://docs.python.org/2/library/\</span>
-<span class="sd">                sqlite3.html#sqlite3.Connection.text_factory</span>
-<span class="sd">        for details. The default sqlite3.OptimizedUnicode will return Unicode</span>
-<span class="sd">        objects only for non-ASCII data, and bytestrings otherwise.</span>
+<span class="sd">        Text factory to use for the sqlite3 database.</span>
 
 <span class="sd">    pragmas : dict</span>
 <span class="sd">        Dictionary of pragmas used when creating the sqlite3 database. See</span>
