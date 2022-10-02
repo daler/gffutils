@@ -399,3 +399,20 @@ def test_issue_181():
         return ','.join(f['ID'])
 
     db.update(introns, id_spec={'intron': [intron_id]})
+
+def test_issue_197():
+
+    # Previously this would fail with ValueError due to using the stop position
+    # of the last item on the previous chrom as the start position.
+    db = gffutils.create_db('issue_197.gff', ':memory:', merge_strategy='error')
+    genes = list(db.features_of_type('gene'))
+    igss = list( db.interfeatures(genes,new_featuretype='intergenic_space') )
+
+    def transform(f):
+        f['ID'] = [ '-'.join(f.attributes['ID']) ]
+        return f
+
+    db = db.update(igss, transform=transform, merge_strategy='error')
+
+    for i in db.all_features(order_by=('seqid', 'start')):
+        print(i)
