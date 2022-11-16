@@ -37,10 +37,10 @@ jobs:
       - name: run unit tests
         run: |
           eval "$(conda shell.bash hook)"
-          mamba install -y -p ./env --file optional-requirements.txt nose
+          mamba install -y -p ./env --file optional-requirements.txt pytest
 
           conda activate ./env
-          nosetests -v --with-doctest -a '!slow'
+          pytest -v --doctest-modules -m 'not slow'
           conda deactivate
 
       - name: doctests

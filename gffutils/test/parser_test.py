@@ -1,9 +1,10 @@
 import tempfile
-from nose.tools import assert_raises
 from gffutils import parser, create, feature, iterators, constants, helpers, exceptions
 from gffutils import example_filename, create_db
 from . import attr_test_cases
 from textwrap import dedent
+
+import pytest
 
 TEST_FILENAMES = [
     example_filename(i)
@@ -88,10 +89,10 @@ def test_empty_recontruct():
     reconstructing attributes with incomplete information returns empty string
     """
     assert parser._reconstruct(None, constants.dialect) == ""
-    assert_raises(
-        exceptions.AttributeStringError, parser._reconstruct, dict(ID="asdf"), None
-    )
-    assert_raises(exceptions.AttributeStringError, parser._reconstruct, None, None)
+    with pytest.raises(exceptions.AttributeStringError):
+        parser._reconstruct(dict(ID="asdf"), None)
+    with pytest.raises(exceptions.AttributeStringError):
+        parser._reconstruct(None, None)
 
 
 def test_empty_split_keyvals():
