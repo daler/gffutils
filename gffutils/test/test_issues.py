@@ -10,8 +10,8 @@ from textwrap import dedent
 import gffutils
 from gffutils import feature
 from gffutils import merge_criteria as mc
-from nose.tools import assert_raises
 
+import pytest
 
 def test_issue_79():
     gtf = gffutils.example_filename("keep-order-test.gtf")
@@ -324,9 +324,12 @@ def test_issue_157():
     #   TypeError: merge() got an unexpected keyword argument 'ignore_strand'
     #
     # Now changing to ValueError and suggesting a fix. 
-    assert_raises(ValueError, db.children_bp, gene, child_featuretype='exon', merge=True, ignore_strand=True)
-    assert_raises(ValueError, db.children_bp, gene, ignore_strand=True, nonexistent=True)
-    assert_raises(TypeError, db.children_bp, gene, nonexistent=True)
+    with pytest.raises(ValueError):
+        db.children_bp(gene, child_featuretype='exon', merge=True, ignore_strand=True)
+    with pytest.raises(ValueError):
+        db.children_bp(gene, ignore_strand=True, nonexistent=True)
+    with pytest.raises(TypeError):
+        db.children_bp(gene, nonexistent=True)
 
     # The way to do it now is the following (we can omit the mc.feature_type
     # since we're preselecting for exons anyway):
@@ -393,7 +396,8 @@ def test_issue_181():
     introns = db.create_introns()
 
     # This now warns that the provided ID key has multiple values.
-    assert_raises(ValueError, db.update, introns)
+    with pytest.raises(ValueError):
+        db.update(introns)
 
     # The fix is to provide a custom intron ID converter.
     def intron_id(f):

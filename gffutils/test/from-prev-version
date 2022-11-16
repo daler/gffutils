@@ -4,11 +4,11 @@ from ..__init__ import example_filename
 import sys
 import os
 import sqlite3
-import nose.tools as nt
 import difflib
 import pprint
 import copy
 
+import pytest
 
 testdbfn_gtf = ':memory:'
 testdbfn_gff = ':memory:'
@@ -709,7 +709,8 @@ chr2L	protein_coding	stop_codon	9277	9279	.	+	0	gene_id "FBgn0031208"; transcrip
                     attributes=''),
            ] 
         merged = self.G.merge_features(diff_strands)
-        nt.assert_raises(ValueError, list, merged)
+        with pytest.raises(ValueError):
+            list(merged)
 
         # But this should run without raising an error
         merged = list(self.G.merge_features(diff_strands,ignore_strand=True))
@@ -738,7 +739,8 @@ chr2L	protein_coding	stop_codon	9277	9279	.	+	0	gene_id "FBgn0031208"; transcrip
                     attributes=''),
            ] 
         merged = self.G.merge_features(diff_chroms)
-        nt.assert_raises(NotImplementedError, list, merged)
+        with pytest.raises(NotImplementedError):
+           list(merged)
         exons = self.G.children('FBgn0031208',featuretype='exon', level=2)
         merged_exons = self.G.merge_features(exons)
         observed = list(merged_exons)
@@ -963,11 +965,13 @@ FBtr0300690	FBgn0031208	chr2L	+	7529	9484	7680	9276	3	7529,8193,8668,	8116,8589,
     def test_too_deep(self):
         def f():
             list(self.G.children('FBgn0031208', level=3))
-        nt.assert_raises(NotImplementedError, f)
+        with pytest.raises(NotImplementedError):
+            f()
 
         def f():
             list(self.G.parents('FBgn0031208', level=3))
-        nt.assert_raises(NotImplementedError, f)
+        with pytest.raises(NotImplementedError):
+            f()
 
 
 class TestGFFDBClass(GenericDBClass):
