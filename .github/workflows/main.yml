@@ -24,13 +24,11 @@ jobs:
           source "${HOME}/conda/etc/profile.d/conda.sh"
           source "${HOME}/conda/etc/profile.d/mamba.sh"
           which conda
-          conda --version
-          exit 1
           conda config --system --add channels defaults
           conda config --system --add channels bioconda
           conda config --system --add channels conda-forge
           conda config --system --set channel_priority strict
-          conda create -y -n gffutils-env \
+          mamba create -y -n gffutils-env \
             python=${{ matrix.python-version }} \
             --file requirements.txt
 
@@ -45,7 +43,7 @@ jobs:
         run: |
           source "${HOME}/conda/etc/profile.d/conda.sh"
           source "${HOME}/conda/etc/profile.d/mamba.sh"
-          conda install -y -n gffutils-env --file optional-requirements.txt pytest hypothesis
+          mamba install -y -n gffutils-env --file optional-requirements.txt pytest hypothesis
 
           conda activate gffutils-env
           pytest -v --doctest-modules gffutils
@@ -64,7 +62,7 @@ jobs:
         run: |
           source "${HOME}/conda/etc/profile.d/conda.sh"
           source "${HOME}/conda/etc/profile.d/mamba.sh"
-          conda install -y -n gffutils-env --file docs-requirements.txt
+          mamba install -y -n gffutils-env --file docs-requirements.txt
           conda activate gffutils-env
           (cd doc && make clean doctest)
           conda deactivate
