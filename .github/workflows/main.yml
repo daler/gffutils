@@ -37,7 +37,7 @@ jobs:
       - name: run unit tests
         run: |
           eval "$(conda shell.bash hook)"
-          mamba install -y -n gffutils-env --file optional-requirements.txt pytest hypothesis
+          conda install -y -n gffutils-env --file optional-requirements.txt pytest hypothesis
 
           conda activate gffutils-env
           pytest -v --doctest-modules gffutils
@@ -55,7 +55,7 @@ jobs:
         if: ${{ (matrix.python-version != 3.8) }}
         run: |
           eval "$(conda shell.bash hook)"
-          mamba install -y -n gffutils-env --file docs-requirements.txt
+          conda install -y -n gffutils-env --file docs-requirements.txt
           conda activate gffutils-env
           (cd doc && make clean doctest)
           conda deactivate
