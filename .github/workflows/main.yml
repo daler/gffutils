@@ -18,10 +18,12 @@ jobs:
 
       - name: conda env
         run: |
-          apt remove conda -y
+          sudo apt remove conda -y
+          wget -O Mambaforge.sh  "https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-$(uname)-$(uname -m).sh"
           curl -L -O "https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-$(uname)-$(uname -m).sh"
           bash Mambaforge-$(uname)-$(uname -m).sh
-          eval "$(conda shell.bash hook)"
+          source "${HOME}/conda/etc/profile.d/conda.sh"
+          source "${HOME}/conda/etc/profile.d/mamba.sh"
           which conda
           conda --version
           exit 1
@@ -42,7 +44,8 @@ jobs:
 
       - name: run unit tests
         run: |
-          eval "$(conda shell.bash hook)"
+          source "${HOME}/conda/etc/profile.d/conda.sh"
+          source "${HOME}/conda/etc/profile.d/mamba.sh"
           conda install -y -n gffutils-env --file optional-requirements.txt pytest hypothesis
 
           conda activate gffutils-env
@@ -60,7 +63,8 @@ jobs:
         # The workaround is to just not build the html docs on 3.8.
         if: ${{ (matrix.python-version != 3.8) }}
         run: |
-          eval "$(conda shell.bash hook)"
+          source "${HOME}/conda/etc/profile.d/conda.sh"
+          source "${HOME}/conda/etc/profile.d/mamba.sh"
           conda install -y -n gffutils-env --file docs-requirements.txt
           conda activate gffutils-env
           (cd doc && make clean doctest)
