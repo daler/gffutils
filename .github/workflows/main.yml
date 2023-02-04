@@ -19,9 +19,10 @@ jobs:
       - name: conda env
         run: |
           eval "$(conda shell.bash hook)"
-          conda config --add channels defaults
-          conda config --add channels bioconda
-          conda config --add channels conda-forge
+          conda config --system --add channels defaults
+          conda config --system --add channels bioconda
+          conda config --system --add channels conda-forge
+          conda config --system --set channel_priority strict
           conda install -n base mamba -y
           mamba create -y -n gffutils-env \
             python=${{ matrix.python-version }} \
