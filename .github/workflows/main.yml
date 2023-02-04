@@ -40,7 +40,7 @@ jobs:
           mamba install -y -p ./env --file optional-requirements.txt pytest hypothesis
 
           conda activate ./env
-          pytest -v --doctest-modules -m 'not slow'
+          pytest -v --doctest-modules gffutils
           conda deactivate
 
       - name: doctests
