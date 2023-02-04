@@ -18,7 +18,6 @@ jobs:
 
       - name: conda env
         run: |
-          sudo apt remove conda -y
           wget -O Mambaforge.sh  "https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-$(uname)-$(uname -m).sh"
           curl -L -O "https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-$(uname)-$(uname -m).sh"
           bash Mambaforge-$(uname)-$(uname -m).sh
