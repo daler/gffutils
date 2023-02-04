@@ -71,7 +71,8 @@ jobs:
         # See above for note about 3.8
         if: ${{ (matrix.python-version != 3.8) }}
         run: |
-          eval "$(conda shell.bash hook)"
+          source "${HOME}/conda/etc/profile.d/conda.sh"
+          source "${HOME}/conda/etc/profile.d/mamba.sh"
           conda activate gffutils-env
           (cd doc && make html)
           conda deactivate
