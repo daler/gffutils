@@ -460,3 +460,9 @@ def test_issue_198():
     # Previous result, note leading space --------------------------->| |
     # assert f.attributes['description'] == ['WASP family homolog 7', ' pseudogene']
     assert f.attributes['description'] == ['WASP family homolog 7, pseudogene']
+
+    # But removing that space before "pseudogene" means it's interpreted as
+    # a multivalue attribute
+    line = 'NC_000001.11	BestRefSeq	gene	14362	29370	.	-	.	gene_id "WASH7P"; transcript_id ""; db_xref "GeneID:653635"; description "WASP family homolog 7,pseudogene"; gbkey "Gene"; gene "WASH7P"; gene_biotype "transcribed_pseudogene"; gene_synonym "FAM39F"; gene_synonym "WASH5P"; pseudo "true";'
+    f = feature.feature_from_line(line)
+    assert f.attributes['description'] == ['WASP family homolog 7', 'pseudogene']
