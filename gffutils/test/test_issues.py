@@ -471,3 +471,110 @@ def test_issue_198():
     line = "chr17	RefSeq	CDS	6806527	6806553	.	+	0	Name=CDS:NC_000083.5:LOC100040603;Parent=XM_001475631.1,"
     f = feature.feature_from_line(line)
     assert f.attributes['Parent'] == ['XM_001475631.1', '']
+
+
+def test_issue_207():
+
+    def _check(txt, expected_keys, dialect_trailing_semicolon):
+        db = gffutils.create_db(txt.replace(' ', '\t'), ':memory:', from_string=True)
+        assert [list(f.attributes.keys()) for f in db.all_features()] == expected_keys
+        assert db.dialect['trailing semicolon'] == dialect_trailing_semicolon
+
+    # All lines have trailing semicolon
+    _check(
+        txt=dedent("""\
+        chr1 AUGUSTUS gene 68330 73621 1 - . ID=g1903;
+        chr1 AUGUSTUS mRNA 68330 73621 1 - . ID=g1903.t1;Parent=g1903;
+        chr1 Pfam protein_match 73372 73618 1 - . ID=g1903.t1.d1;Parent=g1903.t1;
+        chr1 Pfam protein_hmm_match 73372 73618 1 - . ID=g1903.t1.d1.1;Parent=g1903.t1.d1;
+        """),
+        expected_keys = [
+            ['ID'],
+            ['ID', 'Parent'],
+            ['ID', 'Parent'],
+            ['ID', 'Parent'],
+        ],
+        dialect_trailing_semicolon=True
+    )
+
+    # First two lines have trailing semicolon. However, the heuristics of
+    # dialect selection, which favor attributes with more values (assuming more
+    # information), decides that this file does NOT have trailing semicolons.
+    _check(
+        txt=dedent("""\
+        chr1 AUGUSTUS gene 68330 73621 1 - . ID=g1903;
+        chr1 AUGUSTUS mRNA 68330 73621 1 - . ID=g1903.t1;Parent=g1903;
+        chr1 Pfam protein_match 73372 73618 1 - . ID=g1903.t1.d1;Parent=g1903.t1
+        chr1 Pfam protein_hmm_match 73372 73618 1 - . ID=g1903.t1.d1.1;Parent=g1903.t1.d1
+        """),
+        expected_keys = [
+            ['ID', ''],
+            ['ID', 'Parent', ''],
+            ['ID', 'Parent'],
+            ['ID', 'Parent'],
+        ],
+        dialect_trailing_semicolon=False,
+    )
+
+    # APPARENTLY INCONSISTENT: The only thing difference here is that the
+    # Parent attribute has been removed, otherwise matches above (first two
+    # have trailing semicolon). But now there are no empty keys.
+    #
+    # This is expected behavior, because there are no attributes with more keys
+    # as above to give higher weight, and to break the tie between with and
+    # without trailing semicolon, falls back to first dialect observed.
+    _check(
+        txt=dedent("""\
+        chr1 AUGUSTUS gene 68330 73621 1 - . ID=g1903;
+        chr1 AUGUSTUS mRNA 68330 73621 1 - . ID=g1903.t1;
+        chr1 Pfam protein_match 73372 73618 1 - . ID=g1903.t1.d1
+        chr1 Pfam protein_hmm_match 73372 73618 1 - . ID=g1903.t1.d1.1
+        """),
+        expected_keys=[
+            ['ID'],
+            ['ID'],
+            ['ID'],
+            ['ID']
+        ],
+        dialect_trailing_semicolon=True,
+    )
+
+    # We can convince the heuristics to think there should be NO trailing
+    # semicolon by giving one more line as evidence. Only difference is from
+    # above is the last line.
+    _check(
+        txt=dedent("""\
+        chr1 AUGUSTUS gene 68330 73621 1 - . ID=g1903;
+        chr1 AUGUSTUS mRNA 68330 73621 1 - . ID=g1903.t1;
+        chr1 Pfam protein_match 73372 73618 1 - . ID=g1903.t1.d1
+        chr1 Pfam protein_hmm_match 73372 73618 1 - . ID=g1903.t1.d1.1
+        chr1 Pfam protein_hmm_match 73372 73618 1 - . ID=g1904.t1.d1.1
+        """),
+        expected_keys=[
+            ['ID', ''],
+            ['ID', ''],
+            ['ID'],
+            ['ID'],
+            ['ID'],
+        ],
+        dialect_trailing_semicolon=False,
+    )
+
+
+    # Again seems inconsistent at first, but heuristics break ties by
+    # preferring first dialect, which here is no trailing semicolon.
+    _check(
+        txt=dedent("""\
+        chr1 AUGUSTUS gene 68330 73621 1 - . ID=g1903
+        chr1 AUGUSTUS mRNA 68330 73621 1 - . ID=g1903.t1
+        chr1 Pfam protein_match 73372 73618 1 - . ID=g1903.t1.d1;
+        chr1 Pfam protein_hmm_match 73372 73618 1 - . ID=g1903.t1.d1.1;
+        """),
+        expected_keys=[
+            ['ID'],
+            ['ID'],
+            ['ID', ''],
+            ['ID', '']
+        ],
+        dialect_trailing_semicolon=False,
+    )
