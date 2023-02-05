@@ -459,4 +459,4 @@ def test_issue_198():
 
     # Previous result, note leading space --------------------------->| |
     # assert f.attributes['description'] == ['WASP family homolog 7', ' pseudogene']
-    assert f.attributes['description'] == ['WASP family homolog 7 pseudogene']
+    assert f.attributes['description'] == ['WASP family homolog 7, pseudogene']
