@@ -341,16 +341,25 @@ def _split_keyvals(keyval_str, dialect=None):
             val = val[1:-1]
             dialect["quoted GFF2 values"] = True
         if val:
+
             # TODO: if there are extra commas for a value, just use empty
             # strings
             # quals[key].extend([v for v in val.split(',') if v])
-            vals = val.split(",")
-            if (len(vals) > 1) and dialect["repeated keys"]:
-                raise AttributeStringError(
-                    "Internally inconsistent attributes formatting: "
-                    "some have repeated keys, some do not."
-                )
-            quals[key].extend(vals)
+
+            # See issue #198, where 
+            if dialect["repeated keys"]:
+                quals[key].append(val)
+            else:
+                vals = val.split(",")
+
+                # If anything starts with a leading space, then we infer that
+                # it was part of a description or some other typographical
+                # interpretation, not a character to split multiple vals on --
+                # and append the original val rather than the split vals.
+                if any([i[0] == " " for i in vals]):
+                    quals[key].append(val)
+                else:
+                    quals[key].extend(vals)
 
         # keep track of the order of keys
         dialect["order"].append(key)
