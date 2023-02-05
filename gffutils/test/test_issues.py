@@ -466,3 +466,8 @@ def test_issue_198():
     line = 'NC_000001.11	BestRefSeq	gene	14362	29370	.	-	.	gene_id "WASH7P"; transcript_id ""; db_xref "GeneID:653635"; description "WASP family homolog 7,pseudogene"; gbkey "Gene"; gene "WASH7P"; gene_biotype "transcribed_pseudogene"; gene_synonym "FAM39F"; gene_synonym "WASH5P"; pseudo "true";'
     f = feature.feature_from_line(line)
     assert f.attributes['description'] == ['WASP family homolog 7', 'pseudogene']
+
+    # Confirm behavior of corner cases like a trailing comma
+    line = "chr17	RefSeq	CDS	6806527	6806553	.	+	0	Name=CDS:NC_000083.5:LOC100040603;Parent=XM_001475631.1,"
+    f = feature.feature_from_line(line)
+    assert f.attributes['Parent'] == ['XM_001475631.1', '']

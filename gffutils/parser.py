@@ -356,7 +356,7 @@ def _split_keyvals(keyval_str, dialect=None):
                 # it was part of a description or some other typographical
                 # interpretation, not a character to split multiple vals on --
                 # and append the original val rather than the split vals.
-                if any([i[0] == " " for i in vals]):
+                if any([i[0] == " " for i in vals if i]):
                     quals[key].append(val)
                 else:
                     quals[key].extend(vals)
