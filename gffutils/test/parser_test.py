@@ -43,15 +43,8 @@ def test_directives():
     assert db.directives == ["directive1 example"], db.directives
 
 
-def test_split_attrs():
-    # nosetests generator for all the test cases in attr_test_cases.  (note no
-    # docstring for this test function so that nosetests -v will print the test
-    # cases)
-    for (attr_str, attr_dict, acceptable_reconstruction) in attr_test_cases.attrs:
-        yield attrs_OK, attr_str, attr_dict, acceptable_reconstruction
-
-
-def attrs_OK(attr_str, attr_dict, acceptable_reconstruction=None):
+@pytest.mark.parametrize("item", attr_test_cases.attrs)
+def test_attrs_OK(item):
     """
     Given an attribute string and a dictionary of what you expect, test the
     attribute splitting and reconstruction (invariant roundtrip).
@@ -60,7 +53,9 @@ def attrs_OK(attr_str, attr_dict, acceptable_reconstruction=None):
     (see attr_test_cases.py for details); `acceptable_reconstruction` handles
     those.
     """
+    attr_str, attr_dict, acceptable_reconstruction = item
     result, dialect = parser._split_keyvals(attr_str)
+    result = dict(result)
     assert result == attr_dict, result
 
     reconstructed = parser._reconstruct(result, dialect, keep_order=True)

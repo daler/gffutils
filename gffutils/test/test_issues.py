@@ -431,3 +431,43 @@ def test_issue_197():
         'tig00000492\tgffutils_derived\tintergenic_space\t50071\t50071\t.\t-\t.\tID=gene4-gene5',
         'tig00000492\tgffutils_derived\tintergenic_space\t50076\t50089\t.\t-\t.\tID=gene5-gene6',
     ]
+
+def test_issue_198():
+    line = 'NC_000001.11	BestRefSeq	gene	14362	29370	.	-	.	gene_id "WASH7P"; transcript_id ""; db_xref "GeneID:653635"; db_xref "HGNC:HGNC:38034"; description "WASP family homolog 7, pseudogene"; gbkey "Gene"; gene "WASH7P"; gene_biotype "transcribed_pseudogene"; gene_synonym "FAM39F"; gene_synonym "WASH5P"; pseudo "true";'
+
+    # Original issue #198 is that this fails with:
+    #
+    #   gffutils.exceptions.AttributeStringError: Internally inconsistent
+    #   attributes formatting: some have repeated keys, some do not.
+    #
+    # This is because the dialect inference sees the two db_xref keys, and
+    # correctly assumes the dialect uses repeated keys rather than
+    # multiple, comma-separated values -- but there's a comma in the
+    # description.
+    #
+    # So we need to figure out the best way of interpreting a comma in cases
+    # like this. It seems like the best solution is to assume that the presence
+    # of repeated keys always wins.
+    f = feature.feature_from_line(line)
+
+    assert f.attributes['description'] == ['WASP family homolog 7, pseudogene']
+
+    # If we remove one of the db_xref keys, then the parser sees the comma and
+    # figures it's a multivalue key.
+    line = 'NC_000001.11	BestRefSeq	gene	14362	29370	.	-	.	gene_id "WASH7P"; transcript_id ""; db_xref "GeneID:653635"; description "WASP family homolog 7, pseudogene"; gbkey "Gene"; gene "WASH7P"; gene_biotype "transcribed_pseudogene"; gene_synonym "FAM39F"; gene_synonym "WASH5P"; pseudo "true";'
+    f = feature.feature_from_line(line)
+
+    # Previous result, note leading space --------------------------->| |
+    # assert f.attributes['description'] == ['WASP family homolog 7', ' pseudogene']
+    assert f.attributes['description'] == ['WASP family homolog 7, pseudogene']
+
+    # But removing that space before "pseudogene" means it's interpreted as
+    # a multivalue attribute
+    line = 'NC_000001.11	BestRefSeq	gene	14362	29370	.	-	.	gene_id "WASH7P"; transcript_id ""; db_xref "GeneID:653635"; description "WASP family homolog 7,pseudogene"; gbkey "Gene"; gene "WASH7P"; gene_biotype "transcribed_pseudogene"; gene_synonym "FAM39F"; gene_synonym "WASH5P"; pseudo "true";'
+    f = feature.feature_from_line(line)
+    assert f.attributes['description'] == ['WASP family homolog 7', 'pseudogene']
+
+    # Confirm behavior of corner cases like a trailing comma
+    line = "chr17	RefSeq	CDS	6806527	6806553	.	+	0	Name=CDS:NC_000083.5:LOC100040603;Parent=XM_001475631.1,"
+    f = feature.feature_from_line(line)
+    assert f.attributes['Parent'] == ['XM_001475631.1', '']
