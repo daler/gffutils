@@ -68,9 +68,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>gffutils.create</li>
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">gffutils.create</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -109,7 +109,7 @@
 
 
 <span class="k">def</span> <span class="nf">deprecation_handler</span><span class="p">(</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    As things change from version to version, deal with them here.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># After reconsidering, let&#39;s leave `infer_gene_extent` for another release.</span>
@@ -155,7 +155,7 @@
         <span class="n">directives</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Base class for _GFFDBCreator and _GTFDBCreator; see create_db()</span>
 <span class="sd">        function for docs</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -246,7 +246,7 @@
         <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_autoincrements</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
 
     <span class="k">def</span> <span class="nf">_id_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Given a Feature from self.iterator, figure out what the ID should be.</span>
 
 <span class="sd">        This uses `self.id_spec` to identify the ID.</span>
@@ -315,7 +315,7 @@
         <span class="k">return</span> <span class="n">feature</span><span class="o">.</span><span class="n">Feature</span><span class="p">(</span><span class="n">dialect</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">iterator</span><span class="o">.</span><span class="n">dialect</span><span class="p">,</span> <span class="o">**</span><span class="n">results</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_do_merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">merge_strategy</span><span class="p">,</span> <span class="n">add_duplicate</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Different merge strategies upon name conflicts.</span>
 
 <span class="sd">        &quot;error&quot;:</span>
@@ -458,7 +458,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid merge strategy &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">merge_strategy</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">_add_duplicate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idspecid</span><span class="p">,</span> <span class="n">newid</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Adds a duplicate ID (as identified by id_spec) and its new ID to the</span>
 <span class="sd">        duplicates table so that they can be later searched for merging.</span>
 
@@ -473,7 +473,7 @@
         <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-                <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                INSERT INTO duplicates</span>
 <span class="sd">                (idspecid, newid)</span>
 <span class="sd">                VALUES (?, ?)&quot;&quot;&quot;</span><span class="p">,</span>
@@ -481,7 +481,7 @@
             <span class="p">)</span>
         <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">ProgrammingError</span><span class="p">:</span>
             <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-                <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                INSERT INTO duplicates</span>
 <span class="sd">                (idspecid, newid)</span>
 <span class="sd">                VALUES (?, ?)&quot;&quot;&quot;</span><span class="p">,</span>
@@ -494,7 +494,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_candidate_merges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Identifies those features that originally had the same ID as `f`</span>
 <span class="sd">        (according to the id_spec), but were modified because of duplicate</span>
 <span class="sd">        IDs.</span>
@@ -525,7 +525,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">set_pragmas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pragmas</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set pragmas for the current database connection.</span>
 
 <span class="sd">        Parameters</span>
@@ -540,7 +540,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_init_tables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Table creation</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
@@ -550,7 +550,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Various last-minute stuff to perform after file has been parsed and</span>
 <span class="sd">        imported.</span>
 
@@ -559,13 +559,13 @@
         <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
         <span class="n">directives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">directives</span>
         <span class="n">c</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span>
-            <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                      INSERT INTO directives VALUES (?)</span>
 <span class="sd">                      &quot;&quot;&quot;</span><span class="p">,</span>
             <span class="p">((</span><span class="n">i</span><span class="p">,)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">directives</span><span class="p">),</span>
         <span class="p">)</span>
         <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            INSERT INTO meta (version, dialect)</span>
 <span class="sd">            VALUES (:version, :dialect)&quot;&quot;&quot;</span><span class="p">,</span>
             <span class="nb">dict</span><span class="p">(</span>
@@ -574,7 +574,7 @@
         <span class="p">)</span>
 
         <span class="n">c</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span>
-            <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            INSERT OR REPLACE INTO autoincrements VALUES (?, ?)</span>
 <span class="sd">            &quot;&quot;&quot;</span><span class="p">,</span>
             <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_autoincrements</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span>
@@ -615,7 +615,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">iterator</span><span class="o">.</span><span class="n">warnings</span>
 
     <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calls various methods sequentially in order to fully build the</span>
 <span class="sd">        database.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -632,7 +632,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_update_relations</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Execute a query directly on the database.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
@@ -641,7 +641,7 @@
             <span class="k">yield</span> <span class="n">i</span>
 
     <span class="k">def</span> <span class="nf">_insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">cursor</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Insert a feature into the database.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
@@ -650,7 +650,7 @@
             <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">_INSERT</span><span class="p">,</span> <span class="n">feature</span><span class="o">.</span><span class="n">astuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_encoding</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">_replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">cursor</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Insert a feature into the database.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
@@ -664,7 +664,7 @@
 
 <span class="k">class</span> <span class="nc">_GFFDBCreator</span><span class="p">(</span><span class="n">_DBCreator</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        _DBCreator subclass specifically for working with GFF files.</span>
 
 <span class="sd">        create_db() delegates to this class -- see that function for docs</span>
@@ -706,7 +706,7 @@
                 <span class="n">fixed</span><span class="p">,</span> <span class="n">final_strategy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_do_merge</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">merge_strategy</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">final_strategy</span> <span class="o">==</span> <span class="s2">&quot;merge&quot;</span><span class="p">:</span>
                     <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-                        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">                        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                        UPDATE features SET attributes = ?</span>
 <span class="sd">                        WHERE id = ?</span>
 <span class="sd">                        &quot;&quot;&quot;</span><span class="p">,</span>
@@ -723,7 +723,7 @@
                             <span class="nb">getattr</span><span class="p">(</span><span class="n">fixed</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">force_merge_fields</span>
                         <span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">fixed</span><span class="o">.</span><span class="n">id</span><span class="p">]</span>
                         <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-                            <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">                            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                            UPDATE features SET %s</span>
 <span class="sd">                            WHERE id = ?</span>
 <span class="sd">                            &quot;&quot;&quot;</span>
@@ -740,7 +740,7 @@
             <span class="k">if</span> <span class="s2">&quot;Parent&quot;</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">attributes</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;Parent&quot;</span><span class="p">]:</span>
                     <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-                        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">                        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                        INSERT OR IGNORE INTO relations VALUES</span>
 <span class="sd">                        (?, ?, 1)</span>
 <span class="sd">                        &quot;&quot;&quot;</span><span class="p">,</span>
@@ -783,7 +783,7 @@
             <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT id FROM features&quot;</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="n">c</span><span class="p">:</span>
                 <span class="n">c2</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-                    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">                    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                           SELECT child FROM relations WHERE parent IN</span>
 <span class="sd">                           (SELECT child FROM relations WHERE parent = ?)</span>
 <span class="sd">                           &quot;&quot;&quot;</span><span class="p">,</span>
@@ -799,7 +799,7 @@
                     <span class="k">yield</span> <span class="nb">dict</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="n">child</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
         <span class="n">c</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span>
-            <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            INSERT OR IGNORE INTO relations VALUES</span>
 <span class="sd">            (:parent, :child, :level)</span>
 <span class="sd">            &quot;&quot;&quot;</span><span class="p">,</span>
@@ -818,7 +818,7 @@
 
 <span class="k">class</span> <span class="nc">_GTFDBCreator</span><span class="p">(</span><span class="n">_DBCreator</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        create_db() delegates to this class -- see that function for docs</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">transcript_key</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;transcript_key&quot;</span><span class="p">,</span> <span class="s2">&quot;transcript_id&quot;</span><span class="p">)</span>
@@ -874,7 +874,7 @@
                 <span class="n">fixed</span><span class="p">,</span> <span class="n">final_strategy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_do_merge</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">merge_strategy</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">final_strategy</span> <span class="o">==</span> <span class="s2">&quot;merge&quot;</span><span class="p">:</span>
                     <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-                        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">                        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                        UPDATE features SET attributes = ?</span>
 <span class="sd">                        WHERE id = ?</span>
 <span class="sd">                        &quot;&quot;&quot;</span><span class="p">,</span>
@@ -890,7 +890,7 @@
                             <span class="nb">getattr</span><span class="p">(</span><span class="n">fixed</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">force_merge_fields</span>
                         <span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">fixed</span><span class="o">.</span><span class="n">id</span><span class="p">]</span>
                         <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-                            <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">                            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                            UPDATE features SET %s</span>
 <span class="sd">                            WHERE id = ?</span>
 <span class="sd">                            &quot;&quot;&quot;</span>
@@ -927,7 +927,7 @@
             <span class="c1"># (e.g., the transcript-gene relation on pretty much every line in</span>
             <span class="c1"># a GTF) will only be included once.</span>
             <span class="n">c</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span>
-                <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                INSERT OR IGNORE INTO relations (parent, child, level)</span>
 <span class="sd">                VALUES (?, ?, ?)</span>
 <span class="sd">                &quot;&quot;&quot;</span><span class="p">,</span>
@@ -1003,7 +1003,7 @@
             <span class="c1"># only looking for genes.</span>
 
             <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-                <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                SELECT DISTINCT firstlevel.parent, relations.parent</span>
 <span class="sd">                FROM (</span>
 <span class="sd">                    SELECT DISTINCT parent</span>
@@ -1030,7 +1030,7 @@
                 <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">disable_infer_transcripts</span><span class="p">:</span>
                     <span class="c1"># transcript extent</span>
                     <span class="n">c2</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-                        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">                        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                        SELECT MIN(start), MAX(end), strand, seqid</span>
 <span class="sd">                        FROM features</span>
 <span class="sd">                        JOIN relations ON</span>
@@ -1080,7 +1080,7 @@
                     <span class="c1"># works</span>
                     <span class="k">if</span> <span class="n">gene_id</span> <span class="o">!=</span> <span class="n">last_gene_id</span><span class="p">:</span>
                         <span class="n">c2</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-                            <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">                            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                            SELECT MIN(start), MAX(end), strand, seqid</span>
 <span class="sd">                            FROM features</span>
 <span class="sd">                            JOIN relations ON</span>
@@ -1116,7 +1116,7 @@
                     <span class="n">n_features</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="k">def</span> <span class="nf">derived_feature_generator</span><span class="p">():</span>
-            <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Generator of items from the file that was just created...</span>
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span>
@@ -1161,7 +1161,7 @@
             <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">IntegrityError</span><span class="p">:</span>
                 <span class="n">fixed</span><span class="p">,</span> <span class="n">final_strategy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_do_merge</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s2">&quot;merge&quot;</span><span class="p">)</span>
                 <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-                    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">                    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                    UPDATE features SET attributes = ?</span>
 <span class="sd">                    WHERE id = ?</span>
 <span class="sd">                    &quot;&quot;&quot;</span><span class="p">,</span>
@@ -1204,7 +1204,7 @@
     <span class="n">disable_infer_transcripts</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a database from a GFF or GTF file.</span>
 
 <span class="sd">    For more details on when and how to use the kwargs below, see the examples</span>

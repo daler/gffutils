@@ -68,9 +68,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>gffutils.pybedtools_integration</li>
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">gffutils.pybedtools_integration</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -92,7 +92,7 @@
 
 
 <div class="viewcode-block" id="to_bedtool"><a class="viewcode-back" href="../../autodocs/gffutils.pybedtools_integration.to_bedtool.html#gffutils.pybedtools_integration.to_bedtool">[docs]</a><span class="k">def</span> <span class="nf">to_bedtool</span><span class="p">(</span><span class="n">iterator</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert any iterator into a pybedtools.BedTool object.</span>
 
 <span class="sd">    Note that the supplied iterator is not consumed by this function. To save</span>
@@ -116,7 +116,7 @@
     <span class="n">as_bed6</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">bedtools_227_or_later</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create 1-bp transcription start sites for all transcripts in the database</span>
 <span class="sd">    and return as a sorted pybedtools.BedTool object pointing to a temporary</span>
 <span class="sd">    file.</span>
@@ -268,7 +268,7 @@
         <span class="n">_merge_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">merge_kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">gen</span><span class="p">():</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generator of pybedtools.Intervals representing TSSes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">gene</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">features_of_type</span><span class="p">(</span><span class="s2">&quot;gene&quot;</span><span class="p">):</span>
@@ -296,7 +296,7 @@
             <span class="n">attrs</span> <span class="o">=</span> <span class="p">[</span><span class="n">attrs</span><span class="p">]</span>
 
         <span class="k">def</span> <span class="nf">to_bed</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Given a pybedtools.Interval, return a new Interval with the name</span>
 <span class="sd">            set according to the kwargs provided above.</span>
 <span class="sd">            &quot;&quot;&quot;</span>

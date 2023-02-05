@@ -68,9 +68,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>gffutils.interface</li>
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">gffutils.interface</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -95,7 +95,7 @@
 
 
 <span class="k">def</span> <span class="nf">assign_child</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Helper for add_relation()</span>
 <span class="sd">    Sets &#39;Parent&#39; attribute to parent[&#39;ID&#39;]</span>
 
@@ -124,7 +124,7 @@
 
 
 <span class="k">def</span> <span class="nf">_finalize_merge</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">feature_children</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Helper for FeatureDB.merge() to update source and assign children property</span>
 
 <span class="sd">    Parameters</span>
@@ -186,7 +186,7 @@
         <span class="n">sort_attribute_values</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">text_factory</span><span class="o">=</span><span class="n">sqlite3</span><span class="o">.</span><span class="n">OptimizedUnicode</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Connect to a database created by :func:`gffutils.create_db`.</span>
 
 <span class="sd">        Parameters</span>
@@ -276,7 +276,7 @@
         <span class="c1"># TODO: this is a good place to check for previous versions, and offer</span>
         <span class="c1"># to upgrade...</span>
         <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            SELECT version, dialect FROM meta</span>
 <span class="sd">            &quot;&quot;&quot;</span>
         <span class="p">)</span>
@@ -286,7 +286,7 @@
 
         <span class="c1"># Load directives from db</span>
         <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            SELECT directive FROM directives</span>
 <span class="sd">            &quot;&quot;&quot;</span>
         <span class="p">)</span>
@@ -296,7 +296,7 @@
         <span class="c1"># autoincrementing from where we last left off (instead of from 1,</span>
         <span class="c1"># which would cause name collisions)</span>
         <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            SELECT base, n FROM autoincrements</span>
 <span class="sd">            &quot;&quot;&quot;</span>
         <span class="p">)</span>
@@ -315,7 +315,7 @@
             <span class="p">)</span></div>
 
 <div class="viewcode-block" id="FeatureDB.set_pragmas"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.set_pragmas.html#gffutils.interface.FeatureDB.set_pragmas">[docs]</a>    <span class="k">def</span> <span class="nf">set_pragmas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pragmas</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set pragmas for the current database connection.</span>
 
 <span class="sd">        Parameters</span>
@@ -330,7 +330,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">_feature_returner</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a feature, adding additional database-specific defaults</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;dialect&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialect</span><span class="p">)</span>
@@ -340,7 +340,7 @@
 
     <span class="k">def</span> <span class="nf">_analyzed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            SELECT name FROM sqlite_master WHERE type=&#39;table&#39;</span>
 <span class="sd">            AND name=&#39;sqlite_stat1&#39;;</span>
 <span class="sd">            &quot;&quot;&quot;</span>
@@ -348,12 +348,12 @@
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">res</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span>
 
 <div class="viewcode-block" id="FeatureDB.schema"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.schema.html#gffutils.interface.FeatureDB.schema">[docs]</a>    <span class="k">def</span> <span class="nf">schema</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the database schema as a string.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
         <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            SELECT sql FROM sqlite_master</span>
 <span class="sd">            &quot;&quot;&quot;</span>
         <span class="p">)</span>
@@ -381,7 +381,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_feature_returner</span><span class="p">(</span><span class="o">**</span><span class="n">results</span><span class="p">)</span>
 
 <div class="viewcode-block" id="FeatureDB.count_features_of_type"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.count_features_of_type.html#gffutils.interface.FeatureDB.count_features_of_type">[docs]</a>    <span class="k">def</span> <span class="nf">count_features_of_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Simple count of features.</span>
 
 <span class="sd">        Can be faster than &quot;grep&quot;, and is faster than checking the length of</span>
@@ -403,7 +403,7 @@
         <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">featuretype</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-                <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                SELECT count() FROM features</span>
 <span class="sd">                WHERE featuretype = ?</span>
 <span class="sd">                &quot;&quot;&quot;</span><span class="p">,</span>
@@ -411,7 +411,7 @@
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-                <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                SELECT count() FROM features</span>
 <span class="sd">                &quot;&quot;&quot;</span>
             <span class="p">)</span>
@@ -430,7 +430,7 @@
         <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">completely_within</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns an iterator of :class:`gffutils.Feature` objects.</span>
 
 <span class="sd">        Parameters</span>
@@ -459,7 +459,7 @@
         <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">completely_within</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        For each parent of type `featuretype`, yield a list L of that parent</span>
 <span class="sd">        and all of its children (`[parent] + list(children)`). The parent will</span>
 <span class="sd">        always be L[0].</span>
@@ -486,7 +486,7 @@
         <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">completely_within</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Iterate through the entire database.</span>
 
 <span class="sd">        Returns</span>
@@ -510,7 +510,7 @@
             <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">_feature_returner</span><span class="p">(</span><span class="o">**</span><span class="n">i</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="FeatureDB.featuretypes"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.featuretypes.html#gffutils.interface.FeatureDB.featuretypes">[docs]</a>    <span class="k">def</span> <span class="nf">featuretypes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Iterate over feature types found in the database.</span>
 
 <span class="sd">        Returns</span>
@@ -519,7 +519,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
         <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            SELECT DISTINCT featuretype from features</span>
 <span class="sd">            &quot;&quot;&quot;</span>
         <span class="p">)</span>
@@ -542,7 +542,7 @@
         <span class="c1"># The following docstring will be included in the parents() and</span>
         <span class="c1"># children() docstrings to maintain consistency, since they both</span>
         <span class="c1"># delegate to this method.</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
@@ -603,7 +603,7 @@
         <span class="n">limit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">completely_within</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return children of feature `id`.</span>
 <span class="sd">        {_relation_docstring}</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -629,7 +629,7 @@
         <span class="n">completely_within</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">limit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return parents of feature `id`.</span>
 <span class="sd">        {_relation_docstring}</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -653,7 +653,7 @@
         <span class="k">return</span> <span class="n">c</span>
 
 <div class="viewcode-block" id="FeatureDB.execute"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.execute.html#gffutils.interface.FeatureDB.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Execute arbitrary queries on the db.</span>
 
 <span class="sd">        .. seealso::</span>
@@ -676,7 +676,7 @@
         <span class="k">return</span> <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">analyze</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Runs the sqlite ANALYZE command to potentially speed up queries</span>
 <span class="sd">        dramatically.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -693,7 +693,7 @@
         <span class="n">featuretype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">completely_within</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return features within specified genomic coordinates.</span>
 
 <span class="sd">        Specifying genomic coordinates can be done in a flexible manner</span>
@@ -822,7 +822,7 @@
         <span class="c1"># See #129</span>
         <span class="k">if</span> <span class="n">start</span> <span class="ow">and</span> <span class="n">end</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">completely_within</span><span class="p">:</span>
             <span class="n">position_clause</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="sd">&quot;&quot;&quot;(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;(</span>
 <span class="sd">                ({region_start} &lt;= start AND {region_end} &gt;= start) OR</span>
 <span class="sd">                ({region_start} &gt;= start AND {region_end} &lt;= end) OR</span>
 <span class="sd">                ({region_start} &lt;= end AND {region_end} &gt;= end)</span>
@@ -891,7 +891,7 @@
         <span class="n">attribute_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">update_attributes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct new features representing the space between features.</span>
 
 <span class="sd">        For example, if `features` is a list of exons, then this method will</span>
@@ -951,7 +951,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">def</span> <span class="nf">_init_interfeature</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Used to initialize a new interfeature that is ready to be updated</span>
 <span class="sd">            in-place.</span>
 <span class="sd">            &quot;&quot;&quot;</span>
@@ -962,7 +962,7 @@
             <span class="k">return</span> <span class="n">d</span>
 
         <span class="k">def</span> <span class="nf">_prep_for_yield</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Finalize the interfeature by adjusting coords, recalculating the</span>
 <span class="sd">            bin, and creating a feature using self._feature_returner.</span>
 
@@ -1051,7 +1051,7 @@
             <span class="n">last_feature</span> <span class="o">=</span> <span class="n">f</span></div>
 
 <div class="viewcode-block" id="FeatureDB.delete"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.delete.html#gffutils.interface.FeatureDB.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">make_backup</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Delete features from database.</span>
 
 <span class="sd">        features : str, iterable, FeatureDB instance</span>
@@ -1097,7 +1097,7 @@
         <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="FeatureDB.update"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.update.html#gffutils.interface.FeatureDB.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">make_backup</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Update the on-disk database with features in `data`.</span>
 
 <span class="sd">        WARNING: If you used any non-default kwargs for gffutils.create_db when</span>
@@ -1180,7 +1180,7 @@
         <span class="k">return</span> <span class="bp">self</span></div>
 
 <div class="viewcode-block" id="FeatureDB.add_relation"><a class="viewcode-back" href="../../autodocs/gffutils.interface.FeatureDB.add_relation.html#gffutils.interface.FeatureDB.add_relation">[docs]</a>    <span class="k">def</span> <span class="nf">add_relation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">parent_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">child_func</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Manually add relations to the database.</span>
 
 <span class="sd">        Parameters</span>
@@ -1222,7 +1222,7 @@
 
         <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
         <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">                  INSERT INTO relations (parent, child, level)</span>
 <span class="sd">                  VALUES (?, ?, ?)&quot;&quot;&quot;</span><span class="p">,</span>
             <span class="p">(</span><span class="n">parent</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">child</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">level</span><span class="p">),</span>
@@ -1243,7 +1243,7 @@
         <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">_UPDATE</span><span class="p">,</span> <span class="o">*</span><span class="nb">tuple</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">_insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">cursor</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Insert a feature into the database.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1260,7 +1260,7 @@
         <span class="n">merge_attributes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">numeric_sort</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create introns from existing annotations.</span>
 
 
@@ -1350,7 +1350,7 @@
                 <span class="k">yield</span> <span class="n">intron</span></div>
 
     <span class="k">def</span> <span class="nf">_old_merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">ignore_strand</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        DEPRECATED, only retained here for backwards compatibility. Please use</span>
 <span class="sd">        merge().</span>
 
@@ -1455,7 +1455,7 @@
         <span class="n">merge_criteria</span><span class="o">=</span><span class="p">(</span><span class="n">mc</span><span class="o">.</span><span class="n">seqid</span><span class="p">,</span> <span class="n">mc</span><span class="o">.</span><span class="n">overlap_end_inclusive</span><span class="p">,</span> <span class="n">mc</span><span class="o">.</span><span class="n">strand</span><span class="p">,</span> <span class="n">mc</span><span class="o">.</span><span class="n">feature_type</span><span class="p">),</span>
         <span class="n">multiline</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Merge features matching criteria together</span>
 
 
@@ -1614,7 +1614,7 @@
         <span class="n">featuretypes_groups</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,),</span>
         <span class="n">exclude_components</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Merge all features in database according to criteria.</span>
 <span class="sd">        Merged features will be assigned as children of the merged record.</span>
 <span class="sd">        The resulting records are added to the database.</span>
@@ -1669,7 +1669,7 @@
                             <span class="n">mc</span><span class="o">.</span><span class="n">feature_type</span><span class="p">),</span>
             <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Total bp of all children of a featuretype.</span>
 
 <span class="sd">        Useful for getting the exonic bp of an mRNA.</span>
@@ -1730,7 +1730,7 @@
         <span class="n">name_field</span><span class="o">=</span><span class="s2">&quot;ID&quot;</span><span class="p">,</span>
         <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Converts `feature` into a BED12 format.</span>
 
 <span class="sd">        GFF and GTF files do not necessarily define genes consistently, so this</span>
@@ -1882,13 +1882,13 @@
         <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">fields</span><span class="p">))</span></div>
 
     <span class="k">def</span> <span class="nf">seqids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Yield the unique sequence IDs (chromosomes, contigs) observed in the</span>
 <span class="sd">        database.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
         <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            SELECT DISTINCT seqid from features</span>
 <span class="sd">            &quot;&quot;&quot;</span>
         <span class="p">)</span>

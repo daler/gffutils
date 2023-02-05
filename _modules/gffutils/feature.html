@@ -68,9 +68,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>gffutils.feature</li>
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">gffutils.feature</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -127,7 +127,7 @@
         <span class="n">keep_order</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">sort_attribute_values</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Represents a feature from the database.</span>
 
 <span class="sd">        Usually you won&#39;t want to use this directly, since it has various</span>
@@ -288,7 +288,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sort_attribute_values</span> <span class="o">=</span> <span class="n">sort_attribute_values</span></div>
 
     <span class="k">def</span> <span class="nf">calc_bin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_bin</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate the smallest UCSC genomic bin that will contain this feature.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">_bin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -404,7 +404,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="k">def</span> <span class="nf">astuple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return a tuple suitable for import into a database.</span>
 
 <span class="sd">        Attributes field and extra field jsonified into strings. The order of</span>
@@ -449,7 +449,7 @@
         <span class="p">)</span>
 
 <div class="viewcode-block" id="Feature.sequence"><a class="viewcode-back" href="../../autodocs/gffutils.feature.Feature.sequence.html#gffutils.feature.Feature.sequence">[docs]</a>    <span class="k">def</span> <span class="nf">sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fasta</span><span class="p">,</span> <span class="n">use_strand</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieves the sequence of this feature as a string.</span>
 
 <span class="sd">        Uses the pyfaidx package.</span>
@@ -481,7 +481,7 @@
 
 
 <div class="viewcode-block" id="feature_from_line"><a class="viewcode-back" href="../../autodocs/gffutils.feature.feature_from_line.html#gffutils.feature.feature_from_line">[docs]</a><span class="k">def</span> <span class="nf">feature_from_line</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_order</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given a line from a GFF file, return a Feature object</span>
 
 <span class="sd">    Parameters</span>

@@ -68,9 +68,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>gffutils.helpers</li>
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">gffutils.helpers</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -98,14 +98,14 @@
 
 
 <div class="viewcode-block" id="example_filename"><a class="viewcode-back" href="../../autodocs/gffutils.helpers.example_filename.html#gffutils.helpers.example_filename">[docs]</a><span class="k">def</span> <span class="nf">example_filename</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the full path of a data file that ships with gffutils.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">HERE</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="infer_dialect"><a class="viewcode-back" href="../../autodocs/gffutils.helpers.infer_dialect.html#gffutils.helpers.infer_dialect">[docs]</a><span class="k">def</span> <span class="nf">infer_dialect</span><span class="p">(</span><span class="n">attributes</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Infer the dialect based on the attributes.</span>
 
 <span class="sd">    Parameters</span>
@@ -122,7 +122,7 @@
 
 
 <span class="k">def</span> <span class="nf">_choose_dialect</span><span class="p">(</span><span class="n">features</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given a list of features (often from peeking into an iterator), choose</span>
 <span class="sd">    a dialect to use as the &quot;canonical&quot; version.</span>
 
@@ -212,7 +212,7 @@
     <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">completely_within</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Multi-purpose, bare-bones ORM function.</span>
 
 <span class="sd">    This function composes queries given some commonly-used kwargs that can be</span>
@@ -378,7 +378,7 @@
 
 
 <span class="k">def</span> <span class="nf">_bin_from_dict</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given a dictionary yielded by the parser, return the genomic &quot;UCSC&quot; bin</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
@@ -392,14 +392,14 @@
 
 
 <span class="k">def</span> <span class="nf">_jsonify</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Use most compact form of JSON&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Use most compact form of JSON&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dict_class</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">_d</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">))</span>
 
 
 <span class="k">def</span> <span class="nf">_unjsonify</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">isattributes</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Convert JSON string to an ordered defaultdict.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert JSON string to an ordered defaultdict.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">isattributes</span><span class="p">:</span>
         <span class="n">obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">dict_class</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
@@ -407,7 +407,7 @@
 
 
 <span class="k">def</span> <span class="nf">_feature_to_fields</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">jsonify</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert feature to tuple, for faster sqlite3 import</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
@@ -421,7 +421,7 @@
 
 
 <span class="k">def</span> <span class="nf">_dict_to_fields</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">jsonify</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert dict to tuple, for faster sqlite3 import</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
@@ -435,7 +435,7 @@
 
 
 <div class="viewcode-block" id="asinterval"><a class="viewcode-back" href="../../autodocs/gffutils.helpers.asinterval.html#gffutils.helpers.asinterval">[docs]</a><span class="k">def</span> <span class="nf">asinterval</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts a gffutils.Feature to a pybedtools.Interval</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span> <span class="nn">pybedtools</span>
@@ -444,7 +444,7 @@
 
 
 <div class="viewcode-block" id="merge_attributes"><a class="viewcode-back" href="../../autodocs/gffutils.helpers.merge_attributes.html#gffutils.helpers.merge_attributes">[docs]</a><span class="k">def</span> <span class="nf">merge_attributes</span><span class="p">(</span><span class="n">attr1</span><span class="p">,</span> <span class="n">attr2</span><span class="p">,</span> <span class="n">numeric_sort</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Merges two attribute dictionaries into a single dictionary.</span>
 
 <span class="sd">    Parameters</span>
@@ -502,7 +502,7 @@
 
 
 <span class="k">def</span> <span class="nf">dialect_compare</span><span class="p">(</span><span class="n">dialect1</span><span class="p">,</span> <span class="n">dialect2</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compares two dialects.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">orig</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">dialect1</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
@@ -513,7 +513,7 @@
 
 
 <div class="viewcode-block" id="sanitize_gff_db"><a class="viewcode-back" href="../../autodocs/gffutils.helpers.sanitize_gff_db.html#gffutils.helpers.sanitize_gff_db">[docs]</a><span class="k">def</span> <span class="nf">sanitize_gff_db</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">gid_field</span><span class="o">=</span><span class="s2">&quot;gid&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Sanitize given GFF db. Returns a sanitized GFF db.</span>
 
 <span class="sd">    Sanitizing means:</span>
@@ -544,7 +544,7 @@
 
 
 <span class="k">def</span> <span class="nf">sanitize_gff_file</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">,</span> <span class="n">in_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Sanitize a GFF file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">db</span> <span class="o">=</span> <span class="kc">None</span>
@@ -568,7 +568,7 @@
 
 
 <div class="viewcode-block" id="annotate_gff_db"><a class="viewcode-back" href="../../autodocs/gffutils.helpers.annotate_gff_db.html#gffutils.helpers.annotate_gff_db">[docs]</a><span class="k">def</span> <span class="nf">annotate_gff_db</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Annotate a GFF file by cross-referencing it with another GFF</span>
 <span class="sd">    file, e.g. one containing gene models.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -576,7 +576,7 @@
 
 
 <span class="k">def</span> <span class="nf">is_gff_db</span><span class="p">(</span><span class="n">db_fname</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return True if the given filename is a GFF database.</span>
 
 <span class="sd">    For now, rely on .db extension.</span>
@@ -596,7 +596,7 @@
 
 
 <span class="k">def</span> <span class="nf">canonical_transcripts</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">fasta_filename</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    WARNING: this function is currently not well ttested and will likely be</span>
 <span class="sd">    replaced with a more modular approach.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -641,7 +641,7 @@
 <span class="c1">## TODO: move clean_gff here?</span>
 <span class="c1">##</span>
 <span class="k">def</span> <span class="nf">get_gff_db</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;.db&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get db for GFF file. If the database has a .db file,</span>
 <span class="sd">    load that. Otherwise, create a named temporary file,</span>
 <span class="sd">    serialize the db to that, and return the loaded database.</span>
