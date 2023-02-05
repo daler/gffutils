@@ -102,7 +102,7 @@ jobs:
 
       - name: push artifact
         if: ${{ (matrix.python-version == 3.9) }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: doc
           path: /tmp/docs
