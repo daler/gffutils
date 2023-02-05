@@ -1,8 +1,8 @@
 """
-Performance testing. Run them with https://github.com/mahmoudimus/nose-timer:
+Performance testing. Run them with https://pypi.org/project/pytest-timer/:
 
 ```
-nosetests --nocapture -a slow --with-timer
+pytest --capture=no -m slow --with-timer
 ```
 
 WARNING: These tests can take about 1.5 hours to run!
@@ -15,7 +15,7 @@ import random
 import unittest
 import os
 
-from nose.plugins import attrib
+import pytest
 
 import gffutils
 
@@ -187,7 +187,7 @@ class PerformanceTestFeatureDB(object):
         )
 
 
-@attrib.attr("slow")
+@pytest.mark.slow
 class TestPerformanceOnSacCer(PerformanceTestFeatureDB, unittest.TestCase):
     """
     Test frequent scenarios on medium size genome of yeast.
@@ -205,7 +205,7 @@ class TestPerformanceOnSacCer(PerformanceTestFeatureDB, unittest.TestCase):
     )
 
 
-@attrib.attr("slow")
+@pytest.mark.slow
 class TestPerformanceOnMouse(PerformanceTestFeatureDB, unittest.TestCase):
     """
     Test frequent scenarios on large genome of mouse.

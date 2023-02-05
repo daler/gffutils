@@ -4,10 +4,10 @@ jobs:
   build-and-test:
     strategy:
       matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9]
+        python-version: ["3.7", "3.8", "3.9", "3.10"]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: git setup
         id: git-setup
         run: |
@@ -18,16 +18,21 @@ jobs:
 
       - name: conda env
         run: |
-          eval "$(conda shell.bash hook)"
-          conda config --add channels defaults
-          conda config --add channels bioconda
-          conda config --add channels conda-forge
-          conda install -n base mamba -y
-          mamba create -y -p ./env \
+          wget -O Mambaforge.sh  "https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-$(uname)-$(uname -m).sh"
+          curl -L -O "https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-$(uname)-$(uname -m).sh"
+          bash Mambaforge.sh -b -p "${HOME}/conda"
+          source "${HOME}/conda/etc/profile.d/conda.sh"
+          source "${HOME}/conda/etc/profile.d/mamba.sh"
+          which conda
+          conda config --system --add channels defaults
+          conda config --system --add channels bioconda
+          conda config --system --add channels conda-forge
+          conda config --system --set channel_priority strict
+          mamba create -y -n gffutils-env \
             python=${{ matrix.python-version }} \
             --file requirements.txt
 
-          conda activate ./env
+          conda activate gffutils-env
           python setup.py clean sdist
           (cd dist && pip install gffutils-*.tar.gz)
           cd $TMPDIR
@@ -36,11 +41,12 @@ jobs:
 
       - name: run unit tests
         run: |
-          eval "$(conda shell.bash hook)"
-          mamba install -y -p ./env --file optional-requirements.txt nose
+          source "${HOME}/conda/etc/profile.d/conda.sh"
+          source "${HOME}/conda/etc/profile.d/mamba.sh"
+          mamba install -y -n gffutils-env --file optional-requirements.txt pytest hypothesis
 
-          conda activate ./env
-          nosetests -v --with-doctest -a '!slow'
+          conda activate gffutils-env
+          pytest -v --doctest-modules gffutils
           conda deactivate
 
       - name: doctests
@@ -54,9 +60,10 @@ jobs:
         # The workaround is to just not build the html docs on 3.8.
         if: ${{ (matrix.python-version != 3.8) }}
         run: |
-          eval "$(conda shell.bash hook)"
-          mamba install -y -p ./env --file docs-requirements.txt
-          conda activate ./env
+          source "${HOME}/conda/etc/profile.d/conda.sh"
+          source "${HOME}/conda/etc/profile.d/mamba.sh"
+          mamba install -y -n gffutils-env --file docs-requirements.txt
+          conda activate gffutils-env
           (cd doc && make clean doctest)
           conda deactivate
 
@@ -64,8 +71,9 @@ jobs:
         # See above for note about 3.8
         if: ${{ (matrix.python-version != 3.8) }}
         run: |
-          eval "$(conda shell.bash hook)"
-          conda activate ./env
+          source "${HOME}/conda/etc/profile.d/conda.sh"
+          source "${HOME}/conda/etc/profile.d/mamba.sh"
+          conda activate gffutils-env
           (cd doc && make html)
           conda deactivate
 

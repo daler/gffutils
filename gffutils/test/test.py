@@ -1,7 +1,7 @@
 import warnings
 from textwrap import dedent
 from . import expected
-from gffutils import example_filename, create, parser, feature
+from gffutils import example_filename, create, feature
 import gffutils
 import gffutils.helpers as helpers
 import gffutils.gffwriter as gffwriter
@@ -13,8 +13,6 @@ import six
 import shutil
 import threading
 import tempfile
-from textwrap import dedent
-from nose.tools import assert_raises
 from six.moves import SimpleHTTPServer
 
 if sys.version_info.major == 3:
@@ -24,10 +22,9 @@ else:
 
 import multiprocessing
 import json
-import tempfile
-import shutil
-import glob
 import difflib
+
+import pytest
 
 testdbfn_gtf = ":memory:"
 testdbfn_gff = ":memory:"
@@ -631,17 +628,16 @@ def test_feature_merge():
     x = db["fake"]
     y = db["fake_1"]
 
-    assert_raises(
-        ValueError,
-        gffutils.create_db,
-        gtfdata,
-        ":memory:",
-        from_string=True,
-        merge_strategy="merge",
-        id_spec="gene_id",
-        force_merge_fields=["start"],
-        keep_order=True,
-    )
+    with pytest.raises(ValueError):
+        gffutils.create_db(
+            gtfdata,
+            ":memory:",
+            from_string=True,
+            merge_strategy="merge",
+            id_spec="gene_id",
+            force_merge_fields=["start"],
+            keep_order=True,
+            )
 
     # test that warnings are raised because of strand and frame
     with warnings.catch_warnings(record=True) as w:
@@ -750,7 +746,8 @@ def test_empty_files():
     fn = tempfile.NamedTemporaryFile(delete=False).name
     a = open(fn, "w")
     a.close()
-    assert_raises(gffutils.exceptions.EmptyInputError, gffutils.create_db, fn, fn + ".db")
+    with pytest.raises(gffutils.exceptions.EmptyInputError):
+        gffutils.create_db(fn, fn + ".db")
 
 
 def test_false_function():
@@ -1107,23 +1104,21 @@ def test_deprecation_handler():
     return
 
     # TODO: when infer_gene_extent actually gets deprecated, test here.
-    assert_raises(
-        ValueError,
-        gffutils.create_db,
-        gffutils.example_filename("FBgn0031208.gtf"),
-        ":memory:",
-        infer_gene_extent=False,
-    )
+    with pytest.raises(ValueError):
+        gffutils.create_db(
+            gffutils.example_filename("FBgn0031208.gtf"),
+            ":memory:",
+            infer_gene_extent=False,
+            )
 
 
 def test_nonsense_kwarg():
-    assert_raises(
-        TypeError,
-        gffutils.create_db,
-        gffutils.example_filename("FBgn0031208.gtf"),
-        ":memory:",
-        asdf=True,
-    )
+    with pytest.raises(TypeError):
+        gffutils.create_db(
+            gffutils.example_filename("FBgn0031208.gtf"),
+            ":memory:",
+            asdf=True,
+            )
 
 
 def test_infer_gene_extent():
