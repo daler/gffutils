@@ -216,7 +216,11 @@ def _split_keyvals(keyval_str, dialect=None):
         if dialect["trailing semicolon"]:
             keyval_str = keyval_str.rstrip(";")
 
-        parts = keyval_str.split(dialect["field separator"])
+        # adding regex to split by separator instead of base split
+        # adapted from https://stackoverflow.com/a/2787979/7182397
+
+        # parts = keyval_str.split(dialect["field separator"])
+        parts = re.split(f'''{dialect["field separator"]}(?=(?:[^"]|"[^"]*")*$)''', keyval_str)
 
         kvsep = dialect["keyval separator"]
         if dialect["leading semicolon"]:
@@ -288,7 +292,11 @@ def _split_keyvals(keyval_str, dialect=None):
     # GFF3 works with no spaces.
     # So split on the first one we can recognize...
     for sep in (" ; ", "; ", ";"):
-        parts = keyval_str.split(sep)
+        # adding regex to split by separator instead of base split
+        # adapted from https://stackoverflow.com/a/2787979/7182397
+
+        # parts = keyval_str.split(sep)
+        parts = re.split(f'''{sep}(?=(?:[^"]|"[^"]*")*$)''', keyval_str)
         if len(parts) > 1:
             dialect["field separator"] = sep
             break
