@@ -964,7 +964,7 @@ class FeatureDB(object):
             new_feature = _prep_for_yield(interfeature)
             if new_feature:
                 # concat list of ID to create uniq IDs because feature with multiple values for their ID are no longer permitted since v0.11
-                if len(new_feature.attributes["ID"]) > 1:
+                if "ID" in new_feature.attributes and len(new_feature.attributes["ID"]) > 1:
                     new_id = '-'.join(new_feature.attributes["ID"])
                     new_feature.attributes["ID"] = [new_id]
                 yield new_feature
