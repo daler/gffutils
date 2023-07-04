@@ -397,11 +397,18 @@ def test_issue_197():
     genes = list(db.features_of_type('gene'))
     igss = list( db.interfeatures(genes,new_featuretype='intergenic_space') )
 
+
+    # Prior to PR #219, multiple IDs could be created by interfeatures, which
+    # in turn was patched here by providing the transform to db.update. With
+    # #219, this ends up being a no-op because ID is a single value by the time
+    # it gets to the transform function.
+    #
+    # However, keeping the test as-is to ensure backward-compatibility.
     def transform(f):
         f['ID'] = [ '-'.join(f.attributes['ID']) ]
         return f
 
-    db = db.update(igss, transform=transform, merge_strategy='error')
+    db = db.update(igss, transform=transform,  merge_strategy='error')
 
     obs = list(db.features_of_type('intergenic_space'))
     for i in obs:
