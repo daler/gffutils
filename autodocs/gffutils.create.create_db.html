@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gffutils.create.create_db &mdash; gffutils 0.11.1 documentation</title>
+  <title>gffutils.create.create_db &mdash; gffutils 0.12 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -12,10 +12,9 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
@@ -30,14 +29,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> gffutils
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            gffutils
           </a>
               <div class="version">
-                0.11.1
+                0.12
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -57,7 +60,6 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../api.html#create-a-database">Create a database</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">gffutils.create.create_db</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#gffutils.create.create_db"><code class="docutils literal notranslate"><span class="pre">create_db()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gffutils.create.create_db">create_db</a></li>
 </ul>
 </li>
 </ul>
@@ -86,7 +88,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../api.html">API</a></li>
       <li class="breadcrumb-item active">gffutils.create.create_db</li>
       <li class="wy-breadcrumbs-aside">
@@ -107,7 +109,7 @@
 <p>For more details on when and how to use the kwargs below, see the examples
 in the online documentation (<a class="reference internal" href="../examples.html#examples"><span class="std std-ref">Examples</span></a>).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<em>string</em><em> or </em><em>iterable</em>) – <p>If a string (and <code class="docutils literal notranslate"><span class="pre">from_string</span></code> is False), then <code class="docutils literal notranslate"><span class="pre">data</span></code> is the path to
 the original GFF or GTF file.</p>
@@ -279,7 +281,7 @@ as the suffix fo the tempfile. This can be useful for testing in
 parallel environments.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>New <code class="xref py py-class docutils literal notranslate"><span class="pre">FeatureDB</span></code> object.</p>
 </dd>
 </dl>

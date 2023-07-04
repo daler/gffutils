@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Database schema &mdash; gffutils 0.11.1 documentation</title>
+  <title>Database schema &mdash; gffutils 0.12 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -12,10 +12,9 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -30,14 +29,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> gffutils
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            gffutils
           </a>
               <div class="version">
-                0.11.1
+                0.12
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -79,7 +82,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Database schema</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/database-schema.rst.txt" rel="nofollow"> View page source</a>
@@ -152,7 +155,7 @@ you’re not familiar with SQL. An explanation of each table can be found below.
 <p>The <code class="docutils literal notranslate"><span class="pre">features</span></code> table stores the primary information from each line in the
 original file (and any additional information added by the user).</p>
 <dl class="field-list">
-<dt class="field-odd">id</dt>
+<dt class="field-odd">id<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Primary key for features.  The content of this field is determined by the
 user and the file format at creation time</p>
 <div class="admonition seealso">
@@ -161,10 +164,10 @@ user and the file format at creation time</p>
 field are determined.</p>
 </div>
 </dd>
-<dt class="field-even">seqid, source, feature, start, end, score, strand, frame</dt>
+<dt class="field-even">seqid, source, feature, start, end, score, strand, frame<span class="colon">:</span></dt>
 <dd class="field-even"><p>These fields correspond exactly to the fields in the GFF/GTF lines</p>
 </dd>
-<dt class="field-odd">attributes</dt>
+<dt class="field-odd">attributes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A JSON-serialized dictionary of attributes.  Note that the string
 representation of attributes is not stored; rather, it is reconstructed as
 needed using the dialect</p>
@@ -173,12 +176,12 @@ needed using the dialect</p>
 <p>See <a class="reference internal" href="dialect.html"><span class="doc">Dialects</span></a> for what dialects are and how they are constructed</p>
 </div>
 </dd>
-<dt class="field-even">extra</dt>
+<dt class="field-even">extra<span class="colon">:</span></dt>
 <dd class="field-even"><p>A JSON-serialized list of non-standard extra fields.  These are sometimes
 added by analysis tools (e.g., BEDTools).  For standard GFF/GTF, this
 field will be empty.</p>
 </dd>
-<dt class="field-odd">bin</dt>
+<dt class="field-odd">bin<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The genomic bin, according to the <a class="reference external" href="http://genome.cshlp.org/content/12/6/996/F7.expansion.html">UCSC binning</a> strategy.</p>
 </dd>
 </dl>
@@ -189,13 +192,13 @@ field will be empty.</p>
 a simple directed acyclic graph that seems to work well for GFF/GTF files with
 [relatively] simple graph structure.</p>
 <dl class="field-list simple">
-<dt class="field-odd">parent</dt>
+<dt class="field-odd">parent<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Foreign key to <code class="docutils literal notranslate"><span class="pre">features.id</span></code> – a gene, for example.</p>
 </dd>
-<dt class="field-even">child</dt>
+<dt class="field-even">child<span class="colon">:</span></dt>
 <dd class="field-even"><p>Foreign key to <code class="docutils literal notranslate"><span class="pre">feature.id</span></code> – an mRNA or an exon, for example.</p>
 </dd>
-<dt class="field-odd">level</dt>
+<dt class="field-odd">level<span class="colon">:</span></dt>
 <dd class="field-odd"><p>In graph terms, the number of edges between <code class="docutils literal notranslate"><span class="pre">child</span></code> and <code class="docutils literal notranslate"><span class="pre">parent</span></code>.  In
 biological terms, if parent=gene and child=mRNA, then level=1.  If
 parent=gene and child=exon, then level=2.</p>
@@ -206,7 +209,7 @@ parent=gene and child=exon, then level=2.</p>
 <h2><code class="docutils literal notranslate"><span class="pre">meta</span></code> table<a class="headerlink" href="#meta-table" title="Permalink to this heading"></a></h2>
 <p>This table stores extra information about the database in general.</p>
 <dl class="field-list">
-<dt class="field-odd">dialect</dt>
+<dt class="field-odd">dialect<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A JSON-serialized version of the dialect empirically determined when
 parsing the original file.</p>
 <div class="admonition seealso">
@@ -214,7 +217,7 @@ parsing the original file.</p>
 <p><a class="reference internal" href="dialect.html"><span class="doc">Dialects</span></a></p>
 </div>
 </dd>
-<dt class="field-even">version</dt>
+<dt class="field-even">version<span class="colon">:</span></dt>
 <dd class="field-even"><p>The <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a> version used to create the database.</p>
 </dd>
 </dl>
@@ -224,7 +227,7 @@ parsing the original file.</p>
 <p>A table that acts as a simple list of directives (lines starting with <code class="docutils literal notranslate"><span class="pre">##</span></code>) in
 the original GFF file.</p>
 <dl class="field-list simple">
-<dt class="field-odd">directive</dt>
+<dt class="field-odd">directive<span class="colon">:</span></dt>
 <dd class="field-odd"><p>String directive, without the leading <code class="docutils literal notranslate"><span class="pre">##</span></code>.</p>
 </dd>
 </dl>
@@ -245,12 +248,12 @@ integer (rather than 0).</p>
 <p><a class="reference internal" href="database-ids.html"><span class="doc">Database IDs</span></a></p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">base</dt>
+<dt class="field-odd">base<span class="colon">:</span></dt>
 <dd class="field-odd"><p>By default the feature type (<code class="docutils literal notranslate"><span class="pre">gene</span></code>, <code class="docutils literal notranslate"><span class="pre">exon</span></code>, etc) but can also be the value
 of any GFF field or attribute (e.g., the seqid or “GENE_1” (in the case
 of multiple features with ID=”GENE_1”).</p>
 </dd>
-<dt class="field-even">n</dt>
+<dt class="field-even">n<span class="colon">:</span></dt>
 <dd class="field-even"><p>Current extent of autoincrementing – add 1 to this when autoincrementing
 next time.</p>
 </dd>

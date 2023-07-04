@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Database IDs &mdash; gffutils 0.11.1 documentation</title>
+  <title>Database IDs &mdash; gffutils 0.12 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -12,10 +12,9 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -30,14 +29,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> gffutils
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            gffutils
           </a>
               <div class="version">
-                0.11.1
+                0.12
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -76,7 +79,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Database IDs</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/database-ids.rst.txt" rel="nofollow"> View page source</a>
@@ -142,24 +145,24 @@ particular input file.</p>
 from each line in order to construct a primary key for the feature.  It can
 have several different forms – None, string, list, dictionary, or callable.</p>
 <dl class="field-list">
-<dt class="field-odd">None</dt>
+<dt class="field-odd">None<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The primary key for each feature will be an auto-incremented version of the
 feature type (e.g., “gene_1”, “gene_2”, etc).</p>
 </dd>
-<dt class="field-even">string</dt>
+<dt class="field-even">string<span class="colon">:</span></dt>
 <dd class="field-even"><p>Use the attribute value.</p>
 <p>For example, <code class="docutils literal notranslate"><span class="pre">id_spec=&quot;ID&quot;</span></code>. The primary key for each feature will be the
 value of the “ID” attribute.  If this is not found, then an
 auto-incremented version of the feature type is used</p>
 </dd>
-<dt class="field-odd">list</dt>
+<dt class="field-odd">list<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Use the first available attribute value from the list.</p>
 <p>For example, <code class="docutils literal notranslate"><span class="pre">id_spec=[&quot;ID&quot;,</span> <span class="pre">&quot;Name&quot;]</span></code>: the primary key for each feature
 will be the value of the “ID” attribute.  If no “ID” attribute is found,
 then use the value of the “Name” field.  If this is not found, then an
 auto-incremented version of the feature type is used.</p>
 </dd>
-<dt class="field-even">dict</dt>
+<dt class="field-even">dict<span class="colon">:</span></dt>
 <dd class="field-even"><p>Use different strategies according to the featuretype.</p>
 <p>For example, <code class="docutils literal notranslate"><span class="pre">id_spec={&quot;gene&quot;:</span> <span class="pre">&quot;Name&quot;,</span> <span class="pre">&quot;mRNA&quot;:</span> <span class="pre">[&quot;ID&quot;,</span> <span class="pre">&quot;transcript_id&quot;]}</span></code>:</p>
 <ul class="simple">
@@ -173,14 +176,14 @@ auto-incremented version of “mRNA”.</p></li>
 the feature type.</p></li>
 </ul>
 </dd>
-<dt class="field-odd">special string</dt>
+<dt class="field-odd">special string<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Use a GFF field value (from the first 8 columns) rather than an attributes
 value.  Must be surrounded by <code class="docutils literal notranslate"><span class="pre">:</span></code>.  The options to use can be found in the
 list <code class="xref py py-obj docutils literal notranslate"><span class="pre">gffutils.constants._gffkeys</span></code> [:-1].</p>
 <p>For example, <code class="docutils literal notranslate"><span class="pre">id_spec=&quot;:seqid:&quot;</span></code>:  use the “seqid” field as the primary
 key.</p>
 </dd>
-<dt class="field-even">function</dt>
+<dt class="field-even">function<span class="colon">:</span></dt>
 <dd class="field-even"><p>Apply a custom function (or other callable object), and use its return
 value as the primary key.</p>
 <p>The function must accept a single <code class="xref py py-class docutils literal notranslate"><span class="pre">gffutils.Feature</span></code> object.  It can

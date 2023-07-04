@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gffutils.interface &mdash; gffutils 0.11.1 documentation</title>
+  <title>gffutils.interface &mdash; gffutils 0.12 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -11,10 +11,9 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -27,14 +26,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> gffutils
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            gffutils
           </a>
               <div class="version">
-                0.11.1
+                0.12
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -68,7 +71,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
       <li class="breadcrumb-item active">gffutils.interface</li>
       <li class="wy-breadcrumbs-aside">
@@ -184,7 +187,7 @@
         <span class="n">keep_order</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">pragmas</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">default_pragmas</span><span class="p">,</span>
         <span class="n">sort_attribute_values</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">text_factory</span><span class="o">=</span><span class="n">sqlite3</span><span class="o">.</span><span class="n">OptimizedUnicode</span><span class="p">,</span>
+        <span class="n">text_factory</span><span class="o">=</span><span class="nb">str</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Connect to a database created by :func:`gffutils.create_db`.</span>
@@ -199,8 +202,7 @@
 <span class="sd">        text_factory : callable</span>
 
 <span class="sd">            Optionally set the way sqlite3 handles strings.  Default is</span>
-<span class="sd">            sqlite3.OptimizedUnicode, which returns ascii when possible,</span>
-<span class="sd">            unicode otherwise</span>
+<span class="sd">            str</span>
 
 <span class="sd">        default_encoding : str</span>
 
@@ -977,7 +979,14 @@
             <span class="k">if</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;end&#39;</span><span class="p">]:</span>
                 <span class="k">return</span> <span class="kc">None</span>
 
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_feature_returner</span><span class="p">(</span><span class="o">**</span><span class="n">d</span><span class="p">)</span>
+            <span class="n">new_feature</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_feature_returner</span><span class="p">(</span><span class="o">**</span><span class="n">d</span><span class="p">)</span>
+
+            <span class="c1"># concat list of ID to create uniq IDs because feature with</span>
+            <span class="c1"># multiple values for their ID are no longer permitted since v0.11</span>
+            <span class="k">if</span> <span class="s2">&quot;ID&quot;</span> <span class="ow">in</span> <span class="n">new_feature</span><span class="o">.</span><span class="n">attributes</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_feature</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;ID&quot;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">new_id</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">new_feature</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;ID&quot;</span><span class="p">])</span>
+                <span class="n">new_feature</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;ID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_id</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">new_feature</span>
 
         <span class="c1"># If not provided, use a no-op function instead.</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">attribute_func</span><span class="p">:</span>
@@ -1348,6 +1357,128 @@
                 <span class="n">dialect</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dialect</span><span class="p">,</span>
             <span class="p">):</span>
                 <span class="k">yield</span> <span class="n">intron</span></div>
+
+    <span class="k">def</span> <span class="nf">create_splice_sites</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">exon_featuretype</span><span class="o">=</span><span class="s2">&quot;exon&quot;</span><span class="p">,</span>
+        <span class="n">grandparent_featuretype</span><span class="o">=</span><span class="s2">&quot;gene&quot;</span><span class="p">,</span>
+        <span class="n">parent_featuretype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">merge_attributes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">numeric_sort</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create splice sites from existing annotations.</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        exon_featuretype : string</span>
+<span class="sd">            Feature type to use in order to infer splice sites.  Typically `&quot;exon&quot;`.</span>
+
+<span class="sd">        grandparent_featuretype : string</span>
+<span class="sd">            If `grandparent_featuretype` is not None, then group exons by</span>
+<span class="sd">            children of this featuretype.  If `granparent_featuretype` is</span>
+<span class="sd">            &quot;gene&quot; (default), then splice sites will be created for all first-level</span>
+<span class="sd">            children of genes.  This may include mRNA, rRNA, ncRNA, etc.  If</span>
+<span class="sd">            you only want to infer splice sites from one of these featuretypes</span>
+<span class="sd">            (e.g., mRNA), then use the `parent_featuretype` kwarg which is</span>
+<span class="sd">            mutually exclusive with `grandparent_featuretype`.</span>
+
+<span class="sd">        parent_featuretype : string</span>
+<span class="sd">            If `parent_featuretype` is not None, then only use this featuretype</span>
+<span class="sd">            to infer splice sites.  Use this if you only want a subset of</span>
+<span class="sd">            featuretypes to have splice sites (e.g., &quot;mRNA&quot; only, and not ncRNA or</span>
+<span class="sd">            rRNA). Mutually exclusive with `grandparent_featuretype`.</span>
+
+<span class="sd">        merge_attributes : bool</span>
+<span class="sd">            Whether or not to merge attributes from all exons. If False then no</span>
+<span class="sd">            attributes will be created for the splice sites.</span>
+
+<span class="sd">        numeric_sort : bool</span>
+<span class="sd">            If True, then merged attributes that can be cast to float will be</span>
+<span class="sd">            sorted by their numeric values (but will still be returned as</span>
+<span class="sd">            string). This is useful, for example, when creating splice sites between</span>
+<span class="sd">            exons and the exons have exon_number attributes as an integer.</span>
+<span class="sd">            Using numeric_sort=True will ensure that the returned exons have</span>
+<span class="sd">            merged exon_number attribute of [&#39;9&#39;, &#39;10&#39;] (numerically sorted)</span>
+<span class="sd">            rather than [&#39;10&#39;, &#39;9&#39;] (alphabetically sorted).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        A generator object that yields :class:`Feature` objects representing</span>
+<span class="sd">        new splice sites</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The returned generator can be passed directly to the</span>
+<span class="sd">        :meth:`FeatureDB.update` method to permanently add them to the</span>
+<span class="sd">        database, e.g., ::</span>
+
+<span class="sd">            db.update(db.create_splice sites())</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">grandparent_featuretype</span> <span class="ow">and</span> <span class="n">parent_featuretype</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+            <span class="n">grandparent_featuretype</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">parent_featuretype</span> <span class="ow">is</span> <span class="kc">None</span>
+        <span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;exactly one of `grandparent_featuretype` or &quot;</span>
+                <span class="s2">&quot;`parent_featuretype` should be provided&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">grandparent_featuretype</span><span class="p">:</span>
+
+            <span class="k">def</span> <span class="nf">child_gen</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">gene</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features_of_type</span><span class="p">(</span><span class="n">grandparent_featuretype</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="n">gene</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+                        <span class="k">yield</span> <span class="n">child</span>
+
+        <span class="k">elif</span> <span class="n">parent_featuretype</span><span class="p">:</span>
+
+            <span class="k">def</span> <span class="nf">child_gen</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features_of_type</span><span class="p">(</span><span class="n">parent_featuretype</span><span class="p">):</span>
+                    <span class="k">yield</span> <span class="n">child</span>
+
+        <span class="c1"># Two splice features need to be created for each interleave</span>
+        <span class="k">for</span> <span class="n">side</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">child_gen</span><span class="p">():</span>
+                <span class="n">exons</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">(</span>
+                    <span class="n">child</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="n">exon_featuretype</span><span class="p">,</span> <span class="n">order_by</span><span class="o">=</span><span class="s2">&quot;start&quot;</span>
+                <span class="p">)</span>
+
+                <span class="c1"># get strand</span>
+                <span class="n">strand</span> <span class="o">=</span> <span class="n">child</span><span class="o">.</span><span class="n">strand</span>
+
+                <span class="n">new_featuretype</span> <span class="o">=</span> <span class="s2">&quot;splice_site&quot;</span>
+                <span class="k">if</span> <span class="n">side</span> <span class="o">==</span> <span class="s2">&quot;left&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">strand</span> <span class="o">==</span> <span class="s2">&quot;+&quot;</span><span class="p">:</span>
+                        <span class="n">new_featuretype</span> <span class="o">=</span> <span class="s2">&quot;five_prime_cis_splice_site&quot;</span>
+                    <span class="k">elif</span> <span class="n">strand</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+                        <span class="n">new_featuretype</span> <span class="o">=</span> <span class="s2">&quot;three_prime_cis_splice_site&quot;</span>
+
+                <span class="k">if</span> <span class="n">side</span> <span class="o">==</span> <span class="s2">&quot;right&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">strand</span> <span class="o">==</span> <span class="s2">&quot;+&quot;</span><span class="p">:</span>
+                        <span class="n">new_featuretype</span> <span class="o">=</span> <span class="s2">&quot;three_prime_cis_splice_site&quot;</span>
+                    <span class="k">elif</span> <span class="n">strand</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+                        <span class="n">new_featuretype</span> <span class="o">=</span> <span class="s2">&quot;five_prime_cis_splice_site&quot;</span>
+
+                <span class="k">for</span> <span class="n">splice_site</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">interfeatures</span><span class="p">(</span>
+                    <span class="n">exons</span><span class="p">,</span>
+                    <span class="n">new_featuretype</span><span class="o">=</span><span class="n">new_featuretype</span><span class="p">,</span>
+                    <span class="n">merge_attributes</span><span class="o">=</span><span class="n">merge_attributes</span><span class="p">,</span>
+                    <span class="n">numeric_sort</span><span class="o">=</span><span class="n">numeric_sort</span><span class="p">,</span>
+                    <span class="n">dialect</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dialect</span><span class="p">,</span>
+                <span class="p">):</span>
+
+                    <span class="k">if</span> <span class="n">side</span> <span class="o">==</span> <span class="s2">&quot;left&quot;</span><span class="p">:</span>
+                        <span class="n">splice_site</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="n">splice_site</span><span class="o">.</span><span class="n">start</span> <span class="o">+</span> <span class="mi">1</span>
+                    <span class="k">if</span> <span class="n">side</span> <span class="o">==</span> <span class="s2">&quot;right&quot;</span><span class="p">:</span>
+                        <span class="n">splice_site</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">splice_site</span><span class="o">.</span><span class="n">end</span> <span class="o">-</span> <span class="mi">1</span>
+
+                    <span class="c1"># make ID uniq by adding suffix</span>
+                    <span class="n">splice_site</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;ID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_featuretype</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">splice_site</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;ID&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
+
+                    <span class="k">yield</span> <span class="n">splice_site</span>
+
 
     <span class="k">def</span> <span class="nf">_old_merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">ignore_strand</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>

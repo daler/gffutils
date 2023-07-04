@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gffutils.interface.FeatureDB.region &mdash; gffutils 0.11.1 documentation</title>
+  <title>gffutils.interface.FeatureDB.region &mdash; gffutils 0.12 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -12,10 +12,9 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
@@ -30,14 +29,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> gffutils
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            gffutils
           </a>
               <div class="version">
-                0.11.1
+                0.12
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -67,7 +70,6 @@
 <li class="toctree-l3"><a class="reference internal" href="gffutils.interface.FeatureDB.featuretypes.html">gffutils.interface.FeatureDB.featuretypes</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">gffutils.interface.FeatureDB.region</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#gffutils.interface.FeatureDB.region"><code class="docutils literal notranslate"><span class="pre">FeatureDB.region()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gffutils.interface.FeatureDB.region">region</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="gffutils.interface.FeatureDB.iter_by_parent_childs.html">gffutils.interface.FeatureDB.iter_by_parent_childs</a></li>
@@ -105,7 +107,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../api.html">API</a></li>
       <li class="breadcrumb-item active">gffutils.interface.FeatureDB.region</li>
       <li class="wy-breadcrumbs-aside">
@@ -125,7 +127,7 @@
 <dd><p>Return features within specified genomic coordinates.</p>
 <p>Specifying genomic coordinates can be done in a flexible manner</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>region</strong> (<em>string</em><em>, </em><em>tuple</em><em>, or </em><em>Feature instance</em>) – <p>If string, then of the form “seqid:start-end”.  If tuple, then
 (seqid, start, end).  If <code class="xref py py-class docutils literal notranslate"><span class="pre">Feature</span></code>, then use the features
@@ -160,12 +162,6 @@ partially or completely overlap <code class="docutils literal notranslate"><span
 <p class="rubric">Notes</p>
 <p>The meaning of <code class="docutils literal notranslate"><span class="pre">seqid</span></code>, <code class="docutils literal notranslate"><span class="pre">start</span></code>, and <code class="docutils literal notranslate"><span class="pre">end</span></code> is interpreted as follows:</p>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 11%" />
-<col style="width: 11%" />
-<col style="width: 9%" />
-<col style="width: 69%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>seqid</p></th>
 <th class="head"><p>start</p></th>
@@ -217,7 +213,7 @@ only plus-strand features that completely fall within positions 1 to
 100 on chr1.</p></li>
 </ul>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A generator object that yields <code class="xref py py-class docutils literal notranslate"><span class="pre">Feature</span></code> objects.</p>
 </dd>
 </dl>

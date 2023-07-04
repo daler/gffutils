@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>API &mdash; gffutils 0.11.1 documentation</title>
+  <title>API &mdash; gffutils 0.12 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -12,10 +12,9 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -30,14 +29,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> gffutils
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            gffutils
           </a>
               <div class="version">
-                0.11.1
+                0.12
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -124,7 +127,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">API</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
@@ -143,10 +146,6 @@
 <section id="create-a-database">
 <h2>Create a database<a class="headerlink" href="#create-a-database" title="Permalink to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.create.create_db.html#gffutils.create.create_db" title="gffutils.create.create_db"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_db</span></code></a></p></td>
 <td><p>Create a database from a GFF or GTF file.</p></td>
@@ -158,10 +157,6 @@
 <h2>Interact with a database<a class="headerlink" href="#interact-with-a-database" title="Permalink to this heading"></a></h2>
 <p>First, connect to an existing database:</p>
 <table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.html#gffutils.interface.FeatureDB" title="gffutils.interface.FeatureDB"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FeatureDB</span></code></a></p></td>
 <td><p></p></td>
@@ -170,10 +165,6 @@
 </table>
 <p>Then, use the methods of <a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.html#gffutils.interface.FeatureDB" title="gffutils.interface.FeatureDB"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeatureDB</span></code></a> to interact:</p>
 <table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.children.html#gffutils.interface.FeatureDB.children" title="gffutils.interface.FeatureDB.children"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FeatureDB.children</span></code></a></p></td>
 <td><p>Return children of feature <code class="docutils literal notranslate"><span class="pre">id</span></code>.</p></td>
@@ -209,10 +200,6 @@
 </table>
 <p>Modify a <a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.html#gffutils.interface.FeatureDB" title="gffutils.interface.FeatureDB"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeatureDB</span></code></a>:</p>
 <table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.update.html#gffutils.interface.FeatureDB.update" title="gffutils.interface.FeatureDB.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FeatureDB.update</span></code></a></p></td>
 <td><p>Update the on-disk database with features in <code class="docutils literal notranslate"><span class="pre">data</span></code>.</p></td>
@@ -230,10 +217,6 @@
 </table>
 <p>Operate on features:</p>
 <table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.interfeatures.html#gffutils.interface.FeatureDB.interfeatures" title="gffutils.interface.FeatureDB.interfeatures"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FeatureDB.interfeatures</span></code></a></p></td>
 <td><p>Construct new features representing the space between features.</p></td>
@@ -257,10 +240,6 @@
 <h2>Feature objects<a class="headerlink" href="#feature-objects" title="Permalink to this heading"></a></h2>
 <p>Most <a class="reference internal" href="autodocs/gffutils.interface.FeatureDB.html#gffutils.interface.FeatureDB" title="gffutils.interface.FeatureDB"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeatureDB</span></code></a> methods return <code class="xref py py-class docutils literal notranslate"><span class="pre">Feature</span></code> objects:</p>
 <table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.feature.Feature.html#gffutils.feature.Feature" title="gffutils.feature.Feature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Feature</span></code></a></p></td>
 <td><p></p></td>
@@ -269,10 +248,6 @@
 </table>
 <p>You can extract the sequence for a feature:</p>
 <table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.feature.Feature.sequence.html#gffutils.feature.Feature.sequence" title="gffutils.feature.Feature.sequence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Feature.sequence</span></code></a></p></td>
 <td><p>Retrieves the sequence of this feature as a string.</p></td>
@@ -281,10 +256,6 @@
 </table>
 <p>Creating a <a class="reference internal" href="autodocs/gffutils.feature.Feature.html#gffutils.feature.Feature" title="gffutils.feature.Feature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Feature</span></code></a> object:</p>
 <table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.feature.feature_from_line.html#gffutils.feature.feature_from_line" title="gffutils.feature.feature_from_line"><code class="xref py py-obj docutils literal notranslate"><span class="pre">feature_from_line</span></code></a></p></td>
 <td><p>Given a line from a GFF file, return a Feature object</p></td>
@@ -295,10 +266,6 @@
 <section id="integration-with-other-tools">
 <h2>Integration with other tools<a class="headerlink" href="#integration-with-other-tools" title="Permalink to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.biopython_integration.to_seqfeature.html#gffutils.biopython_integration.to_seqfeature" title="gffutils.biopython_integration.to_seqfeature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gffutils.biopython_integration.to_seqfeature</span></code></a></p></td>
 <td><p>Converts a gffutils.Feature object to a Bio.SeqFeature object.</p></td>
@@ -318,10 +285,6 @@
 <section id="utilities">
 <h2>Utilities<a class="headerlink" href="#utilities" title="Permalink to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="autodocs/gffutils.helpers.asinterval.html#gffutils.helpers.asinterval" title="gffutils.helpers.asinterval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gffutils.helpers.asinterval</span></code></a></p></td>
 <td><p>Converts a gffutils.Feature to a pybedtools.Interval</p></td>

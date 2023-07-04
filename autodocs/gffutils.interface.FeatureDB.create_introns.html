@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gffutils.interface.FeatureDB.create_introns &mdash; gffutils 0.11.1 documentation</title>
+  <title>gffutils.interface.FeatureDB.create_introns &mdash; gffutils 0.12 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -12,10 +12,9 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
@@ -30,14 +29,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> gffutils
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            gffutils
           </a>
               <div class="version">
-                0.11.1
+                0.12
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -76,7 +79,6 @@
 <li class="toctree-l3"><a class="reference internal" href="gffutils.interface.FeatureDB.merge.html">gffutils.interface.FeatureDB.merge</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">gffutils.interface.FeatureDB.create_introns</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#gffutils.interface.FeatureDB.create_introns"><code class="docutils literal notranslate"><span class="pre">FeatureDB.create_introns()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gffutils.interface.FeatureDB.create_introns">create_introns</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="gffutils.interface.FeatureDB.bed12.html">gffutils.interface.FeatureDB.bed12</a></li>
@@ -105,7 +107,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../api.html">API</a></li>
       <li class="breadcrumb-item active">gffutils.interface.FeatureDB.create_introns</li>
       <li class="wy-breadcrumbs-aside">
@@ -124,7 +126,7 @@
 <span class="sig-prename descclassname"><span class="pre">FeatureDB.</span></span><span class="sig-name descname"><span class="pre">create_introns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exon_featuretype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'exon'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grandparent_featuretype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gene'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_featuretype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_featuretype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'intron'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">merge_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numeric_sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gffutils/interface.html#FeatureDB.create_introns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gffutils.interface.FeatureDB.create_introns" title="Permalink to this definition"></a></dt>
 <dd><p>Create introns from existing annotations.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>exon_featuretype</strong> (<em>string</em>) – Feature type to use in order to infer introns.  Typically <code class="docutils literal notranslate"><span class="pre">&quot;exon&quot;</span></code>.</p></li>
 <li><p><strong>grandparent_featuretype</strong> (<em>string</em>) – If <code class="docutils literal notranslate"><span class="pre">grandparent_featuretype</span></code> is not None, then group exons by
@@ -151,7 +153,7 @@ merged exon_number attribute of [‘9’, ‘10’] (numerically sorted)
 rather than [‘10’, ‘9’] (alphabetically sorted).</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p>A generator object that yields <code class="xref py py-class docutils literal notranslate"><span class="pre">Feature</span></code> objects representing</p></li>
 <li><p><em>new introns</em></p></li>

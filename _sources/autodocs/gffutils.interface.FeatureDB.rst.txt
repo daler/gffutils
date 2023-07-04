@@ -22,6 +22,7 @@
       ~FeatureDB.children_bp
       ~FeatureDB.count_features_of_type
       ~FeatureDB.create_introns
+      ~FeatureDB.create_splice_sites
       ~FeatureDB.delete
       ~FeatureDB.execute
       ~FeatureDB.features_of_type
