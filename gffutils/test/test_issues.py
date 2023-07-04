@@ -91,8 +91,8 @@ def test_issue_107():
         db.interfeatures(db.features_of_type("gene", order_by=("seqid", "start")))
     )
     assert [str(i) for i in interfeatures] == [
-        "chr1\tgffutils_derived\tinter_gene_gene\t6\t9\t.\t.\t.\tID=a,b;",
-        "chr2\tgffutils_derived\tinter_gene_gene\t51\t54\t.\t-\t.\tID=c,d;",
+        "chr1\tgffutils_derived\tinter_gene_gene\t6\t9\t.\t.\t.\tID=a-b;",
+        "chr2\tgffutils_derived\tinter_gene_gene\t51\t54\t.\t-\t.\tID=c-d;",
     ]
 
 
@@ -388,23 +388,6 @@ def test_issue_174():
     assert observed[8] == ['9', '10'] 
     assert observed[9] == ['10', '11']
 
-
-def test_issue_181():
-    db = gffutils.create_db(
-        gffutils.example_filename('issue181.gff'),
-        ':memory:')
-    introns = db.create_introns()
-
-    # This now warns that the provided ID key has multiple values.
-    with pytest.raises(ValueError):
-        db.update(introns)
-
-    # The fix is to provide a custom intron ID converter.
-    def intron_id(f):
-        return ','.join(f['ID'])
-
-    db.update(introns, id_spec={'intron': [intron_id]})
-
 def test_issue_197():
 
     # Previously this would fail with ValueError due to using the stop position
@@ -414,11 +397,18 @@ def test_issue_197():
     genes = list(db.features_of_type('gene'))
     igss = list( db.interfeatures(genes,new_featuretype='intergenic_space') )
 
+
+    # Prior to PR #219, multiple IDs could be created by interfeatures, which
+    # in turn was patched here by providing the transform to db.update. With
+    # #219, this ends up being a no-op because ID is a single value by the time
+    # it gets to the transform function.
+    #
+    # However, keeping the test as-is to ensure backward-compatibility.
     def transform(f):
         f['ID'] = [ '-'.join(f.attributes['ID']) ]
         return f
 
-    db = db.update(igss, transform=transform, merge_strategy='error')
+    db = db.update(igss, transform=transform,  merge_strategy='error')
 
     obs = list(db.features_of_type('intergenic_space'))
     for i in obs:
