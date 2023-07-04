@@ -18,6 +18,7 @@ setup(
     package_data = {'gffutils': ['test/data/*']},
     description="Work with GFF and GTF files in a flexible "
     "database framework",
+    long_description=open("README.rst").read(),
     author_email='dalerr@niddk.nih.gov',
     url='https://github.com/daler/gffutils',
     classifiers=[

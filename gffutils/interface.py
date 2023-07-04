@@ -102,7 +102,7 @@ class FeatureDB(object):
         keep_order=False,
         pragmas=constants.default_pragmas,
         sort_attribute_values=False,
-        text_factory=sqlite3.OptimizedUnicode,
+        text_factory=str
     ):
         """
         Connect to a database created by :func:`gffutils.create_db`.
@@ -117,8 +117,7 @@ class FeatureDB(object):
         text_factory : callable
 
             Optionally set the way sqlite3 handles strings.  Default is
-            sqlite3.OptimizedUnicode, which returns ascii when possible,
-            unicode otherwise
+            str
 
         default_encoding : str
 
@@ -895,7 +894,14 @@ class FeatureDB(object):
             if d['start'] > d['end']:
                 return None
 
-            return self._feature_returner(**d)
+            new_feature = self._feature_returner(**d)
+
+            # concat list of ID to create uniq IDs because feature with
+            # multiple values for their ID are no longer permitted since v0.11
+            if "ID" in new_feature.attributes and len(new_feature.attributes["ID"]) > 1:
+                new_id = '-'.join(new_feature.attributes["ID"])
+                new_feature.attributes["ID"] = [new_id]
+            return new_feature
 
         # If not provided, use a no-op function instead.
         if not attribute_func:
@@ -963,10 +969,6 @@ class FeatureDB(object):
             # Ready to yield
             new_feature = _prep_for_yield(interfeature)
             if new_feature:
-                # concat list of ID to create uniq IDs because feature with multiple values for their ID are no longer permitted since v0.11
-                if "ID" in new_feature.attributes and len(new_feature.attributes["ID"]) > 1:
-                    new_id = '-'.join(new_feature.attributes["ID"])
-                    new_feature.attributes["ID"] = [new_id]
                 yield new_feature
             nfeatures = 1
 

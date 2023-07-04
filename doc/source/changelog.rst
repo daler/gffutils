@@ -3,8 +3,21 @@
 Change log
 ==========
 
-Changes in v0.11.1
-------------------
+v0.12
+-----
+
+- Fix `#216 <https://github.com/daler/gffutils/issues/216>`_ (remove deprecated OptimizedUnicode text factory)
+- When interfeatures (like when creating introns) results in features with
+  multiple IDs, concatenate them (`#219
+  <https://github.com/daler/gffutils/pull/219>`_, thanks @Juke34)
+- Handle corner cases observed in GRCh38 annotations where a quoted comma in
+  the attributes causes the dialect inference to incorrectly conclude that
+  repeated keys are not present. See `PR #208 <https://github.com/daler/gffutils/pull/208>`_ for details.
+- Refactor tests to use pytest instead of the deprecated nosetests (`PR #201
+  <https://github.com/daler/gffutils/pull/201>`_, thanks @mr-c)
+
+v0.11.1
+-------
 
 Bugfix: This fixes `#197 <https://github.com/daler/gffutils/issues/197>`_,
 where the :meth:`FeatureDB.interfeatures` function was not behaving correctly
@@ -18,8 +31,8 @@ This also makes a minor maintenance change, replacing
 been an alias to the latter, but this alias will be removed in Python 3.12.
 Making the change now avoids a deprecation warning.
 
-Changes in v0.11
-----------------
+v0.11
+-----
 
 This is largely a bugfix release, many thanks to contributors Rory Kirchner,
 Stefano Rivera, Daniel Lowengrub, Nolan Woods, Stefen Moeller,  and Husen Umer.
@@ -69,14 +82,14 @@ Stefano Rivera, Daniel Lowengrub, Nolan Woods, Stefen Moeller,  and Husen Umer.
   issue with a custom id spec. This addresses `#181
   <https://github.com/daler/gffutils/issues/181>`_.
 
-Changes in v0.10.1
-------------------
+v0.10.1
+-------
 
 - Fix issue with new merge routine (`#152
   <https://github.com/daler/gffutils/issues/152>`_)
 
-Changes in v0.10
-----------------
+v0.10
+-----
 
 - Support very large chromosomes (fixed issues `#94
   <https://github.com/daler/gffutils/issues/94>`_ and `#112
@@ -123,8 +136,8 @@ Changes in v0.10
   <https://github.com/daler/gffutils/pull/149>`_)
 
 
-Changes in v0.9
----------------
+v0.9
+----
 Long-overdue release with performance improvements and better handling of
 corner-case GFF and GTF files.
 
@@ -155,26 +168,26 @@ corner-case GFF and GTF files.
   encoding/decoding behavior.
 - improved testing framework
 
-Changes in v0.8.7.1
--------------------
+v0.8.7.1
+--------
 Fixes bug in `gffutils.pybedtools_integration.tsses` where iterating over large
 databases and using the `as_bed6=True` argument could cause a deadlock.
 
-Changes in v0.8.7
------------------
+v0.8.7
+------
 New module, :mod:`gffutils.pybedtools_integration`. In particular, the
 :func:`gffutils.pybedtools_integration.tsses` function provides many options
 for creating a GTF, GFF, or BED file of transcription start sites (TSSes) from
 an annotation.
 
-Changes in v0.8.6.1
--------------------
+v0.8.6.1
+--------
 Only a warning -- and not an ImportError -- is raised if BioPython is not installed.
 
 Lots of updates in the testing framework to use docker containers on travis-ci.org.
 
-Changes in v0.8.4
------------------
+v0.8.4
+------
 This version addresses issues `#48
 <https://github.com/daler/gffutils/issues/48>`_ and `#20
 <https://github.com/daler/gffutils/issues/20>`_. It only affects database
@@ -213,15 +226,15 @@ transcripts if genes exist, or infer genes if transcripts exist (rather than
 the previous all-or-nothing approach).
 
 
-Changes in v0.8.3.1
--------------------
+v0.8.3.1
+--------
 Thanks to Sven-Eric Schelhorn (@schellhorn on github), this version fixes a bug
 where, if multiple gffutils processes try to create databases from GTF files
 simultaneously, the resulting databases would be incomplete and incorrect.
 
 
-Changes in v0.8.3
------------------
+v0.8.3
+------
 New features
 ~~~~~~~~~~~~
 - New :func:`inspect.inspect` function for examining the contents of
