@@ -102,7 +102,7 @@ class FeatureDB(object):
         keep_order=False,
         pragmas=constants.default_pragmas,
         sort_attribute_values=False,
-        text_factory=sqlite3.OptimizedUnicode,
+        text_factory=str
     ):
         """
         Connect to a database created by :func:`gffutils.create_db`.
@@ -117,8 +117,7 @@ class FeatureDB(object):
         text_factory : callable
 
             Optionally set the way sqlite3 handles strings.  Default is
-            sqlite3.OptimizedUnicode, which returns ascii when possible,
-            unicode otherwise
+            str
 
         default_encoding : str
 
