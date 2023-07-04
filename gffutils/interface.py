@@ -102,7 +102,7 @@ class FeatureDB(object):
         keep_order=False,
         pragmas=constants.default_pragmas,
         sort_attribute_values=False,
-        text_factory=sqlite3.OptimizedUnicode,
+        text_factory=str
     ):
         """
         Connect to a database created by :func:`gffutils.create_db`.
@@ -117,8 +117,7 @@ class FeatureDB(object):
         text_factory : callable
 
             Optionally set the way sqlite3 handles strings.  Default is
-            sqlite3.OptimizedUnicode, which returns ascii when possible,
-            unicode otherwise
+            str
 
         default_encoding : str
 
@@ -895,7 +894,14 @@ class FeatureDB(object):
             if d['start'] > d['end']:
                 return None
 
-            return self._feature_returner(**d)
+            new_feature = self._feature_returner(**d)
+
+            # concat list of ID to create uniq IDs because feature with
+            # multiple values for their ID are no longer permitted since v0.11
+            if "ID" in new_feature.attributes and len(new_feature.attributes["ID"]) > 1:
+                new_id = '-'.join(new_feature.attributes["ID"])
+                new_feature.attributes["ID"] = [new_id]
+            return new_feature
 
         # If not provided, use a no-op function instead.
         if not attribute_func:
@@ -1266,6 +1272,128 @@ class FeatureDB(object):
                 dialect=self.dialect,
             ):
                 yield intron
+
+    def create_splice_sites(
+        self,
+        exon_featuretype="exon",
+        grandparent_featuretype="gene",
+        parent_featuretype=None,
+        merge_attributes=True,
+        numeric_sort=False,
+    ):
+        """
+        Create splice sites from existing annotations.
+
+
+        Parameters
+        ----------
+        exon_featuretype : string
+            Feature type to use in order to infer splice sites.  Typically `"exon"`.
+
+        grandparent_featuretype : string
+            If `grandparent_featuretype` is not None, then group exons by
+            children of this featuretype.  If `granparent_featuretype` is
+            "gene" (default), then splice sites will be created for all first-level
+            children of genes.  This may include mRNA, rRNA, ncRNA, etc.  If
+            you only want to infer splice sites from one of these featuretypes
+            (e.g., mRNA), then use the `parent_featuretype` kwarg which is
+            mutually exclusive with `grandparent_featuretype`.
+
+        parent_featuretype : string
+            If `parent_featuretype` is not None, then only use this featuretype
+            to infer splice sites.  Use this if you only want a subset of
+            featuretypes to have splice sites (e.g., "mRNA" only, and not ncRNA or
+            rRNA). Mutually exclusive with `grandparent_featuretype`.
+
+        merge_attributes : bool
+            Whether or not to merge attributes from all exons. If False then no
+            attributes will be created for the splice sites.
+
+        numeric_sort : bool
+            If True, then merged attributes that can be cast to float will be
+            sorted by their numeric values (but will still be returned as
+            string). This is useful, for example, when creating splice sites between
+            exons and the exons have exon_number attributes as an integer.
+            Using numeric_sort=True will ensure that the returned exons have
+            merged exon_number attribute of ['9', '10'] (numerically sorted)
+            rather than ['10', '9'] (alphabetically sorted).
+
+        Returns
+        -------
+        A generator object that yields :class:`Feature` objects representing
+        new splice sites
+
+        Notes
+        -----
+        The returned generator can be passed directly to the
+        :meth:`FeatureDB.update` method to permanently add them to the
+        database, e.g., ::
+
+            db.update(db.create_splice sites())
+
+        """
+        if (grandparent_featuretype and parent_featuretype) or (
+            grandparent_featuretype is None and parent_featuretype is None
+        ):
+            raise ValueError(
+                "exactly one of `grandparent_featuretype` or "
+                "`parent_featuretype` should be provided"
+            )
+
+        if grandparent_featuretype:
+
+            def child_gen():
+                for gene in self.features_of_type(grandparent_featuretype):
+                    for child in self.children(gene, level=1):
+                        yield child
+
+        elif parent_featuretype:
+
+            def child_gen():
+                for child in self.features_of_type(parent_featuretype):
+                    yield child
+
+        # Two splice features need to be created for each interleave
+        for side in ["left", "right"]:
+            for child in child_gen():
+                exons = self.children(
+                    child, level=1, featuretype=exon_featuretype, order_by="start"
+                )
+
+                # get strand
+                strand = child.strand
+
+                new_featuretype = "splice_site"
+                if side == "left":
+                    if strand == "+":
+                        new_featuretype = "five_prime_cis_splice_site"
+                    elif strand == "-":
+                        new_featuretype = "three_prime_cis_splice_site"
+
+                if side == "right":
+                    if strand == "+":
+                        new_featuretype = "three_prime_cis_splice_site"
+                    elif strand == "-":
+                        new_featuretype = "five_prime_cis_splice_site"
+
+                for splice_site in self.interfeatures(
+                    exons,
+                    new_featuretype=new_featuretype,
+                    merge_attributes=merge_attributes,
+                    numeric_sort=numeric_sort,
+                    dialect=self.dialect,
+                ):
+
+                    if side == "left":
+                        splice_site.end = splice_site.start + 1
+                    if side == "right":
+                        splice_site.start = splice_site.end - 1
+
+                    # make ID uniq by adding suffix
+                    splice_site.attributes["ID"] = [new_featuretype + "_" + splice_site.attributes["ID"][0]]
+
+                    yield splice_site
+
 
     def _old_merge(self, features, ignore_strand=False):
         """

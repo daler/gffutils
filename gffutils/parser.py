@@ -346,7 +346,11 @@ def _split_keyvals(keyval_str, dialect=None):
             # strings
             # quals[key].extend([v for v in val.split(',') if v])
 
-            # See issue #198, where 
+            # See issue #198, where commas within a description can incorrectly
+            # cause the dialect inference to conclude that there are not
+            # repeated keys.
+            #
+            # More description in PR #208.
             if dialect["repeated keys"]:
                 quals[key].append(val)
             else:
