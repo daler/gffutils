@@ -15,6 +15,7 @@ v0.12
   repeated keys are not present. See `PR #208 <https://github.com/daler/gffutils/pull/208>`_ for details.
 - Refactor tests to use pytest instead of the deprecated nosetests (`PR #201
   <https://github.com/daler/gffutils/pull/201>`_, thanks @mr-c)
+- New method, `FeatureDB.create_splice_sites` (`PR #220 <https://github.com/daler/gffutils/pull/200>`_, thanks @Juke34)
 
 v0.11.1
 -------

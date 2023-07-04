@@ -1359,7 +1359,7 @@ class FeatureDB(object):
                 exons = self.children(
                     child, level=1, featuretype=exon_featuretype, order_by="start"
                 )
-                
+
                 # get strand
                 strand = child.strand
 
@@ -1375,7 +1375,7 @@ class FeatureDB(object):
                         new_featuretype = "three_prime_cis_splice_site"
                     elif strand == "-":
                         new_featuretype = "five_prime_cis_splice_site"
-          
+
                 for splice_site in self.interfeatures(
                     exons,
                     new_featuretype=new_featuretype,
