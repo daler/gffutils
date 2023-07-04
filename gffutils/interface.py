@@ -1359,9 +1359,9 @@ class FeatureDB(object):
                 )
                 
                 # get strand
-                strand=child.strand
+                strand = child.strand
 
-                new_featuretype="splice_site"
+                new_featuretype = "splice_site"
                 if side == "left":
                     if strand == "+":
                         new_featuretype = "five_prime_cis_splice_site"
@@ -1388,7 +1388,7 @@ class FeatureDB(object):
                         splice_site.start = splice_site.end - 1
 
                     # make ID uniq by adding suffix
-                    splice_site.attributes["ID"] = [new_featuretype+"_"+splice_site.attributes["ID"][0]]
+                    splice_site.attributes["ID"] = [new_featuretype + "_" + splice_site.attributes["ID"][0]]
 
                     yield splice_site
 
