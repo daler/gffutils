@@ -1280,37 +1280,37 @@ class FeatureDB(object):
         numeric_sort=False,
     ):
         """
-        Create introns from existing annotations.
+        Create splice sites from existing annotations.
 
 
         Parameters
         ----------
         exon_featuretype : string
-            Feature type to use in order to infer introns.  Typically `"exon"`.
+            Feature type to use in order to infer splice sites.  Typically `"exon"`.
 
         grandparent_featuretype : string
             If `grandparent_featuretype` is not None, then group exons by
             children of this featuretype.  If `granparent_featuretype` is
-            "gene" (default), then introns will be created for all first-level
+            "gene" (default), then splice sites will be created for all first-level
             children of genes.  This may include mRNA, rRNA, ncRNA, etc.  If
-            you only want to infer introns from one of these featuretypes
+            you only want to infer splice sites from one of these featuretypes
             (e.g., mRNA), then use the `parent_featuretype` kwarg which is
             mutually exclusive with `grandparent_featuretype`.
 
         parent_featuretype : string
             If `parent_featuretype` is not None, then only use this featuretype
-            to infer introns.  Use this if you only want a subset of
-            featuretypes to have introns (e.g., "mRNA" only, and not ncRNA or
+            to infer splice sites.  Use this if you only want a subset of
+            featuretypes to have splice sites (e.g., "mRNA" only, and not ncRNA or
             rRNA). Mutually exclusive with `grandparent_featuretype`.
 
         merge_attributes : bool
             Whether or not to merge attributes from all exons. If False then no
-            attributes will be created for the introns.
+            attributes will be created for the splice sites.
 
         numeric_sort : bool
             If True, then merged attributes that can be cast to float will be
             sorted by their numeric values (but will still be returned as
-            string). This is useful, for example, when creating introns between
+            string). This is useful, for example, when creating splice sites between
             exons and the exons have exon_number attributes as an integer.
             Using numeric_sort=True will ensure that the returned exons have
             merged exon_number attribute of ['9', '10'] (numerically sorted)
@@ -1319,7 +1319,7 @@ class FeatureDB(object):
         Returns
         -------
         A generator object that yields :class:`Feature` objects representing
-        new introns
+        new splice sites
 
         Notes
         -----
@@ -1327,7 +1327,7 @@ class FeatureDB(object):
         :meth:`FeatureDB.update` method to permanently add them to the
         database, e.g., ::
 
-            db.update(db.create_introns())
+            db.update(db.create_splice sites())
 
         """
         if (grandparent_featuretype and parent_featuretype) or (
