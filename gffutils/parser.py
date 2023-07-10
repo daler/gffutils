@@ -174,7 +174,7 @@ def _reconstruct(keyvals, dialect, keep_order=False, sort_attribute_values=False
 # TODO:
 # Cythonize -- profiling shows that the bulk of the time is spent on this
 # function...
-def _split_keyvals(keyval_str, dialect=None):
+def _split_keyvals(keyval_str, dialect=None, infer_dialect_call=False):
     """
     Given the string attributes field of a GFF-like line, split it into an
     attributes dictionary and a "dialect" dictionary which contains information
@@ -186,6 +186,11 @@ def _split_keyvals(keyval_str, dialect=None):
     attribute string.
 
     Otherwise, use the provided dialect (and return it at the end).
+
+    The `infer_dialect_call` argument denotes whether the call to this function
+    has been made as part of the regular parsing or only to obtain the dialect
+    using helpers.infer_dialect(); this helps us to call the regex from PR #215
+    only when absolutely required so as to avoid slowing down every other case.
     """
 
     def _unquote_quals(quals, dialect):
@@ -216,11 +221,10 @@ def _split_keyvals(keyval_str, dialect=None):
         if dialect["trailing semicolon"]:
             keyval_str = keyval_str.rstrip(";")
 
-        # adding regex to split by separator instead of base split
-        # adapted from https://stackoverflow.com/a/2787979/7182397
-
-        # parts = keyval_str.split(dialect["field separator"])
-        parts = re.split(f'''{dialect["field separator"]}(?=(?:[^"]|"[^"]*")*$)''', keyval_str)
+        if dialect["semicolon_in_quotes"]:
+            parts = re.split(f'''{dialect["field separator"]}(?=(?:[^"]|"[^"]*")*$)''', keyval_str)
+        else:
+            parts = keyval_str.split(dialect["field separator"])
 
         kvsep = dialect["keyval separator"]
         if dialect["leading semicolon"]:
@@ -292,13 +296,15 @@ def _split_keyvals(keyval_str, dialect=None):
     # GFF3 works with no spaces.
     # So split on the first one we can recognize...
     for sep in (" ; ", "; ", ";"):
-        # adding regex to split by separator instead of base split
-        # adapted from https://stackoverflow.com/a/2787979/7182397
-
-        # parts = keyval_str.split(sep)
-        parts = re.split(f'''{sep}(?=(?:[^"]|"[^"]*")*$)''', keyval_str)
+        # We want to run regex only when calling helpers.infer_dialect()
+        parts = keyval_str.split(sep)
+        parts_regex = parts
+        if infer_dialect_call:
+            parts_regex = re.split(f'''{sep}(?=(?:[^"]|"[^"]*")*$)''', keyval_str)
         if len(parts) > 1:
             dialect["field separator"] = sep
+            if parts != parts_regex:
+                dialect["semicolon_in_quotes"] = True
             break
 
     # Is it GFF3?  They have key-vals separated by "="
@@ -354,7 +360,11 @@ def _split_keyvals(keyval_str, dialect=None):
             # strings
             # quals[key].extend([v for v in val.split(',') if v])
 
-            # See issue #198, where 
+            # See issue #198, where commas within a description can incorrectly
+            # cause the dialect inference to conclude that there are not
+            # repeated keys.
+            #
+            # More description in PR #208.
             if dialect["repeated keys"]:
                 quals[key].append(val)
             else:

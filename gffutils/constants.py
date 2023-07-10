@@ -127,6 +127,12 @@ dialect = {
     # vs
     #   ID=001; Name=gene1
     "field separator": ";",
+    # Sometimes there are semicolons inside quotes that break things, e.g.,
+    #
+    #   note "Evidence 1a: Function1, Function2"
+    # vs
+    #   note "Evidence 1a: Function; PubMedId: 123, 456"
+    "semicolon_in_quotes": False,
     # Usually "=" for GFF3; " " for GTF, e.g.,
     #
     #   gene_id "GENE1"
