@@ -9,4 +9,4 @@ manipulation of hierarchical features (e.g., genes, transcripts, and exons)
 than is possible with plain-text methods alone.
 
 See documentation at https://daler.github.io/gffutils, and GitHub repo at
-https:/github.com/daler/gffutils.
+https://github.com/daler/gffutils.
