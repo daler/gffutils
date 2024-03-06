@@ -46,10 +46,12 @@ def to_seqfeature(feature):
     return SeqFeature(
         # Convert from GFF 1-based to standard Python 0-based indexing used by
         # BioPython
-        FeatureLocation(feature.start - 1, feature.stop),
+        FeatureLocation(
+            feature.start - 1,
+            feature.stop,
+            strand=_biopython_strand[feature.strand]),
         id=feature.id,
         type=feature.featuretype,
-        strand=_biopython_strand[feature.strand],
         qualifiers=qualifiers,
     )
 
