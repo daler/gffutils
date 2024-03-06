@@ -193,7 +193,7 @@ class BaseDB(object):
 
     orig_fn = None
 
-    def setup(self):
+    def setup_method(self):
         def gff_id_func(f):
             if "ID" in f.attributes:
                 return f.attributes["ID"][0]
