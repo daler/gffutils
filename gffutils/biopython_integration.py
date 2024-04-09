@@ -72,8 +72,8 @@ def from_seqfeature(s, **kwargs):
 
     # BioPython parses 1-based GenBank positions into 0-based for use within
     # Python.  We need to convert back to 1-based GFF format here.
-    start = s.location.start.position + 1
-    stop = s.location.end.position
+    start = s.location.start + 1
+    stop = s.location.end
     featuretype = s.type
     id = s.id
     attributes = dict(s.qualifiers)
