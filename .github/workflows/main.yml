@@ -45,7 +45,7 @@ jobs:
           source "${HOME}/conda/etc/profile.d/mamba.sh"
 
           conda activate gffutils-env
-          pip install pytest hypothesis biopython
+          pip install pytest hypothesis biopython pybedtools
           pytest -v --doctest-modules gffutils
           conda deactivate
 
