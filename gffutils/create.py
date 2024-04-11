@@ -5,7 +5,6 @@ import tempfile
 import sys
 import os
 import sqlite3
-import six
 from textwrap import dedent
 from gffutils import constants
 from gffutils import version
@@ -119,7 +118,7 @@ class _DBCreator(object):
                 os.unlink(dbfn)
         self.dbfn = dbfn
         self.id_spec = id_spec
-        if isinstance(dbfn, six.string_types):
+        if isinstance(dbfn, str):
             conn = sqlite3.connect(dbfn)
         else:
             conn = dbfn
@@ -171,7 +170,7 @@ class _DBCreator(object):
         """
 
         # If id_spec is a string or callable, convert to iterable for later
-        if isinstance(self.id_spec, six.string_types):
+        if isinstance(self.id_spec, str):
             id_key = [self.id_spec]
         elif hasattr(self.id_spec, "__call__"):
             id_key = [self.id_spec]
@@ -181,7 +180,7 @@ class _DBCreator(object):
         elif isinstance(self.id_spec, dict):
             try:
                 id_key = self.id_spec[f.featuretype]
-                if isinstance(id_key, six.string_types):
+                if isinstance(id_key, str):
                     id_key = [id_key]
 
             # Otherwise, use default auto-increment.
@@ -684,7 +683,7 @@ class _GFFDBCreator(_DBCreator):
         # c.execute('CREATE INDEX childindex ON relations (child)')
         # self.conn.commit()
 
-        if isinstance(self._keep_tempfiles, six.string_types):
+        if isinstance(self._keep_tempfiles, str):
             suffix = self._keep_tempfiles
         else:
             suffix = ".gffutils"
@@ -883,7 +882,7 @@ class _GTFDBCreator(_DBCreator):
             msg = "transcript"
         logger.info("Inferring %s extents " "and writing to tempfile" % msg)
 
-        if isinstance(self._keep_tempfiles, six.string_types):
+        if isinstance(self._keep_tempfiles, str):
             suffix = self._keep_tempfiles
         else:
             suffix = ".gffutils"

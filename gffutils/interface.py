@@ -1,6 +1,5 @@
 import collections
 import os
-import six
 import sqlite3
 import shutil
 import warnings
@@ -694,7 +693,7 @@ class FeatureDB(object):
                     "If region is supplied, do not supply seqid, "
                     "start, or end as separate kwargs"
                 )
-            if isinstance(region, six.string_types):
+            if isinstance(region, str):
                 toks = region.split(":")
                 if len(toks) == 1:
                     seqid = toks[0]
@@ -774,7 +773,7 @@ class FeatureDB(object):
 
         # Add the featuretype clause
         if featuretype is not None:
-            if isinstance(featuretype, six.string_types):
+            if isinstance(featuretype, str):
                 featuretype = [featuretype]
             feature_clause = " or ".join(["featuretype = ?" for _ in featuretype])
             query += " AND (%s) " % feature_clause
@@ -994,7 +993,7 @@ class FeatureDB(object):
         FeatureDB object, with features deleted.
         """
         if make_backup:
-            if isinstance(self.dbfn, six.string_types):
+            if isinstance(self.dbfn, str):
                 shutil.copy2(self.dbfn, self.dbfn + ".bak")
 
         c = self.conn.cursor()
@@ -1006,12 +1005,12 @@ class FeatureDB(object):
         """
         if isinstance(features, FeatureDB):
             features = features.all_features()
-        if isinstance(features, six.string_types):
+        if isinstance(features, str):
             features = [features]
         if isinstance(features, Feature):
             features = [features]
         for feature in features:
-            if isinstance(feature, six.string_types):
+            if isinstance(feature, str):
                 _id = feature
             else:
                 _id = feature.id
@@ -1060,7 +1059,7 @@ class FeatureDB(object):
         from gffutils import iterators
 
         if make_backup:
-            if isinstance(self.dbfn, six.string_types):
+            if isinstance(self.dbfn, str):
                 shutil.copy2(self.dbfn, self.dbfn + ".bak")
 
         # get iterator-specific kwargs
@@ -1139,9 +1138,9 @@ class FeatureDB(object):
         -------
         FeatureDB object with new relations added.
         """
-        if isinstance(parent, six.string_types):
+        if isinstance(parent, str):
             parent = self[parent]
-        if isinstance(child, six.string_types):
+        if isinstance(child, str):
             child = self[child]
 
         c = self.conn.cursor()

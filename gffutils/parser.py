@@ -3,7 +3,7 @@
 import re
 import copy
 import collections
-from six.moves import urllib
+import urllib
 from gffutils import constants
 from gffutils.exceptions import AttributeStringError
 

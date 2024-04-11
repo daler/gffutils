@@ -4,7 +4,6 @@ import os
 import simplejson as json
 import time
 import tempfile
-import six
 from gffutils import constants
 from gffutils import bins
 import gffutils
@@ -202,7 +201,7 @@ def make_query(
         # e.g., "featuretype = 'exon'"
         #
         # or, "featuretype IN ('exon', 'CDS')"
-        if isinstance(featuretype, six.string_types):
+        if isinstance(featuretype, str):
             d["FEATURETYPE"] = "features.featuretype = ?"
             args.append(featuretype)
         else:
@@ -218,7 +217,7 @@ def make_query(
         # `limit` is a string or a tuple of (chrom, start, stop)
         #
         # e.g., "seqid = 'chr2L' AND start > 1000 AND end < 5000"
-        if isinstance(limit, six.string_types):
+        if isinstance(limit, str):
             seqid, startstop = limit.split(":")
             start, end = startstop.split("-")
         else:
@@ -257,7 +256,7 @@ def make_query(
         # Default is essentially random order.
         #
         # e.g. "ORDER BY seqid, start DESC"
-        if isinstance(order_by, six.string_types):
+        if isinstance(order_by, str):
             _order_by.append(order_by)
 
         else:
@@ -387,7 +386,7 @@ def merge_attributes(attr1, attr2, numeric_sort=False):
         if not isinstance(v, list):
             new_d[k] = [v]
 
-    for k, v in six.iteritems(attr1):
+    for k, v in attr1.items():
         if k in attr2:
             if not isinstance(v, list):
                 v = [v]
@@ -507,9 +506,9 @@ def is_gff_db(db_fname):
 
 
 def to_unicode(obj, encoding="utf-8"):
-    if isinstance(obj, six.string_types):
-        if not isinstance(obj, six.text_type):
-            obj = six.text_type(obj, encoding)
+    if isinstance(obj, str):
+        if not isinstance(obj, str):
+            obj = str(obj, encoding)
     return obj
 
 

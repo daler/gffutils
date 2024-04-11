@@ -9,11 +9,10 @@ import gffutils.inspect as inspect
 import gffutils.iterators as iterators
 import sys
 import os
-import six
 import shutil
 import threading
 import tempfile
-from six.moves import SimpleHTTPServer
+import http.server as SimpleHTTPServer
 
 if sys.version_info.major == 3:
     import socketserver as SocketServer
@@ -395,7 +394,7 @@ def test_gffwriter():
     ), "unsanitized.gff should not have a gffutils-style header."
     db_in = gffutils.create_db(fn, ":memory:", keep_order=True)
     # Fetch first record
-    rec = six.next(db_in.all_features())
+    rec = next(db_in.all_features())
     ##
     ## Write GFF file in-place test
     ##
@@ -551,7 +550,7 @@ def test_nonascii():
         # ...but fails using plain nosetests or when using regular Python
         # interpreter
         except UnicodeEncodeError:
-            print(six.text_type(i))
+            print(str(i))
 
 
 def test_feature_merge():
@@ -903,7 +902,7 @@ def test_iterator_update():
     db.update(gen(), merge_strategy="replace")
     assert len(list(db.all_features())) == 12
     assert len(list(db.features_of_type("gene"))) == 1
-    g = six.next(db.features_of_type("gene"))
+    g = next(db.features_of_type("gene"))
     assert g.start == 1, g.start
     assert g.stop == 100, g.stop
 
@@ -924,7 +923,7 @@ def test_iterator_update():
     )
     assert len(list(db.all_features())) == 12
     assert len(list(db.features_of_type("gene"))) == 1
-    g = six.next(db.features_of_type("gene"))
+    g = next(db.features_of_type("gene"))
     print(g)
     assert g.start == 1, g.start
     assert g.stop == 100, g.stop
