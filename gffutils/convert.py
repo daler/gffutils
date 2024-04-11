@@ -3,7 +3,6 @@ Conversion functions that operate on :class:`FeatureDB` classes.
 """
 
 
-
 def to_bed12(f, db, child_type="exon", name_field="ID"):
     """
     Given a top-level feature (e.g., transcript), construct a BED12 entry

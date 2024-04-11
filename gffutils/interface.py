@@ -101,7 +101,7 @@ class FeatureDB(object):
         keep_order=False,
         pragmas=constants.default_pragmas,
         sort_attribute_values=False,
-        text_factory=str
+        text_factory=str,
     ):
         """
         Connect to a database created by :func:`gffutils.create_db`.
@@ -871,10 +871,21 @@ class FeatureDB(object):
             Used to initialize a new interfeature that is ready to be updated
             in-place.
             """
-            keys = ['id', 'seqid', 'source', 'featuretype', 'start', 'end',
-                    'score', 'strand', 'frame', 'attributes', 'bin']
+            keys = [
+                "id",
+                "seqid",
+                "source",
+                "featuretype",
+                "start",
+                "end",
+                "score",
+                "strand",
+                "frame",
+                "attributes",
+                "bin",
+            ]
             d = dict(zip(keys, f.astuple()))
-            d['source'] = 'gffutils_derived'
+            d["source"] = "gffutils_derived"
             return d
 
         def _prep_for_yield(d):
@@ -885,12 +896,12 @@ class FeatureDB(object):
             If start is greater than stop (which happens when trying to get
             interfeatures for overlapping features), then return None.
             """
-            d['start'] += 1
-            d['end'] -= 1
-            new_bin = bins.bins(d['start'], d['end'], one=True)
-            d['bin'] = new_bin
+            d["start"] += 1
+            d["end"] -= 1
+            new_bin = bins.bins(d["start"], d["end"], one=True)
+            d["bin"] = new_bin
 
-            if d['start'] > d['end']:
+            if d["start"] > d["end"]:
                 return None
 
             new_feature = self._feature_returner(**d)
@@ -898,12 +909,13 @@ class FeatureDB(object):
             # concat list of ID to create uniq IDs because feature with
             # multiple values for their ID are no longer permitted since v0.11
             if "ID" in new_feature.attributes and len(new_feature.attributes["ID"]) > 1:
-                new_id = '-'.join(new_feature.attributes["ID"])
+                new_id = "-".join(new_feature.attributes["ID"])
                 new_feature.attributes["ID"] = [new_id]
             return new_feature
 
         # If not provided, use a no-op function instead.
         if not attribute_func:
+
             def attribute_func(a):
                 return a
 
@@ -932,23 +944,23 @@ class FeatureDB(object):
             nfeatures += 1
 
             # Adjust the interfeature dict in-place with coords...
-            interfeature['start'] = last_feature.stop
-            interfeature['end'] = f.start
+            interfeature["start"] = last_feature.stop
+            interfeature["end"] = f.start
 
             # ...featuretype
             if new_featuretype is None:
-                interfeature['featuretype'] = "inter_%s_%s" % (
+                interfeature["featuretype"] = "inter_%s_%s" % (
                     last_feature.featuretype,
                     f.featuretype,
                 )
             else:
-                interfeature['featuretype'] = new_featuretype
+                interfeature["featuretype"] = new_featuretype
 
             # ...strand
             if last_feature.strand != f.strand:
-                interfeature['strand'] = '.'
+                interfeature["strand"] = "."
             else:
-                interfeature['strand'] = f.strand
+                interfeature["strand"] = f.strand
 
             # and attributes
             if merge_attributes:
@@ -963,7 +975,7 @@ class FeatureDB(object):
             if update_attributes:
                 new_attributes.update(update_attributes)
 
-            interfeature['attributes'] = new_attributes
+            interfeature["attributes"] = new_attributes
 
             # Ready to yield
             new_feature = _prep_for_yield(interfeature)
@@ -1389,10 +1401,11 @@ class FeatureDB(object):
                         splice_site.start = splice_site.end - 1
 
                     # make ID uniq by adding suffix
-                    splice_site.attributes["ID"] = [new_featuretype + "_" + splice_site.attributes["ID"][0]]
+                    splice_site.attributes["ID"] = [
+                        new_featuretype + "_" + splice_site.attributes["ID"][0]
+                    ]
 
                     yield splice_site
-
 
     def _old_merge(self, features, ignore_strand=False):
         """
@@ -1709,10 +1722,12 @@ class FeatureDB(object):
         return result_features
 
     def children_bp(
-        self, feature, child_featuretype="exon", merge=False,
-            merge_criteria=(mc.seqid, mc.overlap_end_inclusive, mc.strand,
-                            mc.feature_type),
-            **kwargs
+        self,
+        feature,
+        child_featuretype="exon",
+        merge=False,
+        merge_criteria=(mc.seqid, mc.overlap_end_inclusive, mc.strand, mc.feature_type),
+        **kwargs
     ):
         """
         Total bp of all children of a featuretype.
@@ -1751,9 +1766,14 @@ class FeatureDB(object):
                 raise ValueError(
                     "'ignore_strand' has been deprecated; please use "
                     "merge_criteria to control how features should be merged. "
-                    "E.g., leave out the 'mc.strand' criteria to ignore strand.")
+                    "E.g., leave out the 'mc.strand' criteria to ignore strand."
+                )
             else:
-                raise TypeError("merge() got unexpected keyword arguments '{}'".format(kwargs.keys()))
+                raise TypeError(
+                    "merge() got unexpected keyword arguments '{}'".format(
+                        kwargs.keys()
+                    )
+                )
 
         children = self.children(
             feature, featuretype=child_featuretype, order_by="start"
@@ -1939,7 +1959,6 @@ class FeatureDB(object):
         )
         for (i,) in c:
             yield i
-
 
     # Recycle the docs for _relation so they stay consistent between parents()
     # and children()

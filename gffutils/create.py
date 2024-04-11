@@ -216,7 +216,8 @@ class _DBCreator(object):
                                 "a single value is required for a primary key in the "
                                 "database. Consider using a custom id_spec to "
                                 "convert these multiple values into a single "
-                                "value".format(k))
+                                "value".format(k)
+                            )
                     except KeyError:
                         pass
                     try:
