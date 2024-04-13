@@ -3,6 +3,17 @@
 Change log
 ==========
 
+v0.13
+-----
+
+- Document options for avoiding deadlocks when simultaneously reading/writing
+  to a db on disk (fixes `#227
+  <https://github.com/daler/gffutils/issues/227>`__).
+- Support later versions of BioPython (fixes `#228
+  <https://github.com/daler/gffutils/issues/228>`__).
+- Drop support for Python 3.7 and unused ``six`` dependency; support Python
+  3.11 and 3.12 (fixes `#223 <https://github.com/daler/gffutils/issues/223>`__)
+
 v0.12
 -----
 

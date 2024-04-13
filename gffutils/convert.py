@@ -2,8 +2,6 @@
 Conversion functions that operate on :class:`FeatureDB` classes.
 """
 
-import six
-
 
 def to_bed12(f, db, child_type="exon", name_field="ID"):
     """
@@ -22,7 +20,7 @@ def to_bed12(f, db, child_type="exon", name_field="ID"):
         Attribute to be used in the "name" field of the BED12 entry.  Usually
         "ID" for GFF; "transcript_id" for GTF.
     """
-    if isinstance(f, six.string_types):
+    if isinstance(f, str):
         f = db[f]
     children = list(db.children(f, featuretype=child_type, order_by="start"))
     sizes = [len(i) for i in children]

@@ -1,1 +1,1 @@
-collect_ignore=["data"]
+collect_ignore = ["data"]

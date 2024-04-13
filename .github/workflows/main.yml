@@ -4,7 +4,7 @@ jobs:
   build-and-test:
     strategy:
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -30,7 +30,7 @@ jobs:
           conda config --system --set channel_priority strict
           mamba create -y -n gffutils-env \
             python=${{ matrix.python-version }} \
-            --file requirements.txt
+            bedtools
 
           conda activate gffutils-env
           python setup.py clean sdist
@@ -43,9 +43,9 @@ jobs:
         run: |
           source "${HOME}/conda/etc/profile.d/conda.sh"
           source "${HOME}/conda/etc/profile.d/mamba.sh"
-          mamba install -y -n gffutils-env --file optional-requirements.txt pytest hypothesis
 
           conda activate gffutils-env
+          pip install pytest hypothesis biopython pybedtools
           pytest -v --doctest-modules gffutils
           conda deactivate
 

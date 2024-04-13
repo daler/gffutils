@@ -6,7 +6,6 @@ import os
 import pybedtools
 from pybedtools import featurefuncs
 from gffutils import helpers
-import six
 
 
 def to_bedtool(iterator):
@@ -210,7 +209,7 @@ def tsses(
 
     if merge_overlapping or as_bed6:
 
-        if isinstance(attrs, six.string_types):
+        if isinstance(attrs, str):
             attrs = [attrs]
 
         def to_bed(f):

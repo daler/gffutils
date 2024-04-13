@@ -9,11 +9,10 @@ import gffutils.inspect as inspect
 import gffutils.iterators as iterators
 import sys
 import os
-import six
 import shutil
 import threading
 import tempfile
-from six.moves import SimpleHTTPServer
+import http.server as SimpleHTTPServer
 
 if sys.version_info.major == 3:
     import socketserver as SocketServer
@@ -395,7 +394,7 @@ def test_gffwriter():
     ), "unsanitized.gff should not have a gffutils-style header."
     db_in = gffutils.create_db(fn, ":memory:", keep_order=True)
     # Fetch first record
-    rec = six.next(db_in.all_features())
+    rec = next(db_in.all_features())
     ##
     ## Write GFF file in-place test
     ##
@@ -551,7 +550,7 @@ def test_nonascii():
         # ...but fails using plain nosetests or when using regular Python
         # interpreter
         except UnicodeEncodeError:
-            print(six.text_type(i))
+            print(str(i))
 
 
 def test_feature_merge():
@@ -637,7 +636,7 @@ def test_feature_merge():
             id_spec="gene_id",
             force_merge_fields=["start"],
             keep_order=True,
-            )
+        )
 
     # test that warnings are raised because of strand and frame
     with warnings.catch_warnings(record=True) as w:
@@ -903,7 +902,7 @@ def test_iterator_update():
     db.update(gen(), merge_strategy="replace")
     assert len(list(db.all_features())) == 12
     assert len(list(db.features_of_type("gene"))) == 1
-    g = six.next(db.features_of_type("gene"))
+    g = next(db.features_of_type("gene"))
     assert g.start == 1, g.start
     assert g.stop == 100, g.stop
 
@@ -924,7 +923,7 @@ def test_iterator_update():
     )
     assert len(list(db.all_features())) == 12
     assert len(list(db.features_of_type("gene"))) == 1
-    g = six.next(db.features_of_type("gene"))
+    g = next(db.features_of_type("gene"))
     print(g)
     assert g.start == 1, g.start
     assert g.stop == 100, g.stop
@@ -934,17 +933,19 @@ def test_iterator_update():
         [(i.start, i.stop) for i in db.features_of_type("exon")]
     )
 
+
 def clean_tempdir():
     tempfile.tempdir = tempdir
     if os.path.exists(tempdir):
         shutil.rmtree(tempdir)
     os.makedirs(tempdir)
 
+
 # specify a writeable temp dir for testing
 tempdir = "/tmp/gffutils-test"
 
-def test_tempfiles():
 
+def test_tempfiles():
 
     clean_tempdir()
 
@@ -991,6 +992,7 @@ def test_tempfiles():
     filelist = os.listdir(tempdir)
     assert len(filelist) == 1, filelist
     assert filelist[0].endswith(".GFFtmp")
+
 
 @pytest.mark.skip(reason="Unclear if still needed; currently failing")
 def test_parallel_db():
@@ -1114,7 +1116,7 @@ def test_deprecation_handler():
             gffutils.example_filename("FBgn0031208.gtf"),
             ":memory:",
             infer_gene_extent=False,
-            )
+        )
 
 
 def test_nonsense_kwarg():
@@ -1123,7 +1125,7 @@ def test_nonsense_kwarg():
             gffutils.example_filename("FBgn0031208.gtf"),
             ":memory:",
             asdf=True,
-            )
+        )
 
 
 def test_infer_gene_extent():
@@ -1242,7 +1244,8 @@ def test_create_splice_sites():
     db = gffutils.create_db(fn, ":memory:")
     db = db.update(db.create_splice_sites())
     observed = "\n".join(str(feature) for feature in db.all_features())
-    expected = dedent("""\
+    expected = dedent(
+        """\
     chr1	ensGene	gene	4763287	4775820	.	-	.	Name=ENSMUSG00000033845;ID=ENSMUSG00000033845;Alias=ENSMUSG00000033845;gid=ENSMUSG00000033845
     chr1	ensGene	mRNA	4764517	4775779	.	-	.	Name=ENSMUST00000045689;Parent=ENSMUSG00000033845;ID=ENSMUST00000045689;Alias=ENSMUSG00000033845;gid=ENSMUSG00000033845
     chr1	ensGene	CDS	4775654	4775758	.	-	0	Name=ENSMUST00000045689.cds0;Parent=ENSMUST00000045689;ID=ENSMUST00000045689.cds0;gid=ENSMUSG00000033845
@@ -1260,11 +1263,10 @@ def test_create_splice_sites():
     chr1	gffutils_derived	three_prime_cis_splice_site	4772815	4772816	.	-	.	Name=ENSMUST00000045689.exon0,ENSMUST00000045689.exon1;Parent=ENSMUST00000045689;ID=three_prime_cis_splice_site_ENSMUST00000045689.exon0-ENSMUST00000045689.exon1;gid=ENSMUSG00000033845
     chr1	gffutils_derived	five_prime_cis_splice_site	4767604	4767605	.	-	.	Name=ENSMUST00000045689.exon2,ENSMUST00000045689.exon3;Parent=ENSMUST00000045689;ID=five_prime_cis_splice_site_ENSMUST00000045689.exon2-ENSMUST00000045689.exon3;gid=ENSMUSG00000033845
     chr1	gffutils_derived	five_prime_cis_splice_site	4772647	4772648	.	-	.	Name=ENSMUST00000045689.exon1,ENSMUST00000045689.exon2;Parent=ENSMUST00000045689;ID=five_prime_cis_splice_site_ENSMUST00000045689.exon1-ENSMUST00000045689.exon2;gid=ENSMUSG00000033845
-    chr1	gffutils_derived	five_prime_cis_splice_site	4775652	4775653	.	-	.	Name=ENSMUST00000045689.exon0,ENSMUST00000045689.exon1;Parent=ENSMUST00000045689;ID=five_prime_cis_splice_site_ENSMUST00000045689.exon0-ENSMUST00000045689.exon1;gid=ENSMUSG00000033845""")
+    chr1	gffutils_derived	five_prime_cis_splice_site	4775652	4775653	.	-	.	Name=ENSMUST00000045689.exon0,ENSMUST00000045689.exon1;Parent=ENSMUST00000045689;ID=five_prime_cis_splice_site_ENSMUST00000045689.exon0-ENSMUST00000045689.exon1;gid=ENSMUSG00000033845"""
+    )
 
     assert observed == expected
-
-
 
 
 if __name__ == "__main__":

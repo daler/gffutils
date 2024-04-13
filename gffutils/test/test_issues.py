@@ -13,6 +13,7 @@ from gffutils import merge_criteria as mc
 
 import pytest
 
+
 def test_issue_79():
     gtf = gffutils.example_filename("keep-order-test.gtf")
     db = gffutils.create_db(
@@ -291,41 +292,41 @@ def test_issue_128():
     # In #128, some lines had separators of "; " and some with ";". The first
     # one in the file would win. Now the detection pays more attention to lines
     # with more attributes to make it work properly
-    gff = gffutils.example_filename('gms2_example.gff3')
+    gff = gffutils.example_filename("gms2_example.gff3")
     db = gffutils.create_db(gff, ":memory:", force=True)
     expected = {
-        'ID': ['1'],
-        'Parent': ['gene_1'],
-        'gene_type': ['native'],
-        'partial': ['11'],
-        'gc': ['33'], 
-        'length': ['363'],
+        "ID": ["1"],
+        "Parent": ["gene_1"],
+        "gene_type": ["native"],
+        "partial": ["11"],
+        "gc": ["33"],
+        "length": ["363"],
     }
-    assert dict(db['1'].attributes) == expected
+    assert dict(db["1"].attributes) == expected
 
 
 def test_issue_157():
     # With the merge overhaul, children_bp incorrectly still used ignore_strand.
-    db = gffutils.create_db(gffutils.example_filename('FBgn0031208.gff'), ":memory:")
-    gene = next(db.features_of_type('gene'))
-    children = list(db.children(gene, featuretype='exon'))
+    db = gffutils.create_db(gffutils.example_filename("FBgn0031208.gff"), ":memory:")
+    gene = next(db.features_of_type("gene"))
+    children = list(db.children(gene, featuretype="exon"))
 
     # Modify the last one to have a different strand so we can test the
     # ignore_strand argument.
-    children[-1].strand = '-'
-    db.update(children[-1:], merge_strategy='replace')
+    children[-1].strand = "-"
+    db.update(children[-1:], merge_strategy="replace")
 
     # and, since updating has been problematic in the past, double-check again
     # that the strand is changed in the db.
-    assert list(db.children(gene, featuretype='exon'))[-1].strand == '-'
-    cbp1 = db.children_bp(gene, child_featuretype='exon')
+    assert list(db.children(gene, featuretype="exon"))[-1].strand == "-"
+    cbp1 = db.children_bp(gene, child_featuretype="exon")
 
     # Previously this would give:
     #   TypeError: merge() got an unexpected keyword argument 'ignore_strand'
     #
-    # Now changing to ValueError and suggesting a fix. 
+    # Now changing to ValueError and suggesting a fix.
     with pytest.raises(ValueError):
-        db.children_bp(gene, child_featuretype='exon', merge=True, ignore_strand=True)
+        db.children_bp(gene, child_featuretype="exon", merge=True, ignore_strand=True)
     with pytest.raises(ValueError):
         db.children_bp(gene, ignore_strand=True, nonexistent=True)
     with pytest.raises(TypeError):
@@ -333,12 +334,17 @@ def test_issue_157():
 
     # The way to do it now is the following (we can omit the mc.feature_type
     # since we're preselecting for exons anyway):
-    db.children_bp(gene, child_featuretype='exon', merge=True, merge_criteria=(mc.overlap_end_inclusive))
+    db.children_bp(
+        gene,
+        child_featuretype="exon",
+        merge=True,
+        merge_criteria=(mc.overlap_end_inclusive),
+    )
 
 
 def test_issue_159():
-    db = gffutils.create_db(gffutils.example_filename('FBgn0031208.gff'), ":memory:")
-    fasta = gffutils.example_filename('dm6-chr2L.fa')
+    db = gffutils.create_db(gffutils.example_filename("FBgn0031208.gff"), ":memory:")
+    fasta = gffutils.example_filename("dm6-chr2L.fa")
     for transcript, seq in gffutils.helpers.canonical_transcripts(db, fasta):
         pass
 
@@ -347,56 +353,59 @@ def test_issue_164():
     # Something strange with the original annotation, but seems fine at least
     # after pasting in the offending genes from the GitHub comments.
     db = gffutils.create_db(
-        gffutils.example_filename('sharr.gtf'),
-        ':memory:',
+        gffutils.example_filename("sharr.gtf"),
+        ":memory:",
         disable_infer_transcripts=True,
         disable_infer_genes=True,
-        id_spec={'gene': 'gene_id', 'transcript': 'transcript_id'},
-        merge_strategy='create_unique',
-        keep_order=True)
+        id_spec={"gene": "gene_id", "transcript": "transcript_id"},
+        merge_strategy="create_unique",
+        keep_order=True,
+    )
 
 
 def test_issue_166():
     # Added the new FeatureDB.seqids() method.
-    db = gffutils.create_db(gffutils.example_filename('nonascii'), ':memory:')
+    db = gffutils.create_db(gffutils.example_filename("nonascii"), ":memory:")
     seqs = list(db.seqids())
-    assert seqs == ['2L', '2R', '3L', '3R', 'X'], seqs
+    assert seqs == ["2L", "2R", "3L", "3R", "X"], seqs
 
 
 def test_issue_167():
     # Previously was causing sqlite3.InterfaceError
-    db = gffutils.create_db(gffutils.example_filename('issue167.gff'), ':memory:')
+    db = gffutils.create_db(gffutils.example_filename("issue167.gff"), ":memory:")
 
 
 def test_issue_174():
     db = gffutils.create_db(
-        gffutils.example_filename('issue174.gtf'),
-        ':memory:',
-        merge_strategy='warning',
+        gffutils.example_filename("issue174.gtf"),
+        ":memory:",
+        merge_strategy="warning",
     )
     introns = [f for f in db.create_introns()]
-    observed = [i.attributes['exon_number'] for i in introns]
-    assert observed[7] == ['8', '9']
-    assert observed[8] == ['10', '9']
-    assert observed[9] == ['10', '11']
+    observed = [i.attributes["exon_number"] for i in introns]
+    assert observed[7] == ["8", "9"]
+    assert observed[8] == ["10", "9"]
+    assert observed[9] == ["10", "11"]
 
     # Now do the same thing, but with the new numeric_sort arg
     introns = [f for f in db.create_introns(numeric_sort=True)]
-    observed = [i.attributes['exon_number'] for i in introns]
-    assert observed[7] == ['8', '9']
+    observed = [i.attributes["exon_number"] for i in introns]
+    assert observed[7] == ["8", "9"]
     # This should be fixed:
-    assert observed[8] == ['9', '10'] 
-    assert observed[9] == ['10', '11']
+    assert observed[8] == ["9", "10"]
+    assert observed[9] == ["10", "11"]
+
 
 def test_issue_197():
 
     # Previously this would fail with ValueError due to using the stop position
     # of the last item on the previous chrom as the start position.
 
-    db = gffutils.create_db(gffutils.example_filename('issue_197.gff'), ':memory:', merge_strategy='error')
-    genes = list(db.features_of_type('gene'))
-    igss = list( db.interfeatures(genes,new_featuretype='intergenic_space') )
-
+    db = gffutils.create_db(
+        gffutils.example_filename("issue_197.gff"), ":memory:", merge_strategy="error"
+    )
+    genes = list(db.features_of_type("gene"))
+    igss = list(db.interfeatures(genes, new_featuretype="intergenic_space"))
 
     # Prior to PR #219, multiple IDs could be created by interfeatures, which
     # in turn was patched here by providing the transform to db.update. With
@@ -405,22 +414,23 @@ def test_issue_197():
     #
     # However, keeping the test as-is to ensure backward-compatibility.
     def transform(f):
-        f['ID'] = [ '-'.join(f.attributes['ID']) ]
+        f["ID"] = ["-".join(f.attributes["ID"])]
         return f
 
-    db = db.update(igss, transform=transform,  merge_strategy='error')
+    db = db.update(igss, transform=transform, merge_strategy="error")
 
-    obs = list(db.features_of_type('intergenic_space'))
+    obs = list(db.features_of_type("intergenic_space"))
     for i in obs:
         print(i)
 
     assert [str(i) for i in obs] == [
-        'tig00000492\tgffutils_derived\tintergenic_space\t47236\t47350\t.\t-\t.\tID=ctg492.gene0001-ctg492.gene0002;Name=gene0001,gene0002',
-        'tig00000492\tgffutils_derived\tintergenic_space\t48257\t49999\t.\t-\t.\tID=ctg492.gene0002-gene0;Name=gene0002',
-        'tig00000492\tgffutils_derived\tintergenic_space\t50050\t50054\t.\t-\t.\tID=gene3-gene4',
-        'tig00000492\tgffutils_derived\tintergenic_space\t50071\t50071\t.\t-\t.\tID=gene4-gene5',
-        'tig00000492\tgffutils_derived\tintergenic_space\t50076\t50089\t.\t-\t.\tID=gene5-gene6',
+        "tig00000492\tgffutils_derived\tintergenic_space\t47236\t47350\t.\t-\t.\tID=ctg492.gene0001-ctg492.gene0002;Name=gene0001,gene0002",
+        "tig00000492\tgffutils_derived\tintergenic_space\t48257\t49999\t.\t-\t.\tID=ctg492.gene0002-gene0;Name=gene0002",
+        "tig00000492\tgffutils_derived\tintergenic_space\t50050\t50054\t.\t-\t.\tID=gene3-gene4",
+        "tig00000492\tgffutils_derived\tintergenic_space\t50071\t50071\t.\t-\t.\tID=gene4-gene5",
+        "tig00000492\tgffutils_derived\tintergenic_space\t50076\t50089\t.\t-\t.\tID=gene5-gene6",
     ]
+
 
 def test_issue_198():
     line = 'NC_000001.11	BestRefSeq	gene	14362	29370	.	-	.	gene_id "WASH7P"; transcript_id ""; db_xref "GeneID:653635"; db_xref "HGNC:HGNC:38034"; description "WASP family homolog 7, pseudogene"; gbkey "Gene"; gene "WASH7P"; gene_biotype "transcribed_pseudogene"; gene_synonym "FAM39F"; gene_synonym "WASH5P"; pseudo "true";'
@@ -440,7 +450,7 @@ def test_issue_198():
     # of repeated keys always wins.
     f = feature.feature_from_line(line)
 
-    assert f.attributes['description'] == ['WASP family homolog 7, pseudogene']
+    assert f.attributes["description"] == ["WASP family homolog 7, pseudogene"]
 
     # If we remove one of the db_xref keys, then the parser sees the comma and
     # figures it's a multivalue key.
@@ -449,59 +459,62 @@ def test_issue_198():
 
     # Previous result, note leading space --------------------------->| |
     # assert f.attributes['description'] == ['WASP family homolog 7', ' pseudogene']
-    assert f.attributes['description'] == ['WASP family homolog 7, pseudogene']
+    assert f.attributes["description"] == ["WASP family homolog 7, pseudogene"]
 
     # But removing that space before "pseudogene" means it's interpreted as
     # a multivalue attribute
     line = 'NC_000001.11	BestRefSeq	gene	14362	29370	.	-	.	gene_id "WASH7P"; transcript_id ""; db_xref "GeneID:653635"; description "WASP family homolog 7,pseudogene"; gbkey "Gene"; gene "WASH7P"; gene_biotype "transcribed_pseudogene"; gene_synonym "FAM39F"; gene_synonym "WASH5P"; pseudo "true";'
     f = feature.feature_from_line(line)
-    assert f.attributes['description'] == ['WASP family homolog 7', 'pseudogene']
+    assert f.attributes["description"] == ["WASP family homolog 7", "pseudogene"]
 
     # Confirm behavior of corner cases like a trailing comma
     line = "chr17	RefSeq	CDS	6806527	6806553	.	+	0	Name=CDS:NC_000083.5:LOC100040603;Parent=XM_001475631.1,"
     f = feature.feature_from_line(line)
-    assert f.attributes['Parent'] == ['XM_001475631.1', '']
+    assert f.attributes["Parent"] == ["XM_001475631.1", ""]
 
 
 def test_issue_207():
-
     def _check(txt, expected_keys, dialect_trailing_semicolon):
-        db = gffutils.create_db(txt.replace(' ', '\t'), ':memory:', from_string=True)
+        db = gffutils.create_db(txt.replace(" ", "\t"), ":memory:", from_string=True)
         assert [list(f.attributes.keys()) for f in db.all_features()] == expected_keys
-        assert db.dialect['trailing semicolon'] == dialect_trailing_semicolon
+        assert db.dialect["trailing semicolon"] == dialect_trailing_semicolon
 
     # All lines have trailing semicolon
     _check(
-        txt=dedent("""\
+        txt=dedent(
+            """\
         chr1 AUGUSTUS gene 68330 73621 1 - . ID=g1903;
         chr1 AUGUSTUS mRNA 68330 73621 1 - . ID=g1903.t1;Parent=g1903;
         chr1 Pfam protein_match 73372 73618 1 - . ID=g1903.t1.d1;Parent=g1903.t1;
         chr1 Pfam protein_hmm_match 73372 73618 1 - . ID=g1903.t1.d1.1;Parent=g1903.t1.d1;
-        """),
-        expected_keys = [
-            ['ID'],
-            ['ID', 'Parent'],
-            ['ID', 'Parent'],
-            ['ID', 'Parent'],
+        """
+        ),
+        expected_keys=[
+            ["ID"],
+            ["ID", "Parent"],
+            ["ID", "Parent"],
+            ["ID", "Parent"],
         ],
-        dialect_trailing_semicolon=True
+        dialect_trailing_semicolon=True,
     )
 
     # First two lines have trailing semicolon. However, the heuristics of
     # dialect selection, which favor attributes with more values (assuming more
     # information), decides that this file does NOT have trailing semicolons.
     _check(
-        txt=dedent("""\
+        txt=dedent(
+            """\
         chr1 AUGUSTUS gene 68330 73621 1 - . ID=g1903;
         chr1 AUGUSTUS mRNA 68330 73621 1 - . ID=g1903.t1;Parent=g1903;
         chr1 Pfam protein_match 73372 73618 1 - . ID=g1903.t1.d1;Parent=g1903.t1
         chr1 Pfam protein_hmm_match 73372 73618 1 - . ID=g1903.t1.d1.1;Parent=g1903.t1.d1
-        """),
-        expected_keys = [
-            ['ID', ''],
-            ['ID', 'Parent', ''],
-            ['ID', 'Parent'],
-            ['ID', 'Parent'],
+        """
+        ),
+        expected_keys=[
+            ["ID", ""],
+            ["ID", "Parent", ""],
+            ["ID", "Parent"],
+            ["ID", "Parent"],
         ],
         dialect_trailing_semicolon=False,
     )
@@ -514,18 +527,15 @@ def test_issue_207():
     # as above to give higher weight, and to break the tie between with and
     # without trailing semicolon, falls back to first dialect observed.
     _check(
-        txt=dedent("""\
+        txt=dedent(
+            """\
         chr1 AUGUSTUS gene 68330 73621 1 - . ID=g1903;
         chr1 AUGUSTUS mRNA 68330 73621 1 - . ID=g1903.t1;
         chr1 Pfam protein_match 73372 73618 1 - . ID=g1903.t1.d1
         chr1 Pfam protein_hmm_match 73372 73618 1 - . ID=g1903.t1.d1.1
-        """),
-        expected_keys=[
-            ['ID'],
-            ['ID'],
-            ['ID'],
-            ['ID']
-        ],
+        """
+        ),
+        expected_keys=[["ID"], ["ID"], ["ID"], ["ID"]],
         dialect_trailing_semicolon=True,
     )
 
@@ -533,39 +543,37 @@ def test_issue_207():
     # semicolon by giving one more line as evidence. Only difference is from
     # above is the last line.
     _check(
-        txt=dedent("""\
+        txt=dedent(
+            """\
         chr1 AUGUSTUS gene 68330 73621 1 - . ID=g1903;
         chr1 AUGUSTUS mRNA 68330 73621 1 - . ID=g1903.t1;
         chr1 Pfam protein_match 73372 73618 1 - . ID=g1903.t1.d1
         chr1 Pfam protein_hmm_match 73372 73618 1 - . ID=g1903.t1.d1.1
         chr1 Pfam protein_hmm_match 73372 73618 1 - . ID=g1904.t1.d1.1
-        """),
+        """
+        ),
         expected_keys=[
-            ['ID', ''],
-            ['ID', ''],
-            ['ID'],
-            ['ID'],
-            ['ID'],
+            ["ID", ""],
+            ["ID", ""],
+            ["ID"],
+            ["ID"],
+            ["ID"],
         ],
         dialect_trailing_semicolon=False,
     )
 
-
     # Again seems inconsistent at first, but heuristics break ties by
     # preferring first dialect, which here is no trailing semicolon.
     _check(
-        txt=dedent("""\
+        txt=dedent(
+            """\
         chr1 AUGUSTUS gene 68330 73621 1 - . ID=g1903
         chr1 AUGUSTUS mRNA 68330 73621 1 - . ID=g1903.t1
         chr1 Pfam protein_match 73372 73618 1 - . ID=g1903.t1.d1;
         chr1 Pfam protein_hmm_match 73372 73618 1 - . ID=g1903.t1.d1.1;
-        """),
-        expected_keys=[
-            ['ID'],
-            ['ID'],
-            ['ID', ''],
-            ['ID', '']
-        ],
+        """
+        ),
+        expected_keys=[["ID"], ["ID"], ["ID", ""], ["ID", ""]],
         dialect_trailing_semicolon=False,
     )
 
@@ -587,7 +595,6 @@ def test_issue_213():
     it = gffutils.iterators.DataIterator(data, from_string=True)
     assert it.directives == ["gff-version 3"]
 
-
     # Ensure they're parsed into the db from a string
     db = gffutils.create_db(data, dbfn=":memory:", from_string=True, verbose=False)
     assert db.directives == ["gff-version 3"], db.directives
@@ -602,6 +609,6 @@ def test_issue_213():
 
     # Ensure they're parsed into the db from a file, and going to a file (to
     # exactly replicate example in #213)
-    db = gffutils.create_db(tmp, dbfn='issue_213.db', force=True)
+    db = gffutils.create_db(tmp, dbfn="issue_213.db", force=True)
     assert db.directives == ["gff-version 3"], db.directives
     assert len(db.directives) == 1

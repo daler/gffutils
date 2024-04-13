@@ -2,7 +2,6 @@
 Module for integration with BioPython, specifically SeqRecords and SeqFeature
 objects.
 """
-import six
 
 try:
     from Bio.SeqFeature import SeqFeature, FeatureLocation
@@ -15,7 +14,8 @@ from .feature import Feature, feature_from_line
 _biopython_strand = {
     "+": 1,
     "-": -1,
-    ".": 0,
+    ".": None,
+    "?": 0,
 }
 _feature_strand = dict((v, k) for k, v in _biopython_strand.items())
 
@@ -33,7 +33,7 @@ def to_seqfeature(feature):
         If string, assume it is a GFF or GTF-format line; otherwise just use
         the provided feature directly.
     """
-    if isinstance(feature, six.string_types):
+    if isinstance(feature, str):
         feature = feature_from_line(feature)
 
     qualifiers = {
@@ -46,10 +46,11 @@ def to_seqfeature(feature):
     return SeqFeature(
         # Convert from GFF 1-based to standard Python 0-based indexing used by
         # BioPython
-        FeatureLocation(feature.start - 1, feature.stop),
+        FeatureLocation(
+            feature.start - 1, feature.stop, strand=_biopython_strand[feature.strand]
+        ),
         id=feature.id,
         type=feature.featuretype,
-        strand=_biopython_strand[feature.strand],
         qualifiers=qualifiers,
     )
 
@@ -66,12 +67,12 @@ def from_seqfeature(s, **kwargs):
     score = s.qualifiers.get("score", ".")[0]
     seqid = s.qualifiers.get("seqid", ".")[0]
     frame = s.qualifiers.get("frame", ".")[0]
-    strand = _feature_strand[s.strand]
+    strand = _feature_strand[s.location.strand]
 
     # BioPython parses 1-based GenBank positions into 0-based for use within
     # Python.  We need to convert back to 1-based GFF format here.
-    start = s.location.start.position + 1
-    stop = s.location.end.position
+    start = s.location.start + 1
+    stop = s.location.end
     featuretype = s.type
     id = s.id
     attributes = dict(s.qualifiers)
