@@ -1038,7 +1038,13 @@ class FeatureDB(object):
         WARNING: If you used any non-default kwargs for gffutils.create_db when
         creating the database in the first place (especially
         `disable_infer_transcripts` or `disable_infer_genes`) then you should
-        use those same arguments here.
+        use those same arguments here. The exception is the `force` argument
+        though -- in some cases including that can truncate the database.
+
+        WARNING: If you are creating features from the database and writing
+        immediately back to the database, you could experience deadlocks. See
+        the help for `create_introns` for some different options for avoiding
+        this.
 
         The returned object is the same FeatureDB, but since it is pointing to
         the same database and that has been just updated, the new features can
@@ -1245,9 +1251,42 @@ class FeatureDB(object):
         -----
         The returned generator can be passed directly to the
         :meth:`FeatureDB.update` method to permanently add them to the
-        database, e.g., ::
+        database. However, this needs to be done carefully to avoid deadlocks
+        from simultaneous reading/writing.
 
-            db.update(db.create_introns())
+        When using `update()` you should also use the same keyword arguments
+        used to create the db in the first place (with the exception of `force`).
+
+        Here are three options for getting the introns back into the database,
+        depending on the circumstances.
+
+        **OPTION 1: Create list of introns.**
+
+        Consume the `create_introns()` generator completely before writing to
+        the database. If you have sufficient memory, this is the easiest
+        option::
+
+            db.update(list(db.create_introns(**intron_kwargs)), **create_kwargs)
+
+        **OPTION 2: Use `WAL <https://sqlite.org/wal.html>`__**
+
+        The WAL pragma enables simultaneous read/write. WARNING: this does not
+        work if the database is on a networked filesystem, like those used on
+        many HPC clusters.
+
+        ::
+
+            db.set_pragmas({"journal_mode": "WAL"})
+            db.update(db.create_introns(**intron_kwargs), **create_kwargs)
+
+        **OPTION 3: Write to intermediate file.**
+
+        Use this if you are memory limited and using a networked filesystem::
+
+            with open('tmp.gtf', 'w') as fout:
+                for intron in db.create_introns(**intron_kwargs):
+                    fout.write(str(intron) + "\n")
+            db.update(gffutils.DataIterator('tmp.gtf'), **create_kwargs)
 
         """
         if (grandparent_featuretype and parent_featuretype) or (
