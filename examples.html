@@ -1,22 +1,24 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Examples &mdash; gffutils 0.12 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <title>Examples &mdash; gffutils 0.13 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=9bec1924"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -36,7 +38,7 @@
             gffutils
           </a>
               <div class="version">
-                0.12
+                0.13
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -158,7 +160,7 @@
            <div itemprop="articleBody">
              
   <section id="examples">
-<span id="id1"></span><h1>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h1>
+<span id="id1"></span><h1>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h1>
 <p>Often, GTF/GFF files have non-standard formatting.  While <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a> is
 set up to handle standard formatting by default, it also allows great
 flexibility for working with non-standard files.  These examples collect
@@ -186,11 +188,11 @@ vs the 9th field of a GFF line, which is called the “attributes” field
 according to the spec. Confusing?  Yes!</p>
 </div>
 <section class="html-toggle" id="mouse-extra-comma-gff3">
-<span id="id2"></span><h2>mouse_extra_comma.gff3<a class="headerlink" href="#mouse-extra-comma-gff3" title="Permalink to this heading"></a></h2>
+<span id="id2"></span><h2>mouse_extra_comma.gff3<a class="headerlink" href="#mouse-extra-comma-gff3" title="Link to this heading"></a></h2>
 <p>This file has gene, mRNA, protein, UTR, CDS, and exon annotations. However, not
 all of them have a useful ID in their attributes.</p>
 <section id="file-contents">
-<h3>File contents<a class="headerlink" href="#file-contents" title="Permalink to this heading"></a></h3>
+<h3>File contents<a class="headerlink" href="#file-contents" title="Link to this heading"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">chr17</span>	<span class="n">RefSeq</span>	<span class="n">gene</span>	<span class="mi">6797760</span>	<span class="mi">6818159</span>	<span class="o">.</span>	<span class="o">+</span>	<span class="o">.</span>	<span class="n">ID</span><span class="o">=</span><span class="n">NC_000083</span><span class="mf">.5</span><span class="p">:</span><span class="n">LOC100040603</span><span class="p">;</span><span class="n">Name</span><span class="o">=</span><span class="n">NC_000083</span><span class="mf">.5</span><span class="p">:</span><span class="n">LOC100040603</span>
 <span class="n">chr17</span>	<span class="n">RefSeq</span>	<span class="n">mRNA</span>	<span class="mi">6797760</span>	<span class="mi">6818159</span>	<span class="o">.</span>	<span class="o">+</span>	<span class="o">.</span>	<span class="n">ID</span><span class="o">=</span><span class="n">XM_001475631</span><span class="mf">.1</span><span class="p">;</span><span class="n">Parent</span><span class="o">=</span><span class="n">NC_000083</span><span class="mf">.5</span><span class="p">:</span><span class="n">LOC100040603</span>
 <span class="n">chr17</span>	<span class="n">RefSeq</span>	<span class="n">protein</span>	<span class="mi">6806527</span>	<span class="mi">6812289</span>	<span class="o">.</span>	<span class="o">+</span>	<span class="o">.</span>	<span class="n">ID</span><span class="o">=</span><span class="p">;</span><span class="n">Parent</span><span class="o">=</span><span class="n">XM_001475631</span><span class="mf">.1</span>
@@ -212,7 +214,7 @@ all of them have a useful ID in their attributes.</p>
 </div>
 </section>
 <section id="import">
-<h3>Import<a class="headerlink" href="#import" title="Permalink to this heading"></a></h3>
+<h3>Import<a class="headerlink" href="#import" title="Link to this heading"></a></h3>
 <p>The defaults for <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a> will load this example into a database.
 However, the CDSs do not have ID attributes, and the default for GFF files is
 <code class="docutils literal notranslate"><span class="pre">id_spec=&quot;ID&quot;</span></code>.  As described at <a class="reference internal" href="database-ids.html#id-spec"><span class="std std-ref">id_spec</span></a>, they will be accessed by the
@@ -230,7 +232,7 @@ we’ll go with the simpler default strategy for this file:</p>
 </div>
 </section>
 <section id="example-access">
-<h3>Example access<a class="headerlink" href="#example-access" title="Permalink to this heading"></a></h3>
+<h3>Example access<a class="headerlink" href="#example-access" title="Link to this heading"></a></h3>
 <p>Since the mRNA on line 2 has an ID, we can simply access it by ID:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="p">[</span><span class="s1">&#39;XM_001475631.1&#39;</span><span class="p">]</span>
 <span class="go">&lt;Feature mRNA (chr17:6797760-6818159[+]) at 0x...&gt;</span>
@@ -257,19 +259,19 @@ CDS “5”?) But we can access those CDSs as children of the mRNA:</p>
 </section>
 </section>
 <section id="c-elegans-ws199-ann-gff-txt">
-<span id="id3"></span><h2>c_elegans_WS199_ann_gff.txt<a class="headerlink" href="#c-elegans-ws199-ann-gff-txt" title="Permalink to this heading"></a></h2>
+<span id="id3"></span><h2>c_elegans_WS199_ann_gff.txt<a class="headerlink" href="#c-elegans-ws199-ann-gff-txt" title="Link to this heading"></a></h2>
 <p>This is a minimal file, with only one feature and that one feature has no
 genomic coordinates.  It illustrates how things behave when there is very
 little information for a feature.</p>
 <section id="id4">
-<h3>File contents<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h3>
+<h3>File contents<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># modified GFF file to remove location coordinates and test annotations</span>
 <span class="n">I</span>	<span class="n">Expr_profile</span>	<span class="n">experimental_result_region</span>	<span class="o">.</span>	<span class="o">.</span>	<span class="o">.</span>	<span class="o">+</span>	<span class="o">.</span>	<span class="n">expr_profile</span><span class="o">=</span><span class="n">B0019</span><span class="mf">.1</span>
 </pre></div>
 </div>
 </section>
 <section id="id5">
-<h3>Import<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h3>
+<h3>Import<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
 <p>Import is straightforward:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fn</span> <span class="o">=</span> <span class="n">gffutils</span><span class="o">.</span><span class="n">example_filename</span><span class="p">(</span><span class="s1">&#39;c_elegans_WS199_ann_gff.txt&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">gffutils</span><span class="o">.</span><span class="n">create_db</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="s1">&#39;:memory:&#39;</span><span class="p">)</span>
@@ -277,7 +279,7 @@ little information for a feature.</p>
 </div>
 </section>
 <section id="access">
-<h3>Access<a class="headerlink" href="#access" title="Permalink to this heading"></a></h3>
+<h3>Access<a class="headerlink" href="#access" title="Link to this heading"></a></h3>
 <p>Confirm there’s only a single feature imported:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">all_features</span><span class="p">())</span>
 <span class="go">[&lt;Feature experimental_result_region (I:.-.[+]) at 0x...]</span>
@@ -303,14 +305,14 @@ by name using the feature type:</p>
 </section>
 </section>
 <section id="c-elegans-ws199-shortened-gff-txt">
-<span id="id6"></span><h2>c_elegans_WS199_shortened_gff.txt<a class="headerlink" href="#c-elegans-ws199-shortened-gff-txt" title="Permalink to this heading"></a></h2>
+<span id="id6"></span><h2>c_elegans_WS199_shortened_gff.txt<a class="headerlink" href="#c-elegans-ws199-shortened-gff-txt" title="Link to this heading"></a></h2>
 <p>This file contains many different kinds of features; much like
 <a class="reference internal" href="#mouse-extra-comma-gff3"><span class="std std-ref">mouse_extra_comma.gff3</span></a> above, some features have IDs, some do not, and
 there are many that share the same feature ID.  This example shows a common
 way of subsetting features (here, getting all the non-historical CDSs for
 a gene).</p>
 <section id="id7">
-<h3>File contents<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h3>
+<h3>File contents<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">I</span>	<span class="n">Orfeome</span>	<span class="n">PCR_product</span>	<span class="mi">12759747</span>	<span class="mi">12764936</span>	<span class="o">.</span>	<span class="o">-</span>	<span class="o">.</span>	<span class="n">amplified</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">pcr_product</span><span class="o">=</span><span class="n">mv_B0019</span><span class="mf">.1</span>
 <span class="n">I</span>	<span class="n">SAGE_tag_unambiguously_mapped</span>	<span class="n">SAGE_tag</span>	<span class="mi">12763533</span>	<span class="mi">12763553</span>	<span class="o">.</span>	<span class="o">-</span>	<span class="o">.</span>	<span class="n">count</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">gene</span><span class="o">=</span><span class="n">amx</span><span class="o">-</span><span class="mi">2</span><span class="p">;</span><span class="n">sequence</span><span class="o">=</span><span class="n">SAGE</span><span class="p">:</span><span class="n">ggcagagtcttttggca</span><span class="p">;</span><span class="n">transcript</span><span class="o">=</span><span class="n">B0019</span><span class="mf">.1</span>
 <span class="n">I</span>	<span class="n">SAGE_tag_unambiguously_mapped</span>	<span class="n">SAGE_tag</span>	<span class="mi">12761492</span>	<span class="mi">12761512</span>	<span class="o">.</span>	<span class="o">-</span>	<span class="o">.</span>	<span class="n">count</span><span class="o">=</span><span class="mi">5</span><span class="p">;</span><span class="n">gene</span><span class="o">=</span><span class="n">amx</span><span class="o">-</span><span class="mi">2</span><span class="p">;</span><span class="n">sequence</span><span class="o">=</span><span class="n">SAGE</span><span class="p">:</span><span class="n">aacggagccgtacacgc</span><span class="p">;</span><span class="n">transcript</span><span class="o">=</span><span class="n">B0019</span><span class="mf">.1</span>
@@ -492,7 +494,7 @@ a gene).</p>
 </div>
 </section>
 <section id="id8">
-<h3>Import<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h3>
+<h3>Import<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
 <p>If <code class="docutils literal notranslate"><span class="pre">merge_strategy=&quot;merge&quot;</span></code>, is used here, exceptions will be raised because
 all those CDSs cannot be logically merged: they have different
 coordinates. So <code class="docutils literal notranslate"><span class="pre">merge_strategy=&quot;create_unique&quot;</span></code> is used instead. This kwarg
@@ -504,7 +506,7 @@ key:</p>
 </div>
 </section>
 <section id="id9">
-<h3>Access<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h3>
+<h3>Access<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
 <p>Getting a gene:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="s1">&#39;Gene:WBGene00017003&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">g</span>
@@ -537,11 +539,11 @@ key:</p>
 </section>
 </section>
 <section id="ensembl-gtf-txt">
-<span id="id10"></span><h2>ensembl_gtf.txt<a class="headerlink" href="#ensembl-gtf-txt" title="Permalink to this heading"></a></h2>
+<span id="id10"></span><h2>ensembl_gtf.txt<a class="headerlink" href="#ensembl-gtf-txt" title="Link to this heading"></a></h2>
 <p>In this GTF file, gene_id and transcript_id are identical, creating problems
 for unique IDs in the database.</p>
 <section id="id11">
-<h3>File contents<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h3>
+<h3>File contents<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">I</span>	<span class="n">snoRNA</span>	<span class="n">exon</span>	<span class="mi">3747</span>	<span class="mi">3909</span>	<span class="o">.</span>	<span class="o">-</span>	<span class="o">.</span>	 <span class="n">gene_id</span> <span class="s2">&quot;Y74C9A.6&quot;</span><span class="p">;</span> <span class="n">transcript_id</span> <span class="s2">&quot;Y74C9A.6&quot;</span><span class="p">;</span> <span class="n">exon_number</span> <span class="s2">&quot;1&quot;</span><span class="p">;</span> <span class="n">gene_name</span> <span class="s2">&quot;Y74C9A.6&quot;</span><span class="p">;</span> <span class="n">transcript_name</span> <span class="s2">&quot;NR_001477.2&quot;</span><span class="p">;</span>
 <span class="n">I</span>	<span class="n">protein_coding</span>	<span class="n">exon</span>	<span class="mi">12764812</span>	<span class="mi">12764949</span>	<span class="o">.</span>	<span class="o">-</span>	<span class="o">.</span>	 <span class="n">gene_id</span> <span class="s2">&quot;B0019.1&quot;</span><span class="p">;</span> <span class="n">transcript_id</span> <span class="s2">&quot;B0019.1&quot;</span><span class="p">;</span> <span class="n">exon_number</span> <span class="s2">&quot;1&quot;</span><span class="p">;</span> <span class="n">gene_name</span> <span class="s2">&quot;amx-2&quot;</span><span class="p">;</span> <span class="n">transcript_name</span> <span class="s2">&quot;B0019.1&quot;</span><span class="p">;</span>
 <span class="n">I</span>	<span class="n">protein_coding</span>	<span class="n">CDS</span>	<span class="mi">12764812</span>	<span class="mi">12764937</span>	<span class="o">.</span>	<span class="o">-</span>	<span class="mi">0</span>	 <span class="n">gene_id</span> <span class="s2">&quot;B0019.1&quot;</span><span class="p">;</span> <span class="n">transcript_id</span> <span class="s2">&quot;B0019.1&quot;</span><span class="p">;</span> <span class="n">exon_number</span> <span class="s2">&quot;1&quot;</span><span class="p">;</span> <span class="n">gene_name</span> <span class="s2">&quot;amx-2&quot;</span><span class="p">;</span> <span class="n">transcript_name</span> <span class="s2">&quot;B0019.1&quot;</span><span class="p">;</span> <span class="n">protein_id</span> <span class="s2">&quot;B0019.1&quot;</span><span class="p">;</span>
@@ -579,7 +581,7 @@ for unique IDs in the database.</p>
 </div>
 </section>
 <section id="id12">
-<h3>Import<a class="headerlink" href="#id12" title="Permalink to this heading"></a></h3>
+<h3>Import<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
 <p>As part of the import process, <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a> creates new “derived” features
 for genes and transcripts (see <a class="reference internal" href="gtf.html#gtf"><span class="std std-ref">GTF files</span></a>).  These are not explicitly defined in a GTF file, but
 can be inferred.  Even though gene and transcript features do not exist in the
@@ -609,7 +611,7 @@ data upon import into the database:</p>
 </div>
 </section>
 <section id="id13">
-<h3>Access<a class="headerlink" href="#id13" title="Permalink to this heading"></a></h3>
+<h3>Access<a class="headerlink" href="#id13" title="Link to this heading"></a></h3>
 <p>We can access the derived “gene” feature by its ID (recall it doesn’t actually
 exist in the GTF file):</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="s2">&quot;B0019.1&quot;</span><span class="p">]</span>
@@ -635,7 +637,7 @@ end because of that transform function:</p>
 </section>
 </section>
 <section id="f3-unique-3-v2-gff">
-<span id="id14"></span><h2>F3-unique-3.v2.gff<a class="headerlink" href="#f3-unique-3-v2-gff" title="Permalink to this heading"></a></h2>
+<span id="id14"></span><h2>F3-unique-3.v2.gff<a class="headerlink" href="#f3-unique-3-v2-gff" title="Link to this heading"></a></h2>
 <p>This file does not contain hierarchical information, and has many directives.
 Since much of the benefit of <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a> comes from being able to navigate
 the hierarchical relationships, it might be overkill to use <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a> on
@@ -643,7 +645,7 @@ this file.  An exeception would be if you want to be able to look up the read
 names by their ID.  Here, we use yet a differnt way of overriding the way
 <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a> decides on a primary key for the database.</p>
 <section id="id15">
-<h3>File contents<a class="headerlink" href="#id15" title="Permalink to this heading"></a></h3>
+<h3>File contents<a class="headerlink" href="#id15" title="Link to this heading"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">##solid-gff-version 0.2</span>
 <span class="c1">##gff-version 2</span>
 <span class="c1">##source-version MaToGff.java v1.5</span>
@@ -776,7 +778,7 @@ names by their ID.  Here, we use yet a differnt way of overriding the way
 </div>
 </section>
 <section id="id16">
-<h3>Import<a class="headerlink" href="#id16" title="Permalink to this heading"></a></h3>
+<h3>Import<a class="headerlink" href="#id16" title="Link to this heading"></a></h3>
 <p>By default, the <code class="docutils literal notranslate"><span class="pre">id_spec=&quot;some_string&quot;</span></code> parameter tells <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a> to
 create a primary key based on the value of the “some_string” attribute.  For
 this example, however, we would like to make the first field the primary key.
@@ -804,7 +806,7 @@ database, so we use <code class="docutils literal notranslate"><span class="pre"
 </section>
 </section>
 <section class="html-toggle" id="glimmer-nokeyval-gff3">
-<span id="id17"></span><h2>glimmer_nokeyval.gff3<a class="headerlink" href="#glimmer-nokeyval-gff3" title="Permalink to this heading"></a></h2>
+<span id="id17"></span><h2>glimmer_nokeyval.gff3<a class="headerlink" href="#glimmer-nokeyval-gff3" title="Link to this heading"></a></h2>
 <p>This is a problematic file in which the attributes are not all in format
 “key=val”.  This example demonstrates how <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a> handles cases like
 this: by implicitly treating them as keys and setting the value to an empty
@@ -822,7 +824,7 @@ things like ncRNA, tRNA, etc and is more general than just “mRNA”).  Next, w
 need to edit the Parent attribute of CDS, exon, etc.  How this is handled will
 depend completely on the file you are using.</p>
 <section class="html-toggle" id="id18">
-<h3>File contents<a class="headerlink" href="#id18" title="Permalink to this heading"></a></h3>
+<h3>File contents<a class="headerlink" href="#id18" title="Link to this heading"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">##gff-version 3</span>
 <span class="c1">##sequence-region scaffold4215_3 1 6526</span>
 <span class="n">scaffold4215_3</span>	<span class="n">glimmer</span>	<span class="n">gene</span>	<span class="mi">3</span>	<span class="mi">62</span>	<span class="o">.</span>	<span class="o">-</span>	<span class="o">.</span>	<span class="n">ID</span><span class="o">=</span><span class="n">GL0000006</span><span class="p">;</span><span class="n">Name</span><span class="o">=</span><span class="n">GL0000006</span><span class="p">;</span><span class="n">Lack</span> <span class="mi">3</span><span class="s1">&#39;-end;</span>
@@ -833,7 +835,7 @@ depend completely on the file you are using.</p>
 </div>
 </section>
 <section id="id19">
-<h3>Import<a class="headerlink" href="#id19" title="Permalink to this heading"></a></h3>
+<h3>Import<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">featuretype</span> <span class="o">==</span> <span class="s1">&#39;gene&#39;</span><span class="p">:</span>
 <span class="gp">... </span>        <span class="k">return</span> <span class="n">f</span>
@@ -855,7 +857,7 @@ depend completely on the file you are using.</p>
 </div>
 </section>
 <section id="id20">
-<h3>Access<a class="headerlink" href="#id20" title="Permalink to this heading"></a></h3>
+<h3>Access<a class="headerlink" href="#id20" title="Link to this heading"></a></h3>
 <p>This shows that keys with missing values are assigned an empty list.  It’s up
 to the calling code to decide how to handle this (say, by checking for the
 presence of the key “Complete”.</p>
@@ -875,7 +877,7 @@ presence of the key “Complete”.</p>
 </section>
 </section>
 <section class="html-toggle" id="hybrid1-gff3">
-<span id="id21"></span><h2>hybrid1.gff3<a class="headerlink" href="#hybrid1-gff3" title="Permalink to this heading"></a></h2>
+<span id="id21"></span><h2>hybrid1.gff3<a class="headerlink" href="#hybrid1-gff3" title="Link to this heading"></a></h2>
 <p>This file contains a FASTA sequence at the end.  Currently, <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a>
 assumes that there are no further annotations and stops parsing the file at
 this point (specifically, when it sees the string “##FASTA” at the beginning of
@@ -883,7 +885,7 @@ a line).</p>
 <p>Another issue with this file is that the “Note” attributes field contains
 url-encoded characters. These are kept verbatim.</p>
 <section id="id22">
-<h3>File contents<a class="headerlink" href="#id22" title="Permalink to this heading"></a></h3>
+<h3>File contents<a class="headerlink" href="#id22" title="Link to this heading"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">##gff-version 3</span>
 <span class="c1">##sequence-region foo 1 100</span>
 <span class="c1">##feature-ontology bar</span>
@@ -905,7 +907,7 @@ url-encoded characters. These are kept verbatim.</p>
 </div>
 </section>
 <section id="id23">
-<h3>Import<a class="headerlink" href="#id23" title="Permalink to this heading"></a></h3>
+<h3>Import<a class="headerlink" href="#id23" title="Link to this heading"></a></h3>
 <p>Straightforward:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fn</span> <span class="o">=</span> <span class="n">gffutils</span><span class="o">.</span><span class="n">example_filename</span><span class="p">(</span><span class="s1">&#39;hybrid1.gff3&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">gffutils</span><span class="o">.</span><span class="n">create_db</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="s2">&quot;:memory:&quot;</span><span class="p">)</span>
@@ -913,7 +915,7 @@ url-encoded characters. These are kept verbatim.</p>
 </div>
 </section>
 <section id="id24">
-<h3>Access<a class="headerlink" href="#id24" title="Permalink to this heading"></a></h3>
+<h3>Access<a class="headerlink" href="#id24" title="Link to this heading"></a></h3>
 <p>Print out the attributes:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">db</span><span class="p">[</span><span class="s1">&#39;A00469&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
@@ -926,7 +928,7 @@ url-encoded characters. These are kept verbatim.</p>
 </section>
 </section>
 <section id="jgi-gff2-txt">
-<span id="id25"></span><h2>jgi_gff2.txt<a class="headerlink" href="#jgi-gff2-txt" title="Permalink to this heading"></a></h2>
+<span id="id25"></span><h2>jgi_gff2.txt<a class="headerlink" href="#jgi-gff2-txt" title="Link to this heading"></a></h2>
 <p>This file is GFF2 format – the attribute format is like GTF, but without the
 required “gene_id” and “transcript_id” fields that are used to infer genes and
 transcripts. To get around this, we can supply the <code class="docutils literal notranslate"><span class="pre">gtf_transcript_key</span></code> kwarg,
@@ -936,7 +938,7 @@ background on this).</p>
 such information about which CDS goes to which transcript.  There is, however,
 information about the parent protein.</p>
 <section id="id26">
-<h3>File contents<a class="headerlink" href="#id26" title="Permalink to this heading"></a></h3>
+<h3>File contents<a class="headerlink" href="#id26" title="Link to this heading"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">chr_1</span>	<span class="n">JGI</span>	<span class="n">exon</span>	<span class="mi">37061</span>	<span class="mi">37174</span>	<span class="o">.</span>	<span class="o">-</span>	<span class="o">.</span>	<span class="n">name</span> <span class="s2">&quot;fgenesh1_pg.C_chr_1000007&quot;</span><span class="p">;</span> <span class="n">transcriptId</span> <span class="mi">873</span>
 <span class="n">chr_1</span>	<span class="n">JGI</span>	<span class="n">CDS</span>	<span class="mi">37061</span>	<span class="mi">37174</span>	<span class="o">.</span>	<span class="o">-</span>	<span class="mi">0</span>	<span class="n">name</span> <span class="s2">&quot;fgenesh1_pg.C_chr_1000007&quot;</span><span class="p">;</span> <span class="n">proteinId</span> <span class="mi">873</span><span class="p">;</span> <span class="n">exonNumber</span> <span class="mi">3</span>
 <span class="n">chr_1</span>	<span class="n">JGI</span>	<span class="n">exon</span>	<span class="mi">37315</span>	<span class="mi">37620</span>	<span class="o">.</span>	<span class="o">-</span>	<span class="o">.</span>	<span class="n">name</span> <span class="s2">&quot;fgenesh1_pg.C_chr_1000007&quot;</span><span class="p">;</span> <span class="n">transcriptId</span> <span class="mi">873</span>
@@ -947,7 +949,7 @@ information about the parent protein.</p>
 </div>
 </section>
 <section id="id27">
-<h3>Import<a class="headerlink" href="#id27" title="Permalink to this heading"></a></h3>
+<h3>Import<a class="headerlink" href="#id27" title="Link to this heading"></a></h3>
 <p>Inspecting the file, we see that the “name” attribute is repeated on each line.
 We can use that as the gene ID for inferring the gene extents, like “gene_id”
 in a normal GTF file.  Similarly, the “transcriptId” attribute here can be used
@@ -973,7 +975,7 @@ attribute out of an existing “proteinId” attribute:</p>
 </div>
 </section>
 <section id="id28">
-<h3>Access<a class="headerlink" href="#id28" title="Permalink to this heading"></a></h3>
+<h3>Access<a class="headerlink" href="#id28" title="Link to this heading"></a></h3>
 <p>Since we used that transform function, the exons and CDSs are all children of
 the “873” transcript:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="s1">&#39;873&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">featuretype</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">start</span><span class="p">))</span>
@@ -995,11 +997,11 @@ the “873” transcript:</p>
 </section>
 </section>
 <section id="ncbi-gff3-txt">
-<span id="id29"></span><h2>ncbi_gff3.txt<a class="headerlink" href="#ncbi-gff3-txt" title="Permalink to this heading"></a></h2>
+<span id="id29"></span><h2>ncbi_gff3.txt<a class="headerlink" href="#ncbi-gff3-txt" title="Link to this heading"></a></h2>
 <p>This file is problematic because all genes have the same ID attribute.  We can
 get around this by using the “db_xref” field as the key for genes.</p>
 <section id="id30">
-<h3>File contents<a class="headerlink" href="#id30" title="Permalink to this heading"></a></h3>
+<h3>File contents<a class="headerlink" href="#id30" title="Link to this heading"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">##gff-version 3</span>
 <span class="c1">##source-version NCBI C++ formatter 0.2</span>
 <span class="c1">##date 2009-04-25</span>
@@ -1025,7 +1027,7 @@ get around this by using the “db_xref” field as the key for genes.</p>
 </div>
 </section>
 <section id="id31">
-<h3>Import<a class="headerlink" href="#id31" title="Permalink to this heading"></a></h3>
+<h3>Import<a class="headerlink" href="#id31" title="Link to this heading"></a></h3>
 <p>For “gene” featuretypes, we want to use the “db_xref” field as the primary key;
 all other featuretypes will be incremented versions of the featuretype
 (“CDS_1”, “CDS_2”, etc).</p>
@@ -1035,7 +1037,7 @@ all other featuretypes will be incremented versions of the featuretype
 </div>
 </section>
 <section id="id32">
-<h3>Access<a class="headerlink" href="#id32" title="Permalink to this heading"></a></h3>
+<h3>Access<a class="headerlink" href="#id32" title="Link to this heading"></a></h3>
 <p>Genes can now be accessed by the db_xref:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="p">[</span><span class="s1">&#39;GeneID:4537201&#39;</span><span class="p">]</span>
 <span class="go">&lt;Feature gene (NC_008596.1:12272-13301[+]) at 0x...&gt;</span>
@@ -1044,7 +1046,7 @@ all other featuretypes will be incremented versions of the featuretype
 </section>
 </section>
 <section id="wormbase-gff2-alt-txt">
-<span id="id33"></span><h2>wormbase_gff2_alt.txt<a class="headerlink" href="#wormbase-gff2-alt-txt" title="Permalink to this heading"></a></h2>
+<span id="id33"></span><h2>wormbase_gff2_alt.txt<a class="headerlink" href="#wormbase-gff2-alt-txt" title="Link to this heading"></a></h2>
 <p>This file has no gene_id or transcript_id fields; it appears to use “CDS” as
 a gene-level kind of object.  So we can use a transform function to add
 “gene_id” and “transcript_id” fields to all non-CDS features so that the file
@@ -1055,7 +1057,7 @@ that the file itself has inconsistent trailing semicolons. The dialect
 detection decides that there should be no trailing semicolon since that’s what
 the majority of the features use.</p>
 <section id="id34">
-<h3>File contents<a class="headerlink" href="#id34" title="Permalink to this heading"></a></h3>
+<h3>File contents<a class="headerlink" href="#id34" title="Link to this heading"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Remanei_genome</span>	<span class="n">Genomic_canonical</span>	<span class="n">region</span>	<span class="mi">1</span>	<span class="mi">7816</span>	<span class="o">.</span>	<span class="o">+</span>	<span class="o">.</span>	<span class="n">Sequence</span> <span class="s2">&quot;Contig1020&quot;</span><span class="p">;</span>
 <span class="n">Contig102</span>	<span class="n">WU_MERGED</span>	<span class="n">CDS</span>	<span class="mi">1629</span>	<span class="mi">3377</span>	<span class="o">.</span>	<span class="o">-</span>	<span class="o">.</span>	<span class="n">CDS</span> <span class="s2">&quot;cr01.sctg102.wum.2.1&quot;</span>
 <span class="n">Contig102</span>	<span class="n">WU_MERGED</span>	<span class="n">coding_exon</span>	<span class="mi">2927</span>	<span class="mi">3377</span>	<span class="o">.</span>	<span class="o">-</span>	<span class="o">.</span>	<span class="n">CDS</span> <span class="s2">&quot;cr01.sctg102.wum.2.1&quot;</span>
@@ -1069,7 +1071,7 @@ the majority of the features use.</p>
 </div>
 </section>
 <section id="id35">
-<h3>Import<a class="headerlink" href="#id35" title="Permalink to this heading"></a></h3>
+<h3>Import<a class="headerlink" href="#id35" title="Link to this heading"></a></h3>
 <p>The transform function to manipulate the attribute dictionary: add “gene_id”
 and “transcript_id” attributes to intron and coding_exon features:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
@@ -1086,7 +1088,7 @@ and “transcript_id” attributes to intron and coding_exon features:</p>
 </div>
 </section>
 <section id="id36">
-<h3>Access<a class="headerlink" href="#id36" title="Permalink to this heading"></a></h3>
+<h3>Access<a class="headerlink" href="#id36" title="Link to this heading"></a></h3>
 <p>Note that the inferred genes have a source of “gffutils_derived”:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">db</span><span class="p">[</span><span class="s2">&quot;cr01.sctg102.wum.2.1&quot;</span><span class="p">])</span>  
 <span class="go">Contig102       gffutils_derived        gene    1629    3377    .       -       .       gene_id &quot;cr01.sctg102.wum.2.1&quot;</span>
@@ -1108,13 +1110,13 @@ and “transcript_id” attributes to intron and coding_exon features:</p>
 </section>
 </section>
 <section id="wormbase-gff2-txt">
-<span id="id37"></span><h2>wormbase_gff2.txt<a class="headerlink" href="#wormbase-gff2-txt" title="Permalink to this heading"></a></h2>
+<span id="id37"></span><h2>wormbase_gff2.txt<a class="headerlink" href="#wormbase-gff2-txt" title="Link to this heading"></a></h2>
 <p>This file is problematic because of inconsistent formatting: the <code class="docutils literal notranslate"><span class="pre">SAGE_tag</span></code>
 features have a different attributes format than the rest of the features.  So
 we need to do some work with the dialect used for parsing attributes into
 dictionaries.</p>
 <section id="id38">
-<h3>File contents<a class="headerlink" href="#id38" title="Permalink to this heading"></a></h3>
+<h3>File contents<a class="headerlink" href="#id38" title="Link to this heading"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">I</span>	<span class="n">Genomic_canonical</span>	<span class="n">region</span>	<span class="mi">1</span>	<span class="mi">2679</span>	<span class="o">.</span>	<span class="o">+</span>	<span class="o">.</span>	<span class="n">Sequence</span> <span class="s2">&quot;cTel33B&quot;</span> <span class="p">;</span> <span class="n">Note</span> <span class="s2">&quot;Clone cTel33B; Genbank AC199162&quot;</span> <span class="p">;</span> <span class="n">Note</span> <span class="s2">&quot;Clone cTel33B; Genbank AC199162&quot;</span>
 <span class="n">I</span>	<span class="n">Coding_transcript</span>	<span class="n">Transcript</span>	<span class="mi">12759582</span>	<span class="mi">12764949</span>	<span class="o">.</span>	<span class="o">-</span>	<span class="o">.</span>	<span class="n">Transcript</span> <span class="s2">&quot;B0019.1&quot;</span> <span class="p">;</span> <span class="n">WormPep</span> <span class="s2">&quot;WP:CE40797&quot;</span> <span class="p">;</span> <span class="n">Note</span> <span class="s2">&quot;amx-2&quot;</span> <span class="p">;</span> <span class="n">Prediction_status</span> <span class="s2">&quot;Partially_confirmed&quot;</span> <span class="p">;</span> <span class="n">Gene</span> <span class="s2">&quot;WBGene00000138&quot;</span> <span class="p">;</span> <span class="n">CDS</span> <span class="s2">&quot;B0019.1&quot;</span> <span class="p">;</span> <span class="n">WormPep</span> <span class="s2">&quot;WP:CE40797&quot;</span> <span class="p">;</span> <span class="n">Note</span> <span class="s2">&quot;amx-2&quot;</span> <span class="p">;</span> <span class="n">Prediction_status</span> <span class="s2">&quot;Partially_confirmed&quot;</span> <span class="p">;</span> <span class="n">Gene</span> <span class="s2">&quot;WBGene00000138&quot;</span>
 <span class="n">I</span>	<span class="n">Coding_transcript</span>	<span class="n">intron</span>	<span class="mi">12759829</span>	<span class="mi">12759948</span>	<span class="o">.</span>	<span class="o">-</span>	<span class="o">.</span>	<span class="n">Transcript</span> <span class="s2">&quot;B0019.1&quot;</span> <span class="p">;</span> <span class="n">Confirmed_EST</span> <span class="n">EC034652</span>
@@ -1182,7 +1184,7 @@ dictionaries.</p>
 </div>
 </section>
 <section id="id39">
-<h3>Import<a class="headerlink" href="#id39" title="Permalink to this heading"></a></h3>
+<h3>Import<a class="headerlink" href="#id39" title="Link to this heading"></a></h3>
 <p>We will need <code class="docutils literal notranslate"><span class="pre">force_dialect_check=True</span></code> in this case if we want to be able to have
 the parents of the <code class="docutils literal notranslate"><span class="pre">SAGE_tag</span></code> features be recognized, because the attributes
 for <code class="docutils literal notranslate"><span class="pre">SAGE_tag</span></code> features are formatted differently.  That is, they don’t have
@@ -1237,7 +1239,7 @@ attributes to have the same format.  To help with this, we can use the
 </div>
 </section>
 <section id="id40">
-<h3>Access<a class="headerlink" href="#id40" title="Permalink to this heading"></a></h3>
+<h3>Access<a class="headerlink" href="#id40" title="Link to this heading"></a></h3>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="s2">&quot;B0019.1&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -1262,7 +1264,7 @@ database should follow that dialect:</p>
 </section>
 </section>
 <section id="gencode-v19-gtf">
-<span id="gencode-v190-gtf"></span><h2>gencode-v19.gtf<a class="headerlink" href="#gencode-v19-gtf" title="Permalink to this heading"></a></h2>
+<span id="gencode-v190-gtf"></span><h2>gencode-v19.gtf<a class="headerlink" href="#gencode-v19-gtf" title="Link to this heading"></a></h2>
 <p>This example file contains the first gene from the Gencode v19 annotations.
 It’s in GTF format, but in contrast to an on-spec GTF file, which only has
 exon, CDS, UTRs, and start/stop codon features, this file already has genes and
@@ -1297,7 +1299,7 @@ inference, which saves time.</p>
 </pre></div>
 </div>
 <section id="id41">
-<h3>Import<a class="headerlink" href="#id41" title="Permalink to this heading"></a></h3>
+<h3>Import<a class="headerlink" href="#id41" title="Link to this heading"></a></h3>
 <p>We can use <code class="docutils literal notranslate"><span class="pre">disable_infer_genes=True</span></code> and <code class="docutils literal notranslate"><span class="pre">disable_infer_transcripts=True</span></code> to
 disable the gene and transcript inference.  This will dramatically speed up
 import, but will result in identical results:</p>
@@ -1310,7 +1312,7 @@ import, but will result in identical results:</p>
 </div>
 </section>
 <section id="id42">
-<h3>Access<a class="headerlink" href="#id42" title="Permalink to this heading"></a></h3>
+<h3>Access<a class="headerlink" href="#id42" title="Link to this heading"></a></h3>
 <p>Access is the same as other files:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="p">[</span><span class="s1">&#39;ENSG00000223972.4&#39;</span><span class="p">]</span>
 <span class="go">&lt;Feature gene (chr1:11869-14412[+]) at 0x...&gt;</span>

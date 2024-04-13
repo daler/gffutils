@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gffutils.helpers &mdash; gffutils 0.12 documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <title>gffutils.helpers &mdash; gffutils 0.13 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=9bec1924"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -33,7 +35,7 @@
             gffutils
           </a>
               <div class="version">
-                0.12
+                0.13
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -89,7 +91,6 @@
 <span class="kn">import</span> <span class="nn">simplejson</span> <span class="k">as</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">tempfile</span>
-<span class="kn">import</span> <span class="nn">six</span>
 <span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">constants</span>
 <span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">bins</span>
 <span class="kn">import</span> <span class="nn">gffutils</span>
@@ -100,14 +101,19 @@
 <span class="n">HERE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
 
 
-<div class="viewcode-block" id="example_filename"><a class="viewcode-back" href="../../autodocs/gffutils.helpers.example_filename.html#gffutils.helpers.example_filename">[docs]</a><span class="k">def</span> <span class="nf">example_filename</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+<div class="viewcode-block" id="example_filename">
+<a class="viewcode-back" href="../../autodocs/gffutils.helpers.example_filename.html#gffutils.helpers.example_filename">[docs]</a>
+<span class="k">def</span> <span class="nf">example_filename</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the full path of a data file that ships with gffutils.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">HERE</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="infer_dialect"><a class="viewcode-back" href="../../autodocs/gffutils.helpers.infer_dialect.html#gffutils.helpers.infer_dialect">[docs]</a><span class="k">def</span> <span class="nf">infer_dialect</span><span class="p">(</span><span class="n">attributes</span><span class="p">):</span>
+
+<div class="viewcode-block" id="infer_dialect">
+<a class="viewcode-back" href="../../autodocs/gffutils.helpers.infer_dialect.html#gffutils.helpers.infer_dialect">[docs]</a>
+<span class="k">def</span> <span class="nf">infer_dialect</span><span class="p">(</span><span class="n">attributes</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Infer the dialect based on the attributes.</span>
 
@@ -122,6 +128,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">attributes</span><span class="p">,</span> <span class="n">dialect</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">_split_keyvals</span><span class="p">(</span><span class="n">attributes</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">dialect</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">_choose_dialect</span><span class="p">(</span><span class="n">features</span><span class="p">):</span>
@@ -287,7 +294,7 @@
         <span class="c1"># e.g., &quot;featuretype = &#39;exon&#39;&quot;</span>
         <span class="c1">#</span>
         <span class="c1"># or, &quot;featuretype IN (&#39;exon&#39;, &#39;CDS&#39;)&quot;</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">featuretype</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">featuretype</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">d</span><span class="p">[</span><span class="s2">&quot;FEATURETYPE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;features.featuretype = ?&quot;</span>
             <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">featuretype</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -303,7 +310,7 @@
         <span class="c1"># `limit` is a string or a tuple of (chrom, start, stop)</span>
         <span class="c1">#</span>
         <span class="c1"># e.g., &quot;seqid = &#39;chr2L&#39; AND start &gt; 1000 AND end &lt; 5000&quot;</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">limit</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">limit</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">seqid</span><span class="p">,</span> <span class="n">startstop</span> <span class="o">=</span> <span class="n">limit</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
             <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">startstop</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -342,7 +349,7 @@
         <span class="c1"># Default is essentially random order.</span>
         <span class="c1">#</span>
         <span class="c1"># e.g. &quot;ORDER BY seqid, start DESC&quot;</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">order_by</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">order_by</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">_order_by</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">order_by</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
@@ -437,7 +444,9 @@
     <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="asinterval"><a class="viewcode-back" href="../../autodocs/gffutils.helpers.asinterval.html#gffutils.helpers.asinterval">[docs]</a><span class="k">def</span> <span class="nf">asinterval</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
+<div class="viewcode-block" id="asinterval">
+<a class="viewcode-back" href="../../autodocs/gffutils.helpers.asinterval.html#gffutils.helpers.asinterval">[docs]</a>
+<span class="k">def</span> <span class="nf">asinterval</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts a gffutils.Feature to a pybedtools.Interval</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -446,7 +455,10 @@
     <span class="k">return</span> <span class="n">pybedtools</span><span class="o">.</span><span class="n">create_interval_from_list</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="merge_attributes"><a class="viewcode-back" href="../../autodocs/gffutils.helpers.merge_attributes.html#gffutils.helpers.merge_attributes">[docs]</a><span class="k">def</span> <span class="nf">merge_attributes</span><span class="p">(</span><span class="n">attr1</span><span class="p">,</span> <span class="n">attr2</span><span class="p">,</span> <span class="n">numeric_sort</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+<div class="viewcode-block" id="merge_attributes">
+<a class="viewcode-back" href="../../autodocs/gffutils.helpers.merge_attributes.html#gffutils.helpers.merge_attributes">[docs]</a>
+<span class="k">def</span> <span class="nf">merge_attributes</span><span class="p">(</span><span class="n">attr1</span><span class="p">,</span> <span class="n">attr2</span><span class="p">,</span> <span class="n">numeric_sort</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Merges two attribute dictionaries into a single dictionary.</span>
 
@@ -472,7 +484,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="n">new_d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="p">]</span>
 
-    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">attr1</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">attr1</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">attr2</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
                 <span class="n">v</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="p">]</span>
@@ -504,6 +516,7 @@
     <span class="k">return</span> <span class="n">final_d</span></div>
 
 
+
 <span class="k">def</span> <span class="nf">dialect_compare</span><span class="p">(</span><span class="n">dialect1</span><span class="p">,</span> <span class="n">dialect2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compares two dialects.</span>
@@ -515,7 +528,9 @@
     <span class="p">)</span>
 
 
-<div class="viewcode-block" id="sanitize_gff_db"><a class="viewcode-back" href="../../autodocs/gffutils.helpers.sanitize_gff_db.html#gffutils.helpers.sanitize_gff_db">[docs]</a><span class="k">def</span> <span class="nf">sanitize_gff_db</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">gid_field</span><span class="o">=</span><span class="s2">&quot;gid&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="sanitize_gff_db">
+<a class="viewcode-back" href="../../autodocs/gffutils.helpers.sanitize_gff_db.html#gffutils.helpers.sanitize_gff_db">[docs]</a>
+<span class="k">def</span> <span class="nf">sanitize_gff_db</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">gid_field</span><span class="o">=</span><span class="s2">&quot;gid&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Sanitize given GFF db. Returns a sanitized GFF db.</span>
 
@@ -546,6 +561,7 @@
     <span class="k">return</span> <span class="n">sanitized_db</span></div>
 
 
+
 <span class="k">def</span> <span class="nf">sanitize_gff_file</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">,</span> <span class="n">in_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Sanitize a GFF file.</span>
@@ -570,12 +586,15 @@
     <span class="n">gff_out</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 
-<div class="viewcode-block" id="annotate_gff_db"><a class="viewcode-back" href="../../autodocs/gffutils.helpers.annotate_gff_db.html#gffutils.helpers.annotate_gff_db">[docs]</a><span class="k">def</span> <span class="nf">annotate_gff_db</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
+<div class="viewcode-block" id="annotate_gff_db">
+<a class="viewcode-back" href="../../autodocs/gffutils.helpers.annotate_gff_db.html#gffutils.helpers.annotate_gff_db">[docs]</a>
+<span class="k">def</span> <span class="nf">annotate_gff_db</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Annotate a GFF file by cross-referencing it with another GFF</span>
 <span class="sd">    file, e.g. one containing gene models.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">pass</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">is_gff_db</span><span class="p">(</span><span class="n">db_fname</span><span class="p">):</span>
@@ -592,9 +611,9 @@
 
 
 <span class="k">def</span> <span class="nf">to_unicode</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">):</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">text_type</span><span class="p">):</span>
-            <span class="n">obj</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">text_type</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">encoding</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">encoding</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">obj</span>
 
 
@@ -604,7 +623,6 @@
 <span class="sd">    replaced with a more modular approach.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span> <span class="nn">pyfaidx</span>
-
 
     <span class="n">fasta</span> <span class="o">=</span> <span class="n">pyfaidx</span><span class="o">.</span><span class="n">Fasta</span><span class="p">(</span><span class="n">fasta_filename</span><span class="p">,</span> <span class="n">as_raw</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">gene</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">features_of_type</span><span class="p">(</span><span class="s2">&quot;gene&quot;</span><span class="p">):</span>
@@ -621,7 +639,20 @@
                     <span class="n">cds_len</span> <span class="o">+=</span> <span class="n">exon_length</span>
                 <span class="n">total_len</span> <span class="o">+=</span> <span class="n">exon_length</span>
 
-            <span class="n">exon_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">cds_len</span><span class="p">,</span> <span class="n">total_len</span><span class="p">,</span> <span class="n">transcript</span><span class="p">,</span> <span class="n">exons</span> <span class="k">if</span> <span class="n">cds_len</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">exons</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">featuretype</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;CDS&#39;</span><span class="p">,</span> <span class="s1">&#39;five_prime_UTR&#39;</span><span class="p">,</span> <span class="s1">&#39;three_prime_UTR&#39;</span><span class="p">]]))</span>
+            <span class="n">exon_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">(</span>
+                    <span class="n">cds_len</span><span class="p">,</span>
+                    <span class="n">total_len</span><span class="p">,</span>
+                    <span class="n">transcript</span><span class="p">,</span>
+                    <span class="n">exons</span>
+                    <span class="k">if</span> <span class="n">cds_len</span> <span class="o">==</span> <span class="mi">0</span>
+                    <span class="k">else</span> <span class="p">[</span>
+                        <span class="n">e</span>
+                        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">exons</span>
+                        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">featuretype</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CDS&quot;</span><span class="p">,</span> <span class="s2">&quot;five_prime_UTR&quot;</span><span class="p">,</span> <span class="s2">&quot;three_prime_UTR&quot;</span><span class="p">]</span>
+                    <span class="p">],</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
 
         <span class="c1"># If we have CDS, then use the longest coding transcript</span>
         <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">exon_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -634,7 +665,12 @@
 
         <span class="n">canonical_exons</span> <span class="o">=</span> <span class="n">best</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">transcript</span> <span class="o">=</span> <span class="n">best</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
-        <span class="n">seqs</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">sequence</span><span class="p">(</span><span class="n">fasta</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">canonical_exons</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="n">transcript</span><span class="o">.</span><span class="n">strand</span> <span class="o">!=</span> <span class="s1">&#39;+&#39;</span><span class="p">)]</span>
+        <span class="n">seqs</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">i</span><span class="o">.</span><span class="n">sequence</span><span class="p">(</span><span class="n">fasta</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span>
+                <span class="n">canonical_exons</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="n">transcript</span><span class="o">.</span><span class="n">strand</span> <span class="o">!=</span> <span class="s2">&quot;+&quot;</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
         <span class="k">yield</span> <span class="n">transcript</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">seqs</span><span class="p">)</span>
 
 

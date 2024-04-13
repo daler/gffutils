@@ -1,22 +1,24 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Database schema &mdash; gffutils 0.12 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <title>Database schema &mdash; gffutils 0.13 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=9bec1924"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -36,7 +38,7 @@
             gffutils
           </a>
               <div class="version">
-                0.12
+                0.13
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -94,9 +96,9 @@
            <div itemprop="articleBody">
              
   <section id="database-schema">
-<h1>Database schema<a class="headerlink" href="#database-schema" title="Permalink to this heading"></a></h1>
+<h1>Database schema<a class="headerlink" href="#database-schema" title="Link to this heading"></a></h1>
 <section id="schema">
-<span id="id1"></span><h2>Schema<a class="headerlink" href="#schema" title="Permalink to this heading"></a></h2>
+<span id="id1"></span><h2>Schema<a class="headerlink" href="#schema" title="Link to this heading"></a></h2>
 <p>The following is the schema used for <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a>. Feel free to skip this if
 you’re not familiar with SQL. An explanation of each table can be found below.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">gffutils</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">SCHEMA</span><span class="p">)</span>  
@@ -151,7 +153,7 @@ you’re not familiar with SQL. An explanation of each table can be found below.
 </div>
 </section>
 <section id="features-table">
-<span id="featurestable"></span><h2><code class="docutils literal notranslate"><span class="pre">features</span></code> table<a class="headerlink" href="#features-table" title="Permalink to this heading"></a></h2>
+<span id="featurestable"></span><h2><code class="docutils literal notranslate"><span class="pre">features</span></code> table<a class="headerlink" href="#features-table" title="Link to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">features</span></code> table stores the primary information from each line in the
 original file (and any additional information added by the user).</p>
 <dl class="field-list">
@@ -187,7 +189,7 @@ field will be empty.</p>
 </dl>
 </section>
 <section id="relations-table">
-<h2><code class="docutils literal notranslate"><span class="pre">relations</span></code> table<a class="headerlink" href="#relations-table" title="Permalink to this heading"></a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">relations</span></code> table<a class="headerlink" href="#relations-table" title="Link to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">relations</span></code> table stores the heierarchical information.  It’s sort of
 a simple directed acyclic graph that seems to work well for GFF/GTF files with
 [relatively] simple graph structure.</p>
@@ -206,7 +208,7 @@ parent=gene and child=exon, then level=2.</p>
 </dl>
 </section>
 <section id="meta-table">
-<h2><code class="docutils literal notranslate"><span class="pre">meta</span></code> table<a class="headerlink" href="#meta-table" title="Permalink to this heading"></a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">meta</span></code> table<a class="headerlink" href="#meta-table" title="Link to this heading"></a></h2>
 <p>This table stores extra information about the database in general.</p>
 <dl class="field-list">
 <dt class="field-odd">dialect<span class="colon">:</span></dt>
@@ -223,7 +225,7 @@ parsing the original file.</p>
 </dl>
 </section>
 <section id="directives-table">
-<h2><code class="docutils literal notranslate"><span class="pre">directives</span></code> table<a class="headerlink" href="#directives-table" title="Permalink to this heading"></a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">directives</span></code> table<a class="headerlink" href="#directives-table" title="Link to this heading"></a></h2>
 <p>A table that acts as a simple list of directives (lines starting with <code class="docutils literal notranslate"><span class="pre">##</span></code>) in
 the original GFF file.</p>
 <dl class="field-list simple">
@@ -233,7 +235,7 @@ the original GFF file.</p>
 </dl>
 </section>
 <section id="autoincrements-table">
-<h2><code class="docutils literal notranslate"><span class="pre">autoincrements</span></code> table<a class="headerlink" href="#autoincrements-table" title="Permalink to this heading"></a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">autoincrements</span></code> table<a class="headerlink" href="#autoincrements-table" title="Link to this heading"></a></h2>
 <p>When items have conflicting primary keys based on the user-provided criteria
 then <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a> can autoincrement in order to get a unique – yet
 reasonably meaningful – primary key. For example, if the user specified that

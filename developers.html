@@ -1,22 +1,24 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Developer’s docs &mdash; gffutils 0.12 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <title>Developer’s docs &mdash; gffutils 0.13 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=9bec1924"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -36,7 +38,7 @@
             gffutils
           </a>
               <div class="version">
-                0.12
+                0.13
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -96,11 +98,11 @@
            <div itemprop="articleBody">
              
   <section id="developer-s-docs">
-<h1>Developer’s docs<a class="headerlink" href="#developer-s-docs" title="Permalink to this heading"></a></h1>
+<h1>Developer’s docs<a class="headerlink" href="#developer-s-docs" title="Link to this heading"></a></h1>
 <p>This section serves as an entry point for learning about the internals of
 <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a>. The github repository can be found <a class="reference external" href="https://github.com/daler/gffutils">here</a></p>
 <section id="package-modules">
-<h2>Package modules<a class="headerlink" href="#package-modules" title="Permalink to this heading"></a></h2>
+<h2>Package modules<a class="headerlink" href="#package-modules" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">create.py</span></code> for creating new databases</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">parser.py</span></code> for parsing GFF/GTF files and determining the dialect</p></li>
@@ -113,9 +115,9 @@ existing db</p></li>
 </ul>
 </section>
 <section id="general-workflow">
-<h2>General workflow<a class="headerlink" href="#general-workflow" title="Permalink to this heading"></a></h2>
+<h2>General workflow<a class="headerlink" href="#general-workflow" title="Link to this heading"></a></h2>
 <section id="how-data-is-read-in">
-<h3>How data is read in<a class="headerlink" href="#how-data-is-read-in" title="Permalink to this heading"></a></h3>
+<h3>How data is read in<a class="headerlink" href="#how-data-is-read-in" title="Link to this heading"></a></h3>
 <p>Three kinds of input data can be provided: a filename, an iterator of
 <code class="xref py py-class docutils literal notranslate"><span class="pre">Feature</span></code> objects, or a string containing GFF/GTF lines. This
 flexibility comes at the cost of code complexity.</p>
@@ -164,7 +166,7 @@ a new dialect. For example, to convert from GTF to GFF dialects:</p>
 auto-detected.</p>
 </section>
 <section id="import">
-<h3>Import<a class="headerlink" href="#import" title="Permalink to this heading"></a></h3>
+<h3>Import<a class="headerlink" href="#import" title="Link to this heading"></a></h3>
 <p>While the format of each line in a GFF and GTF file are <em>syntactically</em> similar
 (same number of fields, roughly the same attributes string formatting), in the
 context of the file as a whole they can be very <em>semantically</em> different.</p>
@@ -208,7 +210,7 @@ and all the docs for the kwargs are in this function.</p>
 the flexibility.</p>
 </section>
 <section id="access">
-<h3>Access<a class="headerlink" href="#access" title="Permalink to this heading"></a></h3>
+<h3>Access<a class="headerlink" href="#access" title="Link to this heading"></a></h3>
 <p>Since the db creation imported the data into a uniform format, access requires
 only a single class, <code class="xref py py-class docutils literal notranslate"><span class="pre">interface.FeatureDB</span></code>. Most methods on this class
 simply perform queries on the database and return iterators of
@@ -217,7 +219,7 @@ simply perform queries on the database and return iterators of
 database’s dialect so that they print correctly.</p>
 </section>
 <section id="little-things">
-<h3>Little things<a class="headerlink" href="#little-things" title="Permalink to this heading"></a></h3>
+<h3>Little things<a class="headerlink" href="#little-things" title="Link to this heading"></a></h3>
 <p>Some notes that don’t fit elsewhere:</p>
 <ul class="simple">
 <li><p>the database stores an autoincrement table, keeping track of the last ID used

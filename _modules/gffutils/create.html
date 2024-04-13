@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gffutils.create &mdash; gffutils 0.12 documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <title>gffutils.create &mdash; gffutils 0.13 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=9bec1924"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -33,7 +35,7 @@
             gffutils
           </a>
               <div class="version">
-                0.12
+                0.13
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -90,7 +92,6 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sqlite3</span>
-<span class="kn">import</span> <span class="nn">six</span>
 <span class="kn">from</span> <span class="nn">textwrap</span> <span class="kn">import</span> <span class="n">dedent</span>
 <span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">constants</span>
 <span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">version</span>
@@ -204,7 +205,7 @@
                 <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">dbfn</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dbfn</span> <span class="o">=</span> <span class="n">dbfn</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id_spec</span> <span class="o">=</span> <span class="n">id_spec</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dbfn</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dbfn</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">dbfn</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">conn</span> <span class="o">=</span> <span class="n">dbfn</span>
@@ -256,7 +257,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># If id_spec is a string or callable, convert to iterable for later</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id_spec</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id_spec</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">id_key</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">id_spec</span><span class="p">]</span>
         <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id_spec</span><span class="p">,</span> <span class="s2">&quot;__call__&quot;</span><span class="p">):</span>
             <span class="n">id_key</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">id_spec</span><span class="p">]</span>
@@ -266,7 +267,7 @@
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id_spec</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">id_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_spec</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">featuretype</span><span class="p">]</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">id_key</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">id_key</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                     <span class="n">id_key</span> <span class="o">=</span> <span class="p">[</span><span class="n">id_key</span><span class="p">]</span>
 
             <span class="c1"># Otherwise, use default auto-increment.</span>
@@ -302,7 +303,8 @@
                                 <span class="s2">&quot;a single value is required for a primary key in the &quot;</span>
                                 <span class="s2">&quot;database. Consider using a custom id_spec to &quot;</span>
                                 <span class="s2">&quot;convert these multiple values into a single &quot;</span>
-                                <span class="s2">&quot;value&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+                                <span class="s2">&quot;value&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                            <span class="p">)</span>
                     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                         <span class="k">pass</span>
                     <span class="k">try</span><span class="p">:</span>
@@ -769,7 +771,7 @@
         <span class="c1"># c.execute(&#39;CREATE INDEX childindex ON relations (child)&#39;)</span>
         <span class="c1"># self.conn.commit()</span>
 
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_keep_tempfiles</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_keep_tempfiles</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">suffix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keep_tempfiles</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;.gffutils&quot;</span>
@@ -968,7 +970,7 @@
             <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;transcript&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Inferring </span><span class="si">%s</span><span class="s2"> extents &quot;</span> <span class="s2">&quot;and writing to tempfile&quot;</span> <span class="o">%</span> <span class="n">msg</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_keep_tempfiles</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_keep_tempfiles</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">suffix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keep_tempfiles</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;.gffutils&quot;</span>
@@ -1180,7 +1182,9 @@
         <span class="c1"># called after this one, and indexes are created in _finalize().</span>
 
 
-<div class="viewcode-block" id="create_db"><a class="viewcode-back" href="../../autodocs/gffutils.create.create_db.html#gffutils.create.create_db">[docs]</a><span class="k">def</span> <span class="nf">create_db</span><span class="p">(</span>
+<div class="viewcode-block" id="create_db">
+<a class="viewcode-back" href="../../autodocs/gffutils.create.create_db.html#gffutils.create.create_db">[docs]</a>
+<span class="k">def</span> <span class="nf">create_db</span><span class="p">(</span>
     <span class="n">data</span><span class="p">,</span>
     <span class="n">dbfn</span><span class="p">,</span>
     <span class="n">id_spec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1502,6 +1506,7 @@
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">db</span></div>
+
 </pre></div>
 
            </div>
