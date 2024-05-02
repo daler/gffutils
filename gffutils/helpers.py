@@ -34,7 +34,7 @@ def infer_dialect(attributes):
     -------
     Dictionary representing the inferred dialect
     """
-    attributes, dialect = parser._split_keyvals(attributes)
+    attributes, dialect = parser._split_keyvals(attributes, infer_dialect_call=True)
     return dialect
 
 
