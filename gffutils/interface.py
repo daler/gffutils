@@ -1999,6 +1999,12 @@ class FeatureDB(object):
         for (i,) in c:
             yield i
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.conn.close()
+
     # Recycle the docs for _relation so they stay consistent between parents()
     # and children()
     children.__doc__ = children.__doc__.format(_relation_docstring=_relation.__doc__)
