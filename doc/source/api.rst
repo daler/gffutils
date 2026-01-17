@@ -117,10 +117,10 @@ Integration with other tools
     :toctree: autodocs
     :nosignatures:
 
-    gffutils.biopython_integration.to_seqfeature
-    gffutils.biopython_integration.from_seqfeature
-    gffutils.pybedtools_integration.tsses
-    gffutils.pybedtools_integration.to_bedtool
+    biopython_integration.to_seqfeature
+    biopython_integration.from_seqfeature
+    pybedtools_integration.tsses
+    pybedtools_integration.to_bedtool
 
 
 
@@ -131,10 +131,10 @@ Utilities
     :toctree: autodocs
     :nosignatures:
 
-    gffutils.helpers.asinterval
-    gffutils.helpers.merge_attributes
-    gffutils.helpers.sanitize_gff_db
-    gffutils.helpers.annotate_gff_db
-    gffutils.helpers.infer_dialect
-    gffutils.helpers.example_filename
-    gffutils.inspect.inspect
+    helpers.asinterval
+    helpers.merge_attributes
+    helpers.sanitize_gff_db
+    helpers.annotate_gff_db
+    helpers.infer_dialect
+    helpers.example_filename
+    inspect.inspect
