@@ -1285,7 +1285,7 @@ class FeatureDB(object):
 
             with open('tmp.gtf', 'w') as fout:
                 for intron in db.create_introns(**intron_kwargs):
-                    fout.write(str(intron) + "\n")
+                    fout.write(str(intron) + "\\n")
             db.update(gffutils.DataIterator('tmp.gtf'), **create_kwargs)
 
         """
