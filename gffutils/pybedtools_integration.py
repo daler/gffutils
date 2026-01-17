@@ -113,7 +113,7 @@ def tsses(
     if they overlap (as in the first two):
 
 
-    >>> print(tsses(db))                        # doctest: +NORMALIZE_WHITESPACE
+    >>> print(gffutils.pybedtools_integration.tsses(db))                        # doctest: +NORMALIZE_WHITESPACE
     chr2L	gffutils_derived	transcript_TSS	7529	7529	.	+	.	gene_id "FBgn0031208"; transcript_id "FBtr0300689";
     chr2L	gffutils_derived	transcript_TSS	7529	7529	.	+	.	gene_id "FBgn0031208"; transcript_id "FBtr0300690";
     chr2L	gffutils_derived	transcript_TSS	11000	11000	.	-	.	gene_id "Fk_gene_1"; transcript_id "transcript_Fk_gene_1";
@@ -124,7 +124,7 @@ def tsses(
     Default merging, showing the first two TSSes merged and reported as
     a single unique TSS for the gene. Note the conversion to BED:
 
-    >>> x = tsses(db, merge_overlapping=True)
+    >>> x = gffutils.pybedtools_integration.tsses(db, merge_overlapping=True)
     >>> print(x)  # doctest: +NORMALIZE_WHITESPACE
     chr2L	7528	7529	FBgn0031208	.	+
     chr2L	10999	11000	Fk_gene_1	.	-
@@ -135,7 +135,7 @@ def tsses(
     be easier to parse than the original GTF or GFF file. With no merging
     specified, we must add `as_bed6=True` to see the names in BED format.
 
-    >>> x = tsses(db, attrs=['gene_id', 'transcript_id'], as_bed6=True)
+    >>> x = gffutils.pybedtools_integration.tsses(db, attrs=['gene_id', 'transcript_id'], as_bed6=True)
     >>> print(x)  # doctest: +NORMALIZE_WHITESPACE
     chr2L	7528	7529	FBgn0031208:FBtr0300689	.	+
     chr2L	7528	7529	FBgn0031208:FBtr0300690	.	+
@@ -145,7 +145,7 @@ def tsses(
 
     Use a 3kb merge distance so the last 2 features are merged together:
 
-    >>> x = tsses(db, merge_overlapping=True, merge_kwargs=dict(d=3000))
+    >>> x = gffutils.pybedtools_integration.tsses(db, merge_overlapping=True, merge_kwargs=dict(d=3000))
     >>> print(x)  # doctest: +NORMALIZE_WHITESPACE
     chr2L	7528	7529	FBgn0031208	.	+
     chr2L	10999	12500	Fk_gene_1,Fk_gene_2	.	-
@@ -154,7 +154,7 @@ def tsses(
 
     The set of unique TSSes for each gene, +1kb upstream and 500bp downstream:
 
-    >>> x = tsses(db, merge_overlapping=True)
+    >>> x = gffutils.pybedtools_integration.tsses(db, merge_overlapping=True)
     >>> x = x.slop(l=1000, r=500, s=True, genome='dm3')
     >>> print(x)  # doctest: +NORMALIZE_WHITESPACE
     chr2L	6528	8029	FBgn0031208	.	+
