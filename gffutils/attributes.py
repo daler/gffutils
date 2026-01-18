@@ -1,4 +1,3 @@
-import six
 import collections
 
 try:
@@ -95,7 +94,7 @@ class Attributes(collectionsAbc.MutableMapping):
         return "\n".join(s)
 
     def update(self, *args, **kwargs):
-        for k, v in six.iteritems(dict(*args, **kwargs)):
+        for k, v in dict(*args, **kwargs).items():
             self[k] = v
 
 

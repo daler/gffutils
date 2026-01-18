@@ -1,7 +1,6 @@
 ##
 ## GFF Writer (writer): serializing gffutils records as GFF text files.
 ##
-import six
 import tempfile
 import shutil
 from time import strftime, localtime
@@ -41,7 +40,7 @@ class GFFWriter:
         self.temp_file = None
         # Output stream to write to
         self.out_stream = None
-        if isinstance(out, six.string_types):
+        if isinstance(out, str):
             if self.in_place:
                 # Use temporary file
                 self.temp_file = tempfile.NamedTemporaryFile(delete=False)

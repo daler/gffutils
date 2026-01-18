@@ -152,10 +152,10 @@ class IsolatedTestCase(object):
     namespace or something?  Anyway, these setup/teardowns do the trick.
     """
 
-    def setup(self):
+    def setup_method(self):
         constants.always_return_list = False
 
-    def teardown(self):
+    def teardown_method(self):
         constants.always_return_list = True
 
     def test_feature_single_item(self):

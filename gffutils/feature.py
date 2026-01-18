@@ -1,5 +1,4 @@
 from pyfaidx import Fasta
-import six
 import simplejson as json
 from gffutils import constants
 from gffutils import helpers
@@ -166,7 +165,7 @@ class Feature(object):
         # for testing.
         attributes = attributes or dict_class()
 
-        if isinstance(attributes, six.string_types):
+        if isinstance(attributes, str):
             try:
                 attributes = helpers._unjsonify(attributes, isattributes=True)
 
@@ -182,7 +181,7 @@ class Feature(object):
         # If string, then try un-JSONifying it into a list; if that doesn't
         # work then assume it's tab-delimited and convert to a list.
         extra = extra or []
-        if isinstance(extra, six.string_types):
+        if isinstance(extra, str):
             try:
                 extra = helpers._unjsonify(extra)
             except json.JSONDecodeError:
@@ -254,10 +253,7 @@ class Feature(object):
             self.attributes[key] = value
 
     def __str__(self):
-        if six.PY3:
-            return self.__unicode__()
-        else:
-            return unicode(self).encode("utf-8")
+        return self.__unicode__()
 
     def __unicode__(self):
 
@@ -387,7 +383,7 @@ class Feature(object):
         -------
         string
         """
-        if isinstance(fasta, six.string_types):
+        if isinstance(fasta, str):
             fasta = Fasta(fasta, as_raw=False)
 
         # recall GTF/GFF is 1-based closed;  pyfaidx uses Python slice notation

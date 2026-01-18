@@ -1,6 +1,5 @@
 import collections
 import os
-import six
 import sqlite3
 import shutil
 import warnings
@@ -102,7 +101,7 @@ class FeatureDB(object):
         keep_order=False,
         pragmas=constants.default_pragmas,
         sort_attribute_values=False,
-        text_factory=sqlite3.OptimizedUnicode,
+        text_factory=str,
     ):
         """
         Connect to a database created by :func:`gffutils.create_db`.
@@ -117,8 +116,7 @@ class FeatureDB(object):
         text_factory : callable
 
             Optionally set the way sqlite3 handles strings.  Default is
-            sqlite3.OptimizedUnicode, which returns ascii when possible,
-            unicode otherwise
+            str
 
         default_encoding : str
 
@@ -695,7 +693,7 @@ class FeatureDB(object):
                     "If region is supplied, do not supply seqid, "
                     "start, or end as separate kwargs"
                 )
-            if isinstance(region, six.string_types):
+            if isinstance(region, str):
                 toks = region.split(":")
                 if len(toks) == 1:
                     seqid = toks[0]
@@ -775,7 +773,7 @@ class FeatureDB(object):
 
         # Add the featuretype clause
         if featuretype is not None:
-            if isinstance(featuretype, six.string_types):
+            if isinstance(featuretype, str):
                 featuretype = [featuretype]
             feature_clause = " or ".join(["featuretype = ?" for _ in featuretype])
             query += " AND (%s) " % feature_clause
@@ -873,10 +871,21 @@ class FeatureDB(object):
             Used to initialize a new interfeature that is ready to be updated
             in-place.
             """
-            keys = ['id', 'seqid', 'source', 'featuretype', 'start', 'end',
-                    'score', 'strand', 'frame', 'attributes', 'bin']
+            keys = [
+                "id",
+                "seqid",
+                "source",
+                "featuretype",
+                "start",
+                "end",
+                "score",
+                "strand",
+                "frame",
+                "attributes",
+                "bin",
+            ]
             d = dict(zip(keys, f.astuple()))
-            d['source'] = 'gffutils_derived'
+            d["source"] = "gffutils_derived"
             return d
 
         def _prep_for_yield(d):
@@ -887,18 +896,26 @@ class FeatureDB(object):
             If start is greater than stop (which happens when trying to get
             interfeatures for overlapping features), then return None.
             """
-            d['start'] += 1
-            d['end'] -= 1
-            new_bin = bins.bins(d['start'], d['end'], one=True)
-            d['bin'] = new_bin
+            d["start"] += 1
+            d["end"] -= 1
+            new_bin = bins.bins(d["start"], d["end"], one=True)
+            d["bin"] = new_bin
 
-            if d['start'] > d['end']:
+            if d["start"] > d["end"]:
                 return None
 
-            return self._feature_returner(**d)
+            new_feature = self._feature_returner(**d)
+
+            # concat list of ID to create uniq IDs because feature with
+            # multiple values for their ID are no longer permitted since v0.11
+            if "ID" in new_feature.attributes and len(new_feature.attributes["ID"]) > 1:
+                new_id = "-".join(new_feature.attributes["ID"])
+                new_feature.attributes["ID"] = [new_id]
+            return new_feature
 
         # If not provided, use a no-op function instead.
         if not attribute_func:
+
             def attribute_func(a):
                 return a
 
@@ -927,23 +944,23 @@ class FeatureDB(object):
             nfeatures += 1
 
             # Adjust the interfeature dict in-place with coords...
-            interfeature['start'] = last_feature.stop
-            interfeature['end'] = f.start
+            interfeature["start"] = last_feature.stop
+            interfeature["end"] = f.start
 
             # ...featuretype
             if new_featuretype is None:
-                interfeature['featuretype'] = "inter_%s_%s" % (
+                interfeature["featuretype"] = "inter_%s_%s" % (
                     last_feature.featuretype,
                     f.featuretype,
                 )
             else:
-                interfeature['featuretype'] = new_featuretype
+                interfeature["featuretype"] = new_featuretype
 
             # ...strand
             if last_feature.strand != f.strand:
-                interfeature['strand'] = '.'
+                interfeature["strand"] = "."
             else:
-                interfeature['strand'] = f.strand
+                interfeature["strand"] = f.strand
 
             # and attributes
             if merge_attributes:
@@ -958,7 +975,7 @@ class FeatureDB(object):
             if update_attributes:
                 new_attributes.update(update_attributes)
 
-            interfeature['attributes'] = new_attributes
+            interfeature["attributes"] = new_attributes
 
             # Ready to yield
             new_feature = _prep_for_yield(interfeature)
@@ -988,7 +1005,7 @@ class FeatureDB(object):
         FeatureDB object, with features deleted.
         """
         if make_backup:
-            if isinstance(self.dbfn, six.string_types):
+            if isinstance(self.dbfn, str):
                 shutil.copy2(self.dbfn, self.dbfn + ".bak")
 
         c = self.conn.cursor()
@@ -1000,12 +1017,12 @@ class FeatureDB(object):
         """
         if isinstance(features, FeatureDB):
             features = features.all_features()
-        if isinstance(features, six.string_types):
+        if isinstance(features, str):
             features = [features]
         if isinstance(features, Feature):
             features = [features]
         for feature in features:
-            if isinstance(feature, six.string_types):
+            if isinstance(feature, str):
                 _id = feature
             else:
                 _id = feature.id
@@ -1021,7 +1038,13 @@ class FeatureDB(object):
         WARNING: If you used any non-default kwargs for gffutils.create_db when
         creating the database in the first place (especially
         `disable_infer_transcripts` or `disable_infer_genes`) then you should
-        use those same arguments here.
+        use those same arguments here. The exception is the `force` argument
+        though -- in some cases including that can truncate the database.
+
+        WARNING: If you are creating features from the database and writing
+        immediately back to the database, you could experience deadlocks. See
+        the help for `create_introns` for some different options for avoiding
+        this.
 
         The returned object is the same FeatureDB, but since it is pointing to
         the same database and that has been just updated, the new features can
@@ -1054,7 +1077,7 @@ class FeatureDB(object):
         from gffutils import iterators
 
         if make_backup:
-            if isinstance(self.dbfn, six.string_types):
+            if isinstance(self.dbfn, str):
                 shutil.copy2(self.dbfn, self.dbfn + ".bak")
 
         # get iterator-specific kwargs
@@ -1133,9 +1156,9 @@ class FeatureDB(object):
         -------
         FeatureDB object with new relations added.
         """
-        if isinstance(parent, six.string_types):
+        if isinstance(parent, str):
             parent = self[parent]
-        if isinstance(child, six.string_types):
+        if isinstance(child, str):
             child = self[child]
 
         c = self.conn.cursor()
@@ -1228,9 +1251,42 @@ class FeatureDB(object):
         -----
         The returned generator can be passed directly to the
         :meth:`FeatureDB.update` method to permanently add them to the
-        database, e.g., ::
+        database. However, this needs to be done carefully to avoid deadlocks
+        from simultaneous reading/writing.
 
-            db.update(db.create_introns())
+        When using `update()` you should also use the same keyword arguments
+        used to create the db in the first place (with the exception of `force`).
+
+        Here are three options for getting the introns back into the database,
+        depending on the circumstances.
+
+        **OPTION 1: Create list of introns.**
+
+        Consume the `create_introns()` generator completely before writing to
+        the database. If you have sufficient memory, this is the easiest
+        option::
+
+            db.update(list(db.create_introns(**intron_kwargs)), **create_kwargs)
+
+        **OPTION 2: Use `WAL <https://sqlite.org/wal.html>`__**
+
+        The WAL pragma enables simultaneous read/write. WARNING: this does not
+        work if the database is on a networked filesystem, like those used on
+        many HPC clusters.
+
+        ::
+
+            db.set_pragmas({"journal_mode": "WAL"})
+            db.update(db.create_introns(**intron_kwargs), **create_kwargs)
+
+        **OPTION 3: Write to intermediate file.**
+
+        Use this if you are memory limited and using a networked filesystem::
+
+            with open('tmp.gtf', 'w') as fout:
+                for intron in db.create_introns(**intron_kwargs):
+                    fout.write(str(intron) + "\\n")
+            db.update(gffutils.DataIterator('tmp.gtf'), **create_kwargs)
 
         """
         if (grandparent_featuretype and parent_featuretype) or (
@@ -1266,6 +1322,129 @@ class FeatureDB(object):
                 dialect=self.dialect,
             ):
                 yield intron
+
+    def create_splice_sites(
+        self,
+        exon_featuretype="exon",
+        grandparent_featuretype="gene",
+        parent_featuretype=None,
+        merge_attributes=True,
+        numeric_sort=False,
+    ):
+        """
+        Create splice sites from existing annotations.
+
+
+        Parameters
+        ----------
+        exon_featuretype : string
+            Feature type to use in order to infer splice sites.  Typically `"exon"`.
+
+        grandparent_featuretype : string
+            If `grandparent_featuretype` is not None, then group exons by
+            children of this featuretype.  If `granparent_featuretype` is
+            "gene" (default), then splice sites will be created for all first-level
+            children of genes.  This may include mRNA, rRNA, ncRNA, etc.  If
+            you only want to infer splice sites from one of these featuretypes
+            (e.g., mRNA), then use the `parent_featuretype` kwarg which is
+            mutually exclusive with `grandparent_featuretype`.
+
+        parent_featuretype : string
+            If `parent_featuretype` is not None, then only use this featuretype
+            to infer splice sites.  Use this if you only want a subset of
+            featuretypes to have splice sites (e.g., "mRNA" only, and not ncRNA or
+            rRNA). Mutually exclusive with `grandparent_featuretype`.
+
+        merge_attributes : bool
+            Whether or not to merge attributes from all exons. If False then no
+            attributes will be created for the splice sites.
+
+        numeric_sort : bool
+            If True, then merged attributes that can be cast to float will be
+            sorted by their numeric values (but will still be returned as
+            string). This is useful, for example, when creating splice sites between
+            exons and the exons have exon_number attributes as an integer.
+            Using numeric_sort=True will ensure that the returned exons have
+            merged exon_number attribute of ['9', '10'] (numerically sorted)
+            rather than ['10', '9'] (alphabetically sorted).
+
+        Returns
+        -------
+        A generator object that yields :class:`Feature` objects representing
+        new splice sites
+
+        Notes
+        -----
+        The returned generator can be passed directly to the
+        :meth:`FeatureDB.update` method to permanently add them to the
+        database, e.g., ::
+
+            db.update(db.create_splice sites())
+
+        """
+        if (grandparent_featuretype and parent_featuretype) or (
+            grandparent_featuretype is None and parent_featuretype is None
+        ):
+            raise ValueError(
+                "exactly one of `grandparent_featuretype` or "
+                "`parent_featuretype` should be provided"
+            )
+
+        if grandparent_featuretype:
+
+            def child_gen():
+                for gene in self.features_of_type(grandparent_featuretype):
+                    for child in self.children(gene, level=1):
+                        yield child
+
+        elif parent_featuretype:
+
+            def child_gen():
+                for child in self.features_of_type(parent_featuretype):
+                    yield child
+
+        # Two splice features need to be created for each interleave
+        for side in ["left", "right"]:
+            for child in child_gen():
+                exons = self.children(
+                    child, level=1, featuretype=exon_featuretype, order_by="start"
+                )
+
+                # get strand
+                strand = child.strand
+
+                new_featuretype = "splice_site"
+                if side == "left":
+                    if strand == "+":
+                        new_featuretype = "five_prime_cis_splice_site"
+                    elif strand == "-":
+                        new_featuretype = "three_prime_cis_splice_site"
+
+                if side == "right":
+                    if strand == "+":
+                        new_featuretype = "three_prime_cis_splice_site"
+                    elif strand == "-":
+                        new_featuretype = "five_prime_cis_splice_site"
+
+                for splice_site in self.interfeatures(
+                    exons,
+                    new_featuretype=new_featuretype,
+                    merge_attributes=merge_attributes,
+                    numeric_sort=numeric_sort,
+                    dialect=self.dialect,
+                ):
+
+                    if side == "left":
+                        splice_site.end = splice_site.start + 1
+                    if side == "right":
+                        splice_site.start = splice_site.end - 1
+
+                    # make ID uniq by adding suffix
+                    splice_site.attributes["ID"] = [
+                        new_featuretype + "_" + splice_site.attributes["ID"][0]
+                    ]
+
+                    yield splice_site
 
     def _old_merge(self, features, ignore_strand=False):
         """
@@ -1582,10 +1761,12 @@ class FeatureDB(object):
         return result_features
 
     def children_bp(
-        self, feature, child_featuretype="exon", merge=False,
-            merge_criteria=(mc.seqid, mc.overlap_end_inclusive, mc.strand,
-                            mc.feature_type),
-            **kwargs
+        self,
+        feature,
+        child_featuretype="exon",
+        merge=False,
+        merge_criteria=(mc.seqid, mc.overlap_end_inclusive, mc.strand, mc.feature_type),
+        **kwargs
     ):
         """
         Total bp of all children of a featuretype.
@@ -1624,9 +1805,14 @@ class FeatureDB(object):
                 raise ValueError(
                     "'ignore_strand' has been deprecated; please use "
                     "merge_criteria to control how features should be merged. "
-                    "E.g., leave out the 'mc.strand' criteria to ignore strand.")
+                    "E.g., leave out the 'mc.strand' criteria to ignore strand."
+                )
             else:
-                raise TypeError("merge() got unexpected keyword arguments '{}'".format(kwargs.keys()))
+                raise TypeError(
+                    "merge() got unexpected keyword arguments '{}'".format(
+                        kwargs.keys()
+                    )
+                )
 
         children = self.children(
             feature, featuretype=child_featuretype, order_by="start"
@@ -1812,7 +1998,6 @@ class FeatureDB(object):
         )
         for (i,) in c:
             yield i
-
 
     # Recycle the docs for _relation so they stay consistent between parents()
     # and children()

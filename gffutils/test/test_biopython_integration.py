@@ -1,6 +1,10 @@
 from gffutils import example_filename
 import gffutils
 import gffutils.biopython_integration as bp
+import pytest
+
+# Skip tests entirely if BioPython not available
+pytest.importorskip('Bio')
 
 
 def test_roundtrip():
@@ -13,8 +17,8 @@ def test_roundtrip():
     feature.keep_order = True
     dialect = feature.dialect
     s = bp.to_seqfeature(feature)
-    assert s.location.start.position == feature.start - 1
-    assert s.location.end.position == feature.stop
+    assert s.location.start == feature.start - 1
+    assert s.location.end == feature.stop
     assert s.id == feature.id
     f = bp.from_seqfeature(s, dialect=dialect, keep_order=True)
     assert feature == f

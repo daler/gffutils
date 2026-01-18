@@ -16,13 +16,8 @@ from gffutils.feature import feature_from_line
 from gffutils.interface import FeatureDB
 from gffutils import helpers
 from textwrap import dedent
-import six
-from six.moves.urllib.request import urlopen
-
-if six.PY3:
-    from urllib import parse as urlparse
-else:
-    import urlparse
+from urllib.request import urlopen
+from urllib import parse as urlparse
 
 
 class Directive(object):
@@ -133,7 +128,7 @@ class _FileIterator(_BaseIterator):
         valid_lines = 0
         with self.open_function(self.data) as fh:
             for i, line in enumerate(fh):
-                if isinstance(line, six.binary_type):
+                if isinstance(line, bytes):
                     line = line.decode("utf-8")
                 line = line.rstrip("\n\r")
                 self.current_item = line
@@ -295,11 +290,11 @@ def DataIterator(
         force_dialect_check=force_dialect_check,
         **kwargs,
     )
-    if isinstance(data, six.string_types):
+    if isinstance(data, str):
         if from_string:
             tmp = tempfile.NamedTemporaryFile(delete=False)
             data = dedent(data)
-            if isinstance(data, six.text_type):
+            if isinstance(data, str):
                 data = data.encode("utf-8")
             tmp.write(data)
             tmp.close()
