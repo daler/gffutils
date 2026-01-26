@@ -612,3 +612,18 @@ def test_issue_213():
     db = gffutils.create_db(tmp, dbfn="issue_213.db", force=True)
     assert db.directives == ["gff-version 3"], db.directives
     assert len(db.directives) == 1
+
+def test_issue_212():
+
+
+    data = dedent(
+        """
+    NC_000964.3	RefSeq	CDS	410	1747	.	+	0	gene_id "BSU_00010"; transcript_id "unassigned_transcript_1"; db_xref "EnsemblGenomes-Gn:BSU00010"; db_xref "EnsemblGenomes-Tr:CAB11777"; db_xref "GOA:P05648"; db_xref "InterPro:IPR001957"; db_xref "InterPro:IPR003593"; db_xref "InterPro:IPR010921"; db_xref "InterPro:IPR013159"; db_xref "InterPro:IPR013317"; db_xref "InterPro:IPR018312"; db_xref "InterPro:IPR020591"; db_xref "InterPro:IPR024633"; db_xref "InterPro:IPR027417"; db_xref "PDB:4TPS"; db_xref "SubtiList:BG10065"; db_xref "UniProtKB/Swiss-Prot:P05648"; db_xref "GenBank:NP_387882.1"; db_xref "GeneID:939978"; experiment "publication(s) with functional evidences, PMID:2167836, 2846289, 12682299, 16120674, 1779750, 28166228"; gbkey "CDS"; gene "dnaA"; locus_tag "BSU_00010"; note "Evidence 1a: Function from experimental evidences in the studied strain; PubMedId: 2167836, 2846289, 12682299, 16120674, 1779750, 28166228; Product type f : factor"; product "chromosomal replication initiator informational ATPase"; protein_id "NP_387882.1"; transl_table "11"; exon_number "1";
+        """
+    )
+    inferred_dialect = gffutils.helpers.infer_dialect(data.split('\t')[-1])
+    assert inferred_dialect["semicolon in quotes"]
+
+    f = next(iter(gffutils.DataIterator(data, from_string=True, dialect=inferred_dialect)))
+    assert f.dialect["semicolon in quotes"]
+    assert f.attributes["note"] == ["Evidence 1a: Function from experimental evidences in the studied strain; PubMedId: 2167836, 2846289, 12682299, 16120674, 1779750, 28166228; Product type f : factor"]
