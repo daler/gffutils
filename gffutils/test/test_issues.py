@@ -200,7 +200,10 @@ def test_pr_144():
     assert f.attributes["a"] == [""]
     assert str(f) == ".	.	.	.	.	.	.	.	a"
     g = gffutils.feature.feature_from_line(str(f))
-    assert g == f
+    g.dialect["fmt"] = "gff3"
+    print(g.attributes)
+    print(g.dialect)
+    assert str(g) == str(f)
 
 
 def test_pr_172():
@@ -452,20 +455,42 @@ def test_issue_198():
 
     assert f.attributes["description"] == ["WASP family homolog 7, pseudogene"]
 
-    # If we remove one of the db_xref keys, then the parser sees the comma and
-    # figures it's a multivalue key.
+    # If we remove one of the db_xref keys, then previously the parser saw the
+    # comma and figured it was a multivalue key, and split it. Now, it's
+    # correctly identified as a single-value key.
+    #
+    # Note that we still have gene_synonym as a repeated key.
     line = 'NC_000001.11	BestRefSeq	gene	14362	29370	.	-	.	gene_id "WASH7P"; transcript_id ""; db_xref "GeneID:653635"; description "WASP family homolog 7, pseudogene"; gbkey "Gene"; gene "WASH7P"; gene_biotype "transcribed_pseudogene"; gene_synonym "FAM39F"; gene_synonym "WASH5P"; pseudo "true";'
     f = feature.feature_from_line(line)
+    assert f.dialect["repeated keys"]
 
     # Previous result, note leading space --------------------------->| |
     # assert f.attributes['description'] == ['WASP family homolog 7', ' pseudogene']
+
+    # Current result: not split.
     assert f.attributes["description"] == ["WASP family homolog 7, pseudogene"]
 
-    # But removing that space before "pseudogene" means it's interpreted as
-    # a multivalue attribute
+    # Removing that space before "pseudogene" might mean it's a multivalue, but
+    # we decide on the convention that if keys are repeated at all, that wins.
+    # So we still don't split
     line = 'NC_000001.11	BestRefSeq	gene	14362	29370	.	-	.	gene_id "WASH7P"; transcript_id ""; db_xref "GeneID:653635"; description "WASP family homolog 7,pseudogene"; gbkey "Gene"; gene "WASH7P"; gene_biotype "transcribed_pseudogene"; gene_synonym "FAM39F"; gene_synonym "WASH5P"; pseudo "true";'
     f = feature.feature_from_line(line)
+    assert f.dialect["repeated keys"]
+    assert f.attributes["description"] == ["WASP family homolog 7,pseudogene"]
+
+    # But if we get rid of all repeated keys, it's interpreted as multiple values
+    line = 'NC_000001.11	BestRefSeq	gene	14362	29370	.	-	.	gene_id "WASH7P"; transcript_id ""; db_xref "GeneID:653635"; description "WASP family homolog 7,pseudogene"; gbkey "Gene"; gene "WASH7P"; gene_biotype "transcribed_pseudogene"; gene_synonym "FAM39F"; pseudo "true";'
+    f = feature.feature_from_line(line)
+    assert not f.dialect["repeated keys"]
     assert f.attributes["description"] == ["WASP family homolog 7", "pseudogene"]
+
+    # ....but if there's a ", " (comma followed by space) instead of just
+    # comma, then it's not split.
+    line = 'NC_000001.11	BestRefSeq	gene	14362	29370	.	-	.	gene_id "WASH7P"; transcript_id ""; db_xref "GeneID:653635"; description "WASP family homolog 7, pseudogene"; gbkey "Gene"; gene "WASH7P"; gene_biotype "transcribed_pseudogene"; gene_synonym "FAM39F"; pseudo "true";'
+    f = feature.feature_from_line(line)
+    assert not f.dialect["repeated keys"]
+    assert f.attributes["description"] == ["WASP family homolog 7, pseudogene"]
+
 
     # Confirm behavior of corner cases like a trailing comma
     line = "chr17	RefSeq	CDS	6806527	6806553	.	+	0	Name=CDS:NC_000083.5:LOC100040603;Parent=XM_001475631.1,"
