@@ -235,7 +235,7 @@ data upon import into the database:
 ...     return x
 
 
-Now we can supply this tranform function to :func:`create_db`:
+Now we can supply this transform function to :func:`create_db`:
 
 >>> fn = gffutils.example_filename('ensembl_gtf.txt')
 >>> db = gffutils.create_db(fn, ":memory:",
@@ -643,8 +643,8 @@ attributes to have the same format.  To help with this, we can use the
 >>> dialect = helpers.infer_dialect(
 ... 'Transcript "B0019.1" ; WormPep "WP:CE40797" ; Note "amx-2" ; Prediction_status "Partially_confirmed" ; Gene "WBGene00000138" ; CDS "B0019.1" ; WormPep "WP:CE40797" ; Note "amx-2" ; Prediction_status "Partially_confirmed" ; Gene "WBGene00000138"',
 ... )
->>> print(dialect)
-{'leading semicolon': False, 'trailing semicolon': False, 'quoted GFF2 values': True, 'field separator': ' ; ', 'keyval separator': ' ', 'multival separator': ',', 'fmt': 'gtf', 'repeated keys': True, 'order': ['Transcript', 'WormPep', 'Note', 'Prediction_status', 'Gene', 'CDS', 'WormPep', 'Note', 'Prediction_status', 'Gene']}
+>>> print({k: v for k, v in sorted(dialect.items())})
+{'field separator': ' ; ', 'fmt': 'gtf', 'keyval separator': ' ', 'leading semicolon': False, 'multival separator': ',', 'order': ['Transcript', 'WormPep', 'Note', 'Prediction_status', 'Gene', 'CDS'], 'quoted GFF2 values': True, 'repeated keys': True, 'semicolon in quotes': False, 'trailing semicolon': False}
 
 >>> db.dialect = dialect
 
