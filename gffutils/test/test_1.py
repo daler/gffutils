@@ -14,10 +14,7 @@ import threading
 import tempfile
 import http.server as SimpleHTTPServer
 
-if sys.version_info.major == 3:
-    import socketserver as SocketServer
-else:
-    import SocketServer
+import socketserver as SocketServer
 
 import multiprocessing
 import json
