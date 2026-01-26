@@ -38,7 +38,8 @@ A GTF dialect might look like this::
      'multival separator': ',',
      'quoted GFF2 values': True,
      'repeated keys': False,
-     'trailing semicolon': True}
+     'trailing semicolon': True,
+     'semicolon_in_quotes': False}
 
 In contrast, a GFF dialect might look like this::
 
@@ -49,7 +50,9 @@ In contrast, a GFF dialect might look like this::
      'multival separator': ',',
      'quoted GFF2 values': False,
      'repeated keys': False,
-     'trailing semicolon': False}
+     'trailing semicolon': False,
+     'semicolon_in_quotes': False}
+
 
 As other real-world files are brought to the attention of the developers, it's
 likely that more entries will be added to the dialect.
