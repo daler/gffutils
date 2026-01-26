@@ -3,6 +3,35 @@
 Change log
 ==========
 
+
+v0.14
+-----
+
+- If a value contained a semicolon there would be unexpected behavior (reported
+  in `#212 <https://github.com/daler/gffutils/issues/212>`__). This is solved
+  by adding a new entry to the dialect, ``semicolon in quotes```, and running
+  the necessary regular expression only -- thanks to @DevangThakkar for the
+  fix.
+- Refactored the attributes parsing to make it clearer to follow along, and
+  added more tests. The refactoring fixed some subtle bugs on corner cases:
+  - Previously, for features with repeated keys, the ``order`` key of dialects
+    would list the repeated keys each time which could result in undetermined
+    behavior. The ``order`` key is now unique and only the first occurrence of
+    a repeated key will be added to the order.
+  - Previously, the ``ensembl_gtf.txt`` example file had a leading *space* in
+    front of the attributes. This looks to be an error in the creation of the
+    example file in the first place, but had previously parsed fine. Now the
+    parser (correctly) mis-handles it. Since I'm unaware of any cases in the
+    wild that have a leading space, I actually consider the new parsing to be
+    more correct.
+  - Added tests to directly inspect the inferred dialects for the test cases.
+- CI, testing, and docs infrastructure updates (miniforge instead of
+  mambaforge; GitHub Action version bumps; skip biopython test if it's not
+  installed; reduce build errors for docs)
+- Fix `#224 <https://github.com/daler/gffutils/issues/224>`__), which was cause
+  by changes to the ``argh`` package used for the command-line tool.
+
+
 v0.13
 -----
 
