@@ -457,27 +457,7 @@ class FeatureDB(object):
         completely_within=False,
         limit=None,
     ):
-
-        # The following docstring will be included in the parents() and
-        # children() docstrings to maintain consistency, since they both
-        # delegate to this method.
-        """
-        Parameters
-        ----------
-
-        id : string or a Feature object
-
-        level : None or int
-
-            If `level=None` (default), then return all children regardless
-            of level.  If `level` is an integer, then constrain to just that
-            level.
-        {_method_doc}
-
-        Returns
-        -------
-        A generator object that yields :class:`Feature` objects.
-        """
+        """Internal implementation for parent/child relationship queries."""
 
         if isinstance(id, Feature):
             id = id.id
@@ -524,7 +504,22 @@ class FeatureDB(object):
     ):
         """
         Return children of feature `id`.
-        {_relation_docstring}
+
+        Parameters
+        ----------
+
+        id : string or a Feature object
+
+        level : None or int
+
+            If `level=None` (default), then return all related children
+            regardless of level. If `level` is an integer, then constrain to
+            just that level.
+        {_method_doc}
+
+        Returns
+        -------
+        A generator object that yields :class:`Feature` objects.
         """
         return self._relation(
             id,
@@ -550,7 +545,22 @@ class FeatureDB(object):
     ):
         """
         Return parents of feature `id`.
-        {_relation_docstring}
+
+        Parameters
+        ----------
+
+        id : string or a Feature object
+
+        level : None or int
+
+            If `level=None` (default), then return all related parents
+            regardless of level. If `level` is an integer, then constrain to
+            just that level.
+        {_method_doc}
+
+        Returns
+        -------
+        A generator object that yields :class:`Feature` objects.
         """
         return self._relation(
             id,
@@ -2001,11 +2011,6 @@ class FeatureDB(object):
         )
         for (i,) in c:
             yield i
-
-    # Recycle the docs for _relation so they stay consistent between parents()
-    # and children()
-    children.__doc__ = children.__doc__.format(_relation_docstring=_relation.__doc__)
-    parents.__doc__ = parents.__doc__.format(_relation_docstring=_relation.__doc__)
 
     # Add the docs for methods that call helpers.make_query()
     for method in [parents, children, features_of_type, all_features]:
