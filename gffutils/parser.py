@@ -15,9 +15,6 @@ ch.setLevel(logging.INFO)
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 
-# Compile regexs up front
-gff3_kw_pat = re.compile(r"\w+=")
-
 # Regex for each separator that will be tested
 quoted_semicolon_patterns = dict()
 
@@ -149,13 +146,21 @@ def _split_keyvals(keyval_str, dialect=None):
     else:
         parts = keyval_str.split(dialect["field separator"])
 
-    # The next stage of dialect inference works on the 'parts' like:
+    # The next stage of dialect inference works on the 'parts' -- unsplit
+    # keyval pairs -- like:
     #
     #    parts = ["ID=001", "Name=gene1"]
     #
+    # or
+    #
+    #    parts = ["gene_id ENSG001", "gene_biotype protein_coding"]
+    #
     if infer_dialect:
         dialect["fmt"] = "gff3"
-        if gff3_kw_pat.match(parts[0]):
+
+        # Note: so far, have not found cases where we need to check more than
+        # the first item
+        if "=" in parts[0]:
             dialect["fmt"] = "gff3"
             dialect["keyval separator"] = "="
         else:
@@ -179,10 +184,12 @@ def _split_keyvals(keyval_str, dialect=None):
         keys = [i[0] for i in key_val_tuples]
         dialect["repeated keys"] = len(keys) != len(set(keys))
 
-    # For dialect detection, this will help figure out if there is inconsistent
-    # quoting across values.
-    quoted_values = []
+        # For dialect detection, this will help figure out if there is
+        # inconsistent quoting across values. It will only be used in the loop
+        # below if infer_dialect is True
+        quoted_values = []
 
+    # Now work splitting the keys if needed.
     for i in key_val_tuples:
 
         if len(i) == 2:
@@ -190,34 +197,50 @@ def _split_keyvals(keyval_str, dialect=None):
             key, val = i
 
         elif len(i) == 1:
-            # By convention, no value becomes an empty string, e.g.:
+            # By convention, no value becomes an empty string, e.g. when done
+            # parsing,
             #
-            #     attributes = "ID=001;is_gene;"
+            #   "ID=001;is_gene;"
+            #
+            # will end up as:
+            #
+            #   {"ID": "001", "is_gene": ""}
             key = i[0]
             val = ""
 
         else:
-            # Multiple spaces within quoted values are joined back together without
-            # requiring a regex (like we need when there's *field* separator like
-            # a semicolon in the values)
+            # Multiple *spaces* within quoted values are joined back together
+            # without requiring a regex, in contrast to when there's *field*
+            # separator like a semicolon in the values.
             #
             # That is:
             #
             #   attributes = 'gene_description "an important gene"; gene_id "g001"'
             #
-            # becomes
+            # when split on spaces, becomes
             #
             #   key_val_tuples = [("gene_description", "an", "important", "gene"), ("gene_id", "g001")]
             #
-            # so here that first key/val pair will become:
+            # so here when we only keep the first token as a key, that first
+            # key/val pair will become:
             #
-            #   key = "gene_description"
-            #   val = "an important gene"
+            #   {
+            #     "gene_description": ["an important gene"],
+            #     "gene_id": ["g001"],
+            #   }
             #
             # Another pathological case, this time for GFF3:
             #
             #   Alias=SGN-M1347;ID=T0028;Note=marker name(s): T0028 SGN-M1347 |identity=99.58|escore=2e-126
-            #                                                                          ^            ^
+            #
+            # will become the following:
+            #
+            #   {
+            #     "Alias": ["SGN-M1347"],
+            #     "ID": ["T0028"],
+            #     "Note": ["marker name(s): T0028 SGN-M1347 |identity=99.58|escore=2e-126"],
+            #   }
+            #
             key = i[0]
             val = kvsep.join(i[1:])
 
@@ -226,7 +249,8 @@ def _split_keyvals(keyval_str, dialect=None):
         if key not in quals:
             quals[key] = []
 
-        # This will run on every value.
+        # This will run on every value, accumulating in quoted_values to check
+        # later for consistency
         if infer_dialect:
             quoted = len(val) > 0 and val[0] == '"' and val[-1] == '"'
             quoted_values.append(quoted)
