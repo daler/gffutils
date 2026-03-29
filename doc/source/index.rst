@@ -6,9 +6,9 @@
 Introduction
 ============
 :mod:`gffutils` is a Python package for working with `GFF
-<http://www.sanger.ac.uk/resources/software/gff/spec.htm>`_ and `GTF
-<http://mblab.wustl.edu/GTF22.html>`_ files in a hierarchical manner.  It
-allows operations which would be complicated or time-consuming using
+<https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md>`__
+and `GTF <http://mblab.wustl.edu/GTF22.html>`_ files in a hierarchical manner.
+It allows operations which would be complicated or time-consuming using
 a text-file-only approach.
 
 Below is a short demonstration of :mod:`gffutils`. For the full documentation,
