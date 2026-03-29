@@ -6,9 +6,12 @@ Tests for specific issues and pull requests
 import os
 import tempfile
 import difflib
+from pathlib import Path
 from textwrap import dedent
 import gffutils
 from gffutils import feature
+from gffutils import helpers
+from gffutils.gffwriter import GFFWriter
 from gffutils import merge_criteria as mc
 
 import pytest
@@ -603,7 +606,7 @@ def test_issue_207():
     )
 
 
-def test_issue_213():
+def test_issue_213(tmp_path):
     # GFF header directives seem to be not parsed when building a db from
     # a file, even though it seems to work fine from a string.
     data = dedent(
@@ -624,19 +627,61 @@ def test_issue_213():
     db = gffutils.create_db(data, dbfn=":memory:", from_string=True, verbose=False)
     assert db.directives == ["gff-version 3"], db.directives
 
-    # Ensure they're parsed into the db from a file
-    tmp = tempfile.NamedTemporaryFile(delete=False).name
+    tmp = tmp_path / "issue_213.gff3"
     with open(tmp, "w") as fout:
         fout.write(data + "\n")
-    db = gffutils.create_db(tmp, ":memory:")
-    assert db.directives == ["gff-version 3"], db.directives
-    assert len(db.directives) == 1
 
-    # Ensure they're parsed into the db from a file, and going to a file (to
-    # exactly replicate example in #213)
-    db = gffutils.create_db(tmp, dbfn="issue_213.db", force=True)
-    assert db.directives == ["gff-version 3"], db.directives
-    assert len(db.directives) == 1
+    # Ensure they're parsed into the db from a file path for both str/Path.
+    for input_path in (str(tmp), tmp):
+        db = gffutils.create_db(input_path, ":memory:")
+        assert db.directives == ["gff-version 3"], db.directives
+        assert len(db.directives) == 1
+
+    # Ensure they're parsed into the db for all str/Path input-output
+    # combinations when both source and destination are file-backed.
+    for input_path, output_path in (
+        (str(tmp), str(tmp_path / "issue_213_str_str.db")),
+        (str(tmp), tmp_path / "issue_213_str_path.db"),
+        (tmp, str(tmp_path / "issue_213_path_str.db")),
+        (tmp, tmp_path / "issue_213_path_path.db"),
+    ):
+        db = gffutils.create_db(input_path, dbfn=output_path, force=True)
+        assert db.directives == ["gff-version 3"], db.directives
+        assert len(db.directives) == 1
+
+
+
+def test_pathlike_inputs(tmp_path):
+    """
+    Ensure various functions work with Path and str.
+    """
+    gff = Path(gffutils.example_filename("FBgn0031208.gff"))
+    fasta = Path(gffutils.example_filename("dm6-chr2L.fa"))
+    db_path = tmp_path / "pathlike.db"
+    out_path = tmp_path / "pathlike.gff3"
+    staged_gff = tmp_path / "pathlike-input.gff3"
+    staged_gff.write_text(gff.read_text())
+    staged_gff_db = Path("%s.%s" % (staged_gff, ".db"))
+
+    db = gffutils.create_db(gff, db_path, force=True)
+    assert db.dbfn == os.fspath(db_path)
+
+    reopened = gffutils.FeatureDB(db_path)
+    reopened.delete([], make_backup=True)
+    assert (tmp_path / "pathlike.db.bak").exists()
+
+    writer = GFFWriter(out_path)
+    writer.write_rec(next(reopened.all_features()))
+    writer.close()
+    assert out_path.exists()
+
+    assert helpers.is_gff_db(db_path)
+    gffutils.create_db(staged_gff, staged_gff_db, force=True)
+    assert helpers.get_gff_db(staged_gff) == os.fspath(staged_gff_db)
+
+    seq = reopened["FBgn0031208"].sequence(fasta)
+    expected_seq = reopened["FBgn0031208"].sequence(os.fspath(fasta))
+    assert seq == expected_seq
 
 def test_issue_212():
 

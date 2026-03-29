@@ -161,6 +161,9 @@ class FeatureDB(object):
         # db.
         from gffutils import create
 
+        if isinstance(dbfn, os.PathLike):
+            dbfn = os.fspath(dbfn)
+
         if isinstance(dbfn, create._DBCreator):
             self.conn = dbfn.conn
             self.dbfn = dbfn.dbfn
