@@ -4,7 +4,7 @@ import sys
 from setuptools import setup
 
 version_py = os.path.join(os.path.dirname(__file__), 'gffutils', 'version.py')
-version = open(version_py).read().strip().split('=')[-1].replace('"', '')
+version = open(version_py).read().strip().split('=')[-1].replace('"', '').strip()
 requirements = open(os.path.join(os.path.dirname(__file__), 'requirements.txt')).readlines()
 setup(
     name='gffutils',
@@ -23,7 +23,6 @@ setup(
     url='https://github.com/daler/gffutils',
     classifiers=[
         'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: MIT License',
         'Topic :: Scientific/Engineering :: Bio-Informatics',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
