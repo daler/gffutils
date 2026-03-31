@@ -12,7 +12,7 @@ jobs:
   build-and-test:
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -29,19 +29,19 @@ jobs:
           wget -O Miniforge3.sh "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
           bash Miniforge3.sh -b -p "${HOME}/conda"
           source "${HOME}/conda/etc/profile.d/conda.sh"
-          source "${HOME}/conda/etc/profile.d/mamba.sh"
           which conda
           conda config --system --add channels defaults
           conda config --system --add channels bioconda
           conda config --system --add channels conda-forge
           conda config --system --set channel_priority strict
-          mamba create -y -n gffutils-env \
+          conda create -y -n gffutils-env \
             python=${{ matrix.python-version }} \
             bedtools
 
           conda activate gffutils-env
-          python setup.py clean sdist
-          (cd dist && pip install gffutils-*.tar.gz)
+          python -m pip install build
+          python -m build
+          (cd dist && python -m pip install gffutils-*.tar.gz)
           cd $TMPDIR
           python -c "import gffutils; print(gffutils.__file__)"
           conda deactivate
@@ -49,11 +49,10 @@ jobs:
       - name: run unit tests
         run: |
           source "${HOME}/conda/etc/profile.d/conda.sh"
-          source "${HOME}/conda/etc/profile.d/mamba.sh"
-
           conda activate gffutils-env
-          pip install pytest hypothesis biopython pybedtools
-          pytest -v --doctest-modules gffutils
+          conda install -y bedtools
+          python -m pip install -e '.[optional,test]'
+          pytest
           conda deactivate
 
       - name: doctests
@@ -68,9 +67,8 @@ jobs:
         if: ${{ (matrix.python-version != 3.8) }}
         run: |
           source "${HOME}/conda/etc/profile.d/conda.sh"
-          source "${HOME}/conda/etc/profile.d/mamba.sh"
-          mamba install -y -n gffutils-env --file docs-requirements.txt
           conda activate gffutils-env
+          python -m pip install -e '.[docs]'
           (cd doc && make clean doctest)
           conda deactivate
 
@@ -79,7 +77,6 @@ jobs:
         if: ${{ (matrix.python-version != 3.8) }}
         run: |
           source "${HOME}/conda/etc/profile.d/conda.sh"
-          source "${HOME}/conda/etc/profile.d/mamba.sh"
           conda activate gffutils-env
           (cd doc && make html)
           conda deactivate
@@ -89,7 +86,6 @@ jobs:
             --single-branch \
             --branch gh-pages "https://x-acess-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" \
             /tmp/docs
-
 
           # clean it out and add newly-built docs
           rm -rf /tmp/docs/*
@@ -117,7 +113,7 @@ jobs:
       - name: push docs to gh-pages branch
         # Push docs to gh-pages if this test is running on master branch, and
         # restrict to a single Python version.
-        if: ${{ (github.ref == 'refs/heads/master') && (matrix.python-version == 3.9) }}
+        if: ${{ (github.ref == 'refs/heads/master') && (matrix.python-version == 3.12) }}
         run: |
           cd /tmp/docs
           git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY" gh-pages

@@ -1,5 +1,7 @@
 [build-system]
-requires = ["setuptools>=61"]
+# setuptools 77.0.3 is when support for plain text values for `license` key,
+# used below, is supported.
+requires = ["setuptools>=77.0.3"]
 build-backend = "setuptools.build_meta"
 
 [project]
