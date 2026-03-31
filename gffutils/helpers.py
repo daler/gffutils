@@ -498,6 +498,8 @@ def is_gff_db(db_fname):
 
     For now, rely on .db extension.
     """
+    if isinstance(db_fname, os.PathLike):
+        db_fname = os.fspath(db_fname)
     if not os.path.isfile(db_fname):
         return False
     if db_fname.endswith(".db"):
@@ -519,6 +521,8 @@ def canonical_transcripts(db, fasta_filename):
     """
     import pyfaidx
 
+    if isinstance(fasta_filename, os.PathLike):
+        fasta_filename = os.fspath(fasta_filename)
     fasta = pyfaidx.Fasta(fasta_filename, as_raw=False)
     for gene in db.features_of_type("gene"):
 
@@ -580,6 +584,8 @@ def get_gff_db(gff_fname, ext=".db"):
     load that. Otherwise, create a named temporary file,
     serialize the db to that, and return the loaded database.
     """
+    if isinstance(gff_fname, os.PathLike):
+        gff_fname = os.fspath(gff_fname)
     if not os.path.isfile(gff_fname):
         # Not sure how we should deal with errors normally in
         # gffutils -- Ryan?

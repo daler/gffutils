@@ -1,0 +1,69 @@
+[build-system]
+# setuptools 77.0.3 is when support for plain text values for `license` key,
+# used below, is supported.
+requires = ["setuptools>=77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gffutils"
+version = "0.14"
+readme = { file = "README.rst", content-type = "text/x-rst" }
+description = "Work with GFF and GTF files in a flexible database framework"
+authors = [
+  { name = "Ryan Dale", email = "ryan.dale@nih.gov" },
+]
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.8"
+dependencies = [
+  "pyfaidx>=0.5.5.2",
+  "argh>=0.26.2",
+  "argcomplete>=1.9.4",
+  "simplejson",
+]
+classifiers = [
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Bio-Informatics",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+urls = { Homepage = "https://github.com/daler/gffutils" }
+
+[project.optional-dependencies]
+test = [
+  "pytest",
+]
+optional = [
+  "biopython>=1.73",
+  "pybedtools>=0.8.0",
+]
+docs = [
+  "make",
+  "numpydoc",
+  "sphinx",
+  "sphinx_rtd_theme",
+  "sphinx-autoapi",
+]
+
+[tool.pytest.ini_options]
+addopts = "-v --doctest-modules"
+testpaths = ["gffutils"]
+markers = [
+  "slow: marks tests that are slow to run",
+]
+
+[tool.setuptools]
+include-package-data = true
+script-files = ["gffutils/scripts/gffutils-cli"]
+
+[tool.setuptools.packages.find]
+include = ["gffutils", "gffutils.*"]
+
+[tool.setuptools.package-data]
+gffutils = ["test/data/*"]

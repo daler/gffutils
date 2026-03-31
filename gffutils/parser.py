@@ -1,9 +1,8 @@
 # Portions copied over from BCBio.GFF.GFFParser
 
 import re
-import copy
 import collections
-import urllib
+from urllib import parse
 from gffutils import constants
 from gffutils.exceptions import AttributeStringError
 
@@ -16,7 +15,27 @@ ch.setLevel(logging.INFO)
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 
-gff3_kw_pat = re.compile(r"\w+=")
+# Regex for each separator that will be tested
+quoted_semicolon_patterns = dict()
+
+for sep in (" ; ", "; ", ";"):
+    quoted_semicolon_patterns[sep] = re.compile(
+        rf"""
+            {re.escape(sep)}   # The separator we're considering (escaped for VERBOSE mode)
+            (?=                # Positive lookahead: does remaining content match?
+                (?:            # Start non-capturing group
+                    [^"]       # Either: match any character that is NOT a quote
+                    |          # OR
+                    "[^"]*"    # Match a complete quoted string, specifically:
+                               #   - opening quote ", followed by
+                               #   - zero or more non-quote characters [^"]*
+                               #   - followed by closing quote "
+                )*             # Repeat the above pattern zero or more times
+                $              # Until we reach the end of the string
+            )                  # End of lookahead
+        """,
+        re.VERBOSE,
+    )
 
 # Encoding/decoding notes
 # -----------------------
@@ -50,9 +69,9 @@ gff3_kw_pat = re.compile(r"\w+=")
 #
 # See also issue #98.
 #
-# Note that spaces are NOT encoded. Some GFF files have spaces encoded; in
-# these cases round-trip invariance will not hold since the %20 will be decoded
-# but not re-encoded.
+# Note that spaces are NOT supposed to be encoded. Yet some GFF files have
+# spaces encoded anyway; in these cases round-trip invariance will not hold
+# since the %20 will be decoded but not re-encoded.
 _to_quote = "\n\t\r%;=&,"
 _to_quote += "".join([chr(i) for i in range(32)])
 _to_quote += chr(127)
@@ -72,6 +91,235 @@ class Quoter(collections.defaultdict):
 
 
 quoter = Quoter()
+
+
+def _split_keyvals(keyval_str, dialect=None):
+    """
+    Dialect detection requires partially parsing the attributes.
+    """
+    from gffutils import feature
+
+    quals = feature.dict_class()
+
+    if not keyval_str:
+        return quals, dialect
+
+    infer_dialect = False
+    if dialect is None:
+        infer_dialect = True
+        dialect = {}
+
+    # No known cases yet of different multival separator
+    dialect["multival separator"] = ","
+
+    # Detection for these dialect fields can work on the full attribute
+    # string. Other detection needs to wait until we've further parsed the
+    # attributes.
+    if infer_dialect:
+        dialect["trailing semicolon"] = keyval_str[-1] == ";"
+        dialect["leading semicolon"] = keyval_str[0] == ";"
+        semicolon_in_quotes = False
+        sep = None
+        for sep in (" ; ", "; ", ";"):
+            parts = keyval_str.split(sep)
+            if len(parts) > 1:
+                # If naive split differs from more expensive regex, we infer there was
+                # a semicolon within quoted value and we'll have to use the expensive
+                # method later
+                parts_regex = re.split(quoted_semicolon_patterns[sep], keyval_str)
+                if parts != parts_regex:
+                    semicolon_in_quotes = True
+                break
+        dialect["semicolon in quotes"] = semicolon_in_quotes
+        dialect["field separator"] = sep
+
+    if dialect["trailing semicolon"]:
+        keyval_str = keyval_str.rstrip(";")
+
+    if dialect["leading semicolon"]:
+        keyval_str = keyval_str.lstrip(";")
+
+    if dialect["semicolon in quotes"]:
+        parts = re.split(
+            quoted_semicolon_patterns[dialect["field separator"]], keyval_str
+        )
+    else:
+        parts = keyval_str.split(dialect["field separator"])
+
+    # The next stage of dialect inference works on the 'parts' -- unsplit
+    # keyval pairs -- like:
+    #
+    #    parts = ["ID=001", "Name=gene1"]
+    #
+    # or
+    #
+    #    parts = ["gene_id ENSG001", "gene_biotype protein_coding"]
+    #
+    if infer_dialect:
+        dialect["fmt"] = "gff3"
+
+        # Note: so far, have not found cases where we need to check more than
+        # the first item
+        if "=" in parts[0]:
+            dialect["fmt"] = "gff3"
+            dialect["keyval separator"] = "="
+        else:
+            dialect["fmt"] = "gtf"
+            dialect["keyval separator"] = " "
+
+    # Now we split
+    #
+    #    parts = ["ID=001", "Name=gene1"]
+    #
+    # into
+    #
+    #   key_val_tuples = [("ID", "001"), ("Name", "gene1")]
+    #
+    # in a dialect-dependent manner.
+    kvsep = dialect["keyval separator"]
+    key_val_tuples = [p.split(kvsep) for p in parts]
+
+    # With the split keys we can detect whether any are repeated
+    if infer_dialect:
+        keys = [i[0] for i in key_val_tuples]
+        dialect["repeated keys"] = len(keys) != len(set(keys))
+
+        # For dialect detection, this will help figure out if there is
+        # inconsistent quoting across values. It will only be used in the loop
+        # below if infer_dialect is True
+        quoted_values = []
+
+    # Now work splitting the keys if needed.
+    for i in key_val_tuples:
+
+        if len(i) == 2:
+            # Easy, on-spec case
+            key, val = i
+
+        elif len(i) == 1:
+            # By convention, no value becomes an empty string, e.g. when done
+            # parsing,
+            #
+            #   "ID=001;is_gene;"
+            #
+            # will end up as:
+            #
+            #   {"ID": "001", "is_gene": ""}
+            key = i[0]
+            val = ""
+
+        else:
+            # Multiple *spaces* within quoted values are joined back together
+            # without requiring a regex, in contrast to when there's *field*
+            # separator like a semicolon in the values.
+            #
+            # That is:
+            #
+            #   attributes = 'gene_description "an important gene"; gene_id "g001"'
+            #
+            # when split on spaces, becomes
+            #
+            #   key_val_tuples = [("gene_description", "an", "important", "gene"), ("gene_id", "g001")]
+            #
+            # so here when we only keep the first token as a key, that first
+            # key/val pair will become:
+            #
+            #   {
+            #     "gene_description": ["an important gene"],
+            #     "gene_id": ["g001"],
+            #   }
+            #
+            # Another pathological case, this time for GFF3:
+            #
+            #   Alias=SGN-M1347;ID=T0028;Note=marker name(s): T0028 SGN-M1347 |identity=99.58|escore=2e-126
+            #
+            # will become the following:
+            #
+            #   {
+            #     "Alias": ["SGN-M1347"],
+            #     "ID": ["T0028"],
+            #     "Note": ["marker name(s): T0028 SGN-M1347 |identity=99.58|escore=2e-126"],
+            #   }
+            #
+            key = i[0]
+            val = kvsep.join(i[1:])
+
+        # By convention all values are lists, even if there's only one value
+        # (or even no values)
+        if key not in quals:
+            quals[key] = []
+
+        # This will run on every value, accumulating in quoted_values to check
+        # later for consistency
+        if infer_dialect:
+            quoted = len(val) > 0 and val[0] == '"' and val[-1] == '"'
+            quoted_values.append(quoted)
+            dialect["quoted GFF2 values"] = quoted
+
+        if dialect["quoted GFF2 values"] and val:
+            val = val.strip('"')
+
+        if val:
+            # For repeated keys dialect, don't split on an internal comma. That is,
+            #
+            #   attributes = 'db_xref="g01,g02"; db_xref="XYZ"'
+            #
+            # becomes:
+            #
+            #   {
+            #     "db_xref": ["g01,g02", "XYZ"]
+            #    }
+            #
+            if dialect.get("repeated keys"):
+                quals[key].append(val)
+
+            # Otherwise, split but only if it's a comma without a space. So:
+            #
+            #    attributes = 'db_xref="g01,g02"'
+            #
+            # becomes
+            #    {
+            #      "db_xref": ["g01", "g02"]
+            #    }
+            # but
+            #
+            #    attributes = 'description="kinase, subunit 1"'
+            #                                      ^ note the space here
+            # becomes
+            #    {
+            #      "description": ["kinase, subunit 1"]
+            #    }
+            #
+            else:
+                # E.g. the "kinase, subunit 1" example above
+                if ", " in val:
+                    quals[key].append(val)
+                else:
+                    quals[key].extend(val.split(","))
+
+    # If there was inconsistent quoting, we fall back to "not quoted" so
+    # as to avoid incorrectly stripping off first and last quotes.
+    if infer_dialect and len(set(quoted_values)) > 1:
+        # Prior behavior was to use whatever the first value used
+        dialect["quoted GFF2 values"] = quoted_values[0]
+
+        # Though there could be an argument for considering quotes in mixed
+        # cases to be part of the string, though technically they should be
+        # %-encoded if so.
+        # dialect["quoted GFF2 values"] = False
+
+    # Handle unquoting of %-encoded values
+    if not constants.ignore_url_escape_characters and dialect["fmt"] == "gff3":
+        for key, vals in quals.items():
+            unquoted = [parse.unquote(v) for v in vals]
+            quals[key] = unquoted
+
+    # Now that we're not supporting old Python versions we can rely on dict
+    # insertion order
+    if infer_dialect:
+        dialect["order"] = list(quals.keys())
+
+    return quals, dialect
 
 
 def _reconstruct(keyvals, dialect, keep_order=False, sort_attribute_values=False):
@@ -156,6 +404,20 @@ def _reconstruct(keyvals, dialect, keep_order=False, sort_attribute_values=False
                 part = key
         else:
             if dialect["fmt"] == "gtf":
+                # By convention, GTF attributes with no value are reconstructed
+                # with an empty string. E.g.:
+                #   'gene_id "gene1"; is_gene;'
+                #
+                # becomes
+                #
+                #   {
+                #     "gene_id": "gene1",
+                #     "is_gene": ""
+                #    }
+                #
+                # and is printed as:
+                #
+                #   'gene_id "gene1"; is_gene "";'
                 part = dialect["keyval separator"].join([key, '""'])
             else:
                 part = key
@@ -169,207 +431,3 @@ def _reconstruct(keyvals, dialect, keep_order=False, sort_attribute_values=False
         parts_str += ";"
 
     return parts_str
-
-
-# TODO:
-# Cythonize -- profiling shows that the bulk of the time is spent on this
-# function...
-def _split_keyvals(keyval_str, dialect=None):
-    """
-    Given the string attributes field of a GFF-like line, split it into an
-    attributes dictionary and a "dialect" dictionary which contains information
-    needed to reconstruct the original string.
-
-    Lots of logic here to handle all the corner cases.
-
-    If `dialect` is None, then do all the logic to infer a dialect from this
-    attribute string.
-
-    Otherwise, use the provided dialect (and return it at the end).
-    """
-
-    def _unquote_quals(quals, dialect):
-        """
-        Handles the unquoting (decoding) of percent-encoded characters.
-
-        See notes on encoding/decoding above.
-        """
-        if not constants.ignore_url_escape_characters and dialect["fmt"] == "gff3":
-            for key, vals in quals.items():
-                unquoted = [urllib.parse.unquote(v) for v in vals]
-                quals[key] = unquoted
-        return quals
-
-    infer_dialect = False
-    if dialect is None:
-        # Make a copy of default dialect so it can be modified as needed
-        dialect = copy.copy(constants.dialect)
-        infer_dialect = True
-    from gffutils import feature
-
-    quals = feature.dict_class()
-    if not keyval_str:
-        return quals, dialect
-
-    # If a dialect was provided, then use that directly.
-    if not infer_dialect:
-        if dialect["trailing semicolon"]:
-            keyval_str = keyval_str.rstrip(";")
-
-        parts = keyval_str.split(dialect["field separator"])
-
-        kvsep = dialect["keyval separator"]
-        if dialect["leading semicolon"]:
-            pieces = []
-            for p in parts:
-                if p and p[0] == ";":
-                    p = p[1:]
-                pieces.append(p.strip().split(kvsep))
-                key_vals = [(p[0], " ".join(p[1:])) for p in pieces]
-
-        if dialect["fmt"] == "gff3":
-            key_vals = [p.split(kvsep) for p in parts]
-        else:
-            leadingsemicolon = dialect["leading semicolon"]
-            pieces = []
-            for i, p in enumerate(parts):
-                if i == 0 and leadingsemicolon:
-                    p = p[1:]
-                pieces.append(p.strip().split(kvsep))
-                key_vals = [(p[0], " ".join(p[1:])) for p in pieces]
-
-        quoted = dialect["quoted GFF2 values"]
-        for item in key_vals:
-            # Easy if it follows spec
-            if len(item) == 2:
-                key, val = item
-
-            # Only key provided?
-            elif len(item) == 1:
-                key = item[0]
-                val = ""
-
-            else:
-                key = item[0]
-                val = dialect["keyval separator"].join(item[1:])
-
-            try:
-                quals[key]
-            except KeyError:
-                quals[key] = []
-
-            if quoted:
-                if len(val) > 0 and val[0] == '"' and val[-1] == '"':
-                    val = val[1:-1]
-
-            if val:
-                # TODO: if there are extra commas for a value, just use empty
-                # strings
-                # quals[key].extend([v for v in val.split(',') if v])
-                vals = val.split(",")
-                quals[key].extend(vals)
-
-        quals = _unquote_quals(quals, dialect)
-        return quals, dialect
-
-    # If we got here, then we need to infer the dialect....
-    #
-    # Reset the order to an empty list so that it will only be populated with
-    # keys that are found in the file.
-    dialect["order"] = []
-
-    # ensembl GTF has trailing semicolon
-    if keyval_str[-1] == ";":
-        keyval_str = keyval_str[:-1]
-        dialect["trailing semicolon"] = True
-
-    # GFF2/GTF has a semicolon with at least one space after it.
-    # Spaces can be on both sides (e.g. wormbase)
-    # GFF3 works with no spaces.
-    # So split on the first one we can recognize...
-    for sep in (" ; ", "; ", ";"):
-        parts = keyval_str.split(sep)
-        if len(parts) > 1:
-            dialect["field separator"] = sep
-            break
-
-    # Is it GFF3?  They have key-vals separated by "="
-    if gff3_kw_pat.match(parts[0]):
-        key_vals = [p.split("=") for p in parts]
-        dialect["fmt"] = "gff3"
-        dialect["keyval separator"] = "="
-
-    # Otherwise, key-vals separated by space.  Key is first item.
-    else:
-        dialect["keyval separator"] = " "
-        pieces = []
-        for p in parts:
-            # Fix misplaced semicolons in keys in some GFF2 files
-            if p and p[0] == ";":
-                p = p[1:]
-                dialect["leading semicolon"] = True
-            pieces.append(p.strip().split(" "))
-        key_vals = [(p[0], " ".join(p[1:])) for p in pieces]
-
-    for item in key_vals:
-
-        # Easy if it follows spec
-        if len(item) == 2:
-            key, val = item
-
-        # Only key provided?
-        elif len(item) == 1:
-            key = item[0]
-            val = ""
-
-        # Pathological cases where values of a key have within them the key-val
-        # separator, e.g.,
-        #  Alias=SGN-M1347;ID=T0028;Note=marker name(s): T0028 SGN-M1347 |identity=99.58|escore=2e-126
-        #                                                                         ^            ^
-        else:
-            key = item[0]
-            val = dialect["keyval separator"].join(item[1:])
-
-        # Is the key already in there?
-        if key in quals:
-            dialect["repeated keys"] = True
-        else:
-            quals[key] = []
-
-        # Remove quotes in GFF2
-        if len(val) > 0 and val[0] == '"' and val[-1] == '"':
-            val = val[1:-1]
-            dialect["quoted GFF2 values"] = True
-        if val:
-
-            # TODO: if there are extra commas for a value, just use empty
-            # strings
-            # quals[key].extend([v for v in val.split(',') if v])
-
-            # See issue #198, where commas within a description can incorrectly
-            # cause the dialect inference to conclude that there are not
-            # repeated keys.
-            #
-            # More description in PR #208.
-            if dialect["repeated keys"]:
-                quals[key].append(val)
-            else:
-                vals = val.split(",")
-
-                # If anything starts with a leading space, then we infer that
-                # it was part of a description or some other typographical
-                # interpretation, not a character to split multiple vals on --
-                # and append the original val rather than the split vals.
-                if any([i[0] == " " for i in vals if i]):
-                    quals[key].append(val)
-                else:
-                    quals[key].extend(vals)
-
-        # keep track of the order of keys
-        dialect["order"].append(key)
-
-    if (dialect["keyval separator"] == " ") and (dialect["quoted GFF2 values"]):
-        dialect["fmt"] = "gtf"
-
-    quals = _unquote_quals(quals, dialect)
-    return quals, dialect

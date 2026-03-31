@@ -3,6 +3,7 @@
 ##
 import tempfile
 import shutil
+import os
 from time import strftime, localtime
 from gffutils.version import version
 
@@ -33,6 +34,8 @@ class GFFWriter:
     """
 
     def __init__(self, out, with_header=True, in_place=False):
+        if isinstance(out, os.PathLike):
+            out = os.fspath(out)
         self.out = out
         self.with_header = with_header
         self.in_place = in_place

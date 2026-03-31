@@ -76,6 +76,9 @@ class _DBCreator(object):
         Base class for _GFFDBCreator and _GTFDBCreator; see create_db()
         function for docs
         """
+        if isinstance(dbfn, os.PathLike):
+            dbfn = os.fspath(dbfn)
+
         self._keep_tempfiles = _keep_tempfiles
         if force_merge_fields is None:
             force_merge_fields = []

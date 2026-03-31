@@ -279,6 +279,8 @@ def DataIterator(
         provided, you should probably also use `force_dialect_check=False` and
         `checklines=0` but this is not enforced.
     """
+    if isinstance(data, os.PathLike):
+        data = os.fspath(data)
 
     if isinstance(data, _BaseIterator):
         return data

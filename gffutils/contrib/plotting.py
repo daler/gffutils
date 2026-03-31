@@ -1,11 +1,11 @@
+import warnings
+
 from gffutils.helpers import asinterval
 
 try:
     from pybedtools.contrib.plotting import Track
 except ImportError:
-    import warnings
-
-    warnings.warn("Please install pybedtools for plotting.")
+    Track = None
 
 
 class Gene(object):
@@ -49,6 +49,9 @@ class Gene(object):
         UTRs, CDSs are.  Padding is essentially "full" minus the largest height
         (CDS, 0.9, by default).
         """
+        if Track is None:
+            warnings.warn("Please install pybedtools for plotting.")
+            raise ImportError("pybedtools is required for gffutils.contrib.plotting")
 
         self.heights = {"transcript": 0.2, "utrs": 0.5, "cds": 0.9, "full": 1.0}
         self.kwargs = kwargs

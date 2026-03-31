@@ -1,4 +1,5 @@
 from pyfaidx import Fasta
+import os
 import simplejson as json
 from gffutils import constants
 from gffutils import helpers
@@ -383,6 +384,8 @@ class Feature(object):
         -------
         string
         """
+        if isinstance(fasta, os.PathLike):
+            fasta = os.fspath(fasta)
         if isinstance(fasta, str):
             fasta = Fasta(fasta, as_raw=False)
 

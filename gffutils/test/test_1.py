@@ -14,10 +14,7 @@ import threading
 import tempfile
 import http.server as SimpleHTTPServer
 
-if sys.version_info.major == 3:
-    import socketserver as SocketServer
-else:
-    import SocketServer
+import socketserver as SocketServer
 
 import multiprocessing
 import json
@@ -482,58 +479,51 @@ def test_sanitize_gff():
     print("Sanitized GFF successfully.")
 
 
-def test_region():
-
+@pytest.mark.parametrize("kwargs,expected", [
+    # previously failed, see issue #45
+    (dict(seqid="chr2L", start=1, end=2e9, completely_within=True), 27),
+    (dict(region="chr2L", start=0), ValueError),
+    (dict(region="chr2L", end=0), ValueError),
+    (dict(region="chr2L", seqid=0), ValueError),
+    # these coords should catch everything
+    (dict(region="chr2L:7529-12500"), 27),
+    # stranded versions:
+    (dict(region="chr2L:7529-12500", strand="."), 0),
+    (dict(region="chr2L:7529-12500", strand="+"), 21),
+    (dict(region="chr2L:7529-12500", strand="-"), 6),
+    # different ways of selecting only that last exon in the last gene:
+    (dict(seqid="chr2L", start=11500, featuretype="exon"), 1),
+    (dict(seqid="chr2L", start=9500, featuretype="exon", strand="+"), 1),
+    # alternative method
+    (dict(seqid="chr2L", start=7529, end=12500), 27),
+    # since default completely_within=False, this catches anything that
+    # falls after 7680.  So it only excludes the 5'UTR, which ends at 7679.
+    (dict(seqid="chr2L", start=7680), 26),
+    # but completely_within=True will exclude the gene and mRNAs, first
+    # exon and the 5'UTR
+    (dict(seqid="chr2L", start=7680, completely_within=True), 22),
+    # similarly, this will *exclude* anything before 7680
+    (dict(seqid="chr2L", end=7680), 5),
+    # and also similarly, this will only get us the 5'UTR which is the only
+    # feature falling completely before 7680
+    (dict(seqid="chr2L", end=7680, completely_within=True), 1),
+    # and there's only features from chr2L in this file, so this catches
+    # everything too
+    (dict(region="chr2L"), 27),
+    # using seqid should work similarly to `region` with only chromosome
+    (dict(seqid="chr2L"), 27),
+    # nonexistent
+    (dict(region="nowhere"), 0),
+])
+def test_region(kwargs, expected):
     db_fname = gffutils.example_filename("FBgn0031208.gff")
     db = gffutils.create_db(db_fname, ":memory:", keep_order=True)
 
-    def _check(item):
-        kwargs, expected = item
-        try:
-            obs = list(db.region(**kwargs))
-            assert len(obs) == expected, "expected %s got %s" % (expected, len(obs))
-        except expected:
-            pass
-
-    regions = [
-        # previously failed, see issue #45
-        (dict(seqid="chr2L", start=1, end=2e9, completely_within=True), 27),
-        (dict(region="chr2L", start=0), ValueError),
-        (dict(region="chr2L", end=0), ValueError),
-        (dict(region="chr2L", seqid=0), ValueError),
-        # these coords should catch everything
-        (dict(region="chr2L:7529-12500"), 27),
-        # stranded versions:
-        (dict(region="chr2L:7529-12500", strand="."), 0),
-        (dict(region="chr2L:7529-12500", strand="+"), 21),
-        (dict(region="chr2L:7529-12500", strand="-"), 6),
-        # different ways of selecting only that last exon in the last gene:
-        (dict(seqid="chr2L", start=11500, featuretype="exon"), 1),
-        (dict(seqid="chr2L", start=9500, featuretype="exon", strand="+"), 1),
-        # alternative method
-        (dict(seqid="chr2L", start=7529, end=12500), 27),
-        # since default completely_within=False, this catches anything that
-        # falls after 7680.  So it only excludes the 5'UTR, which ends at 7679.
-        (dict(seqid="chr2L", start=7680), 26),
-        # but completely_within=True will exclude the gene and mRNAs, first
-        # exon and the 5'UTR
-        (dict(seqid="chr2L", start=7680, completely_within=True), 22),
-        # similarly, this will *exclude* anything before 7680
-        (dict(seqid="chr2L", end=7680), 5),
-        # and also similarly, this will only get us the 5'UTR which is the only
-        # feature falling completely before 7680
-        (dict(seqid="chr2L", end=7680, completely_within=True), 1),
-        # and there's only features from chr2L in this file, so this catches
-        # everything too
-        (dict(region="chr2L"), 27),
-        # using seqid should work similarly to `region` with only chromosome
-        (dict(seqid="chr2L"), 27),
-        # nonexistent
-        (dict(region="nowhere"), 0),
-    ]
-
-    for item in regions:
-        yield _check, item
+    try:
+        obs = list(db.region(**kwargs))
+        assert len(obs) == expected, "expected %s got %s" % (expected, len(obs))
+    except expected:
+        pass
 
 
 def test_nonascii():

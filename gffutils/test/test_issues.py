@@ -6,9 +6,12 @@ Tests for specific issues and pull requests
 import os
 import tempfile
 import difflib
+from pathlib import Path
 from textwrap import dedent
 import gffutils
 from gffutils import feature
+from gffutils import helpers
+from gffutils.gffwriter import GFFWriter
 from gffutils import merge_criteria as mc
 
 import pytest
@@ -200,7 +203,10 @@ def test_pr_144():
     assert f.attributes["a"] == [""]
     assert str(f) == ".	.	.	.	.	.	.	.	a"
     g = gffutils.feature.feature_from_line(str(f))
-    assert g == f
+    g.dialect["fmt"] = "gff3"
+    print(g.attributes)
+    print(g.dialect)
+    assert str(g) == str(f)
 
 
 def test_pr_172():
@@ -452,20 +458,42 @@ def test_issue_198():
 
     assert f.attributes["description"] == ["WASP family homolog 7, pseudogene"]
 
-    # If we remove one of the db_xref keys, then the parser sees the comma and
-    # figures it's a multivalue key.
+    # If we remove one of the db_xref keys, then previously the parser saw the
+    # comma and figured it was a multivalue key, and split it. Now, it's
+    # correctly identified as a single-value key.
+    #
+    # Note that we still have gene_synonym as a repeated key.
     line = 'NC_000001.11	BestRefSeq	gene	14362	29370	.	-	.	gene_id "WASH7P"; transcript_id ""; db_xref "GeneID:653635"; description "WASP family homolog 7, pseudogene"; gbkey "Gene"; gene "WASH7P"; gene_biotype "transcribed_pseudogene"; gene_synonym "FAM39F"; gene_synonym "WASH5P"; pseudo "true";'
     f = feature.feature_from_line(line)
+    assert f.dialect["repeated keys"]
 
     # Previous result, note leading space --------------------------->| |
     # assert f.attributes['description'] == ['WASP family homolog 7', ' pseudogene']
+
+    # Current result: not split.
     assert f.attributes["description"] == ["WASP family homolog 7, pseudogene"]
 
-    # But removing that space before "pseudogene" means it's interpreted as
-    # a multivalue attribute
+    # Removing that space before "pseudogene" might mean it's a multivalue, but
+    # we decide on the convention that if keys are repeated at all, that wins.
+    # So we still don't split
     line = 'NC_000001.11	BestRefSeq	gene	14362	29370	.	-	.	gene_id "WASH7P"; transcript_id ""; db_xref "GeneID:653635"; description "WASP family homolog 7,pseudogene"; gbkey "Gene"; gene "WASH7P"; gene_biotype "transcribed_pseudogene"; gene_synonym "FAM39F"; gene_synonym "WASH5P"; pseudo "true";'
     f = feature.feature_from_line(line)
+    assert f.dialect["repeated keys"]
+    assert f.attributes["description"] == ["WASP family homolog 7,pseudogene"]
+
+    # But if we get rid of all repeated keys, it's interpreted as multiple values
+    line = 'NC_000001.11	BestRefSeq	gene	14362	29370	.	-	.	gene_id "WASH7P"; transcript_id ""; db_xref "GeneID:653635"; description "WASP family homolog 7,pseudogene"; gbkey "Gene"; gene "WASH7P"; gene_biotype "transcribed_pseudogene"; gene_synonym "FAM39F"; pseudo "true";'
+    f = feature.feature_from_line(line)
+    assert not f.dialect["repeated keys"]
     assert f.attributes["description"] == ["WASP family homolog 7", "pseudogene"]
+
+    # ....but if there's a ", " (comma followed by space) instead of just
+    # comma, then it's not split.
+    line = 'NC_000001.11	BestRefSeq	gene	14362	29370	.	-	.	gene_id "WASH7P"; transcript_id ""; db_xref "GeneID:653635"; description "WASP family homolog 7, pseudogene"; gbkey "Gene"; gene "WASH7P"; gene_biotype "transcribed_pseudogene"; gene_synonym "FAM39F"; pseudo "true";'
+    f = feature.feature_from_line(line)
+    assert not f.dialect["repeated keys"]
+    assert f.attributes["description"] == ["WASP family homolog 7, pseudogene"]
+
 
     # Confirm behavior of corner cases like a trailing comma
     line = "chr17	RefSeq	CDS	6806527	6806553	.	+	0	Name=CDS:NC_000083.5:LOC100040603;Parent=XM_001475631.1,"
@@ -578,7 +606,7 @@ def test_issue_207():
     )
 
 
-def test_issue_213():
+def test_issue_213(tmp_path):
     # GFF header directives seem to be not parsed when building a db from
     # a file, even though it seems to work fine from a string.
     data = dedent(
@@ -599,16 +627,73 @@ def test_issue_213():
     db = gffutils.create_db(data, dbfn=":memory:", from_string=True, verbose=False)
     assert db.directives == ["gff-version 3"], db.directives
 
-    # Ensure they're parsed into the db from a file
-    tmp = tempfile.NamedTemporaryFile(delete=False).name
+    tmp = tmp_path / "issue_213.gff3"
     with open(tmp, "w") as fout:
         fout.write(data + "\n")
-    db = gffutils.create_db(tmp, ":memory:")
-    assert db.directives == ["gff-version 3"], db.directives
-    assert len(db.directives) == 1
 
-    # Ensure they're parsed into the db from a file, and going to a file (to
-    # exactly replicate example in #213)
-    db = gffutils.create_db(tmp, dbfn="issue_213.db", force=True)
-    assert db.directives == ["gff-version 3"], db.directives
-    assert len(db.directives) == 1
+    # Ensure they're parsed into the db from a file path for both str/Path.
+    for input_path in (str(tmp), tmp):
+        db = gffutils.create_db(input_path, ":memory:")
+        assert db.directives == ["gff-version 3"], db.directives
+        assert len(db.directives) == 1
+
+    # Ensure they're parsed into the db for all str/Path input-output
+    # combinations when both source and destination are file-backed.
+    for input_path, output_path in (
+        (str(tmp), str(tmp_path / "issue_213_str_str.db")),
+        (str(tmp), tmp_path / "issue_213_str_path.db"),
+        (tmp, str(tmp_path / "issue_213_path_str.db")),
+        (tmp, tmp_path / "issue_213_path_path.db"),
+    ):
+        db = gffutils.create_db(input_path, dbfn=output_path, force=True)
+        assert db.directives == ["gff-version 3"], db.directives
+        assert len(db.directives) == 1
+
+
+
+def test_pathlike_inputs(tmp_path):
+    """
+    Ensure various functions work with Path and str.
+    """
+    gff = Path(gffutils.example_filename("FBgn0031208.gff"))
+    fasta = Path(gffutils.example_filename("dm6-chr2L.fa"))
+    db_path = tmp_path / "pathlike.db"
+    out_path = tmp_path / "pathlike.gff3"
+    staged_gff = tmp_path / "pathlike-input.gff3"
+    staged_gff.write_text(gff.read_text())
+    staged_gff_db = Path("%s.%s" % (staged_gff, ".db"))
+
+    db = gffutils.create_db(gff, db_path, force=True)
+    assert db.dbfn == os.fspath(db_path)
+
+    reopened = gffutils.FeatureDB(db_path)
+    reopened.delete([], make_backup=True)
+    assert (tmp_path / "pathlike.db.bak").exists()
+
+    writer = GFFWriter(out_path)
+    writer.write_rec(next(reopened.all_features()))
+    writer.close()
+    assert out_path.exists()
+
+    assert helpers.is_gff_db(db_path)
+    gffutils.create_db(staged_gff, staged_gff_db, force=True)
+    assert helpers.get_gff_db(staged_gff) == os.fspath(staged_gff_db)
+
+    seq = reopened["FBgn0031208"].sequence(fasta)
+    expected_seq = reopened["FBgn0031208"].sequence(os.fspath(fasta))
+    assert seq == expected_seq
+
+def test_issue_212():
+
+
+    data = dedent(
+        """
+    NC_000964.3	RefSeq	CDS	410	1747	.	+	0	gene_id "BSU_00010"; transcript_id "unassigned_transcript_1"; db_xref "EnsemblGenomes-Gn:BSU00010"; db_xref "EnsemblGenomes-Tr:CAB11777"; db_xref "GOA:P05648"; db_xref "InterPro:IPR001957"; db_xref "InterPro:IPR003593"; db_xref "InterPro:IPR010921"; db_xref "InterPro:IPR013159"; db_xref "InterPro:IPR013317"; db_xref "InterPro:IPR018312"; db_xref "InterPro:IPR020591"; db_xref "InterPro:IPR024633"; db_xref "InterPro:IPR027417"; db_xref "PDB:4TPS"; db_xref "SubtiList:BG10065"; db_xref "UniProtKB/Swiss-Prot:P05648"; db_xref "GenBank:NP_387882.1"; db_xref "GeneID:939978"; experiment "publication(s) with functional evidences, PMID:2167836, 2846289, 12682299, 16120674, 1779750, 28166228"; gbkey "CDS"; gene "dnaA"; locus_tag "BSU_00010"; note "Evidence 1a: Function from experimental evidences in the studied strain; PubMedId: 2167836, 2846289, 12682299, 16120674, 1779750, 28166228; Product type f : factor"; product "chromosomal replication initiator informational ATPase"; protein_id "NP_387882.1"; transl_table "11"; exon_number "1";
+        """
+    )
+    inferred_dialect = gffutils.helpers.infer_dialect(data.split('\t')[-1])
+    assert inferred_dialect["semicolon in quotes"]
+
+    f = next(iter(gffutils.DataIterator(data, from_string=True, dialect=inferred_dialect)))
+    assert f.dialect["semicolon in quotes"]
+    assert f.attributes["note"] == ["Evidence 1a: Function from experimental evidences in the studied strain; PubMedId: 2167836, 2846289, 12682299, 16120674, 1779750, 28166228; Product type f : factor"]

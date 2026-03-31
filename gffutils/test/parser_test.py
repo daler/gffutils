@@ -53,16 +53,31 @@ def test_attrs_OK(item):
     (see attr_test_cases.py for details); `acceptable_reconstruction` handles
     those.
     """
-    attr_str, attr_dict, acceptable_reconstruction = item
-    result, dialect = parser._split_keyvals(attr_str)
+    attr_str = item["str"]
+    attr_dict = item["attrs"]
+    acceptable_reconstruction = item["ok"]
+    dialect_mods = item["dialect_mods"]
+
+    result, inferred_dialect = parser._split_keyvals(attr_str)
     result = dict(result)
     assert result == attr_dict, result
 
-    reconstructed = parser._reconstruct(result, dialect, keep_order=True)
+    reconstructed = parser._reconstruct(result, inferred_dialect, keep_order=True)
     if acceptable_reconstruction:
         assert reconstructed == acceptable_reconstruction, reconstructed
     else:
         assert reconstructed == attr_str, reconstructed
+
+    # Get the default dialect for comparison, and update it with any diffs
+    # indicated by the test case
+    default_dialect = constants.dialect.copy()
+    default_dialect.update(dialect_mods)
+
+    print(inferred_dialect)
+    print(dialect_mods)
+    print(attr_str)
+    assert default_dialect == inferred_dialect
+
 
 
 def parser_smoke_test():
@@ -75,7 +90,7 @@ def parser_smoke_test():
     parser.logger.setLevel(logging.CRITICAL)
     for filename in TEST_FILENAMES:
         p = iterators._FileIterator(filename)
-        for i in p:
+        for _ in p:
             continue
 
 
@@ -93,7 +108,8 @@ def test_empty_recontruct():
 def test_empty_split_keyvals():
     attrs, dialect = parser._split_keyvals(keyval_str=None)
     assert attrs == feature.dict_class()
-    assert dialect == constants.dialect
+    # assert dialect == constants.dialect
+    assert dialect is None
 
 
 def test_repeated_keys_conflict():
@@ -115,7 +131,7 @@ def test_parser_from_string():
     #
     # _StringIterator has been removed and is instead handled by DataIterator
     # creating a temp file and returning a _FileIterator.
-    return True
+    pass
 
 
 def test_valid_line_count():

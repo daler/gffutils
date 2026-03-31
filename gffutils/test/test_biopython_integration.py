@@ -1,6 +1,10 @@
 from gffutils import example_filename
 import gffutils
 import gffutils.biopython_integration as bp
+import pytest
+
+# Skip tests entirely if BioPython not available
+pytest.importorskip('Bio')
 
 
 def test_roundtrip():
