@@ -42,6 +42,11 @@ v0.14
 - Fix `#224 <https://github.com/daler/gffutils/issues/224>`__, which was caused
   by changes to the ``argh`` package used for the command-line tool.
 - Address  `#242 <https://github.com/daler/gffutils/issues/242>`__ (typo in docstring)
+- Migrate to using ``pyproject.toml`` for packaging. This changes how versions are calculated
+  and reported, and removes the need for ``setup.py``. Version is only ever
+  recorded in ``pyproject.toml``; ``version.py`` gets the installed version or
+  parses the TOML if not installed; ``setup.py`` just calls ``setup()`` with no
+  arguments since everything has been migrated to ``pyproject.toml``.
 
 
 v0.13
