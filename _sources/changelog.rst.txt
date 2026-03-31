@@ -3,6 +3,52 @@
 Change log
 ==========
 
+
+v0.14
+-----
+
+- If a value contained a semicolon there would be unexpected behavior (reported
+  in `#212 <https://github.com/daler/gffutils/issues/212>`__). This is solved
+  by adding a new entry to the dialect, ``semicolon in quotes```, and running
+  the necessary regular expression only when inferring dialect, or, if
+  ``semicolon in quotes`` is ``True``, on every feature. In the latter case,
+  this can dramatically increase the parsing time, since in Python regular
+  expressions are relatively slow, but it does correctly parse. Thanks to
+  @DevangThakkar for the fix.
+- While working on that, refactored the attributes parsing to make it clearer
+  to follow along, and added more tests. The refactoring fixed some subtle bugs
+  on corner cases:
+  - Previously, for features with repeated keys, the ``order`` key of dialects
+    would list the repeated keys each time they appeared (i.e., the list had
+    duplicates) which could result in undetermined behavior. The ``order`` key
+    is now unique and only the first occurrence of a repeated key will be added
+    to the order.
+  - Previously, the ``ensembl_gtf.txt`` example file had a leading *space* in
+    front of the attributes. This looks to be an error in the creation of the
+    example file in the first place, but had previously parsed fine. Now the
+    parser (correctly) mis-handles it. Since I'm unaware of any cases in the
+    wild that have a leading space, I actually consider the new parsing, which
+    complains about the space, to be more correct.
+  - Added tests to directly inspect the inferred dialects for the test cases.
+- Preserve GFF directives when ``create_db()`` imports from a file path,
+  matching the behavior for string-backed iterators and fixing
+  `#213 <https://github.com/daler/gffutils/issues/213>`__. This was due to
+  a different path through the code when using a `pathlib.Path` object. In
+  addition to this fix, `pathlib.Path` objects are now converted to `str`
+  throughout the code base with ``os.fspath`` where appropriate.
+- CI, testing, and docs infrastructure updates (miniforge instead of
+  mambaforge; GitHub Action version bumps; skip biopython test if it's not
+  installed (`#233 <https://github.com/daler/gffutils/issues/233>`__); reduce build errors for docs)
+- Fix `#224 <https://github.com/daler/gffutils/issues/224>`__, which was caused
+  by changes to the ``argh`` package used for the command-line tool.
+- Address  `#242 <https://github.com/daler/gffutils/issues/242>`__ (typo in docstring)
+- Migrate to using ``pyproject.toml`` for packaging. This changes how versions are calculated
+  and reported, and removes the need for ``setup.py``. Version is only ever
+  recorded in ``pyproject.toml``; ``version.py`` gets the installed version or
+  parses the TOML if not installed; ``setup.py`` just calls ``setup()`` with no
+  arguments since everything has been migrated to ``pyproject.toml``.
+
+
 v0.13
 -----
 

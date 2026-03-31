@@ -1,23 +1,21 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gffutils.pybedtools_integration &mdash; gffutils 0.13 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
-      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+  <title>gffutils.pybedtools_integration &mdash; gffutils 0.14 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=9bec1924"></script>
-        <script src="../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=506589e9"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -34,9 +32,6 @@
           <a href="../../index.html" class="icon icon-home">
             gffutils
           </a>
-              <div class="version">
-                0.13
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -89,15 +84,15 @@
 <span class="sd">Module for integration with pybedtools</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">pybedtools</span>
-<span class="kn">from</span> <span class="nn">pybedtools</span> <span class="kn">import</span> <span class="n">featurefuncs</span>
-<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">helpers</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pybedtools</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pybedtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">featurefuncs</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gffutils</span><span class="w"> </span><span class="kn">import</span> <span class="n">helpers</span>
 
 
 <div class="viewcode-block" id="to_bedtool">
 <a class="viewcode-back" href="../../autodocs/gffutils.pybedtools_integration.to_bedtool.html#gffutils.pybedtools_integration.to_bedtool">[docs]</a>
-<span class="k">def</span> <span class="nf">to_bedtool</span><span class="p">(</span><span class="n">iterator</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">to_bedtool</span><span class="p">(</span><span class="n">iterator</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert any iterator into a pybedtools.BedTool object.</span>
 
@@ -106,7 +101,7 @@
 <span class="sd">    returned BedTool object.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">gen</span><span class="p">():</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gen</span><span class="p">():</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">iterator</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">helpers</span><span class="o">.</span><span class="n">asinterval</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 
@@ -116,7 +111,7 @@
 
 <div class="viewcode-block" id="tsses">
 <a class="viewcode-back" href="../../autodocs/gffutils.pybedtools_integration.tsses.html#gffutils.pybedtools_integration.tsses">[docs]</a>
-<span class="k">def</span> <span class="nf">tsses</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">tsses</span><span class="p">(</span>
     <span class="n">db</span><span class="p">,</span>
     <span class="n">merge_overlapping</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">attrs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -205,7 +200,7 @@
 <span class="sd">    if they overlap (as in the first two):</span>
 
 
-<span class="sd">    &gt;&gt;&gt; print(tsses(db))                        # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">    &gt;&gt;&gt; print(gffutils.pybedtools_integration.tsses(db))                        # doctest: +NORMALIZE_WHITESPACE</span>
 <span class="sd">    chr2L	gffutils_derived	transcript_TSS	7529	7529	.	+	.	gene_id &quot;FBgn0031208&quot;; transcript_id &quot;FBtr0300689&quot;;</span>
 <span class="sd">    chr2L	gffutils_derived	transcript_TSS	7529	7529	.	+	.	gene_id &quot;FBgn0031208&quot;; transcript_id &quot;FBtr0300690&quot;;</span>
 <span class="sd">    chr2L	gffutils_derived	transcript_TSS	11000	11000	.	-	.	gene_id &quot;Fk_gene_1&quot;; transcript_id &quot;transcript_Fk_gene_1&quot;;</span>
@@ -216,7 +211,7 @@
 <span class="sd">    Default merging, showing the first two TSSes merged and reported as</span>
 <span class="sd">    a single unique TSS for the gene. Note the conversion to BED:</span>
 
-<span class="sd">    &gt;&gt;&gt; x = tsses(db, merge_overlapping=True)</span>
+<span class="sd">    &gt;&gt;&gt; x = gffutils.pybedtools_integration.tsses(db, merge_overlapping=True)</span>
 <span class="sd">    &gt;&gt;&gt; print(x)  # doctest: +NORMALIZE_WHITESPACE</span>
 <span class="sd">    chr2L	7528	7529	FBgn0031208	.	+</span>
 <span class="sd">    chr2L	10999	11000	Fk_gene_1	.	-</span>
@@ -227,7 +222,7 @@
 <span class="sd">    be easier to parse than the original GTF or GFF file. With no merging</span>
 <span class="sd">    specified, we must add `as_bed6=True` to see the names in BED format.</span>
 
-<span class="sd">    &gt;&gt;&gt; x = tsses(db, attrs=[&#39;gene_id&#39;, &#39;transcript_id&#39;], as_bed6=True)</span>
+<span class="sd">    &gt;&gt;&gt; x = gffutils.pybedtools_integration.tsses(db, attrs=[&#39;gene_id&#39;, &#39;transcript_id&#39;], as_bed6=True)</span>
 <span class="sd">    &gt;&gt;&gt; print(x)  # doctest: +NORMALIZE_WHITESPACE</span>
 <span class="sd">    chr2L	7528	7529	FBgn0031208:FBtr0300689	.	+</span>
 <span class="sd">    chr2L	7528	7529	FBgn0031208:FBtr0300690	.	+</span>
@@ -237,7 +232,7 @@
 
 <span class="sd">    Use a 3kb merge distance so the last 2 features are merged together:</span>
 
-<span class="sd">    &gt;&gt;&gt; x = tsses(db, merge_overlapping=True, merge_kwargs=dict(d=3000))</span>
+<span class="sd">    &gt;&gt;&gt; x = gffutils.pybedtools_integration.tsses(db, merge_overlapping=True, merge_kwargs=dict(d=3000))</span>
 <span class="sd">    &gt;&gt;&gt; print(x)  # doctest: +NORMALIZE_WHITESPACE</span>
 <span class="sd">    chr2L	7528	7529	FBgn0031208	.	+</span>
 <span class="sd">    chr2L	10999	12500	Fk_gene_1,Fk_gene_2	.	-</span>
@@ -246,7 +241,7 @@
 
 <span class="sd">    The set of unique TSSes for each gene, +1kb upstream and 500bp downstream:</span>
 
-<span class="sd">    &gt;&gt;&gt; x = tsses(db, merge_overlapping=True)</span>
+<span class="sd">    &gt;&gt;&gt; x = gffutils.pybedtools_integration.tsses(db, merge_overlapping=True)</span>
 <span class="sd">    &gt;&gt;&gt; x = x.slop(l=1000, r=500, s=True, genome=&#39;dm3&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; print(x)  # doctest: +NORMALIZE_WHITESPACE</span>
 <span class="sd">    chr2L	6528	8029	FBgn0031208	.	+</span>
@@ -276,7 +271,7 @@
     <span class="k">if</span> <span class="n">merge_kwargs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">_merge_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">merge_kwargs</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">gen</span><span class="p">():</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gen</span><span class="p">():</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generator of pybedtools.Intervals representing TSSes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -304,7 +299,7 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attrs</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">attrs</span> <span class="o">=</span> <span class="p">[</span><span class="n">attrs</span><span class="p">]</span>
 
-        <span class="k">def</span> <span class="nf">to_bed</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">to_bed</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Given a pybedtools.Interval, return a new Interval with the name</span>
 <span class="sd">            set according to the kwargs provided above.</span>
@@ -321,7 +316,7 @@
             <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="o">**</span><span class="n">_merge_kwargs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
 
-            <span class="k">def</span> <span class="nf">fix_merge</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">fix_merge</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
                 <span class="n">f</span> <span class="o">=</span> <span class="n">featurefuncs</span><span class="o">.</span><span class="n">extend_fields</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">pybedtools</span><span class="o">.</span><span class="n">Interval</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">chrom</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span> <span class="n">f</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">f</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
 

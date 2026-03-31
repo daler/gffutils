@@ -1,24 +1,22 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Introduction &mdash; gffutils 0.13 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
-      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+  <title>Introduction &mdash; gffutils 0.14 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=9bec1924"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=506589e9"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -36,9 +34,6 @@
           <a href="#" class="icon icon-home">
             gffutils
           </a>
-              <div class="version">
-                0.13
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -88,8 +83,9 @@
              
   <section id="introduction">
 <span id="id1"></span><h1>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h1>
-<p><a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a> is a Python package for working with <a class="reference external" href="http://www.sanger.ac.uk/resources/software/gff/spec.htm">GFF</a> and <a class="reference external" href="http://mblab.wustl.edu/GTF22.html">GTF</a> files in a hierarchical manner.  It
-allows operations which would be complicated or time-consuming using
+<p><a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a> is a Python package for working with <a class="reference external" href="https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md">GFF</a>
+and <a class="reference external" href="http://mblab.wustl.edu/GTF22.html">GTF</a> files in a hierarchical manner.
+It allows operations which would be complicated or time-consuming using
 a text-file-only approach.</p>
 <p>Below is a short demonstration of <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a>. For the full documentation,
 see the rest of the table of contents to the left.</p>
@@ -105,9 +101,9 @@ We’ll be using it to describe some features of <a class="reference internal" h
 contains just enough complexity to be representative of a real-world,
 genome-wide GFF file.</p>
 <p>Let’s look at what the file contains:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gffutils</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">gffutils</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fn</span> <span class="o">=</span> <span class="n">gffutils</span><span class="o">.</span><span class="n">example_filename</span><span class="p">(</span><span class="s1">&#39;intro_docs_example.gff&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
 <span class="go">2L      FlyBase gene    7529    9484    .       +       .       ID=FBgn0031208;Name=CG11023;Ontology_term=SO:0000010,SO:0000087,GO:0016929,GO:0016926,GO:0006508;Dbxref=FlyBase:FBan0011023,FlyBase_Annotation_IDs:CG11023,GB_protein:ACZ94128,GB_protein:AAO41164,GB:AI944728,GB:AJ564667,GB_protein:CAD92822,GB:BF495604,UniProt/TrEMBL:Q86BM6,INTERPRO:IPR003653,GB_protein:AGB92323,UniProt/TrEMBL:M9PAY1,OrthoDB7_Drosophila:EOG796K1P,OrthoDB7_Diptera:EOG7X1604,EntrezGene:33155,UniProt/TrEMBL:E1JHP8,UniProt/TrEMBL:Q6KEV3,OrthoDB7_Insecta:EOG7Q8QM7,OrthoDB7_Arthropoda:EOG7R5K68,OrthoDB7_Metazoa:EOG7D59MP,InterologFinder:33155,BIOGRID:59420,FlyAtlas:CG11023-RA,GenomeRNAi:33155;gbunit=AE014134;derived_computed_cyto=21A5-21A5</span>
 <span class="go">2L      FlyBase mRNA    7529    9484    .       +       .       ID=FBtr0300689;Name=CG11023-RB;Parent=FBgn0031208;Dbxref=REFSEQ:NM_001169365,FlyBase_Annotation_IDs:CG11023-RB;score_text=Strongly Supported;score=11</span>
 <span class="go">2L      FlyBase mRNA    7529    9484    .       +       .       ID=FBtr0300690;Name=CG11023-RC;Parent=FBgn0031208;Dbxref=REFSEQ:NM_175941,FlyBase_Annotation_IDs:CG11023-RC;score_text=Strongly Supported;score=15</span>
@@ -184,7 +180,7 @@ generating a file of splice junctions.</p>
 <section id="create-the-database">
 <h2>Create the database<a class="headerlink" href="#create-the-database" title="Link to this heading"></a></h2>
 <p>The first step to working with <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a> is to import the file into
-a local sqlite3 file-based database.  The <code class="xref py py-func docutils literal notranslate"><span class="pre">gffutils.create_db()</span></code> function
+a local sqlite3 file-based database.  The <a class="reference internal" href="api.html#gffutils.create_db" title="gffutils.create_db"><code class="xref py py-func docutils literal notranslate"><span class="pre">gffutils.create_db()</span></code></a> function
 is used for this, and it takes many optional arguments for configuring how to
 interpret your GFF or GTF file.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">gffutils</span><span class="o">.</span><span class="n">create_db</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">dbfn</span><span class="o">=</span><span class="s1">&#39;test.db&#39;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_order</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -209,7 +205,7 @@ practical examples.</p>
 <h2>Use the database<a class="headerlink" href="#use-the-database" title="Link to this heading"></a></h2>
 <p>Once the database has been created, downstream code can connect to it simply
 by:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gffutils</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">gffutils</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">gffutils</span><span class="o">.</span><span class="n">FeatureDB</span><span class="p">(</span><span class="s1">&#39;test.db&#39;</span><span class="p">,</span> <span class="n">keep_order</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -243,13 +239,13 @@ save some typing:</p>
 <p>Printing a <code class="xref py py-class docutils literal notranslate"><span class="pre">Feature</span></code> reproduces the original GFF line as faithfully as
 possible.  See the <a class="reference internal" href="dialect.html#dialects"><span class="std std-ref">Dialects</span></a> section for more details on how this is
 handled and configured.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">gene</span><span class="p">)</span>  
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">gene</span><span class="p">)</span>
 <span class="go">2L      FlyBase gene    7529    9484    .       +       .       ID=FBgn0031208;Name=CG11023;Ontology_term=SO:0000010,SO:0000087,GO:0016929,GO:0016926,GO:0006508;Dbxref=FlyBase:FBan0011023,FlyBase_Annotation_IDs:CG11023,GB_protein:ACZ94128,GB_protein:AAO41164,GB:AI944728,GB:AJ564667,GB_protein:CAD92822,GB:BF495604,UniProt/TrEMBL:Q86BM6,INTERPRO:IPR003653,GB_protein:AGB92323,UniProt/TrEMBL:M9PAY1,OrthoDB7_Drosophila:EOG796K1P,OrthoDB7_Diptera:EOG7X1604,EntrezGene:33155,UniProt/TrEMBL:E1JHP8,UniProt/TrEMBL:Q6KEV3,OrthoDB7_Insecta:EOG7Q8QM7,OrthoDB7_Arthropoda:EOG7R5K68,OrthoDB7_Metazoa:EOG7D59MP,InterologFinder:33155,BIOGRID:59420,FlyAtlas:CG11023-RA,GenomeRNAi:33155;gbunit=AE014134;derived_computed_cyto=21A5-21A5</span>
 </pre></div>
 </div>
 <p>Get all the mRNAs for a gene:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="n">gene</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="s1">&#39;mRNA&#39;</span><span class="p">,</span> <span class="n">order_by</span><span class="o">=</span><span class="s1">&#39;start&#39;</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> 
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 <span class="go">2L      FlyBase mRNA    7529    9484    .       +       .       ID=FBtr0300689;Name=CG11023-RB;Dbxref=REFSEQ:NM_001169365,FlyBase_Annotation_IDs:CG11023-RB;Parent=FBgn0031208;score_text=Strongly Supported;score=11</span>
 <span class="go">2L      FlyBase mRNA    7529    9484    .       +       .       ID=FBtr0300690;Name=CG11023-RC;Dbxref=REFSEQ:NM_175941,FlyBase_Annotation_IDs:CG11023-RC;Parent=FBgn0031208;score_text=Strongly Supported;score=15</span>
 <span class="go">2L      FlyBase mRNA    7529    9484    .       +       .       ID=FBtr0330654;Name=CG11023-RD;Dbxref=FlyBase_Annotation_IDs:CG11023-RD,REFSEQ:NM_001272857;Parent=FBgn0031208;score_text=Strongly Supported;score=11</span>
@@ -257,7 +253,7 @@ handled and configured.</p>
 </div>
 <p>Get all the exons for a gene:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="n">gene</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="s1">&#39;exon&#39;</span><span class="p">,</span> <span class="n">order_by</span><span class="o">=</span><span class="s1">&#39;start&#39;</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> 
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 <span class="go">2L      FlyBase exon    7529    8116    .       +       .       Name=CG11023:1;Parent=FBtr0300689,FBtr0300690,FBtr0330654;parent_type=mRNA</span>
 <span class="go">2L      FlyBase exon    8193    9484    .       +       .       Name=CG11023:3;Parent=FBtr0300689;parent_type=mRNA</span>
 <span class="go">2L      FlyBase exon    8193    8589    .       +       .       Name=CG11023:2;Parent=FBtr0300690;parent_type=mRNA</span>
@@ -287,7 +283,7 @@ of the <a class="reference internal" href="api.html#module-gffutils" title="gffu
 <p>Retrieve UTRs that overlap the gene (note that a feature can be provided as the
 coordinates):</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">UTR</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">region</span><span class="p">(</span><span class="n">gene</span><span class="p">,</span> <span class="n">featuretype</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;three_prime_UTR&#39;</span><span class="p">,</span> <span class="s1">&#39;five_prime_UTR&#39;</span><span class="p">]):</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">UTR</span><span class="p">)</span> 
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">UTR</span><span class="p">)</span>
 <span class="go">2L      FlyBase five_prime_UTR  7529    7679    .       +       .       Name=CG11023-u5;Parent=FBtr0300689,FBtr0300690;parent_type=mRNA</span>
 <span class="go">2L      FlyBase five_prime_UTR  7529    7679    .       +       .       Name=CG11023-u5;Parent=FBtr0330654;parent_type=mRNA</span>
 <span class="go">2L      FlyBase three_prime_UTR 8611    9484    .       +       .       Name=CG11023-u3;Parent=FBtr0300689;parent_type=mRNA</span>
@@ -355,19 +351,19 @@ import, at <a class="reference internal" href="database-ids.html#database-ids"><
 affected them:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">db2</span><span class="o">.</span><span class="n">features_of_type</span><span class="p">(</span><span class="s1">&#39;five_prime_UTR&#39;</span><span class="p">):</span>
 <span class="gp">...</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> 
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 <span class="go">2L      FlyBase five_prime_UTR  7529    7679    .       +       .       Name=CG11023-u5;Parent=FBtr0300689,FBtr0300690,FBtr0330654;parent_type=mRNA</span>
 </pre></div>
 </div>
 <p>Aha! A single 5’UTR.  What about 3’UTRs?</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">db2</span><span class="o">.</span><span class="n">features_of_type</span><span class="p">(</span><span class="s1">&#39;three_prime_UTR&#39;</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> 
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 <span class="go">2L      FlyBase three_prime_UTR 8611    9484    .       +       .       Name=CG11023-u3;Parent=FBtr0300689,FBtr0330654;parent_type=mRNA</span>
 <span class="go">2L      FlyBase three_prime_UTR 9277    9484    .       +       .       Name=CG11023-u3;Parent=FBtr0300690;parent_type=mRNA</span>
 </pre></div>
 </div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">db2</span><span class="o">.</span><span class="n">features_of_type</span><span class="p">(</span><span class="s1">&#39;intron&#39;</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> 
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 <span class="go">2L      FlyBase intron  8117    8228    .       +       .       Name=CG11023-in;Parent=FBtr0330654;parent_type=mRNA</span>
 <span class="go">2L      FlyBase intron  8117    8192    .       +       .       Name=CG11023-in;Parent=FBtr0300689,FBtr0300690;parent_type=mRNA</span>
 <span class="go">2L      FlyBase intron  8590    8667    .       +       .       Name=CG11023-in;Parent=FBtr0300690;parent_type=mRNA</span>

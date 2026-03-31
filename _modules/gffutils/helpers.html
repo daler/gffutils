@@ -1,23 +1,21 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gffutils.helpers &mdash; gffutils 0.13 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
-      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+  <title>gffutils.helpers &mdash; gffutils 0.14 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=9bec1924"></script>
-        <script src="../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=506589e9"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -34,9 +32,6 @@
           <a href="../../index.html" class="icon icon-home">
             gffutils
           </a>
-              <div class="version">
-                0.13
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -85,25 +80,25 @@
            <div itemprop="articleBody">
              
   <h1>Source code for gffutils.helpers</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">copy</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">simplejson</span> <span class="k">as</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">tempfile</span>
-<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">constants</span>
-<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">bins</span>
-<span class="kn">import</span> <span class="nn">gffutils</span>
-<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">gffwriter</span>
-<span class="kn">from</span> <span class="nn">gffutils</span> <span class="kn">import</span> <span class="n">parser</span>
-<span class="kn">from</span> <span class="nn">gffutils.attributes</span> <span class="kn">import</span> <span class="n">dict_class</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">simplejson</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gffutils</span><span class="w"> </span><span class="kn">import</span> <span class="n">constants</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gffutils</span><span class="w"> </span><span class="kn">import</span> <span class="n">bins</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">gffutils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gffutils</span><span class="w"> </span><span class="kn">import</span> <span class="n">gffwriter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gffutils</span><span class="w"> </span><span class="kn">import</span> <span class="n">parser</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gffutils.attributes</span><span class="w"> </span><span class="kn">import</span> <span class="n">dict_class</span>
 
 <span class="n">HERE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
 
 
 <div class="viewcode-block" id="example_filename">
-<a class="viewcode-back" href="../../autodocs/gffutils.helpers.example_filename.html#gffutils.helpers.example_filename">[docs]</a>
-<span class="k">def</span> <span class="nf">example_filename</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+<a class="viewcode-back" href="../../autodocs/gffutils.helpers.example_filename.html#gffutils.example_filename">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">example_filename</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the full path of a data file that ships with gffutils.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -112,8 +107,8 @@
 
 
 <div class="viewcode-block" id="infer_dialect">
-<a class="viewcode-back" href="../../autodocs/gffutils.helpers.infer_dialect.html#gffutils.helpers.infer_dialect">[docs]</a>
-<span class="k">def</span> <span class="nf">infer_dialect</span><span class="p">(</span><span class="n">attributes</span><span class="p">):</span>
+<a class="viewcode-back" href="../../autodocs/gffutils.helpers.infer_dialect.html#gffutils.infer_dialect">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">infer_dialect</span><span class="p">(</span><span class="n">attributes</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Infer the dialect based on the attributes.</span>
 
@@ -131,7 +126,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">_choose_dialect</span><span class="p">(</span><span class="n">features</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_choose_dialect</span><span class="p">(</span><span class="n">features</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given a list of features (often from peeking into an iterator), choose</span>
 <span class="sd">    a dialect to use as the &quot;canonical&quot; version.</span>
@@ -211,7 +206,7 @@
     <span class="k">return</span> <span class="n">final_dialect</span>
 
 
-<span class="k">def</span> <span class="nf">make_query</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_query</span><span class="p">(</span>
     <span class="n">args</span><span class="p">,</span>
     <span class="n">other</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">limit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -387,7 +382,7 @@
     <span class="k">return</span> <span class="n">_QUERY</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">d</span><span class="p">),</span> <span class="n">args</span>
 
 
-<span class="k">def</span> <span class="nf">_bin_from_dict</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_bin_from_dict</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given a dictionary yielded by the parser, return the genomic &quot;UCSC&quot; bin</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -401,14 +396,14 @@
         <span class="k">return</span> <span class="kc">None</span>
 
 
-<span class="k">def</span> <span class="nf">_jsonify</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_jsonify</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Use most compact form of JSON&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dict_class</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">_d</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">))</span>
 
 
-<span class="k">def</span> <span class="nf">_unjsonify</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">isattributes</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_unjsonify</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">isattributes</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert JSON string to an ordered defaultdict.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">isattributes</span><span class="p">:</span>
         <span class="n">obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -416,7 +411,7 @@
     <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_feature_to_fields</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">jsonify</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_feature_to_fields</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">jsonify</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert feature to tuple, for faster sqlite3 import</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -430,7 +425,7 @@
     <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_dict_to_fields</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">jsonify</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_dict_to_fields</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">jsonify</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert dict to tuple, for faster sqlite3 import</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -445,20 +440,20 @@
 
 
 <div class="viewcode-block" id="asinterval">
-<a class="viewcode-back" href="../../autodocs/gffutils.helpers.asinterval.html#gffutils.helpers.asinterval">[docs]</a>
-<span class="k">def</span> <span class="nf">asinterval</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
+<a class="viewcode-back" href="../../autodocs/gffutils.helpers.asinterval.html#gffutils.asinterval">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">asinterval</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts a gffutils.Feature to a pybedtools.Interval</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">import</span> <span class="nn">pybedtools</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">pybedtools</span>
 
     <span class="k">return</span> <span class="n">pybedtools</span><span class="o">.</span><span class="n">create_interval_from_list</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="merge_attributes">
-<a class="viewcode-back" href="../../autodocs/gffutils.helpers.merge_attributes.html#gffutils.helpers.merge_attributes">[docs]</a>
-<span class="k">def</span> <span class="nf">merge_attributes</span><span class="p">(</span><span class="n">attr1</span><span class="p">,</span> <span class="n">attr2</span><span class="p">,</span> <span class="n">numeric_sort</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<a class="viewcode-back" href="../../autodocs/gffutils.helpers.merge_attributes.html#gffutils.merge_attributes">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_attributes</span><span class="p">(</span><span class="n">attr1</span><span class="p">,</span> <span class="n">attr2</span><span class="p">,</span> <span class="n">numeric_sort</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Merges two attribute dictionaries into a single dictionary.</span>
 
@@ -517,7 +512,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">dialect_compare</span><span class="p">(</span><span class="n">dialect1</span><span class="p">,</span> <span class="n">dialect2</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">dialect_compare</span><span class="p">(</span><span class="n">dialect1</span><span class="p">,</span> <span class="n">dialect2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compares two dialects.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -529,8 +524,8 @@
 
 
 <div class="viewcode-block" id="sanitize_gff_db">
-<a class="viewcode-back" href="../../autodocs/gffutils.helpers.sanitize_gff_db.html#gffutils.helpers.sanitize_gff_db">[docs]</a>
-<span class="k">def</span> <span class="nf">sanitize_gff_db</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">gid_field</span><span class="o">=</span><span class="s2">&quot;gid&quot;</span><span class="p">):</span>
+<a class="viewcode-back" href="../../autodocs/gffutils.helpers.sanitize_gff_db.html#gffutils.sanitize_gff_db">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">sanitize_gff_db</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">gid_field</span><span class="o">=</span><span class="s2">&quot;gid&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Sanitize given GFF db. Returns a sanitized GFF db.</span>
 
@@ -543,7 +538,7 @@
 <span class="sd">    TODO: Do something with negative coordinates?</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">sanitized_iterator</span><span class="p">():</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sanitized_iterator</span><span class="p">():</span>
         <span class="c1"># Iterate through the database by each gene&#39;s records</span>
         <span class="k">for</span> <span class="n">gene_recs</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">iter_by_parent_childs</span><span class="p">():</span>
             <span class="c1"># The gene&#39;s ID</span>
@@ -562,7 +557,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">sanitize_gff_file</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">,</span> <span class="n">in_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">sanitize_gff_file</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">,</span> <span class="n">in_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Sanitize a GFF file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -587,8 +582,8 @@
 
 
 <div class="viewcode-block" id="annotate_gff_db">
-<a class="viewcode-back" href="../../autodocs/gffutils.helpers.annotate_gff_db.html#gffutils.helpers.annotate_gff_db">[docs]</a>
-<span class="k">def</span> <span class="nf">annotate_gff_db</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
+<a class="viewcode-back" href="../../autodocs/gffutils.helpers.annotate_gff_db.html#gffutils.annotate_gff_db">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">annotate_gff_db</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Annotate a GFF file by cross-referencing it with another GFF</span>
 <span class="sd">    file, e.g. one containing gene models.</span>
@@ -597,12 +592,14 @@
 
 
 
-<span class="k">def</span> <span class="nf">is_gff_db</span><span class="p">(</span><span class="n">db_fname</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_gff_db</span><span class="p">(</span><span class="n">db_fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return True if the given filename is a GFF database.</span>
 
 <span class="sd">    For now, rely on .db extension.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">db_fname</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">):</span>
+        <span class="n">db_fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">fspath</span><span class="p">(</span><span class="n">db_fname</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">db_fname</span><span class="p">):</span>
         <span class="k">return</span> <span class="kc">False</span>
     <span class="k">if</span> <span class="n">db_fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.db&quot;</span><span class="p">):</span>
@@ -610,20 +607,22 @@
     <span class="k">return</span> <span class="kc">False</span>
 
 
-<span class="k">def</span> <span class="nf">to_unicode</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">to_unicode</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">obj</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">encoding</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">obj</span>
 
 
-<span class="k">def</span> <span class="nf">canonical_transcripts</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">fasta_filename</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">canonical_transcripts</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">fasta_filename</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    WARNING: this function is currently not well ttested and will likely be</span>
 <span class="sd">    replaced with a more modular approach.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">import</span> <span class="nn">pyfaidx</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">pyfaidx</span>
 
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fasta_filename</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">):</span>
+        <span class="n">fasta_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">fspath</span><span class="p">(</span><span class="n">fasta_filename</span><span class="p">)</span>
     <span class="n">fasta</span> <span class="o">=</span> <span class="n">pyfaidx</span><span class="o">.</span><span class="n">Fasta</span><span class="p">(</span><span class="n">fasta_filename</span><span class="p">,</span> <span class="n">as_raw</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">gene</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">features_of_type</span><span class="p">(</span><span class="s2">&quot;gene&quot;</span><span class="p">):</span>
 
@@ -679,12 +678,14 @@
 <span class="c1">##</span>
 <span class="c1">## TODO: move clean_gff here?</span>
 <span class="c1">##</span>
-<span class="k">def</span> <span class="nf">get_gff_db</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;.db&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_gff_db</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;.db&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get db for GFF file. If the database has a .db file,</span>
 <span class="sd">    load that. Otherwise, create a named temporary file,</span>
 <span class="sd">    serialize the db to that, and return the loaded database.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">):</span>
+        <span class="n">gff_fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">fspath</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">gff_fname</span><span class="p">):</span>
         <span class="c1"># Not sure how we should deal with errors normally in</span>
         <span class="c1"># gffutils -- Ryan?</span>

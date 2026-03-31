@@ -1,24 +1,22 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dialects &mdash; gffutils 0.13 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
-      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+  <title>Dialects &mdash; gffutils 0.14 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=9bec1924"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=506589e9"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -37,9 +35,6 @@
           <a href="index.html" class="icon icon-home">
             gffutils
           </a>
-              <div class="version">
-                0.13
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -103,7 +98,7 @@ recommendations about how files should be formatted, in practice there is wide
 variation.  <a class="reference internal" href="api.html#module-gffutils" title="gffutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gffutils</span></code></a> tries to accomodate real-world GFF and GTF files by
 examining the first N lines of a file and figuring out what “dialect” the file
 is using (N=10 by default, but can be changed with the <code class="docutils literal notranslate"><span class="pre">checklines</span></code> kwarg to
-<code class="xref py py-func docutils literal notranslate"><span class="pre">gffutils.create_db()</span></code>).</p>
+<a class="reference internal" href="api.html#gffutils.create_db" title="gffutils.create_db"><code class="xref py py-func docutils literal notranslate"><span class="pre">gffutils.create_db()</span></code></a>).</p>
 <p>The dialect is simply a dictionary of various attributes that have been
 empirically found to differ among real-world files.   You can find the current
 version of the dialect dictionary, which is used by default and mimics the GFF3
@@ -119,7 +114,8 @@ column 9.  In this case, the dialect would specify <code class="docutils literal
  <span class="s1">&#39;multival separator&#39;</span><span class="p">:</span> <span class="s1">&#39;,&#39;</span><span class="p">,</span>
  <span class="s1">&#39;quoted GFF2 values&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
  <span class="s1">&#39;repeated keys&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
- <span class="s1">&#39;trailing semicolon&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+ <span class="s1">&#39;trailing semicolon&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+ <span class="s1">&#39;semicolon_in_quotes&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>In contrast, a GFF dialect might look like this:</p>
@@ -130,7 +126,8 @@ column 9.  In this case, the dialect would specify <code class="docutils literal
  <span class="s1">&#39;multival separator&#39;</span><span class="p">:</span> <span class="s1">&#39;,&#39;</span><span class="p">,</span>
  <span class="s1">&#39;quoted GFF2 values&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
  <span class="s1">&#39;repeated keys&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
- <span class="s1">&#39;trailing semicolon&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+ <span class="s1">&#39;trailing semicolon&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+ <span class="s1">&#39;semicolon_in_quotes&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>As other real-world files are brought to the attention of the developers, it’s
