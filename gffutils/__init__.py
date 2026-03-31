@@ -5,3 +5,14 @@ from gffutils.iterators import DataIterator
 from gffutils.helpers import example_filename
 from gffutils.exceptions import FeatureNotFoundError, DuplicateIDError
 from gffutils.version import version as __version__
+
+__all__ = [
+    "__version__",
+    "create_db",
+    "FeatureDB",
+    "Feature",
+    "DataIterator",
+    "example_filename",
+    "FeatureNotFoundError",
+    "DuplicateIDError",
+]
