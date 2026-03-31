@@ -131,7 +131,7 @@ def test_parser_from_string():
     #
     # _StringIterator has been removed and is instead handled by DataIterator
     # creating a temp file and returning a _FileIterator.
-    return True
+    pass
 
 
 def test_valid_line_count():
