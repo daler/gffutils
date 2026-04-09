@@ -501,6 +501,45 @@ def test_issue_198():
     assert f.attributes["Parent"] == ["XM_001475631.1", ""]
 
 
+def test_issue_204():
+    txt = dedent("""\
+    chr1 AUGUSTUS gene 68330 73621 1 - . ID=g1903;
+    chr1 AUGUSTUS mRNA 68330 73621 1 - . ID=g1903.t1;Parent=g1903;
+    chr1 Pfam protein_match 73372 73618 1 - . ID=g1903.t1.d1;Parent=g1903.t1;
+    chr1 Pfam protein_hmm_match 73372 73618 1 - . ID=g1903.t1.d1.1;Parent=g1903.t1.d1;
+    """)
+
+    db = gffutils.create_db(txt.replace(" ", "\t"), ":memory:", from_string=True)
+
+    parents1 = {
+        "g1903": [],
+        "g1903.t1": ["g1903"],
+        "g1903.t1.d1": ["g1903.t1"],
+        "g1903.t1.d1.1": ["g1903.t1.d1"],
+    }
+    parents2 = {
+        "g1903": [],
+        "g1903.t1": [],
+        "g1903.t1.d1": ["g1903"],
+        "g1903.t1.d1.1": ["g1903.t1"],
+    }
+    parents3 = {
+        "g1903": [],
+        "g1903.t1": [],
+        "g1903.t1.d1": [],
+        "g1903.t1.d1.1": ["g1903"],
+    }
+    expected_levels = [parents1, parents2, parents3]
+
+    for i, expected_level in enumerate(expected_levels):
+        for child, expected_parents in expected_level.items():
+            level = i + 1
+            observed_parents = [i.id for i in db.parents(child, level=level)]
+            print(f"observed level {str(level)} anscestors for {child}:", set(observed_parents))
+            print(f"expected level {str(level)} anscestors for {child}:", set(expected_parents))
+            assert set(observed_parents) == set(expected_parents)
+
+
 def test_issue_207():
     def _check(txt, expected_keys, dialect_trailing_semicolon):
         db = gffutils.create_db(txt.replace(" ", "\t"), ":memory:", from_string=True)

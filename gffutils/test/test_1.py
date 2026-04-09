@@ -951,15 +951,6 @@ def test_tempfiles():
     assert len(filelist) == 1, filelist
     assert filelist[0].endswith(".gffutils")
 
-    # ...and another one for gff. This time, make sure the suffix
-    db = gffutils.create_db(
-        gffutils.example_filename("FBgn0031208.gff"), ":memory:", _keep_tempfiles=True
-    )
-    filelist = os.listdir(tempdir)
-    assert len(filelist) == 2, filelist
-    for i in filelist:
-        assert i.endswith(".gffutils")
-
     # OK, now delete what we have so far...
     clean_tempdir()
 

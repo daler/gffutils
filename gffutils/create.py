@@ -678,8 +678,6 @@ class _GFFDBCreator(_DBCreator):
     def _update_relations(self):
         logger.info("Updating relations")
         c = self.conn.cursor()
-        c2 = self.conn.cursor()
-        c3 = self.conn.cursor()
 
         # TODO: pre-compute indexes?
         # c.execute('CREATE INDEX ids ON features (id)')
@@ -687,54 +685,35 @@ class _GFFDBCreator(_DBCreator):
         # c.execute('CREATE INDEX childindex ON relations (child)')
         # self.conn.commit()
 
-        if isinstance(self._keep_tempfiles, str):
-            suffix = self._keep_tempfiles
-        else:
-            suffix = ".gffutils"
-        tmp = tempfile.NamedTemporaryFile(delete=False, suffix=suffix).name
-        with open(tmp, "w") as fout:
-
-            # Here we look for "grandchildren" -- for each ID, get the child
-            # (parenthetical subquery below); then for each of those get *its*
-            # child (main query below).
-            #
-            # Results are written to temp file so that we don't read and write at
-            # the same time, which would slow things down considerably.
-
-            c.execute("SELECT id FROM features")
-            for parent in c:
-                c2.execute(
-                    """
-                           SELECT child FROM relations WHERE parent IN
-                           (SELECT child FROM relations WHERE parent = ?)
-                           """,
-                    tuple(parent),
+        c.execute(
+                """
+                WITH RECURSIVE generation AS (
+                    SELECT parent,
+                        child,
+                        level
+                    FROM relations
+                    WHERE level = 1
+                
+                UNION ALL
+                
+                    SELECT g.parent,
+                        child.child,
+                        g.level+1 AS level
+                    FROM relations child
+                    JOIN generation g
+                    ON g.child = child.parent
                 )
-                for grandchild in c2:
-                    fout.write("\t".join((parent[0], grandchild[0])) + "\n")
-
-        def relations_generator():
-            with open(fout.name) as fin:
-                for line in fin:
-                    parent, child = line.strip().split("\t")
-                    yield dict(parent=parent, child=child, level=2)
-
-        c.executemany(
-            """
-            INSERT OR IGNORE INTO relations VALUES
-            (:parent, :child, :level)
-            """,
-            relations_generator(),
-        )
-
+                INSERT OR IGNORE INTO relations
+                SELECT * FROM generation
+                WHERE level > 1;
+                        """
+            )
+        
         # TODO: Index creation.  Which ones affect performance?
         c.execute("DROP INDEX IF EXISTS binindex")
         c.execute("CREATE INDEX binindex ON features (bin)")
 
         self.conn.commit()
-
-        if not self._keep_tempfiles:
-            os.unlink(fout.name)
 
 
 class _GTFDBCreator(_DBCreator):
