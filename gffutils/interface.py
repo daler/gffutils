@@ -1452,10 +1452,13 @@ class FeatureDB(object):
                     if side == "right":
                         splice_site.start = splice_site.end - 1
 
-                    # make ID uniq by adding suffix
-                    splice_site.attributes["ID"] = [
-                        new_featuretype + "_" + splice_site.attributes["ID"][0]
-                    ]
+                    # make ID uniq by adding suffix. GTF-derived features have
+                    # no ID attribute (only gene_id/transcript_id/exon_id), so
+                    # only rewrite the ID when one is actually present.
+                    if "ID" in splice_site.attributes:
+                        splice_site.attributes["ID"] = [
+                            new_featuretype + "_" + splice_site.attributes["ID"][0]
+                        ]
 
                     yield splice_site
 

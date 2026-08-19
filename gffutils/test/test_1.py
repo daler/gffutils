@@ -1259,6 +1259,46 @@ def test_create_splice_sites():
     assert observed == expected
 
 
+def test_create_splice_sites_from_gtf():
+    # Regression test for issue #239: create_splice_sites raised
+    # KeyError: 'ID' on GTF-derived databases. GTF features carry
+    # gene_id/transcript_id/exon_id but no ID attribute, so the
+    # ID-uniquification step must not assume an ID is present.
+    gtfdata = dedent(
+        """
+    chr1	example	exon	50	1005	.	+	.	gene_id "gene_1"; transcript_id "gene_0_0"; exon_id "gene_0_0_0";
+    chr1	example	exon	1850	2500	.	+	.	gene_id "gene_1"; transcript_id "gene_0_0"; exon_id "gene_0_0_1";
+    chr1	example	exon	3800	4500	.	+	.	gene_id "gene_1"; transcript_id "gene_0_0"; exon_id "gene_0_0_2";
+    """
+    )
+    db = gffutils.create_db(gtfdata, ":memory:", from_string=True)
+    assert db.dialect["fmt"] == "gtf"
+
+    # A 3-exon transcript has 2 introns, and each intron contributes a
+    # donor and an acceptor splice site, so 4 splice sites are expected.
+    splice_sites = list(db.create_splice_sites(exon_featuretype="exon"))
+    assert len(splice_sites) == 4
+
+    # On the "+" strand the left side is the donor (5') and the right
+    # side is the acceptor (3').
+    featuretypes = sorted(ss.featuretype for ss in splice_sites)
+    assert featuretypes == [
+        "five_prime_cis_splice_site",
+        "five_prime_cis_splice_site",
+        "three_prime_cis_splice_site",
+        "three_prime_cis_splice_site",
+    ]
+
+    # Each splice site spans a single intronic base pair.
+    for ss in splice_sites:
+        assert ss.end - ss.start == 1
+
+    # GTF-derived features have no ID attribute, so the splice sites
+    # should not have one either (and must not crash trying to build it).
+    for ss in splice_sites:
+        assert "ID" not in ss.attributes
+
+
 if __name__ == "__main__":
     # this test case fails
     # test_attributes_modify()
