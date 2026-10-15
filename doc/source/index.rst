@@ -133,7 +133,7 @@ will maintain the order of the attributes (ID, Name, Parent, and so on), and
 always sorted.  These latter two settings are necessary here for this
 documentation (which undergoes automated testing) to have predictable output,
 but in general you can gain a speedup by using the default `keep_order=False`
-and `sort_attributes_order=False`.
+and `sort_attribute_values=False`.
 
 If your input file follows the GFF or GTF file format specifications, this is
 all you need to create a database.  But real-world files don't always
@@ -277,7 +277,7 @@ coordinates)::
     2L	FlyBase	three_prime_UTR	9277	9484	.	+	.	Name=CG11023-u3;Parent=FBtr0300690;parent_type=mRNA
 
 In order to do this, we need to change how features are loaded into the
-database by using `merge_strategy=True` and `id_spec=['ID', 'Name']`.  You can
+database by using `merge_strategy='merge'` and `id_spec=['ID', 'Name']`.  You can
 read more about exactly what these arguments do, and other ways of tweaking the
 import, at :ref:`database-ids`.  But for now, let's see what happens:
 

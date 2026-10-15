@@ -11,7 +11,7 @@ Or `pip`::
 
 
 `gffutils` is `tested <https://github.com/daler/gffutils/actions>`_ with Python
-3.6, 3.7, 3.8, 3.9.
+3.10, 3.11, 3.12.
 
 Optional requirements
 ---------------------
