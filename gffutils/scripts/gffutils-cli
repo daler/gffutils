@@ -53,11 +53,13 @@ def fetch(db, ids):
     """
     if not os.path.isfile(db):
         raise Exception("Cannot fetch: %s does not exist." % (db))
-    gff_db = None
-    if not helpers.is_gff_db(db):
-        gff_db = helpers.get_gff_db(db)
+    if helpers.is_gff_db(db):
+        gff_db = gffutils.FeatureDB(db)
     else:
-        gff_db = db
+        gff_db = helpers.get_gff_db(db)
+        # get_gff_db returns a filename when it finds an existing database.
+        if isinstance(gff_db, str):
+            gff_db = gffutils.FeatureDB(gff_db)
     for i in ids.split(','):
         try:
             yield gff_db[i]
