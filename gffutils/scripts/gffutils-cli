@@ -30,14 +30,14 @@ this argument, a database will be created for you.  This can take some time
 (several minutes), so it's best to create one ahead of time.'''
 
 
-def handle_relations_args(ids, limit, exclude):
+def handle_relations_args(ids, limit, exclude, default_ids):
     """
     Handle args for children or parents subcommands
     """
     if limit:
         raise NotImplementedError('sorry, still working on --limit')
     if ids is None:
-        ids = gffdb.features_of_type('gene')
+        ids = default_ids
     else:
         ids = ids.split(',')
     exclude = (exclude or "").split(',')
@@ -81,7 +81,8 @@ def children(db, ids, *, limit=None, exclude=None, exclude_self=False):
     Fetch children from the database according to ID.
     """
     db = gffutils.FeatureDB(db)
-    ids, limit, exclude = handle_relations_args(ids, limit, exclude)
+    ids, limit, exclude = handle_relations_args(
+        ids, limit, exclude, db.features_of_type('gene'))
 
     for i in ids:
         f = db[i]
@@ -115,7 +116,8 @@ def parents(db, ids, *, limit=None, exclude=None, exclude_self=False):
     Fetch parents from the database according to ID.
     """
     db = gffutils.FeatureDB(db)
-    ids, limit, exclude = handle_relations_args(ids, limit, exclude)
+    ids, limit, exclude = handle_relations_args(
+        ids, limit, exclude, db.features_of_type('exon'))
     for i in ids:
         f = db[i]
         if f.featuretype in exclude:
