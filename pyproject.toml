@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gffutils"
-version = "0.14"
+version = "0.15rc"
 readme = { file = "README.rst", content-type = "text/x-rst" }
 description = "Work with GFF and GTF files in a flexible database framework"
 authors = [

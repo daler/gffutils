@@ -1,6 +1,5 @@
 # Portions copied over from BCBio.GFF.GFFParser
 
-import re
 import collections
 from urllib import parse
 from gffutils import constants
@@ -15,27 +14,29 @@ ch.setLevel(logging.INFO)
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 
-# Regex for each separator that will be tested
-quoted_semicolon_patterns = dict()
 
-for sep in (" ; ", "; ", ";"):
-    quoted_semicolon_patterns[sep] = re.compile(
-        rf"""
-            {re.escape(sep)}   # The separator we're considering (escaped for VERBOSE mode)
-            (?=                # Positive lookahead: does remaining content match?
-                (?:            # Start non-capturing group
-                    [^"]       # Either: match any character that is NOT a quote
-                    |          # OR
-                    "[^"]*"    # Match a complete quoted string, specifically:
-                               #   - opening quote ", followed by
-                               #   - zero or more non-quote characters [^"]*
-                               #   - followed by closing quote "
-                )*             # Repeat the above pattern zero or more times
-                $              # Until we reach the end of the string
-            )                  # End of lookahead
-        """,
-        re.VERBOSE,
-    )
+def _split_on_unquoted_separator(value, separator):
+    """Split at separators with an even number of quotes to their right.
+
+    Counting quotes once per part avoids rescanning the suffix at each
+    separator. Counting from the right also preserves the existing handling
+    of unbalanced quotes.
+    """
+    parts = value.split(separator)
+    remaining_quotes = value.count('"')
+    if not remaining_quotes:
+        return parts
+
+    fields = []
+    chunks = []
+    for part in parts:
+        chunks.append(part)
+        remaining_quotes -= part.count('"')
+        if remaining_quotes % 2 == 0:
+            fields.append(separator.join(chunks))
+            chunks = []
+    return fields
+
 
 # Encoding/decoding notes
 # -----------------------
@@ -123,11 +124,11 @@ def _split_keyvals(keyval_str, dialect=None):
         for sep in (" ; ", "; ", ";"):
             parts = keyval_str.split(sep)
             if len(parts) > 1:
-                # If naive split differs from more expensive regex, we infer there was
-                # a semicolon within quoted value and we'll have to use the expensive
-                # method later
-                parts_regex = re.split(quoted_semicolon_patterns[sep], keyval_str)
-                if parts != parts_regex:
+                # If splitting outside quotes differs from naive splitting, there was
+                # a semicolon within a quoted value and we need the quoted
+                # splitter later
+                parts_quoted = _split_on_unquoted_separator(keyval_str, sep)
+                if parts != parts_quoted:
                     semicolon_in_quotes = True
                 break
         dialect["semicolon in quotes"] = semicolon_in_quotes
@@ -140,9 +141,7 @@ def _split_keyvals(keyval_str, dialect=None):
         keyval_str = keyval_str.lstrip(";")
 
     if dialect["semicolon in quotes"]:
-        parts = re.split(
-            quoted_semicolon_patterns[dialect["field separator"]], keyval_str
-        )
+        parts = _split_on_unquoted_separator(keyval_str, dialect["field separator"])
     else:
         parts = keyval_str.split(dialect["field separator"])
 
